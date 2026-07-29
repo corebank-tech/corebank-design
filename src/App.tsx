@@ -16,6 +16,10 @@ import { E05ReservationResults } from "@/components/inquiry/E05-ReservationResul
 import { G04AutoTransferList } from "@/components/inquiry/G04-AutoTransferList"
 import { G05AutoTransferResults } from "@/components/inquiry/G05-AutoTransferResults"
 import { F02NotificationInbox } from "@/components/inquiry/F02-NotificationInbox"
+import { B04AccountPassword } from "@/components/account/B04-AccountPassword"
+import { B05WithdrawAccounts } from "@/components/account/B05-WithdrawAccounts"
+import { B06AccountAlias } from "@/components/account/B06-AccountAlias"
+import { B07AccountOrder } from "@/components/account/B07-AccountOrder"
 import { cn } from "@/lib/utils"
 
 /**
@@ -41,12 +45,6 @@ const PLACEHOLDER_ROUTES: PlaceholderRoute[] = [
   { path: "/find-id", screenId: "A-07", title: "아이디 찾기", breadcrumb: ["홈", "로그인", "아이디 찾기"], loggedIn: false },
   { path: "/reset-password", screenId: "A-08", title: "비밀번호 재설정", breadcrumb: ["홈", "로그인", "비밀번호 재설정"], loggedIn: false },
   { path: "/logout", screenId: "A-10", title: "로그아웃 완료", breadcrumb: ["홈", "로그아웃"], loggedIn: false },
-
-  // B — 수신(계좌조회 · 계좌관리)
-  { path: "/user/accounts/password", screenId: "B-04", title: "계좌비밀번호 변경", breadcrumb: ["사용자관리", "계좌관리", "계좌비밀번호"], activeId: "user" },
-  { path: "/user/accounts/withdrawal", screenId: "B-05", title: "출금계좌관리", breadcrumb: ["사용자관리", "계좌관리", "출금계좌관리"], activeId: "user" },
-  { path: "/user/accounts/alias", screenId: "B-06", title: "계좌별명 관리", breadcrumb: ["사용자관리", "계좌관리", "계좌별명관리"], activeId: "user" },
-  { path: "/user/accounts/order", screenId: "B-07", title: "계좌순서 변경", breadcrumb: ["사용자관리", "계좌관리", "계좌순서변경"], activeId: "user" },
 
   // C — 수신(금융상품)
   { path: "/products", screenId: "C-01", title: "상품몰 - 상품목록", breadcrumb: ["금융상품", "예금·적금", "상품목록"], activeId: "product" },
@@ -349,6 +347,58 @@ export default function App() {
               customerName="홍길동"
             >
               <G05AutoTransferResults />
+            </PageShell>
+          }
+        />
+        <Route
+          path="/user/accounts/password"
+          element={
+            <PageShell
+              activeId="user"
+              breadcrumb={["사용자관리", "계좌관리", "계좌비밀번호"]}
+              title="계좌비밀번호 변경"
+              customerName="홍길동"
+            >
+              <B04AccountPassword />
+            </PageShell>
+          }
+        />
+        <Route
+          path="/user/accounts/withdrawal"
+          element={
+            <PageShell
+              activeId="user"
+              breadcrumb={["사용자관리", "계좌관리", "출금계좌관리"]}
+              title="출금계좌관리"
+              customerName="홍길동"
+            >
+              <B05WithdrawAccounts />
+            </PageShell>
+          }
+        />
+        <Route
+          path="/user/accounts/alias"
+          element={
+            <PageShell
+              activeId="user"
+              breadcrumb={["사용자관리", "계좌관리", "계좌별명관리"]}
+              title="계좌별명 관리"
+              customerName="홍길동"
+            >
+              <B06AccountAlias />
+            </PageShell>
+          }
+        />
+        <Route
+          path="/user/accounts/order"
+          element={
+            <PageShell
+              activeId="user"
+              breadcrumb={["사용자관리", "계좌관리", "계좌순서변경"]}
+              title="계좌순서 변경"
+              customerName="홍길동"
+            >
+              <B07AccountOrder />
             </PageShell>
           }
         />

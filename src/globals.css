@@ -58,9 +58,25 @@
   /* Radius */
   --radius: 2px;
 
+  /* Radius (Theme A: no separate lg/pill scale) */
+  --radius-lg: var(--radius);
+  --radius-pill: var(--radius);
+
   /* Elevation (Theme A: border-only, no shadow) */
   --shadow-card: none;
   --shadow-pop: 0 8px 28px rgba(16, 24, 40, 0.12);
+
+  /* Weight (Theme A: color carries hierarchy, not weight) */
+  --weight-label: 700;
+  --weight-value: 700;
+  --weight-heading: 700;
+
+  /* Footer foreground (Theme A: dark footer, white text) */
+  --color-footer-fg: rgba(255, 255, 255, 0.75);
+  --color-footer-fg-strong: rgba(255, 255, 255, 0.92);
+  --color-footer-fg-faint: rgba(255, 255, 255, 0.55);
+  --color-footer-divider: rgba(255, 255, 255, 0.25);
+  --color-footer-hover-bg: rgba(255, 255, 255, 0.10);
 
   /* Font */
   --font-sans: "Pretendard Variable", Pretendard, -apple-system, sans-serif;
@@ -100,45 +116,60 @@
           data-theme 없음            →  Theme A (기존)
    ============================================================ */
 [data-theme="card"] {
-  /* Brand — 딥네이비에서 선명한 블루로, 채도를 올린다 */
-  --color-primary: #2f5fe8;
-  --color-primary-hover: #2449bd;
-  --color-primary-soft: #5b83ee;
-  --color-primary-tint: #eef2ff;
-  --color-accent: #2f5fe8;
-  --color-accent-hover: #2449bd;
-  --color-link: #2f5fe8;
+  /* Brand */
+  --color-primary: #3182f6;
+  --color-primary-hover: #1b64da;
+  --color-primary-soft: #6ba5f8;
+  --color-primary-tint: #e8f3ff;
+  --color-accent: #3182f6;
+  --color-accent-hover: #1b64da;
+  --color-link: #3182f6;
 
-  /* Neutrals — 쿨그레이, 배경을 거의 흰색까지 밝힌다 */
-  --color-surface: #f7f8fa;
-  --color-surface-2: #ffffff;
-  --color-border: #e8eaef;
-  --color-border-strong: #ccd1da;
-  --color-footer-bg: #f7f8fa; /* 다크 → 라이트 */
-  --color-ink: #1a1d23;
-  --color-ink-muted: #6b7280;
-  --color-ink-faint: #9aa1ad;
+  /* Neutrals — surface 의미가 '라벨셀'에서 '페이지 배경'으로 바뀐다 */
+  --color-surface: #f2f4f6;
+  --color-surface-2: #f9fafb;
+  --color-border: #e5e8eb;
+  --color-border-strong: #d1d6db;
+  --color-footer-bg: #f9fafb;
+  --color-ink: #191f28;
+  --color-ink-muted: #4e5968;
+  --color-ink-faint: #8b95a1;
 
   /* Feedback */
-  --color-danger: #e5484d;
-  --color-danger-tint: #fef1f1;
-  --color-success: #1f9254;
-  --color-warning: #c77700;
-  --color-info: #2f5fe8;
+  --color-danger: #f04452;
+  --color-danger-tint: #fdf0f1;
+  --color-success: #12b76a;
+  --color-warning: #f79009;
+  --color-info: #3182f6;
 
-  /* Grid / ledger — 네이비 룰의 존재감을 죽인다 */
-  --color-navy: #e8eaef;
-  --color-deposit: #2f5fe8;
-  --color-withdraw: #e5484d;
+  /* Grid — 네이비 룰의 존재감을 지운다 */
+  --color-navy: #e5e8eb;
+  --color-deposit: #3182f6;
+  --color-withdraw: #f04452;
 
-  /* Radius — 2px → 12px */
+  /* Radius */
   --radius: 12px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
 
-  /* Elevation — 보더 대신 옅은 그림자 */
-  --shadow-card: 0 1px 2px rgba(16, 24, 40, 0.04), 0 4px 12px rgba(16, 24, 40, 0.05);
-  --shadow-pop: 0 8px 28px rgba(16, 24, 40, 0.12);
+  /* Elevation */
+  --shadow-card: 0 1px 2px rgba(25, 31, 40, 0.03), 0 4px 16px rgba(25, 31, 40, 0.06);
+  --shadow-pop: 0 8px 32px rgba(25, 31, 40, 0.14);
 
-  /* shadcn 매핑 재바인딩 — 의미가 달라지는 두 개만 명시 */
+  /* Weight — 토스는 색이 아니라 굵기로 위계를 만든다 */
+  --weight-label: 500;
+  --weight-value: 700;
+  --weight-heading: 700;
+
+  /* Footer foreground (Theme B: light footer, dark text) */
+  --color-footer-fg: var(--color-ink-muted);
+  --color-footer-fg-strong: var(--color-ink);
+  --color-footer-fg-faint: var(--color-ink-faint);
+  --color-footer-divider: var(--color-border);
+  --color-footer-hover-bg: var(--color-surface);
+
+  /* shadcn 재바인딩 */
+  --background: var(--color-surface);
   --secondary: var(--color-primary-tint);
   --secondary-foreground: var(--color-primary);
 }
@@ -197,10 +228,19 @@
   --text-xs: var(--text-xs);
 
   --radius: var(--radius);
+  --radius-lg: var(--radius-lg);
+  --radius-pill: var(--radius-pill);
 }
 
 * {
   border-color: var(--color-border);
+}
+
+/* 대시보드 접속현황 헤더: Theme B에서는 bg-primary 솔리드가 무겁다. */
+[data-theme="card"] .access-status-header {
+  background-color: var(--color-surface-2);
+  color: var(--color-ink);
+  font-weight: var(--weight-heading);
 }
 
 html {
@@ -208,6 +248,7 @@ html {
 }
 
 body {
+  min-width: 1280px;
   background-color: var(--color-surface-2);
   color: var(--color-ink);
   font-size: var(--text-base);

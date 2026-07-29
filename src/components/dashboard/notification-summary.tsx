@@ -4,22 +4,30 @@ import { formatDateTime } from "@/lib/format"
 
 export interface NotificationSummaryProps {
   items: NotificationItem[]
+  /** 전체 미읽음 건수. 헤더 숫자에 사용, 미지정 시 items.length로 대체. */
+  totalCount?: number
+  /** 표시할 최대 건수. 초과분은 잘라내고 "알림함"에서 전체를 본다. */
+  maxVisible?: number
   onOpenInbox?: () => void
 }
 
 /** 미읽음 알림 요약 리스트. 헤더에서 알림함으로 이동. */
 export function NotificationSummary({
   items,
+  totalCount,
+  maxVisible = 3,
   onOpenInbox,
 }: NotificationSummaryProps) {
+  const visibleItems = items.slice(0, maxVisible)
+
   return (
     <section
       aria-label="미읽음 알림"
-      className="border border-[var(--color-border)]"
+      className="overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white [box-shadow:var(--shadow-card)]"
     >
       <div className="flex items-center justify-between border-b border-[var(--color-border)] bg-surface px-4 py-2.5">
         <h2 className="text-sm font-bold text-ink">
-          미읽음 알림 <span className="text-primary tabular-nums">{items.length}</span>건
+          미읽음 알림 <span className="text-primary tabular-nums">{totalCount ?? items.length}</span>건
         </h2>
         <button
           type="button"
@@ -31,7 +39,7 @@ export function NotificationSummary({
         </button>
       </div>
       <ul>
-        {items.map((item, i) => (
+        {visibleItems.map((item, i) => (
           <li
             key={item.id}
             className={

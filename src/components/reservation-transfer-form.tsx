@@ -12,6 +12,7 @@ export function ReservationTransferForm() {
 
   return (
     <div>
+      <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white p-6 [box-shadow:var(--shadow-card)]">
       <FormSection
         title="출금 정보"
         action={<Badge variant="primary">잔액 12,340,500원</Badge>}
@@ -64,7 +65,7 @@ export function ReservationTransferForm() {
         </div>
       </FormSection>
 
-      <FormSection title="예약 설정">
+      <FormSection title="예약 설정" className="mb-0">
         <div>
           <FormRow label="예약유형" required>
             <div className="flex flex-wrap items-center gap-4">
@@ -87,8 +88,9 @@ export function ReservationTransferForm() {
           </FormRow>
         </div>
       </FormSection>
+      </div>
 
-      <div className="flex items-center justify-center gap-2 pt-2">
+      <div className="flex items-center justify-center gap-2 pt-6">
         <Button variant="secondary" size="lg" className="min-w-[120px]">
           취소
         </Button>

@@ -86,12 +86,12 @@ export function Modal({
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        className="flex max-h-[calc(100vh-48px)] w-full flex-col rounded-[var(--radius)] bg-white shadow-2xl"
+        className="flex max-h-[calc(100vh-48px)] w-full flex-col rounded-[var(--radius-lg)] bg-white [box-shadow:var(--shadow-pop)]"
         style={{ maxWidth: sizeWidth[size] }}
       >
         <div
           className={cn(
-            "flex shrink-0 items-center justify-between gap-4 rounded-t-[var(--radius)] px-6 py-3.5",
+            "flex shrink-0 items-center justify-between gap-4 rounded-t-[var(--radius-lg)] px-6 py-3.5",
             toneBar[tone],
           )}
         >

@@ -76,7 +76,7 @@ export default function App() {
         <Route
           path="/"
           element={
-            <PageShell activeId="user" bare customerName="홍길동">
+            <PageShell activeId="user" bare loggedIn={false}>
               <LoginScreen />
             </PageShell>
           }

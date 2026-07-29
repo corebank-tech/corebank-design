@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 import { ChevronRight } from "lucide-react"
 
 export interface ShortcutLink {
@@ -8,34 +9,28 @@ export interface ShortcutLink {
 
 export interface BankingShortcutsProps {
   label?: string
+  /** 표시할 바로가기 목록. 기본값은 호출 측(MainDashboard)에서 주입한다. */
   links: ShortcutLink[]
   onSelect?: (id: string) => void
 }
 
-const DEFAULT_LINKS: ShortcutLink[] = [
-  { id: "products", label: "상품현황", href: "#" },
-  { id: "limit", label: "이체한도", href: "#" },
-  { id: "reservation", label: "예약이체", href: "#" },
-  { id: "auto", label: "자동이체", href: "#" },
-]
-
 /** 업무 바로가기: primary-tint 띠 + 좌측 라벨 + 우측 카드형 링크. */
 export function BankingShortcuts({
   label = "나의 뱅킹정보",
-  links = DEFAULT_LINKS,
+  links,
   onSelect,
 }: BankingShortcutsProps) {
   return (
     <section
       aria-label="업무 바로가기"
-      className="flex items-center gap-6 border border-[var(--color-border)] bg-primary-tint px-6 py-5"
+      className="flex items-center gap-6 rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-primary-tint px-6 py-5 [box-shadow:var(--shadow-card)]"
     >
       <h2 className="shrink-0 text-base font-bold text-primary">{label}</h2>
       <ul className="grid flex-1 grid-cols-4 gap-3">
         {links.map((link) => (
           <li key={link.id}>
-            <a
-              href={link.href}
+            <Link
+              to={link.href}
               onClick={(e) => {
                 if (onSelect) {
                   e.preventDefault()
@@ -46,7 +41,7 @@ export function BankingShortcuts({
             >
               {link.label}
               <ChevronRight className="h-4 w-4 text-ink-faint" aria-hidden="true" />
-            </a>
+            </Link>
           </li>
         ))}
       </ul>

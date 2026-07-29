@@ -1,6 +1,5 @@
 import * as React from "react"
-import { UtilityBar } from "./utility-bar"
-import { Gnb } from "./gnb"
+import { AppHeader } from "./app-header"
 import { BreadcrumbBar } from "./breadcrumb-bar"
 import { FullMenuOverlay } from "./full-menu-overlay"
 import { PageHeader } from "./page-header"
@@ -15,6 +14,8 @@ export interface PageShellProps {
   notice?: React.ReactNode[]
   noticeTitle?: React.ReactNode
   customerName?: string
+  /** REQ-CMN-005: 비로그인 상태면 헤더에 [로그인]만 노출. 기본 true */
+  loggedIn?: boolean
   /** hide breadcrumb + page header (e.g. login) */
   bare?: boolean
   children: React.ReactNode
@@ -27,25 +28,26 @@ export function PageShell({
   notice,
   noticeTitle,
   customerName = "홍길동",
+  loggedIn = true,
   bare = false,
   children,
 }: PageShellProps) {
   const [menuOpen, setMenuOpen] = React.useState(false)
 
   return (
-    <div className="flex min-h-screen flex-col bg-surface-2">
-      <header className="sticky top-0 z-[100]">
-        <UtilityBar customerName={customerName} unreadCount={3} />
-        <Gnb activeId={activeId} onOpenFullMenu={() => setMenuOpen(true)} />
-        {!bare && (
-          <BreadcrumbBar trail={breadcrumb} customerName={customerName} />
-        )}
-      </header>
+    <div className="flex min-h-screen flex-col bg-surface">
+      <AppHeader
+        activeId={activeId}
+        customerName={customerName}
+        loggedIn={loggedIn}
+        onOpenFullMenu={() => setMenuOpen(true)}
+      />
 
       <FullMenuOverlay open={menuOpen} onClose={() => setMenuOpen(false)} />
 
       <main className="flex-1">
-        <div className="mx-auto w-full max-w-[1280px] px-4 py-8">
+        <div className="mx-auto w-[1280px] px-4 py-10">
+          {!bare && <BreadcrumbBar trail={breadcrumb} />}
           {!bare && title != null && <PageHeader title={title} />}
           {children}
           {notice && notice.length > 0 && (

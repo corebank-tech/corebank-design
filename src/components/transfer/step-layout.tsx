@@ -44,7 +44,9 @@ export function StepLayout({
         </div>
       )}
 
-      <div>{children}</div>
+      <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white p-6 [box-shadow:var(--shadow-card)]">
+        {children}
+      </div>
 
       {footer != null && (
         <div className="mt-8 flex items-center justify-center gap-2">

@@ -130,7 +130,7 @@ export function TransactionInquiryScreen() {
   }
 
   return (
-    <div>
+    <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white p-6 [box-shadow:var(--shadow-card)]">
       <FormSection title="조회조건">
         <SearchPanel onReset={handleReset} onSearch={() => setPage(1)}>
           <FormRow label="조회계좌번호" htmlFor="inq-account">
@@ -224,7 +224,7 @@ export function TransactionInquiryScreen() {
         )}
       </div>
 
-      <FormSection title="거래내역">
+      <FormSection title="거래내역" className="mb-0">
         <SummaryRow
           className="mb-3"
           items={[

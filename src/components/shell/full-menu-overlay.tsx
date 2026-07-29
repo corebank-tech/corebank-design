@@ -35,32 +35,32 @@ export function FullMenuOverlay({ open, onClose }: FullMenuOverlayProps) {
         onClick={onClose}
         aria-hidden="true"
       />
-      <div className="absolute inset-x-0 top-0 bg-white shadow-lg">
-        <div className="mx-auto max-w-[1280px] px-4">
-          <div className="flex h-12 items-center justify-between">
-            <span className="text-[20px] font-black text-primary">
+      <div className="absolute inset-x-0 top-0 bg-white [box-shadow:var(--shadow-pop)]">
+        <div className="mx-auto w-[1280px] px-4">
+          <div className="flex h-[72px] items-center justify-between border-b border-[var(--color-border)]">
+            <span className="text-[20px] text-primary [font-weight:var(--weight-heading)]">
               전체메뉴
             </span>
             <button
               type="button"
               onClick={onClose}
-              className="inline-flex h-9 w-9 items-center justify-center rounded-full text-ink-muted hover:bg-surface hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-[var(--radius)] text-ink-muted hover:bg-[var(--color-primary-tint)] hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               aria-label="전체메뉴 닫기"
             >
               <X className="h-5 w-5" aria-hidden="true" />
             </button>
           </div>
 
-          <div className="grid grid-cols-4 gap-6 border-t py-8">
+          <div className="grid grid-cols-4 gap-8 py-8">
             {NAV.map((cat) => (
               <div key={cat.id}>
-                <h3 className="mb-3 border-b-2 border-primary pb-2 text-lg font-bold text-primary">
+                <h3 className="mb-3 text-[16px] text-primary [font-weight:var(--weight-heading)]">
                   {cat.label}
                 </h3>
                 <div className="flex flex-col gap-4">
                   {cat.groups.map((group) => (
                     <div key={group.title}>
-                      <p className="mb-1 text-xs font-bold text-ink-faint">
+                      <p className="mb-1 text-[13px] text-ink-faint">
                         {group.title}
                       </p>
                       <ul className="flex flex-col gap-1">
@@ -69,7 +69,7 @@ export function FullMenuOverlay({ open, onClose }: FullMenuOverlayProps) {
                             <a
                               href="#"
                               data-screen-id={item.screenId}
-                              className="inline-block py-0.5 text-sm text-ink-muted hover:text-primary hover:underline"
+                              className="inline-block py-0.5 text-[15px] text-ink [font-weight:var(--weight-label)] hover:text-primary hover:underline"
                             >
                               {item.label}
                             </a>

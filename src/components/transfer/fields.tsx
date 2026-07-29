@@ -35,18 +35,19 @@ export function WithdrawAccountField({
   return (
     <div className="flex w-full flex-col gap-2">
       <div className="flex items-center gap-2">
-        <Select
-          id={id}
-          className="max-w-md"
-          value={value}
-          onChange={(e) => onChange?.(e.target.value)}
-        >
-          {options.map((o) => (
-            <option key={o.accountNo} value={o.accountNo}>
-              {`${o.alias} / ${formatAccountNo(o.accountNo)}`}
-            </option>
-          ))}
-        </Select>
+        <div className="min-w-0 max-w-md flex-1">
+          <Select
+            id={id}
+            value={value}
+            onChange={(e) => onChange?.(e.target.value)}
+          >
+            {options.map((o) => (
+              <option key={o.accountNo} value={o.accountNo}>
+                {`${o.alias} / ${formatAccountNo(o.accountNo)}`}
+              </option>
+            ))}
+          </Select>
+        </div>
         <Button variant="outline" size="md" onClick={onSelectAccount}>
           계좌선택
         </Button>
@@ -126,7 +127,7 @@ export function AccountPasswordField({
         ))}
       </div>
       <Button variant="secondary" size="md" onClick={onCheckErrorCount}>
-        비밀번호 오류횟수 조회
+        오류횟수 조회
       </Button>
     </div>
   )

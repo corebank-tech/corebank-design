@@ -17,6 +17,23 @@ import {
 } from "@/lib/mock/dashboard"
 import { formatAccountNo, formatAmount, formatDate } from "@/lib/format"
 
+const ACCOUNT_COLUMN_WIDTHS = {
+  alias: 140,
+  accountNo: 160,
+  openedDate: 120,
+  lastTxDate: 120,
+  balance: 150,
+  actions: 150,
+} as const
+
+/** alias~balance 폭 합(actions 제외). SummaryRow 라벨폭을 컬럼 경계에 맞춰 정렬한다. */
+const SUMMARY_LABEL_WIDTH =
+  ACCOUNT_COLUMN_WIDTHS.alias +
+  ACCOUNT_COLUMN_WIDTHS.accountNo +
+  ACCOUNT_COLUMN_WIDTHS.openedDate +
+  ACCOUNT_COLUMN_WIDTHS.lastTxDate +
+  ACCOUNT_COLUMN_WIDTHS.balance
+
 export interface MainDashboardProps {
   customerName?: string
   accounts?: DashboardAccount[]
@@ -48,12 +65,12 @@ export function MainDashboard({
   )
 
   const columns: DataGridColumn<DashboardAccount>[] = [
-    { key: "alias", header: "계좌명", align: "left", width: 140 },
+    { key: "alias", header: "계좌명", align: "left", width: ACCOUNT_COLUMN_WIDTHS.alias },
     {
       key: "accountNo",
       header: "계좌번호",
       align: "left",
-      width: 160,
+      width: ACCOUNT_COLUMN_WIDTHS.accountNo,
       render: (r) => (
         <span className="tabular-nums">{formatAccountNo(r.accountNo)}</span>
       ),
@@ -62,7 +79,7 @@ export function MainDashboard({
       key: "openedDate",
       header: "신규일",
       align: "center",
-      width: 120,
+      width: ACCOUNT_COLUMN_WIDTHS.openedDate,
       render: (r) => (
         <span className="tabular-nums">{formatDate(r.openedDate)}</span>
       ),
@@ -71,7 +88,7 @@ export function MainDashboard({
       key: "lastTxDate",
       header: "최근거래일",
       align: "center",
-      width: 120,
+      width: ACCOUNT_COLUMN_WIDTHS.lastTxDate,
       render: (r) => (
         <span className="tabular-nums">{formatDate(r.lastTxDate)}</span>
       ),
@@ -80,7 +97,7 @@ export function MainDashboard({
       key: "balance",
       header: "잔액(원)",
       align: "right",
-      width: 150,
+      width: ACCOUNT_COLUMN_WIDTHS.balance,
       sortable: true,
       sortValue: (r) => r.balance,
       render: (r) => formatAmount(r.balance, { suffix: false }),
@@ -89,7 +106,7 @@ export function MainDashboard({
       key: "actions",
       header: "업무",
       align: "center",
-      width: 150,
+      width: ACCOUNT_COLUMN_WIDTHS.actions,
       render: (r) => (
         <div className="flex items-center justify-center gap-1.5">
           <Button size="sm" variant="outline" onClick={() => onInquiry?.(r.id)}>
@@ -107,8 +124,8 @@ export function MainDashboard({
     <div className="flex flex-col gap-8">
       {/* [1] 인사 영역 + 접속현황 */}
       <div className="flex items-stretch gap-6">
-        <div className="flex w-2/3 flex-col justify-center border border-[var(--color-border)] bg-white px-8 py-9">
-          <p className="text-page font-bold text-ink text-balance">
+        <div className="flex w-2/3 flex-col justify-center rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white px-8 py-9 [box-shadow:var(--shadow-card)]">
+          <p className="text-page font-bold text-ink">
             {customerName} 고객님, 안녕하세요.
           </p>
           <p className="mt-3 text-base text-ink-muted text-pretty">
@@ -124,30 +141,32 @@ export function MainDashboard({
       </div>
 
       {/* [2] 대표계좌 요약 */}
-      <FormSection title="대표계좌" className="mb-0">
-        {accounts.length === 0 ? (
-          <div className="border-t-2 border-t-[var(--color-navy)] border-b border-[var(--color-border)]">
-            <EmptyState
-              message="등록된 계좌가 없습니다."
-              description="상품을 둘러보고 첫 계좌를 개설해 보세요."
-              action={
-                <Button variant="primary" onClick={onBrowseProducts}>
-                  상품 둘러보기
-                </Button>
-              }
-            />
-          </div>
-        ) : (
-          <>
-            <DataGrid columns={columns} rows={accounts} rowKey={(r) => r.id} />
-            <SummaryRow
-              className="mt-3"
-              labelWidth={640}
-              items={[{ label: "총 잔액", value: formatAmount(totalBalance) }]}
-            />
-          </>
-        )}
-      </FormSection>
+      <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white p-6 [box-shadow:var(--shadow-card)]">
+        <FormSection title="대표계좌" className="mb-0">
+          {accounts.length === 0 ? (
+            <div className="border-t-2 border-t-[var(--color-navy)] border-b border-[var(--color-border)]">
+              <EmptyState
+                message="등록된 계좌가 없습니다."
+                description="상품을 둘러보고 첫 계좌를 개설해 보세요."
+                action={
+                  <Button variant="primary" onClick={onBrowseProducts}>
+                    상품 둘러보기
+                  </Button>
+                }
+              />
+            </div>
+          ) : (
+            <>
+              <DataGrid columns={columns} rows={accounts} rowKey={(r) => r.id} />
+              <SummaryRow
+                className="mt-3"
+                labelWidth={SUMMARY_LABEL_WIDTH}
+                items={[{ label: "총 잔액", value: formatAmount(totalBalance) }]}
+              />
+            </>
+          )}
+        </FormSection>
+      </div>
 
       {/* [3] 업무 바로가기 */}
       <BankingShortcuts links={shortcuts ?? DEFAULT_SHORTCUTS} onSelect={onSelectShortcut} />

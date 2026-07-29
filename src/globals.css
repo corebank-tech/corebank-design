@@ -30,6 +30,11 @@
   --color-warning: #b7791f;
   --color-info: #12459b;
 
+  /* Grid / ledger */
+  --color-navy: #17325c; /* data grid top rule */
+  --color-deposit: #1568c4; /* 입금 amounts */
+  --color-withdraw: #c2352b; /* 출금 amounts */
+
   /* Type scale */
   --text-page: 26px;
   --text-h2: 20px;
@@ -123,6 +128,9 @@
   --color-success: var(--color-success);
   --color-warning: var(--color-warning);
   --color-info: var(--color-info);
+  --color-navy: var(--color-navy);
+  --color-deposit: var(--color-deposit);
+  --color-withdraw: var(--color-withdraw);
 
   --text-page: var(--text-page);
   --text-page--line-height: 1.3;

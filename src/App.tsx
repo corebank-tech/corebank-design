@@ -2,11 +2,13 @@ import { Routes, Route, Link, useLocation } from "react-router-dom"
 import { PageShell } from "@/components/shell/page-shell"
 import { LoginScreen } from "@/components/login-screen"
 import { ReservationTransferForm } from "@/components/reservation-transfer-form"
+import { TransactionInquiryScreen } from "@/components/transaction-inquiry-screen"
 import { cn } from "@/lib/utils"
 
 const DEMO_ROUTES = [
   { path: "/", label: "로그인 (A-01)" },
   { path: "/transfer", label: "예약이체 등록" },
+  { path: "/inquiry", label: "거래내역조회 (B-03)" },
 ] as const
 
 function DemoSwitcher() {
@@ -45,6 +47,24 @@ export default function App() {
           element={
             <PageShell activeId="user" bare customerName="홍길동">
               <LoginScreen />
+            </PageShell>
+          }
+        />
+        <Route
+          path="/inquiry"
+          element={
+            <PageShell
+              activeId="inquiry"
+              breadcrumb={["개인", "조회", "예금", "거래내역조회"]}
+              title="거래내역조회"
+              customerName="홍길동"
+              notice={[
+                "거래내역은 최근 1년 이내의 범위에서 조회할 수 있습니다.",
+                "조회 기준일시 이후 발생한 거래는 다음 조회 시 반영됩니다.",
+                "실제 잔액은 미결제 거래 처리 상태에 따라 달라질 수 있습니다.",
+              ]}
+            >
+              <TransactionInquiryScreen />
             </PageShell>
           }
         />

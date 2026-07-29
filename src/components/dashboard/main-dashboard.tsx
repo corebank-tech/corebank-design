@@ -1,0 +1,166 @@
+import * as React from "react"
+import { FormSection } from "@/components/ui/form-section"
+import { Button } from "@/components/ui/button"
+import { DataGrid, type DataGridColumn } from "@/components/query/data-grid"
+import { SummaryRow } from "@/components/query/summary-row"
+import { EmptyState } from "@/components/query/empty-state"
+import { AccessStatusPanel } from "./access-status-panel"
+import { BankingShortcuts, type ShortcutLink } from "./banking-shortcuts"
+import { NotificationSummary } from "./notification-summary"
+import {
+  MOCK_ACCESS_STATUS,
+  MOCK_DASHBOARD_ACCOUNTS,
+  MOCK_NOTIFICATIONS,
+  type AccessStatus,
+  type DashboardAccount,
+  type NotificationItem,
+} from "@/lib/mock/dashboard"
+import { formatAccountNo, formatAmount, formatDate } from "@/lib/format"
+
+export interface MainDashboardProps {
+  customerName?: string
+  accounts?: DashboardAccount[]
+  accessStatus?: AccessStatus
+  notifications?: NotificationItem[]
+  shortcuts?: ShortcutLink[]
+  onInquiry?: (accountId: string) => void
+  onTransfer?: (accountId: string) => void
+  onBrowseProducts?: () => void
+  onSelectShortcut?: (id: string) => void
+  onOpenInbox?: () => void
+}
+
+export function MainDashboard({
+  customerName = "홍길동",
+  accounts = MOCK_DASHBOARD_ACCOUNTS,
+  accessStatus = MOCK_ACCESS_STATUS,
+  notifications = MOCK_NOTIFICATIONS,
+  shortcuts,
+  onInquiry,
+  onTransfer,
+  onBrowseProducts,
+  onSelectShortcut,
+  onOpenInbox,
+}: MainDashboardProps) {
+  const totalBalance = React.useMemo(
+    () => accounts.reduce((sum, a) => sum + a.balance, 0),
+    [accounts],
+  )
+
+  const columns: DataGridColumn<DashboardAccount>[] = [
+    { key: "alias", header: "계좌명", align: "left", width: 140 },
+    {
+      key: "accountNo",
+      header: "계좌번호",
+      align: "left",
+      width: 160,
+      render: (r) => (
+        <span className="tabular-nums">{formatAccountNo(r.accountNo)}</span>
+      ),
+    },
+    {
+      key: "openedDate",
+      header: "신규일",
+      align: "center",
+      width: 120,
+      render: (r) => (
+        <span className="tabular-nums">{formatDate(r.openedDate)}</span>
+      ),
+    },
+    {
+      key: "lastTxDate",
+      header: "최근거래일",
+      align: "center",
+      width: 120,
+      render: (r) => (
+        <span className="tabular-nums">{formatDate(r.lastTxDate)}</span>
+      ),
+    },
+    {
+      key: "balance",
+      header: "잔액(원)",
+      align: "right",
+      width: 150,
+      sortable: true,
+      sortValue: (r) => r.balance,
+      render: (r) => formatAmount(r.balance, { suffix: false }),
+    },
+    {
+      key: "actions",
+      header: "업무",
+      align: "center",
+      width: 150,
+      render: (r) => (
+        <div className="flex items-center justify-center gap-1.5">
+          <Button size="sm" variant="outline" onClick={() => onInquiry?.(r.id)}>
+            조회
+          </Button>
+          <Button size="sm" variant="primary" onClick={() => onTransfer?.(r.id)}>
+            이체
+          </Button>
+        </div>
+      ),
+    },
+  ]
+
+  return (
+    <div className="flex flex-col gap-8">
+      {/* [1] 인사 영역 + 접속현황 */}
+      <div className="flex items-stretch gap-6">
+        <div className="flex w-2/3 flex-col justify-center border border-[var(--color-border)] bg-white px-8 py-9">
+          <p className="text-page font-bold text-ink text-balance">
+            {customerName} 고객님, 안녕하세요.
+          </p>
+          <p className="mt-3 text-base text-ink-muted text-pretty">
+            오늘도 CoreBank를 이용해 주셔서 감사합니다. 자주 쓰는 업무는 아래 바로가기에서 바로 시작할 수 있습니다.
+          </p>
+          <p className="mt-1 text-base text-ink-muted text-pretty">
+            거래 전 접속현황을 확인하시고, 본인이 아닌 접속 기록이 있으면 비밀번호를 변경해 주세요.
+          </p>
+        </div>
+        <div className="w-1/3">
+          <AccessStatusPanel status={accessStatus} />
+        </div>
+      </div>
+
+      {/* [2] 대표계좌 요약 */}
+      <FormSection title="대표계좌" className="mb-0">
+        {accounts.length === 0 ? (
+          <div className="border-t-2 border-t-[var(--color-navy)] border-b border-[var(--color-border)]">
+            <EmptyState
+              message="등록된 계좌가 없습니다."
+              description="상품을 둘러보고 첫 계좌를 개설해 보세요."
+              action={
+                <Button variant="primary" onClick={onBrowseProducts}>
+                  상품 둘러보기
+                </Button>
+              }
+            />
+          </div>
+        ) : (
+          <>
+            <DataGrid columns={columns} rows={accounts} rowKey={(r) => r.id} />
+            <SummaryRow
+              className="mt-3"
+              labelWidth={640}
+              items={[{ label: "총 잔액", value: formatAmount(totalBalance) }]}
+            />
+          </>
+        )}
+      </FormSection>
+
+      {/* [3] 업무 바로가기 */}
+      <BankingShortcuts links={shortcuts ?? DEFAULT_SHORTCUTS} onSelect={onSelectShortcut} />
+
+      {/* [4] 미읽음 알림 */}
+      <NotificationSummary items={notifications} onOpenInbox={onOpenInbox} />
+    </div>
+  )
+}
+
+const DEFAULT_SHORTCUTS: ShortcutLink[] = [
+  { id: "products", label: "상품현황", href: "#" },
+  { id: "limit", label: "이체한도", href: "#" },
+  { id: "reservation", label: "예약이체", href: "#" },
+  { id: "auto", label: "자동이체", href: "#" },
+]

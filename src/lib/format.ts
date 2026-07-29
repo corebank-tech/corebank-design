@@ -9,8 +9,11 @@ export function formatAmount(
   options: { suffix?: boolean } = {},
 ): string {
   const { suffix = true } = options
-  const rounded = Math.round(value)
-  const grouped = rounded.toLocaleString("ko-KR")
+  if (!Number.isInteger(value)) {
+    console.warn(`formatAmount: non-integer amount ${value}; truncating.`)
+  }
+  const truncated = Math.trunc(value)
+  const grouped = truncated.toLocaleString("ko-KR")
   return suffix ? `${grouped}원` : grouped
 }
 

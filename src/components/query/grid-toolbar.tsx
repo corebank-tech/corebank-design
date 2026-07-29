@@ -47,7 +47,7 @@ export function GridToolbar({
             </>
           )}
           <span className="font-bold text-primary tabular-nums">
-            총 {totalCount.toLocaleString("ko-KR")}건
+            [총 {totalCount.toLocaleString("ko-KR")}건]
           </span>
         </p>
 

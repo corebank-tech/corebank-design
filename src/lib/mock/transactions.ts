@@ -1,4 +1,4 @@
-import type { AccountOption } from "@/components/query/fields"
+import type { AccountOption } from "@/shared/types/account"
 
 export interface Transaction {
   id: string
@@ -12,9 +12,9 @@ export interface Transaction {
 }
 
 export const MOCK_ACCOUNTS: AccountOption[] = [
-  { alias: "자유입출금", accountNo: "110632892336", balance: 12340500 },
-  { alias: "급여통장", accountNo: "302998112233", balance: 3860000 },
-  { alias: "비상금통장", accountNo: "255104778910", balance: 1500000 },
+  { alias: "자유입출금", accountNo: "110632892336", balance: 12340500, withdrawable: 12000000 },
+  { alias: "급여통장", accountNo: "302998112233", balance: 3860000, withdrawable: 3860000 },
+  { alias: "비상금통장", accountNo: "255104778910", balance: 1500000, withdrawable: 1500000 },
 ]
 
 /** 12 rows, most recent first, for account 110-632-892336. */

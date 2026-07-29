@@ -33,7 +33,7 @@ export function SearchPanel({
         <button
           type="button"
           onClick={onSaveCondition}
-          className="inline-flex items-center gap-1 text-sm text-[var(--color-link,var(--color-primary))] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="inline-flex items-center gap-1 text-sm text-[var(--color-link)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <Bookmark className="h-4 w-4" aria-hidden="true" />
           조회조건저장

@@ -11,6 +11,7 @@
   --color-primary-tint: #eef3fb; /* notice box background */
   --color-accent: #e8622c; /* full-menu hamburger square */
   --color-accent-hover: #cf5220;
+  --color-link: #12459b; /* inline text links */
 
   /* Neutrals */
   --color-surface: #f4f6f9; /* form label cell background */
@@ -111,6 +112,7 @@
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent-hover: var(--color-accent-hover);
+  --color-link: var(--color-link);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);

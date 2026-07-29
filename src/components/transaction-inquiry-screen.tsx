@@ -5,6 +5,7 @@ import { FormRow } from "@/components/ui/form-row"
 import { SearchPanel } from "@/components/query/search-panel"
 import {
   AccountSelectField,
+  KeywordField,
   PeriodField,
   RadioRowField,
 } from "@/components/query/fields"
@@ -44,7 +45,7 @@ export function TransactionInquiryScreen() {
   const [period, setPeriod] = React.useState({ start: "2026-06-23", end: TODAY })
   const [content, setContent] = React.useState("all")
   const [order, setOrder] = React.useState("recent")
-  const [keyword] = React.useState("")
+  const [keyword, setKeyword] = React.useState("")
   const [accountOpen, setAccountOpen] = React.useState(true)
   const [pageSize, setPageSize] = React.useState<number | "all">(10)
   const [page, setPage] = React.useState(1)
@@ -54,9 +55,11 @@ export function TransactionInquiryScreen() {
 
   // Presentation-only filtering/ordering over the mock rows.
   const rows = React.useMemo(() => {
+    const trimmedKeyword = keyword.trim()
     let next = MOCK_TRANSACTIONS.filter((t) => {
-      if (content === "deposit") return t.deposit > 0
-      if (content === "withdraw") return t.withdraw > 0
+      if (content === "deposit" && t.deposit <= 0) return false
+      if (content === "withdraw" && t.withdraw <= 0) return false
+      if (trimmedKeyword && !t.description.includes(trimmedKeyword)) return false
       return true
     })
     next = [...next].sort((a, b) =>
@@ -65,7 +68,7 @@ export function TransactionInquiryScreen() {
         : a.datetime.localeCompare(b.datetime),
     )
     return next
-  }, [content, order])
+  }, [content, order, keyword])
 
   const depositSum = rows.reduce((s, t) => s + t.deposit, 0)
   const depositCount = rows.filter((t) => t.deposit > 0).length
@@ -122,6 +125,7 @@ export function TransactionInquiryScreen() {
     setPeriod({ start: "2026-06-23", end: TODAY })
     setContent("all")
     setOrder("recent")
+    setKeyword("")
     setPage(1)
   }
 
@@ -152,6 +156,9 @@ export function TransactionInquiryScreen() {
               value={content}
               onChange={setContent}
             />
+          </FormRow>
+          <FormRow label="적요검색" htmlFor="inq-keyword">
+            <KeywordField id="inq-keyword" value={keyword} onChange={setKeyword} />
           </FormRow>
           <FormRow label="조회결과순서">
             <RadioRowField
@@ -197,7 +204,7 @@ export function TransactionInquiryScreen() {
               },
               {
                 term: "출금가능금액",
-                desc: formatAmount(selectedAccount.balance),
+                desc: formatAmount(selectedAccount.withdrawable),
                 numeric: true,
               },
             ].map((item) => (

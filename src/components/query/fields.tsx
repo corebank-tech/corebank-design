@@ -5,16 +5,11 @@ import { Select } from "@/components/ui/select"
 import { Radio } from "@/components/ui/radio"
 import { formatAccountNo, formatAmount } from "@/lib/format"
 import { cn } from "@/lib/utils"
+import type { AccountOption } from "@/shared/types/account"
 
 /* ------------------------------------------------------------------ */
 /* AccountSelectField                                                  */
 /* ------------------------------------------------------------------ */
-
-export interface AccountOption {
-  alias: string
-  accountNo: string
-  balance: number
-}
 
 export interface AccountSelectFieldProps {
   id?: string

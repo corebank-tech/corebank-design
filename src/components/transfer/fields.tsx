@@ -245,7 +245,7 @@ export function AmountField({
           <button
             key={chip.label}
             type="button"
-            onClick={() => onChange((value ?? 0) + chip.value)}
+            onClick={() => onChange(Math.min((value ?? 0) + chip.value, limit))}
             className="h-8 rounded-[var(--radius)] border border-[var(--color-border-strong)] bg-white px-3 text-sm text-ink transition-colors hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             {chip.label}

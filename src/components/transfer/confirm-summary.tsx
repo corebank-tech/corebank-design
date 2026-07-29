@@ -27,10 +27,7 @@ export function ConfirmSummary({
 }: ConfirmSummaryProps) {
   return (
     <div
-      className={cn(
-        "overflow-x-auto border border-[var(--color-danger)]",
-        className,
-      )}
+      className={cn("border border-[var(--color-danger)]", className)}
       {...props}
     >
       <table className="w-full border-collapse text-sm">

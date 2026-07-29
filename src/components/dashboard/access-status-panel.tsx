@@ -18,7 +18,7 @@ export function AccessStatusPanel({ status }: AccessStatusPanelProps) {
       className="overflow-hidden border border-[var(--color-border)] bg-white"
       aria-label="접속현황"
     >
-      <h2 className="access-status-header bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground">
+      <h2 className="bg-surface-2 px-4 py-2.5 text-sm font-bold text-ink">
         접속현황
       </h2>
       <dl>

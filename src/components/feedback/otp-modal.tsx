@@ -131,7 +131,7 @@ export function OtpModal({
     >
       <p className="mb-4 text-sm leading-relaxed text-ink-muted">{guide}</p>
 
-      <div className="mb-4 flex items-center justify-between gap-3 border border-[var(--color-border)] bg-surface px-4 py-3">
+      <div className="mb-4 flex items-center justify-between gap-3 rounded-[var(--radius)] border border-[var(--color-border)] bg-surface px-4 py-3">
         {issued == null ? (
           <>
             <span className="text-sm text-ink-muted">

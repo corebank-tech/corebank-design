@@ -172,7 +172,7 @@ export function TransactionInquiryScreen() {
       </FormSection>
 
       {/* Collapsible account info panel */}
-      <div className="mb-6 border border-[var(--color-border)]">
+      <div className="mb-6 overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-border)]">
         <button
           type="button"
           onClick={() => setAccountOpen((v) => !v)}

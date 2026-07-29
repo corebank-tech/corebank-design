@@ -80,7 +80,7 @@ export function ConfirmDialog({
         </div>
       </div>
 
-      <div className="max-h-[240px] overflow-y-auto border border-[var(--color-border)] bg-surface-2 px-5 py-4">
+      <div className="max-h-[240px] overflow-y-auto rounded-[var(--radius)] border border-[var(--color-border)] bg-surface-2 px-5 py-4">
         <dl className="flex flex-col gap-2">
           {items.map((item, i) => (
             <div key={i} className="flex gap-2 text-sm leading-relaxed">

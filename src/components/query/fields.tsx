@@ -103,8 +103,10 @@ export function PeriodField({ start, end, onChange, today }: PeriodFieldProps) {
   const overLimit = daysBetween(start, end) > MAX_RANGE_DAYS
   const reversed = daysBetween(start, end) < 0
 
+  const stepperGroup =
+    "inline-flex items-stretch overflow-hidden rounded-[var(--radius)] border border-[var(--color-border-strong)]"
   const stepper =
-    "inline-flex h-8 w-7 items-center justify-center border border-[var(--color-border-strong)] bg-white text-ink-muted hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+    "inline-flex h-8 w-7 items-center justify-center bg-white text-ink-muted hover:bg-surface focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
 
   return (
     <div className="flex flex-col gap-2">
@@ -119,7 +121,7 @@ export function PeriodField({ start, end, onChange, today }: PeriodFieldProps) {
                 onClick={() => applyChip(chip.days)}
                 aria-pressed={active}
                 className={cn(
-                  "h-8 rounded-[var(--radius)] border px-3 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                  "h-8 rounded-[var(--radius-pill)] border px-3 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                   active
                     ? "border-ink bg-ink font-bold text-white"
                     : "border-[var(--color-border-strong)] bg-white text-ink hover:bg-surface",
@@ -154,42 +156,42 @@ export function PeriodField({ start, end, onChange, today }: PeriodFieldProps) {
         </div>
 
         <div className="flex items-center gap-1.5">
-          <div className="inline-flex items-center">
+          <div className={stepperGroup}>
             <button
               type="button"
-              className={cn(stepper, "rounded-l-[var(--radius)]")}
+              className={stepper}
               onClick={() => stepEnd("year", -1)}
               aria-label="종료일 1년 전"
             >
               <ChevronLeft className="h-4 w-4" aria-hidden="true" />
             </button>
-            <span className="border-y border-[var(--color-border-strong)] bg-surface px-2 py-1 text-xs font-bold text-ink">
+            <span className="flex items-center border-x border-[var(--color-border-strong)] bg-surface px-2 text-xs font-bold text-ink">
               년
             </span>
             <button
               type="button"
-              className={cn(stepper, "rounded-r-[var(--radius)]")}
+              className={stepper}
               onClick={() => stepEnd("year", 1)}
               aria-label="종료일 1년 후"
             >
               <ChevronRight className="h-4 w-4" aria-hidden="true" />
             </button>
           </div>
-          <div className="inline-flex items-center">
+          <div className={stepperGroup}>
             <button
               type="button"
-              className={cn(stepper, "rounded-l-[var(--radius)]")}
+              className={stepper}
               onClick={() => stepEnd("month", -1)}
               aria-label="종료일 1개월 전"
             >
               <ChevronLeft className="h-4 w-4" aria-hidden="true" />
             </button>
-            <span className="border-y border-[var(--color-border-strong)] bg-surface px-2 py-1 text-xs font-bold text-ink">
+            <span className="flex items-center border-x border-[var(--color-border-strong)] bg-surface px-2 text-xs font-bold text-ink">
               월
             </span>
             <button
               type="button"
-              className={cn(stepper, "rounded-r-[var(--radius)]")}
+              className={stepper}
               onClick={() => stepEnd("month", 1)}
               aria-label="종료일 1개월 후"
             >

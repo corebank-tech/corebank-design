@@ -108,7 +108,7 @@ export function InstantTransferResultDemo() {
     <div>
       <div className="mb-4 flex items-center gap-2">
         <span className="text-sm font-bold text-ink-muted">결과 상태</span>
-        <div className="flex items-center gap-1 border border-[var(--color-border)] bg-surface p-1">
+        <div className="flex items-center gap-1 rounded-[var(--radius-pill)] border border-[var(--color-border)] bg-surface p-1">
           {VARIANTS.map((v) => (
             <button
               key={v.id}
@@ -116,7 +116,7 @@ export function InstantTransferResultDemo() {
               onClick={() => setVariant(v.id)}
               aria-pressed={variant === v.id}
               className={
-                "rounded-[var(--radius)] px-3 py-1 text-sm font-bold transition-colors " +
+                "rounded-[var(--radius-pill)] px-3 py-1 text-sm font-bold transition-colors " +
                 (variant === v.id
                   ? "bg-primary text-primary-foreground"
                   : "text-ink-muted hover:bg-white")

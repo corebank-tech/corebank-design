@@ -1,3 +1,4 @@
+import * as React from "react"
 import { Routes, Route, Link, useLocation } from "react-router-dom"
 import { PageShell } from "@/components/shell/page-shell"
 import { LoginScreen } from "@/components/login-screen"
@@ -19,6 +20,26 @@ const DEMO_ROUTES = [
   { path: "/dialogs", label: "공통 모달" },
 ] as const
 
+function ThemeToggle() {
+  const [theme, setTheme] = React.useState<"bank" | "card">("bank")
+
+  React.useEffect(() => {
+    const el = document.documentElement
+    if (theme === "card") el.setAttribute("data-theme", "card")
+    else el.removeAttribute("data-theme")
+  }, [theme])
+
+  return (
+    <button
+      type="button"
+      onClick={() => setTheme((t) => (t === "bank" ? "card" : "bank"))}
+      className="rounded-full border border-border px-4 py-1.5 text-sm font-bold text-ink-muted transition-colors hover:bg-surface"
+    >
+      테마: {theme === "bank" ? "은행" : "카드"}
+    </button>
+  )
+}
+
 function DemoSwitcher() {
   const location = useLocation()
   return (
@@ -38,6 +59,8 @@ function DemoSwitcher() {
             {r.label}
           </Link>
         ))}
+        <span className="mx-1 h-5 w-px bg-border" aria-hidden />
+        <ThemeToggle />
       </div>
     </div>
   )

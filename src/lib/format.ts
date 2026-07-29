@@ -84,3 +84,29 @@ export function formatDateTime(input: Date | string): string {
     d.getSeconds(),
   )}`
 }
+
+/** "홍길동" -> "홍*동". Masks all but the first and last character. (REQ-NFR-005) */
+export function maskName(name: string): string {
+  if (name.length <= 1) return name
+  if (name.length === 2) return `${name[0]}*`
+  return `${name[0]}${"*".repeat(name.length - 2)}${name[name.length - 1]}`
+}
+
+/** "110632892336" -> "110-632-89****". Masks the trailing digits of the last group. (REQ-NFR-005) */
+export function maskAccountNo(raw: string): string {
+  const formatted = formatAccountNo(raw)
+  const groups = formatted.split("-")
+  const lastIndex = groups.length - 1
+  const last = groups[lastIndex]
+  groups[lastIndex] =
+    last.length <= 2 ? last : `${last.slice(0, 2)}${"*".repeat(last.length - 2)}`
+  return groups.join("-")
+}
+
+/** "abcdef@example.com" -> "ab***@example.com". Masks the local part after the first 2 characters. (REQ-NFR-005) */
+export function maskEmail(email: string): string {
+  const [local, domain] = email.split("@")
+  if (!domain) return email
+  const visible = local.slice(0, 2)
+  return `${visible}***@${domain}`
+}

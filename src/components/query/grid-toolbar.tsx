@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Download, Search } from "lucide-react"
+import { Accessibility, Download, Printer, Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Select } from "@/components/ui/select"
 import { cn } from "@/lib/utils"
@@ -16,6 +16,8 @@ export interface GridToolbarProps extends React.HTMLAttributes<HTMLDivElement> {
   onPageSizeChange?: (size: number | "all") => void
   /** Reference timestamp label, e.g. "2026.07.23 08:57:34". */
   baseTimeLabel?: React.ReactNode
+  onPrint?: () => void
+  onBrailleView?: () => void
   onSaveFile?: () => void
   onSearch?: () => void
 }
@@ -26,6 +28,8 @@ export function GridToolbar({
   pageSize,
   onPageSizeChange,
   baseTimeLabel,
+  onPrint,
+  onBrailleView,
   onSaveFile,
   onSearch,
   className,
@@ -52,6 +56,24 @@ export function GridToolbar({
         </p>
 
         <div className="flex shrink-0 items-center gap-1.5">
+          <Button
+            variant="secondary"
+            size="sm"
+            className="whitespace-nowrap"
+            onClick={onPrint}
+          >
+            <Printer className="h-4 w-4" aria-hidden="true" />
+            보고서인쇄
+          </Button>
+          <Button
+            variant="secondary"
+            size="sm"
+            className="whitespace-nowrap"
+            onClick={onBrailleView}
+          >
+            <Accessibility className="h-4 w-4" aria-hidden="true" />
+            점자보기
+          </Button>
           <Button
             variant="secondary"
             size="sm"
@@ -93,7 +115,7 @@ export function GridToolbar({
       </div>
 
       {baseTimeLabel != null && (
-        <p className="text-right text-xs text-ink-muted tabular-nums">
+        <p className="text-right text-2xs text-ink-muted tabular-nums">
           기준일시 : {baseTimeLabel}
         </p>
       )}

@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Info } from "lucide-react"
+import { CheckCircle2, ChevronDown, ChevronUp, Info } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 export interface NoticeBoxProps {
@@ -16,7 +16,7 @@ export function NoticeBox({
   return (
     <section
       className={cn(
-        "rounded-[var(--radius)] border border-primary/15 bg-primary-tint p-4",
+        "rounded-[var(--radius)] border border-border bg-primary-tint p-4",
         className,
       )}
       aria-label={typeof title === "string" ? title : "안내"}
@@ -35,6 +35,53 @@ export function NoticeBox({
           </li>
         ))}
       </ul>
+    </section>
+  )
+}
+
+export interface NoticeBoxFooterProps {
+  title?: string
+  items: React.ReactNode[]
+  className?: string
+  defaultOpen?: boolean
+}
+
+/** 조회·폼 화면 하단에 배치하는 접이식 [알아두세요] 안내 박스. */
+export function NoticeBoxFooter({
+  title = "알아두세요",
+  items,
+  className,
+  defaultOpen = true,
+}: NoticeBoxFooterProps) {
+  const [open, setOpen] = React.useState(defaultOpen)
+  return (
+    <section className={cn("border border-border p-4", className)} aria-label={title}>
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="flex w-full items-center justify-between"
+        aria-expanded={open}
+      >
+        <span className="flex items-center gap-2">
+          <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
+          <h2 className="text-base font-bold text-ink">{title}</h2>
+        </span>
+        {open ? (
+          <ChevronUp className="h-4 w-4 shrink-0 text-ink-faint" aria-hidden="true" />
+        ) : (
+          <ChevronDown className="h-4 w-4 shrink-0 text-ink-faint" aria-hidden="true" />
+        )}
+      </button>
+      {open && (
+        <ul className="mt-3 flex flex-col gap-1.5">
+          {items.map((item, i) => (
+            <li key={i} className="flex gap-1.5 text-xs leading-relaxed text-ink-muted">
+              <span aria-hidden="true">-</span>
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      )}
     </section>
   )
 }

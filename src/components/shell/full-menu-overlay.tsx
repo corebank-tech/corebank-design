@@ -65,12 +65,13 @@ export function FullMenuOverlay({ open, onClose }: FullMenuOverlayProps) {
                       </p>
                       <ul className="flex flex-col gap-1">
                         {group.items.map((item) => (
-                          <li key={item}>
+                          <li key={item.screenId}>
                             <a
                               href="#"
+                              data-screen-id={item.screenId}
                               className="inline-block py-0.5 text-sm text-ink-muted hover:text-primary hover:underline"
                             >
-                              {item}
+                              {item.label}
                             </a>
                           </li>
                         ))}

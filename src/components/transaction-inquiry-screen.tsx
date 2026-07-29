@@ -130,7 +130,7 @@ export function TransactionInquiryScreen() {
   }
 
   return (
-    <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white p-6 [box-shadow:var(--shadow-card)]">
+    <div className="border border-[var(--color-border)] bg-white p-6">
       <FormSection title="조회조건">
         <SearchPanel onReset={handleReset} onSearch={() => setPage(1)}>
           <FormRow label="조회계좌번호" htmlFor="inq-account">
@@ -172,7 +172,7 @@ export function TransactionInquiryScreen() {
       </FormSection>
 
       {/* Collapsible account info panel */}
-      <div className="mb-6 overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-border)]">
+      <div className="mb-6 overflow-hidden border border-[var(--color-border)]">
         <button
           type="button"
           onClick={() => setAccountOpen((v) => !v)}

@@ -28,7 +28,7 @@ export function ConfirmSummary({
   return (
     <div
       className={cn(
-        "overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-danger)]",
+        "overflow-hidden border border-[var(--color-danger)]",
         className,
       )}
       {...props}

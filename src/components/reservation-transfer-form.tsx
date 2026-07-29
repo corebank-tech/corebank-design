@@ -12,7 +12,7 @@ export function ReservationTransferForm() {
 
   return (
     <div>
-      <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white p-6 [box-shadow:var(--shadow-card)]">
+      <div className="border border-[var(--color-border)] bg-white p-6">
       <FormSection
         title="출금 정보"
         action={<Badge variant="primary">잔액 12,340,500원</Badge>}

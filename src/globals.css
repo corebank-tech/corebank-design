@@ -169,7 +169,7 @@
   --color-footer-hover-bg: var(--color-surface);
 
   /* shadcn 재바인딩 */
-  --background: var(--color-surface);
+  --background: var(--color-white);
   --secondary: var(--color-primary-tint);
   --secondary-foreground: var(--color-primary);
 }

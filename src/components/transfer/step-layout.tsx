@@ -44,7 +44,7 @@ export function StepLayout({
         </div>
       )}
 
-      <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white p-6 [box-shadow:var(--shadow-card)]">
+      <div className="border border-[var(--color-border)] bg-white p-6">
         {children}
       </div>
 

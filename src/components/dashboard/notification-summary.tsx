@@ -23,7 +23,7 @@ export function NotificationSummary({
   return (
     <section
       aria-label="미읽음 알림"
-      className="overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white [box-shadow:var(--shadow-card)]"
+      className="overflow-hidden border border-[var(--color-border)] bg-white"
     >
       <div className="flex items-center justify-between border-b border-[var(--color-border)] bg-surface px-4 py-2.5">
         <h2 className="text-sm font-bold text-ink">

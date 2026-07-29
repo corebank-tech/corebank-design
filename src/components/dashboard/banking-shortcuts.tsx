@@ -23,7 +23,7 @@ export function BankingShortcuts({
   return (
     <section
       aria-label="업무 바로가기"
-      className="flex items-center gap-6 rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-primary-tint px-6 py-5 [box-shadow:var(--shadow-card)]"
+      className="flex items-center gap-6 border border-[var(--color-border)] bg-primary-tint px-6 py-5"
     >
       <h2 className="shrink-0 text-base font-bold text-primary">{label}</h2>
       <ul className="grid flex-1 grid-cols-4 gap-3">

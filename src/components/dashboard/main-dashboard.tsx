@@ -124,7 +124,7 @@ export function MainDashboard({
     <div className="flex flex-col gap-8">
       {/* [1] 인사 영역 + 접속현황 */}
       <div className="flex items-stretch gap-6">
-        <div className="flex w-2/3 flex-col justify-center rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white px-8 py-9 [box-shadow:var(--shadow-card)]">
+        <div className="flex w-2/3 flex-col justify-center border border-[var(--color-border)] bg-white px-8 py-9">
           <p className="text-page font-bold text-ink">
             {customerName} 고객님, 안녕하세요.
           </p>
@@ -141,7 +141,7 @@ export function MainDashboard({
       </div>
 
       {/* [2] 대표계좌 요약 */}
-      <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white p-6 [box-shadow:var(--shadow-card)]">
+      <div className="border border-[var(--color-border)] bg-white p-6">
         <FormSection title="대표계좌" className="mb-0">
           {accounts.length === 0 ? (
             <div className="border-t-2 border-t-[var(--color-navy)] border-b border-[var(--color-border)]">

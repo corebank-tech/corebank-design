@@ -35,7 +35,7 @@ export function PageShell({
   const [menuOpen, setMenuOpen] = React.useState(false)
 
   return (
-    <div className="flex min-h-screen flex-col bg-surface">
+    <div className="flex min-h-screen flex-col bg-white">
       <AppHeader
         activeId={activeId}
         customerName={customerName}

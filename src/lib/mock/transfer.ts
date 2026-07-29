@@ -19,3 +19,24 @@ export const MOCK_TRANSFER_LIMITS = {
 
 /** Resolved payee name for a confirmed deposit account number. */
 export const MOCK_PAYEE_NAME = "김민수"
+
+/** One completed instant-transfer used to fill the result summary grid. */
+export interface TransferResultRow {
+  processedAt: string
+  fromAccountNo: string
+  toAccountNo: string
+  payeeName: string
+  amount: number
+  fee: number
+  memo: string
+}
+
+export const MOCK_TRANSFER_RESULT: TransferResultRow = {
+  processedAt: "2026-07-23T08:57:34",
+  fromAccountNo: "110632892336",
+  toAccountNo: "333330730135",
+  payeeName: MOCK_PAYEE_NAME,
+  amount: 500_000,
+  fee: 0,
+  memo: "-",
+}

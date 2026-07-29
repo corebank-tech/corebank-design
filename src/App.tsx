@@ -4,13 +4,17 @@ import { LoginScreen } from "@/components/login-screen"
 import { ReservationTransferForm } from "@/components/reservation-transfer-form"
 import { TransactionInquiryScreen } from "@/components/transaction-inquiry-screen"
 import { InstantTransferScreen } from "@/components/transfer/instant-transfer-screen"
+import { InstantTransferResultDemo } from "@/components/transfer/instant-transfer/result-demo"
+import { FeedbackDemo } from "@/components/feedback/feedback-demo"
 import { cn } from "@/lib/utils"
 
 const DEMO_ROUTES = [
   { path: "/", label: "로그인 (A-01)" },
   { path: "/transfer", label: "예약이체 등록" },
   { path: "/instant-transfer", label: "즉시이체 (D-01)" },
+  { path: "/result", label: "이체결과 (D-03)" },
   { path: "/inquiry", label: "거래내역조회 (B-03)" },
+  { path: "/dialogs", label: "공통 모달" },
 ] as const
 
 function DemoSwitcher() {
@@ -79,6 +83,31 @@ export default function App() {
               customerName="홍길동"
             >
               <InstantTransferScreen />
+            </PageShell>
+          }
+        />
+        <Route
+          path="/result"
+          element={
+            <PageShell
+              activeId="transfer"
+              breadcrumb={["개인", "이체", "당행이체", "즉시이체"]}
+              customerName="홍길동"
+            >
+              <InstantTransferResultDemo />
+            </PageShell>
+          }
+        />
+        <Route
+          path="/dialogs"
+          element={
+            <PageShell
+              activeId="user"
+              breadcrumb={["개인", "공통", "안내 모달"]}
+              title="공통 모달"
+              customerName="홍길동"
+            >
+              <FeedbackDemo />
             </PageShell>
           }
         />

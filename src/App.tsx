@@ -3,11 +3,13 @@ import { PageShell } from "@/components/shell/page-shell"
 import { LoginScreen } from "@/components/login-screen"
 import { ReservationTransferForm } from "@/components/reservation-transfer-form"
 import { TransactionInquiryScreen } from "@/components/transaction-inquiry-screen"
+import { InstantTransferScreen } from "@/components/transfer/instant-transfer-screen"
 import { cn } from "@/lib/utils"
 
 const DEMO_ROUTES = [
   { path: "/", label: "로그인 (A-01)" },
   { path: "/transfer", label: "예약이체 등록" },
+  { path: "/instant-transfer", label: "즉시이체 (D-01)" },
   { path: "/inquiry", label: "거래내역조회 (B-03)" },
 ] as const
 
@@ -65,6 +67,18 @@ export default function App() {
               ]}
             >
               <TransactionInquiryScreen />
+            </PageShell>
+          }
+        />
+        <Route
+          path="/instant-transfer"
+          element={
+            <PageShell
+              activeId="transfer"
+              breadcrumb={["개인", "이체", "당행이체", "즉시이체"]}
+              customerName="홍길동"
+            >
+              <InstantTransferScreen />
             </PageShell>
           }
         />

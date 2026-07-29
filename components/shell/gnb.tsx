@@ -78,7 +78,7 @@ export function Gnb({ activeId, onOpenFullMenu }: GnbProps) {
             <div className="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-3">
               {activeCategory.groups.map((group) => (
                 <div key={group.title}>
-                  <p className="mb-2 border-b border-primary/20 pb-1 text-sm-t font-bold text-primary">
+                  <p className="mb-2 border-b border-primary/20 pb-1 text-sm font-bold text-primary">
                     {group.title}
                   </p>
                   <ul className="flex flex-col gap-1.5">
@@ -86,7 +86,7 @@ export function Gnb({ activeId, onOpenFullMenu }: GnbProps) {
                       <li key={item}>
                         <a
                           href="#"
-                          className="inline-block py-0.5 text-sm-t text-ink-muted hover:text-primary hover:underline"
+                          className="inline-block py-0.5 text-sm text-ink-muted hover:text-primary hover:underline"
                         >
                           {item}
                         </a>

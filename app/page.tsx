@@ -27,7 +27,7 @@ export default function Page() {
               type="button"
               onClick={() => setView(t.id)}
               className={cn(
-                "rounded-full px-4 py-1.5 text-sm-t font-bold transition-colors",
+                "rounded-full px-4 py-1.5 text-sm font-bold transition-colors",
                 view === t.id
                   ? "bg-primary text-primary-foreground"
                   : "text-ink-muted hover:bg-surface",

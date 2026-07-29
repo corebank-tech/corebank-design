@@ -28,7 +28,7 @@ export function LoginScreen() {
         <div className="rounded-[var(--radius)] border bg-white p-8 shadow-[0_1px_3px_rgba(27,36,48,0.06)]">
           <div className="mb-6 text-center">
             <h1 className="text-page font-bold text-ink">로그인</h1>
-            <p className="mt-1 text-sm-t text-ink-muted">
+            <p className="mt-1 text-sm text-ink-muted">
               CoreBank 인터넷뱅킹에 오신 것을 환영합니다.
             </p>
           </div>
@@ -42,7 +42,7 @@ export function LoginScreen() {
                 className="mt-0.5 h-4 w-4 shrink-0 text-[var(--color-danger)]"
                 aria-hidden="true"
               />
-              <p className="text-sm-t text-ink">
+              <p className="text-sm text-ink">
                 아이디 또는 비밀번호가 올바르지 않습니다.{" "}
                 <span className="font-bold text-[var(--color-danger)]">
                   ({attempts}/{MAX}회)
@@ -53,7 +53,7 @@ export function LoginScreen() {
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="login-id" className="text-sm-t font-bold text-ink">
+              <label htmlFor="login-id" className="text-sm font-bold text-ink">
                 이용자ID
               </label>
               <Input
@@ -67,7 +67,7 @@ export function LoginScreen() {
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="login-pw" className="text-sm-t font-bold text-ink">
+              <label htmlFor="login-pw" className="text-sm font-bold text-ink">
                 비밀번호
               </label>
               <Input
@@ -88,7 +88,7 @@ export function LoginScreen() {
             </Button>
           </form>
 
-          <div className="mt-5 flex items-center justify-center gap-3 text-sm-t text-ink-muted">
+          <div className="mt-5 flex items-center justify-center gap-3 text-sm text-ink-muted">
             <a href="#" className="hover:text-primary hover:underline">
               아이디 찾기
             </a>
@@ -113,7 +113,7 @@ export function LoginScreen() {
               className="mt-0.5 h-4 w-4 shrink-0 text-primary"
               aria-hidden="true"
             />
-            <ul className="flex flex-col gap-1 text-xs-t leading-relaxed text-ink-muted">
+            <ul className="flex flex-col gap-1 text-xs leading-relaxed text-ink-muted">
               <li>
                 보안을 위해 로그인 후 10분간 이용이 없으면 자동으로 로그아웃됩니다.
               </li>

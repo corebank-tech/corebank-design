@@ -66,7 +66,7 @@ export function ReservationTransferForm() {
               placeholder="0"
               className="max-w-xs text-right"
             />
-            <span className="text-sm-t text-ink-muted">원</span>
+            <span className="text-sm text-ink-muted">원</span>
           </FormRow>
           <FormRow label="받는분 표기">
             <Input placeholder="상대 통장에 표기될 내용" className="max-w-xs" />

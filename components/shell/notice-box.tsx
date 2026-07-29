@@ -23,13 +23,13 @@ export function NoticeBox({
     >
       <div className="mb-2 flex items-center gap-2">
         <Info className="h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
-        <h2 className="text-sm-t font-bold text-ink">{title}</h2>
+        <h2 className="text-sm font-bold text-ink">{title}</h2>
       </div>
       <ul className="flex flex-col gap-1.5 pl-6">
         {items.map((item, i) => (
           <li
             key={i}
-            className="relative text-sm-t leading-relaxed text-ink-muted before:absolute before:-left-3 before:top-[9px] before:h-1 before:w-1 before:rounded-full before:bg-ink-faint"
+            className="relative text-sm leading-relaxed text-ink-muted before:absolute before:-left-3 before:top-[9px] before:h-1 before:w-1 before:rounded-full before:bg-ink-faint"
           >
             {item}
           </li>

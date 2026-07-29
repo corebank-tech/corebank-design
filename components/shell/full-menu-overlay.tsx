@@ -56,13 +56,13 @@ export function FullMenuOverlay({ open, onClose }: FullMenuOverlayProps) {
           <div className="grid grid-cols-2 gap-6 border-t py-8 md:grid-cols-4">
             {NAV.map((cat) => (
               <div key={cat.id}>
-                <h3 className="mb-3 border-b-2 border-primary pb-2 text-lg-t font-bold text-primary">
+                <h3 className="mb-3 border-b-2 border-primary pb-2 text-lg font-bold text-primary">
                   {cat.label}
                 </h3>
                 <div className="flex flex-col gap-4">
                   {cat.groups.map((group) => (
                     <div key={group.title}>
-                      <p className="mb-1 text-xs-t font-bold text-ink-faint">
+                      <p className="mb-1 text-xs font-bold text-ink-faint">
                         {group.title}
                       </p>
                       <ul className="flex flex-col gap-1">
@@ -70,7 +70,7 @@ export function FullMenuOverlay({ open, onClose }: FullMenuOverlayProps) {
                           <li key={item}>
                             <a
                               href="#"
-                              className="inline-block py-0.5 text-sm-t text-ink-muted hover:text-primary hover:underline"
+                              className="inline-block py-0.5 text-sm text-ink-muted hover:text-primary hover:underline"
                             >
                               {item}
                             </a>

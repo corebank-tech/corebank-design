@@ -33,7 +33,7 @@ export function UtilityBar({
               </span>
             )}
           </button>
-          <span className="text-sm-t text-ink">
+          <span className="text-sm text-ink">
             <span className="font-bold text-ink">{customerName}</span> 님
           </span>
         </div>

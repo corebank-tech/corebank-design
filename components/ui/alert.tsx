@@ -50,7 +50,7 @@ export function Alert({
     <div
       role="alert"
       className={cn(
-        "flex gap-2 rounded-[var(--radius)] border p-3 text-sm-t",
+        "flex gap-2 rounded-[var(--radius)] border p-3 text-sm",
         wrap,
         className,
       )}

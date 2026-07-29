@@ -28,7 +28,7 @@ export function Footer() {
                 <li key={link} className="flex items-center gap-4">
                   <a
                     href="#"
-                    className="text-sm-t text-white/75 hover:text-white hover:underline"
+                    className="text-sm text-white/75 hover:text-white hover:underline"
                   >
                     {link}
                   </a>
@@ -41,7 +41,7 @@ export function Footer() {
               ))}
             </ul>
 
-            <div className="mt-4 flex flex-col gap-1 text-xs-t text-white/55">
+            <div className="mt-4 flex flex-col gap-1 text-xs text-white/55">
               <p>
                 <span className="font-bold text-white/80">고객센터 1599-0000</span>
                 <span className="ml-2">평일 09:00~18:00 (주말·공휴일 휴무)</span>

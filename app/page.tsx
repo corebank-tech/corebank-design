@@ -4,9 +4,10 @@ import * as React from "react"
 import { PageShell } from "@/components/shell/page-shell"
 import { LoginScreen } from "@/components/login-screen"
 import { ReservationTransferForm } from "@/components/reservation-transfer-form"
+import { TransactionInquiryScreen } from "@/components/transaction-inquiry-screen"
 import { cn } from "@/lib/utils"
 
-type View = "login" | "dashboard"
+type View = "login" | "dashboard" | "inquiry"
 
 export default function Page() {
   const [view, setView] = React.useState<View>("login")
@@ -20,6 +21,7 @@ export default function Page() {
             [
               { id: "login", label: "로그인 (A-01)" },
               { id: "dashboard", label: "예약이체 등록" },
+              { id: "inquiry", label: "거래내역조회 (B-03)" },
             ] as const
           ).map((t) => (
             <button
@@ -42,6 +44,20 @@ export default function Page() {
       {view === "login" ? (
         <PageShell activeId="user" bare customerName="홍길동">
           <LoginScreen />
+        </PageShell>
+      ) : view === "inquiry" ? (
+        <PageShell
+          activeId="inquiry"
+          breadcrumb={["개인", "조회", "예금", "거래내역조회"]}
+          title="거래내역조회"
+          customerName="홍길동"
+          notice={[
+            "거래내역은 최근 1년 이내의 범위에서 조회할 수 있습니다.",
+            "조회 기준일시 이후 발생한 거래는 다음 조회 시 반영됩니다.",
+            "실제 잔액은 미결제 거래 처리 상태에 따라 달라질 수 있습니다.",
+          ]}
+        >
+          <TransactionInquiryScreen />
         </PageShell>
       ) : (
         <PageShell

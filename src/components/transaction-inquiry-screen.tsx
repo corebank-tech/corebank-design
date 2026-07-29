@@ -13,6 +13,7 @@ import { SummaryRow } from "@/components/query/summary-row"
 import { GridToolbar } from "@/components/query/grid-toolbar"
 import { DataGrid, type DataGridColumn } from "@/components/query/data-grid"
 import { Pagination } from "@/components/query/pagination"
+import { NoticeBoxFooter } from "@/components/shell/notice-box"
 import {
   MOCK_ACCOUNTS,
   MOCK_TRANSACTIONS,
@@ -148,6 +149,9 @@ export function TransactionInquiryScreen() {
               onChange={setPeriod}
               today={TODAY}
             />
+            <p className="mt-1 text-2xs text-ink-muted">
+              ※ 조회기간은 시작일 기준 최대 1년 이내로 지정할 수 있습니다(기본값은 최근 1개월입니다).
+            </p>
           </FormRow>
           <FormRow label="조회내용">
             <RadioRowField
@@ -191,28 +195,37 @@ export function TransactionInquiryScreen() {
         {accountOpen && (
           <dl className="grid grid-cols-4 divide-x divide-[var(--color-border)] border-t border-[var(--color-border)]">
             {[
-              { term: "계좌명", desc: selectedAccount.alias, numeric: false },
+              { term: "계좌명", desc: selectedAccount.alias, numeric: false, dominant: false },
               {
                 term: "계좌번호",
                 desc: formatAccountNo(selectedAccount.accountNo),
                 numeric: true,
+                dominant: false,
               },
               {
                 term: "잔액",
                 desc: formatAmount(selectedAccount.balance),
                 numeric: true,
+                dominant: true,
               },
               {
                 term: "출금가능금액",
                 desc: formatAmount(selectedAccount.withdrawable),
                 numeric: true,
+                dominant: false,
               },
             ].map((item) => (
               <div key={item.term} className="flex flex-col gap-1 px-4 py-3">
-                <dt className="text-xs text-ink-muted">{item.term}</dt>
+                <dt
+                  className={cn(
+                    item.dominant ? "text-2xs text-ink-faint" : "text-xs text-ink-faint",
+                  )}
+                >
+                  {item.term}
+                </dt>
                 <dd
                   className={cn(
-                    "text-sm font-bold text-ink",
+                    item.dominant ? "text-page font-bold text-primary" : "text-sm font-bold text-ink",
                     item.numeric && "tabular-nums",
                   )}
                 >
@@ -279,6 +292,16 @@ export function TransactionInquiryScreen() {
           onPageChange={setPage}
         />
       </FormSection>
+
+      <NoticeBoxFooter
+        className="mt-8"
+        items={[
+          "조회기간은 시작일 기준 최대 1년 이내로 지정할 수 있으며, 시작일이 종료일보다 늦으면 조회되지 않습니다.",
+          "거래 후 잔액은 해당 거래 처리 시점 기준이며, 이후 발생한 거래에 따라 현재 잔액과 다를 수 있습니다.",
+          "자동이체 실행 건은 적요가 '자동이체'로 표시됩니다.",
+          "조회 결과는 CSV 파일로 저장할 수 있으며, 파일에는 마스킹된 계좌번호가 사용됩니다.",
+        ]}
+      />
     </div>
   )
 }

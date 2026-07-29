@@ -1,5 +1,5 @@
 import * as React from "react"
-import { NoticeBox } from "@/components/shell/notice-box"
+import { NoticeBox, NoticeBoxFooter } from "@/components/shell/notice-box"
 import { FormSection } from "@/components/ui/form-section"
 import { FormRow } from "@/components/ui/form-row"
 import { Select } from "@/components/ui/select"
@@ -10,7 +10,7 @@ import { SummaryRow } from "@/components/query/summary-row"
 import { GridToolbar } from "@/components/query/grid-toolbar"
 import { DataGrid, type DataGridColumn } from "@/components/query/data-grid"
 import { Pagination } from "@/components/query/pagination"
-import { formatAccountNo, formatAmount, formatDate, formatDateTime } from "@/lib/format"
+import { formatAccountNo, formatAmount, formatDate, formatDateTime, maskName } from "@/lib/format"
 import {
   MOCK_AUTO_TRANSFER_RESULTS,
   type AutoTransferResultRow,
@@ -94,7 +94,13 @@ export function G05AutoTransferResults() {
       width: 150,
       render: (r) => <span className="tabular-nums">{formatAccountNo(r.toAccountNo)}</span>,
     },
-    { key: "payeeName", header: "예금주", align: "center", width: 90 },
+    {
+      key: "payeeName",
+      header: "예금주",
+      align: "center",
+      width: 90,
+      render: (r) => maskName(r.payeeName),
+    },
     {
       key: "amount",
       header: "이체금액",
@@ -114,14 +120,14 @@ export function G05AutoTransferResults() {
       key: "failReason",
       header: "실패사유",
       align: "left",
-      render: (r) => r.failReason ?? <span className="text-ink-faint">-</span>,
+      render: (r) => r.failReason ?? <span className="text-2xs text-ink-faint">-</span>,
     },
   ]
 
   return (
     <div className="flex flex-col">
       <NoticeBox
-        className="mb-6"
+        className="mb-8"
         items={[
           "회차 처리결과는 이체 처리상태(정상/오류)를 그대로 사용합니다.",
           "실행 실패 건은 재시도되지 않으며 다음 회차부터 정상 진행됩니다.",
@@ -163,9 +169,9 @@ export function G05AutoTransferResults() {
             {
               label: "정상처리",
               value: (
-                <span>
+                <span className="text-page font-bold">
                   {formatAmount(sum(normal))}{" "}
-                  <span className="text-xs font-normal text-ink-muted">({normal.length}건)</span>
+                  <span className="text-xs font-normal text-ink-faint">({normal.length}건)</span>
                 </span>
               ),
               valueColor: "var(--color-success)",
@@ -175,13 +181,16 @@ export function G05AutoTransferResults() {
               value: (
                 <span>
                   {formatAmount(sum(error))}{" "}
-                  <span className="text-xs font-normal text-ink-muted">({error.length}건)</span>
+                  <span className="text-xs font-normal text-ink-faint">({error.length}건)</span>
                 </span>
               ),
               valueColor: "var(--color-withdraw)",
             },
           ]}
         />
+        <p className="mb-3 text-2xs text-ink-faint">
+          ※ 집계 금액은 페이징과 무관하게 조회 조건에 해당하는 전체 건 기준입니다.
+        </p>
 
         <GridToolbar
           periodLabel={`${formatDate(period.start)} ~ ${formatDate(period.end)}`}
@@ -203,6 +212,13 @@ export function G05AutoTransferResults() {
 
         <Pagination page={safePage} totalPages={totalPages} onPageChange={setPage} />
       </FormSection>
+
+      <NoticeBoxFooter
+        className="mt-8"
+        items={[
+          "자동이체 회차 실행 실패는 해당 회차만 오류로 처리되며 이후 회차 실행에는 영향을 주지 않습니다(POL-038).",
+        ]}
+      />
     </div>
   )
 }

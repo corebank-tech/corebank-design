@@ -1,6 +1,6 @@
 import * as React from "react"
 import { useNavigate } from "react-router-dom"
-import { NoticeBox } from "@/components/shell/notice-box"
+import { NoticeBox, NoticeBoxFooter } from "@/components/shell/notice-box"
 import { FormSection } from "@/components/ui/form-section"
 import { Button } from "@/components/ui/button"
 import { DataGrid, type DataGridColumn } from "@/components/query/data-grid"
@@ -106,7 +106,7 @@ export function B01AllAccounts() {
         const groupTotal = rows.reduce((sum, a) => sum + a.balance, 0)
         return (
           <FormSection key={group} title={GROUP_LABELS[group]} className="mb-0">
-            <p className="mb-2 text-right text-xs text-ink-muted tabular-nums">
+            <p className="mb-2 text-right text-2xs text-ink-muted tabular-nums">
               기준일시 : {formatDateTime(BASE_TIME)}
             </p>
             <DataGrid
@@ -116,7 +116,7 @@ export function B01AllAccounts() {
               emptyMessage="보유한 계좌가 없습니다."
             />
             <SummaryRow
-              className="mt-2"
+              className="mt-3"
               items={[
                 { label: `${GROUP_LABELS[group]} 총잔액`, value: formatAmount(groupTotal) },
               ]}
@@ -125,8 +125,27 @@ export function B01AllAccounts() {
         )
       })}
 
-      <SummaryRow
-        items={[{ label: "총자산", value: formatAmount(grandTotal), valueColor: "var(--color-primary)" }]}
+      <div>
+        <SummaryRow
+          items={[
+            {
+              label: <span className="text-xs font-normal text-ink-faint">총자산</span>,
+              value: <span className="text-page font-bold">{formatAmount(grandTotal)}</span>,
+              valueColor: "var(--color-primary)",
+            },
+          ]}
+        />
+        <p className="mt-1.5 text-right text-2xs text-ink-faint">
+          대출 상품을 제공하지 않는 Phase 1 특성상 총자산은 수신 계좌 잔액 합계로 산출됩니다.
+        </p>
+      </div>
+
+      <NoticeBoxFooter
+        items={[
+          "계좌 잔액은 조회 시점 기준으로 표시되며, 그룹별 총잔액과 총자산도 같은 시점의 잔액 합계로 집계됩니다(REQ-INQR-002·003).",
+          "계좌명은 별명이 등록된 경우 별명을 우선 표시합니다(REQ-ACCT-013).",
+          "[이체]는 출금계좌로 등록된 입출금계좌에만 노출됩니다(REQ-INQR-005).",
+        ]}
       />
     </div>
   )

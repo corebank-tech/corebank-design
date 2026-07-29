@@ -40,7 +40,12 @@ export function ConfirmSummary({
               <th
                 key={i}
                 scope="col"
-                className="border-b border-[var(--color-danger)]/40 bg-[var(--color-danger-tint)] px-3 py-2.5 text-center text-xs font-bold text-ink whitespace-nowrap [&:not(:first-child)]:border-l [&:not(:first-child)]:border-[var(--color-border)]"
+                className={cn(
+                  "border-b border-[var(--color-danger)] bg-[var(--color-danger-tint)] px-3 py-2.5 text-center whitespace-nowrap [&:not(:first-child)]:border-l [&:not(:first-child)]:border-[var(--color-border)]",
+                  col.emphasis
+                    ? "text-xs font-bold text-ink"
+                    : "text-xs text-ink-faint",
+                )}
               >
                 {col.label}
               </th>
@@ -55,7 +60,7 @@ export function ConfirmSummary({
                 className={cn(
                   "bg-white px-3 py-3 text-center align-middle text-ink whitespace-nowrap [&:not(:first-child)]:border-l [&:not(:first-child)]:border-[var(--color-border)]",
                   col.emphasis
-                    ? "text-lg font-bold tabular-nums text-ink"
+                    ? "text-page font-bold tabular-nums text-primary"
                     : "text-sm",
                 )}
               >

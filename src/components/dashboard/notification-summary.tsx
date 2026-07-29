@@ -53,7 +53,7 @@ export function NotificationSummary({
             <span className="min-w-0 flex-1 truncate text-sm text-ink">
               {item.title}
             </span>
-            <time className="shrink-0 text-xs text-ink-muted tabular-nums">
+            <time className="shrink-0 text-2xs text-ink-faint tabular-nums">
               {formatDateTime(item.datetime)}
             </time>
           </li>

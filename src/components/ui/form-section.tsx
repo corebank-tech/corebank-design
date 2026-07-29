@@ -16,7 +16,7 @@ export function FormSection({
 }: FormSectionProps) {
   return (
     <section className={cn("mb-8", className)} {...props}>
-      <div className="flex items-end justify-between border-b-2 border-primary pb-2">
+      <div className="flex items-end justify-between border-b-2 border-[var(--color-navy)] pb-2">
         <h2 className="text-h2 font-bold text-ink">{title}</h2>
         {action != null && <div className="flex items-center gap-2">{action}</div>}
       </div>

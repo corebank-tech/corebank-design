@@ -1,5 +1,5 @@
 import * as React from "react"
-import { NoticeBox } from "@/components/shell/notice-box"
+import { NoticeBox, NoticeBoxFooter } from "@/components/shell/notice-box"
 import { FormSection } from "@/components/ui/form-section"
 import { Badge } from "@/components/ui/badge"
 import { GridToolbar } from "@/components/query/grid-toolbar"
@@ -38,7 +38,7 @@ export function F02NotificationInbox() {
       width: 60,
       render: (r) =>
         r.read ? (
-          <span className="text-xs text-ink-faint">읽음</span>
+          <span className="text-2xs text-ink-faint">읽음</span>
         ) : (
           <span className="inline-flex items-center gap-1 text-xs font-bold text-primary">
             <span className="h-1.5 w-1.5 rounded-full bg-primary" aria-hidden="true" />
@@ -52,7 +52,9 @@ export function F02NotificationInbox() {
       width: 150,
       sortable: true,
       sortValue: (r) => r.occurredAt,
-      render: (r) => <span className="tabular-nums">{formatDateTime(r.occurredAt)}</span>,
+      render: (r) => (
+        <span className="text-2xs tabular-nums text-ink-faint">{formatDateTime(r.occurredAt)}</span>
+      ),
     },
     {
       key: "category",
@@ -69,7 +71,7 @@ export function F02NotificationInbox() {
         <button
           type="button"
           onClick={() => markRead(r.id)}
-          className="flex w-full flex-col items-start gap-0.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="flex w-full flex-col items-start gap-1 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <span className={cn("text-sm", r.read ? "text-ink" : "font-bold text-ink")}>
             {r.title}
@@ -83,7 +85,7 @@ export function F02NotificationInbox() {
   return (
     <div className="flex flex-col">
       <NoticeBox
-        className="mb-6"
+        className="mb-8"
         items={[
           "이체·예약이체·자동이체·상품가입과 관련된 알림만 표시됩니다.",
           "알림을 클릭하면 읽음 상태로 전환되고 헤더의 미읽음 배지 건수에 즉시 반영됩니다.",
@@ -91,7 +93,7 @@ export function F02NotificationInbox() {
       />
 
       <FormSection title="알림함" className="mb-0">
-        <p className="mb-3 text-sm text-ink-muted">
+        <p className="mb-4 text-sm text-ink-muted">
           미읽음 <span className="font-bold text-primary">{unreadCount}</span>건
         </p>
 
@@ -114,6 +116,14 @@ export function F02NotificationInbox() {
 
         <Pagination page={safePage} totalPages={totalPages} onPageChange={setPage} />
       </FormSection>
+
+      <NoticeBoxFooter
+        className="mt-8"
+        items={[
+          "알림은 이체, 예약이체, 자동이체, 상품가입 처리 결과에 대해 생성되며 최신순으로 표시됩니다(REQ-MYPG-004).",
+          "알림을 클릭하면 읽음 상태로 전환되며, 헤더의 미읽음 건수 배지에 즉시 반영됩니다(REQ-MYPG-005).",
+        ]}
+      />
     </div>
   )
 }

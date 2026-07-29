@@ -8,6 +8,7 @@ import {
   formatAccountNo,
   formatAmount,
   formatDateTime,
+  maskName,
 } from "@/lib/format"
 import { InstantTransferStep1 } from "./instant-transfer/step-1-input"
 import { InstantTransferStep2 } from "./instant-transfer/step-2-confirm"
@@ -80,9 +81,9 @@ export function InstantTransferScreen() {
         toAccount={
           <span className="tabular-nums">{formatAccountNo(form.toAccount)}</span>
         }
-        payeeName={MOCK_PAYEE_NAME}
+        payeeName={maskName(MOCK_PAYEE_NAME)}
         amount={formatAmount(form.amount ?? 0, { suffix: false })}
-        fee="면제"
+        fee={formatAmount(0, { suffix: false })}
         payeeMemo={form.payeeMemo || "-"}
         onPrev={() => setStep(1)}
         onSubmit={() => setStep(3)}

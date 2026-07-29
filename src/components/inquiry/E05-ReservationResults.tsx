@@ -1,5 +1,5 @@
 import * as React from "react"
-import { NoticeBox } from "@/components/shell/notice-box"
+import { NoticeBox, NoticeBoxFooter } from "@/components/shell/notice-box"
 import { FormSection } from "@/components/ui/form-section"
 import { FormRow } from "@/components/ui/form-row"
 import { Badge } from "@/components/ui/badge"
@@ -9,7 +9,7 @@ import { SummaryRow } from "@/components/query/summary-row"
 import { GridToolbar } from "@/components/query/grid-toolbar"
 import { DataGrid, type DataGridColumn } from "@/components/query/data-grid"
 import { Pagination } from "@/components/query/pagination"
-import { formatAccountNo, formatAmount, formatDate, formatDateTime } from "@/lib/format"
+import { formatAccountNo, formatAmount, formatDate, formatDateTime, maskName } from "@/lib/format"
 import {
   MOCK_RESERVATION_RESULTS,
   type ReservationResultRow,
@@ -97,7 +97,13 @@ export function E05ReservationResults() {
       width: 150,
       render: (r) => <span className="tabular-nums">{formatAccountNo(r.toAccountNo)}</span>,
     },
-    { key: "payeeName", header: "예금주", align: "center", width: 90 },
+    {
+      key: "payeeName",
+      header: "예금주",
+      align: "center",
+      width: 90,
+      render: (r) => maskName(r.payeeName),
+    },
     {
       key: "amount",
       header: "이체금액",
@@ -110,21 +116,21 @@ export function E05ReservationResults() {
       header: "거래번호",
       width: 170,
       render: (r) => (
-        <span className="tabular-nums">{r.txId ?? <span className="text-ink-faint">-</span>}</span>
+        <span className="tabular-nums">{r.txId ?? <span className="text-2xs text-ink-faint">-</span>}</span>
       ),
     },
     {
       key: "failReason",
       header: "실패사유",
       align: "left",
-      render: (r) => r.failReason ?? <span className="text-ink-faint">-</span>,
+      render: (r) => r.failReason ?? <span className="text-2xs text-ink-faint">-</span>,
     },
   ]
 
   return (
     <div className="flex flex-col">
       <NoticeBox
-        className="mb-6"
+        className="mb-8"
         items={[
           "예약이체는 매일 00:10에 일괄 실행되며 실패 건은 재시도되지 않습니다.",
           "집계 금액은 페이징과 무관하게 조회 조건에 해당하는 전체 건 기준입니다.",
@@ -159,9 +165,9 @@ export function E05ReservationResults() {
             {
               label: "정상처리",
               value: (
-                <span>
+                <span className="text-page font-bold">
                   {formatAmount(sum(normal))}{" "}
-                  <span className="text-xs font-normal text-ink-muted">({normal.length}건)</span>
+                  <span className="text-xs font-normal text-ink-faint">({normal.length}건)</span>
                 </span>
               ),
               valueColor: "var(--color-success)",
@@ -171,7 +177,7 @@ export function E05ReservationResults() {
               value: (
                 <span>
                   {formatAmount(sum(error))}{" "}
-                  <span className="text-xs font-normal text-ink-muted">({error.length}건)</span>
+                  <span className="text-xs font-normal text-ink-faint">({error.length}건)</span>
                 </span>
               ),
               valueColor: "var(--color-withdraw)",
@@ -181,12 +187,15 @@ export function E05ReservationResults() {
               value: (
                 <span>
                   {formatAmount(sum(canceled))}{" "}
-                  <span className="text-xs font-normal text-ink-muted">({canceled.length}건)</span>
+                  <span className="text-xs font-normal text-ink-faint">({canceled.length}건)</span>
                 </span>
               ),
             },
           ]}
         />
+        <p className="mb-3 text-2xs text-ink-faint">
+          ※ 취소처리 건은 이체 예정일 전에 취소된 예약이체입니다.
+        </p>
 
         <GridToolbar
           periodLabel={`${formatDate(period.start)} ~ ${formatDate(period.end)}`}
@@ -208,6 +217,13 @@ export function E05ReservationResults() {
 
         <Pagination page={safePage} totalPages={totalPages} onPageChange={setPage} />
       </FormSection>
+
+      <NoticeBoxFooter
+        className="mt-8"
+        items={[
+          "처리 실패 건은 재시도 없이 실패로 확정되며, 실패 사유는 목록의 실패사유 열에서 확인할 수 있습니다.",
+        ]}
+      />
     </div>
   )
 }

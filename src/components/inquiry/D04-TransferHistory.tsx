@@ -1,0 +1,301 @@
+import * as React from "react"
+import { BarChart3 } from "lucide-react"
+import { NoticeBox } from "@/components/shell/notice-box"
+import { FormSection } from "@/components/ui/form-section"
+import { FormRow } from "@/components/ui/form-row"
+import { Select } from "@/components/ui/select"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Modal } from "@/components/ui/modal"
+import { SearchPanel } from "@/components/query/search-panel"
+import { PeriodField, RadioRowField } from "@/components/query/fields"
+import { SummaryRow } from "@/components/query/summary-row"
+import { GridToolbar } from "@/components/query/grid-toolbar"
+import { DataGrid, type DataGridColumn } from "@/components/query/data-grid"
+import { Pagination } from "@/components/query/pagination"
+import { formatAccountNo, formatAmount, formatDate, formatDateTime } from "@/lib/format"
+import {
+  MOCK_TRANSFER_HISTORY,
+  MOCK_MONTHLY_TRANSFER_STATS,
+  type TransferHistoryRow,
+  type TransferStatus,
+} from "@/lib/mock/d04-transfers"
+
+const TODAY = "2026-07-23"
+const BASE_TIME = "2026-07-23T08:57:34"
+
+const STATUS_OPTIONS = [
+  { label: "전체", value: "all" },
+  { label: "정상", value: "정상" },
+  { label: "오류", value: "오류" },
+  { label: "처리중", value: "처리중" },
+]
+
+const STATUS_BADGE: Record<TransferStatus, "success" | "danger" | "warning"> = {
+  정상: "success",
+  오류: "danger",
+  처리중: "warning",
+}
+
+const FROM_ACCOUNTS = Array.from(
+  new Map(MOCK_TRANSFER_HISTORY.map((r) => [r.fromAccountNo, r.fromAlias])).entries(),
+)
+
+function toISODate(datetime: string) {
+  return datetime.slice(0, 10)
+}
+
+export function D04TransferHistory() {
+  const [period, setPeriod] = React.useState({ start: "2026-06-23", end: TODAY })
+  const [status, setStatus] = React.useState("all")
+  const [fromAccount, setFromAccount] = React.useState("all")
+  const [pageSize, setPageSize] = React.useState<number | "all">(10)
+  const [page, setPage] = React.useState(1)
+  const [detail, setDetail] = React.useState<TransferHistoryRow | null>(null)
+  const [statsOpen, setStatsOpen] = React.useState(false)
+
+  const rows = React.useMemo(() => {
+    return MOCK_TRANSFER_HISTORY.filter((r) => {
+      const d = toISODate(r.datetime)
+      if (d < period.start || d > period.end) return false
+      if (status !== "all" && r.status !== status) return false
+      if (fromAccount !== "all" && r.fromAccountNo !== fromAccount) return false
+      return true
+    }).sort((a, b) => b.datetime.localeCompare(a.datetime))
+  }, [period, status, fromAccount])
+
+  const normalCount = rows.filter((r) => r.status === "정상").length
+  const normalAmount = rows.filter((r) => r.status === "정상").reduce((s, r) => s + r.amount, 0)
+  const errorAmount = rows.filter((r) => r.status === "오류").reduce((s, r) => s + r.amount, 0)
+  const totalFee = rows.reduce((s, r) => s + r.fee, 0)
+
+  const size = pageSize === "all" ? rows.length || 1 : pageSize
+  const totalPages = Math.max(1, Math.ceil(rows.length / size))
+  const safePage = Math.min(page, totalPages)
+  const pageRows = rows.slice((safePage - 1) * size, safePage * size)
+
+  const handleReset = () => {
+    setPeriod({ start: "2026-06-23", end: TODAY })
+    setStatus("all")
+    setFromAccount("all")
+    setPage(1)
+  }
+
+  const columns: DataGridColumn<TransferHistoryRow>[] = [
+    {
+      key: "datetime",
+      header: "이체일시",
+      width: 150,
+      sortable: true,
+      sortValue: (r) => r.datetime,
+      render: (r) => <span className="tabular-nums">{formatDateTime(r.datetime)}</span>,
+    },
+    {
+      key: "fromAccountNo",
+      header: "출금계좌",
+      width: 170,
+      render: (r) => (
+        <span>
+          {r.fromAlias} <span className="text-ink-faint">/</span>{" "}
+          <span className="tabular-nums">{formatAccountNo(r.fromAccountNo)}</span>
+        </span>
+      ),
+    },
+    {
+      key: "toAccountNo",
+      header: "입금계좌",
+      width: 150,
+      render: (r) => <span className="tabular-nums">{formatAccountNo(r.toAccountNo)}</span>,
+    },
+    { key: "payeeName", header: "예금주", align: "center", width: 90 },
+    {
+      key: "amount",
+      header: "이체금액",
+      align: "right",
+      width: 120,
+      sortable: true,
+      sortValue: (r) => r.amount,
+      render: (r) => formatAmount(r.amount),
+    },
+    {
+      key: "status",
+      header: "처리상태",
+      align: "center",
+      width: 90,
+      render: (r) => <Badge variant={STATUS_BADGE[r.status]}>{r.status}</Badge>,
+    },
+    {
+      key: "txId",
+      header: "거래번호",
+      width: 170,
+      render: (r) => (
+        <button
+          type="button"
+          onClick={() => setDetail(r)}
+          className="text-sm tabular-nums text-[var(--color-link)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          {r.txId}
+        </button>
+      ),
+    },
+  ]
+
+  return (
+    <div className="flex flex-col">
+      <NoticeBox
+        className="mb-6"
+        items={[
+          "조회기간은 최대 1년까지 선택할 수 있으며 기본값은 최근 1개월입니다.",
+          "처리중 상태는 서버 처리 지연 시에만 표시되며 이후 정상 또는 오류로 확정됩니다.",
+          "집계 금액은 페이징과 무관하게 조회 조건에 해당하는 전체 건 기준입니다.",
+        ]}
+      />
+
+      <FormSection title="조회조건">
+        <SearchPanel onReset={handleReset} onSearch={() => setPage(1)}>
+          <FormRow label="조회기간">
+            <PeriodField
+              start={period.start}
+              end={period.end}
+              onChange={setPeriod}
+              today={TODAY}
+            />
+          </FormRow>
+          <FormRow label="처리상태">
+            <RadioRowField
+              name="d04-status"
+              options={STATUS_OPTIONS}
+              value={status}
+              onChange={setStatus}
+            />
+          </FormRow>
+          <FormRow label="출금계좌" htmlFor="d04-from">
+            <Select
+              id="d04-from"
+              className="max-w-md"
+              value={fromAccount}
+              onChange={(e) => setFromAccount(e.target.value)}
+            >
+              <option value="all">전체</option>
+              {FROM_ACCOUNTS.map(([accountNo, alias]) => (
+                <option key={accountNo} value={accountNo}>
+                  {`${alias} / ${formatAccountNo(accountNo)}`}
+                </option>
+              ))}
+            </Select>
+          </FormRow>
+        </SearchPanel>
+      </FormSection>
+
+      <FormSection
+        title="이체결과"
+        className="mb-0"
+        action={
+          <Button variant="secondary" size="sm" onClick={() => setStatsOpen(true)}>
+            <BarChart3 className="h-4 w-4" aria-hidden="true" />
+            이체결과 통계
+          </Button>
+        }
+      >
+        <SummaryRow
+          className="mb-3"
+          items={[
+            {
+              label: "총 정상이체건수",
+              value: `${normalCount.toLocaleString("ko-KR")}건`,
+            },
+            { label: "총 이체금액", value: formatAmount(normalAmount), valueColor: "var(--color-deposit)" },
+            { label: "총 오류금액", value: formatAmount(errorAmount), valueColor: "var(--color-withdraw)" },
+            { label: "총 수수료", value: formatAmount(totalFee) },
+          ]}
+        />
+
+        <GridToolbar
+          periodLabel={`${formatDate(period.start)} ~ ${formatDate(period.end)}`}
+          totalCount={rows.length}
+          pageSize={pageSize}
+          onPageSizeChange={(s) => {
+            setPageSize(s)
+            setPage(1)
+          }}
+          baseTimeLabel={formatDateTime(BASE_TIME)}
+        />
+
+        <DataGrid
+          columns={columns}
+          rows={pageRows}
+          rowKey={(r) => r.id}
+          emptyMessage="조회 결과가 없습니다."
+        />
+
+        <Pagination page={safePage} totalPages={totalPages} onPageChange={setPage} />
+      </FormSection>
+
+      <Modal
+        open={detail != null}
+        onClose={() => setDetail(null)}
+        title="이체 상세"
+        size="sm"
+        footer={
+          <Button variant="primary" size="lg" className="min-w-[120px]" onClick={() => setDetail(null)}>
+            확인
+          </Button>
+        }
+      >
+        {detail && (
+          <dl className="flex flex-col gap-3 text-sm">
+            {[
+              ["거래번호", detail.txId],
+              ["이체일시", formatDateTime(detail.datetime)],
+              ["출금계좌", `${detail.fromAlias} / ${formatAccountNo(detail.fromAccountNo)}`],
+              ["입금계좌", formatAccountNo(detail.toAccountNo)],
+              ["예금주", detail.payeeName],
+              ["이체금액", formatAmount(detail.amount)],
+              ["수수료", formatAmount(detail.fee)],
+              ["표시내용", detail.memo],
+              ["처리상태", detail.status],
+              ...(detail.errorReason ? [["오류사유", detail.errorReason]] : []),
+            ].map(([label, value]) => (
+              <div key={label} className="flex gap-2">
+                <dt className="w-24 shrink-0 font-bold text-ink">{label}</dt>
+                <dd className="min-w-0 flex-1 tabular-nums text-ink">{value}</dd>
+              </div>
+            ))}
+          </dl>
+        )}
+      </Modal>
+
+      <Modal
+        open={statsOpen}
+        onClose={() => setStatsOpen(false)}
+        title="이체결과 통계"
+        size="md"
+        footer={
+          <Button variant="primary" size="lg" className="min-w-[120px]" onClick={() => setStatsOpen(false)}>
+            확인
+          </Button>
+        }
+      >
+        <p className="mb-4 text-sm text-ink-muted">
+          전월 기준 최근 1년 이내 월별·출금계좌별 이체건수와 이체금액입니다.
+        </p>
+        <DataGrid
+          columns={[
+            { key: "month", header: "월", align: "center", width: 90 },
+            { key: "fromAlias", header: "출금계좌", align: "left" },
+            { key: "count", header: "이체건수", align: "right", width: 90, render: (r) => `${r.count}건` },
+            {
+              key: "amount",
+              header: "이체금액",
+              align: "right",
+              width: 130,
+              render: (r) => formatAmount(r.amount),
+            },
+          ]}
+          rows={MOCK_MONTHLY_TRANSFER_STATS}
+          rowKey={(r, i) => `${r.month}-${r.fromAlias}-${i}`}
+        />
+      </Modal>
+    </div>
+  )
+}

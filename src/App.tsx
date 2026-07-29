@@ -8,6 +8,14 @@ import { TransactionInquiryScreen } from "@/components/transaction-inquiry-scree
 import { InstantTransferScreen } from "@/components/transfer/instant-transfer-screen"
 import { InstantTransferResultDemo } from "@/components/transfer/instant-transfer/result-demo"
 import { FeedbackDemo } from "@/components/feedback/feedback-demo"
+import { B01AllAccounts } from "@/components/inquiry/B01-AllAccounts"
+import { B02DepositAccounts } from "@/components/inquiry/B02-DepositAccounts"
+import { D04TransferHistory } from "@/components/inquiry/D04-TransferHistory"
+import { E04ReservationList } from "@/components/inquiry/E04-ReservationList"
+import { E05ReservationResults } from "@/components/inquiry/E05-ReservationResults"
+import { G04AutoTransferList } from "@/components/inquiry/G04-AutoTransferList"
+import { G05AutoTransferResults } from "@/components/inquiry/G05-AutoTransferResults"
+import { F02NotificationInbox } from "@/components/inquiry/F02-NotificationInbox"
 import { cn } from "@/lib/utils"
 
 /**
@@ -35,8 +43,6 @@ const PLACEHOLDER_ROUTES: PlaceholderRoute[] = [
   { path: "/logout", screenId: "A-10", title: "로그아웃 완료", breadcrumb: ["홈", "로그아웃"], loggedIn: false },
 
   // B — 수신(계좌조회 · 계좌관리)
-  { path: "/accounts", screenId: "B-01", title: "전체계좌조회", breadcrumb: ["조회", "계좌조회", "전체계좌"], activeId: "inquiry" },
-  { path: "/accounts/deposits", screenId: "B-02", title: "예금/적금 계좌조회", breadcrumb: ["조회", "계좌조회", "예금·적금"], activeId: "inquiry" },
   { path: "/user/accounts/password", screenId: "B-04", title: "계좌비밀번호 변경", breadcrumb: ["사용자관리", "계좌관리", "계좌비밀번호"], activeId: "user" },
   { path: "/user/accounts/withdrawal", screenId: "B-05", title: "출금계좌관리", breadcrumb: ["사용자관리", "계좌관리", "출금계좌관리"], activeId: "user" },
   { path: "/user/accounts/alias", screenId: "B-06", title: "계좌별명 관리", breadcrumb: ["사용자관리", "계좌관리", "계좌별명관리"], activeId: "user" },
@@ -51,23 +57,17 @@ const PLACEHOLDER_ROUTES: PlaceholderRoute[] = [
   { path: "/product/:productId/join/4", screenId: "C-06", title: "상품가입 4단계 - 완료", breadcrumb: ["금융상품", "가입"], activeId: "product" },
 
   // D — 이체(즉시이체)
-  { path: "/transfer/history", screenId: "D-04", title: "이체결과조회", breadcrumb: ["이체", "즉시이체", "이체결과조회"], activeId: "transfer" },
   { path: "/user/transfer-limit", screenId: "D-05", title: "이체한도 조회/변경", breadcrumb: ["사용자관리", "이체한도관리"], activeId: "user" },
 
   // E — 이체(예약이체)
   { path: "/transfer/reservation/new", screenId: "E-01", title: "예약이체 등록 1단계 - 정보입력", breadcrumb: ["이체", "예약이체", "예약이체 등록"], activeId: "transfer" },
-  { path: "/transfer/reservation", screenId: "E-04", title: "예약이체 조회/취소", breadcrumb: ["이체", "예약이체", "예약이체등록 조회·취소"], activeId: "transfer" },
-  { path: "/transfer/reservation/history", screenId: "E-05", title: "예약이체 처리결과 조회", breadcrumb: ["이체", "예약이체", "예약이체 처리결과 조회"], activeId: "transfer" },
 
   // F — 공통(마이페이지)
   { path: "/user/profile", screenId: "F-01", title: "고객정보 조회/변경", breadcrumb: ["사용자관리", "고객정보관리"], activeId: "user" },
   { path: "/user/password", screenId: "F-01", title: "고객정보 조회/변경", breadcrumb: ["사용자관리", "고객정보관리"], activeId: "user" },
-  { path: "/notifications", screenId: "F-02", title: "알림함", breadcrumb: ["헤더", "알림"] },
 
   // G — 이체(자동이체)
   { path: "/transfer/auto/new", screenId: "G-01", title: "자동이체 등록 1단계 - 정보입력", breadcrumb: ["이체", "자동이체", "자동이체 등록"], activeId: "transfer" },
-  { path: "/transfer/auto", screenId: "G-04", title: "자동이체 조회/변경/해지", breadcrumb: ["이체", "자동이체", "자동이체 조회·변경·해지"], activeId: "transfer" },
-  { path: "/transfer/auto/history", screenId: "G-05", title: "자동이체 결과조회", breadcrumb: ["이체", "자동이체", "자동이체결과 조회"], activeId: "transfer" },
 ]
 
 /** 개발용 라우트 목록 — 파트(A~G)별 화면ID 그룹. 디자인 시스템에 포함되지 않는다. */
@@ -257,6 +257,110 @@ export default function App() {
               customerName="홍길동"
             >
               <FeedbackDemo />
+            </PageShell>
+          }
+        />
+
+        <Route
+          path="/accounts"
+          element={
+            <PageShell
+              activeId="inquiry"
+              breadcrumb={["조회", "계좌조회", "전체계좌"]}
+              title="전체계좌조회"
+              customerName="홍길동"
+            >
+              <B01AllAccounts />
+            </PageShell>
+          }
+        />
+        <Route
+          path="/accounts/deposits"
+          element={
+            <PageShell
+              activeId="inquiry"
+              breadcrumb={["조회", "계좌조회", "예금·적금"]}
+              title="예금/적금 계좌조회"
+              customerName="홍길동"
+            >
+              <B02DepositAccounts />
+            </PageShell>
+          }
+        />
+        <Route
+          path="/transfer/history"
+          element={
+            <PageShell
+              activeId="transfer"
+              breadcrumb={["이체", "즉시이체", "이체결과조회"]}
+              title="이체결과조회"
+              customerName="홍길동"
+            >
+              <D04TransferHistory />
+            </PageShell>
+          }
+        />
+        <Route
+          path="/transfer/reservation"
+          element={
+            <PageShell
+              activeId="transfer"
+              breadcrumb={["이체", "예약이체", "예약이체등록 조회·취소"]}
+              title="예약이체 조회/취소"
+              customerName="홍길동"
+            >
+              <E04ReservationList />
+            </PageShell>
+          }
+        />
+        <Route
+          path="/transfer/reservation/history"
+          element={
+            <PageShell
+              activeId="transfer"
+              breadcrumb={["이체", "예약이체", "예약이체 처리결과 조회"]}
+              title="예약이체 처리결과 조회"
+              customerName="홍길동"
+            >
+              <E05ReservationResults />
+            </PageShell>
+          }
+        />
+        <Route
+          path="/transfer/auto"
+          element={
+            <PageShell
+              activeId="transfer"
+              breadcrumb={["이체", "자동이체", "자동이체 조회·변경·해지"]}
+              title="자동이체 조회/변경/해지"
+              customerName="홍길동"
+            >
+              <G04AutoTransferList />
+            </PageShell>
+          }
+        />
+        <Route
+          path="/transfer/auto/history"
+          element={
+            <PageShell
+              activeId="transfer"
+              breadcrumb={["이체", "자동이체", "자동이체결과 조회"]}
+              title="자동이체 결과조회"
+              customerName="홍길동"
+            >
+              <G05AutoTransferResults />
+            </PageShell>
+          }
+        />
+        <Route
+          path="/notifications"
+          element={
+            <PageShell
+              breadcrumb={["헤더", "알림"]}
+              title="알림함"
+              customerName="홍길동"
+            >
+              <F02NotificationInbox />
             </PageShell>
           }
         />

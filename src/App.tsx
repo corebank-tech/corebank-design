@@ -1,6 +1,7 @@
 import { Routes, Route, Link, useLocation } from "react-router-dom"
 import { PageShell } from "@/components/shell/page-shell"
 import { LoginScreen } from "@/components/login-screen"
+import { MainDashboard } from "@/components/dashboard/main-dashboard"
 import { ReservationTransferForm } from "@/components/reservation-transfer-form"
 import { TransactionInquiryScreen } from "@/components/transaction-inquiry-screen"
 import { InstantTransferScreen } from "@/components/transfer/instant-transfer-screen"
@@ -10,6 +11,7 @@ import { cn } from "@/lib/utils"
 
 const DEMO_ROUTES = [
   { path: "/", label: "로그인 (A-01)" },
+  { path: "/dashboard", label: "메인 대시보드" },
   { path: "/transfer", label: "예약이체 등록" },
   { path: "/instant-transfer", label: "즉시이체 (D-01)" },
   { path: "/result", label: "이체결과 (D-03)" },
@@ -53,6 +55,19 @@ export default function App() {
           element={
             <PageShell activeId="user" bare customerName="홍길동">
               <LoginScreen />
+            </PageShell>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <PageShell
+              activeId="user"
+              breadcrumb={["개인", "메인", "대시보드"]}
+              title="메인 대시보드"
+              customerName="홍길동"
+            >
+              <MainDashboard customerName="홍길동" />
             </PageShell>
           }
         />

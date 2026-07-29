@@ -17,6 +17,40 @@ export function formatAmount(
   return suffix ? `${grouped}원` : grouped
 }
 
+const KO_DIGITS = ["", "일", "이", "삼", "사", "오", "육", "칠", "팔", "구"]
+const KO_SMALL_UNITS = ["", "십", "백", "천"]
+const KO_BIG_UNITS = ["", "만", "억", "조", "경"]
+
+function readFourDigits(num: number): string {
+  const s = String(num).padStart(4, "0")
+  let out = ""
+  for (let i = 0; i < 4; i++) {
+    const d = Number(s[i])
+    if (d !== 0) out += KO_DIGITS[d] + KO_SMALL_UNITS[3 - i]
+  }
+  return out
+}
+
+/**
+ * 1000000 -> "일백만원". Reads a KRW integer amount in Korean numerals.
+ * Used for the read-back label next to amount inputs.
+ */
+export function formatKoreanAmount(value: number): string {
+  const n = Math.trunc(Math.abs(value))
+  if (n === 0) return "영원"
+  const groups: number[] = []
+  let x = n
+  while (x > 0) {
+    groups.push(x % 10000)
+    x = Math.floor(x / 10000)
+  }
+  let out = ""
+  for (let i = groups.length - 1; i >= 0; i--) {
+    if (groups[i] !== 0) out += readFourDigits(groups[i]) + KO_BIG_UNITS[i]
+  }
+  return `${out}원`
+}
+
 /** "110632892336" -> "110-632-892336" (3-3-6). Non-digits are stripped. */
 export function formatAccountNo(raw: string): string {
   const digits = raw.replace(/\D/g, "")

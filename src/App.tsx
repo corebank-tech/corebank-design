@@ -1,44 +1,178 @@
+import * as React from "react"
 import { Routes, Route, Link, useLocation } from "react-router-dom"
 import { PageShell } from "@/components/shell/page-shell"
+import { EmptyState } from "@/components/query/empty-state"
 import { LoginScreen } from "@/components/login-screen"
 import { MainDashboard } from "@/components/dashboard/main-dashboard"
-import { ReservationTransferForm } from "@/components/reservation-transfer-form"
 import { TransactionInquiryScreen } from "@/components/transaction-inquiry-screen"
 import { InstantTransferScreen } from "@/components/transfer/instant-transfer-screen"
 import { InstantTransferResultDemo } from "@/components/transfer/instant-transfer/result-demo"
 import { FeedbackDemo } from "@/components/feedback/feedback-demo"
 import { cn } from "@/lib/utils"
 
-const DEMO_ROUTES = [
-  { path: "/", label: "로그인 (A-01)" },
-  { path: "/dashboard", label: "메인 대시보드" },
-  { path: "/transfer", label: "예약이체 등록" },
-  { path: "/instant-transfer", label: "즉시이체 (D-01)" },
-  { path: "/result", label: "이체결과 (D-03)" },
-  { path: "/inquiry", label: "거래내역조회 (B-03)" },
-  { path: "/dialogs", label: "공통 모달" },
-] as const
+/**
+ * 아직 화면이 구현되지 않은 경로용 플레이스홀더 정의.
+ * breadcrumb 은 docs/requirements.md §1 화면목록의 '경로(메뉴)' 열과 일치시킨다(REQ-CMN-004).
+ */
+interface PlaceholderRoute {
+  path: string
+  screenId: string
+  title: string
+  breadcrumb: string[]
+  activeId?: string
+  loggedIn?: boolean
+}
 
-function DemoSwitcher() {
+const PLACEHOLDER_ROUTES: PlaceholderRoute[] = [
+  // A — 공통(로그인/회원가입)
+  { path: "/signup/1", screenId: "A-02", title: "회원가입 1단계 - 약관동의", breadcrumb: ["홈", "로그인", "회원가입"], loggedIn: false },
+  { path: "/signup/2", screenId: "A-03", title: "회원가입 2단계 - 본인확인", breadcrumb: ["홈", "로그인", "회원가입"], loggedIn: false },
+  { path: "/signup/3", screenId: "A-04", title: "회원가입 3단계 - 정보입력", breadcrumb: ["홈", "로그인", "회원가입"], loggedIn: false },
+  { path: "/signup/4", screenId: "A-05", title: "회원가입 4단계 - 입력확인", breadcrumb: ["홈", "로그인", "회원가입"], loggedIn: false },
+  { path: "/signup/5", screenId: "A-06", title: "회원가입 5단계 - 가입완료", breadcrumb: ["홈", "로그인", "회원가입"], loggedIn: false },
+  { path: "/find-id", screenId: "A-07", title: "아이디 찾기", breadcrumb: ["홈", "로그인", "아이디 찾기"], loggedIn: false },
+  { path: "/reset-password", screenId: "A-08", title: "비밀번호 재설정", breadcrumb: ["홈", "로그인", "비밀번호 재설정"], loggedIn: false },
+  { path: "/logout", screenId: "A-10", title: "로그아웃 완료", breadcrumb: ["홈", "로그아웃"], loggedIn: false },
+
+  // B — 수신(계좌조회 · 계좌관리)
+  { path: "/accounts", screenId: "B-01", title: "전체계좌조회", breadcrumb: ["조회", "계좌조회", "전체계좌"], activeId: "inquiry" },
+  { path: "/accounts/deposits", screenId: "B-02", title: "예금/적금 계좌조회", breadcrumb: ["조회", "계좌조회", "예금·적금"], activeId: "inquiry" },
+  { path: "/user/accounts/password", screenId: "B-04", title: "계좌비밀번호 변경", breadcrumb: ["사용자관리", "계좌관리", "계좌비밀번호"], activeId: "user" },
+  { path: "/user/accounts/withdrawal", screenId: "B-05", title: "출금계좌관리", breadcrumb: ["사용자관리", "계좌관리", "출금계좌관리"], activeId: "user" },
+  { path: "/user/accounts/alias", screenId: "B-06", title: "계좌별명 관리", breadcrumb: ["사용자관리", "계좌관리", "계좌별명관리"], activeId: "user" },
+  { path: "/user/accounts/order", screenId: "B-07", title: "계좌순서 변경", breadcrumb: ["사용자관리", "계좌관리", "계좌순서변경"], activeId: "user" },
+
+  // C — 수신(금융상품)
+  { path: "/products", screenId: "C-01", title: "상품몰 - 상품목록", breadcrumb: ["금융상품", "예금·적금", "상품목록"], activeId: "product" },
+  { path: "/products/:productId", screenId: "C-02", title: "상품 상세", breadcrumb: ["금융상품", "예금·적금", "상품상세"], activeId: "product" },
+  { path: "/product/:productId/join/1", screenId: "C-03", title: "상품가입 1단계 - 약관동의", breadcrumb: ["금융상품", "가입"], activeId: "product" },
+  { path: "/product/:productId/join/2", screenId: "C-04", title: "상품가입 2단계 - 정보입력", breadcrumb: ["금융상품", "가입"], activeId: "product" },
+  { path: "/product/:productId/join/3", screenId: "C-05", title: "상품가입 3단계 - 확인/인증", breadcrumb: ["금융상품", "가입"], activeId: "product" },
+  { path: "/product/:productId/join/4", screenId: "C-06", title: "상품가입 4단계 - 완료", breadcrumb: ["금융상품", "가입"], activeId: "product" },
+
+  // D — 이체(즉시이체)
+  { path: "/transfer/history", screenId: "D-04", title: "이체결과조회", breadcrumb: ["이체", "즉시이체", "이체결과조회"], activeId: "transfer" },
+  { path: "/user/transfer-limit", screenId: "D-05", title: "이체한도 조회/변경", breadcrumb: ["사용자관리", "이체한도관리"], activeId: "user" },
+
+  // E — 이체(예약이체)
+  { path: "/transfer/reservation/new", screenId: "E-01", title: "예약이체 등록 1단계 - 정보입력", breadcrumb: ["이체", "예약이체", "예약이체 등록"], activeId: "transfer" },
+  { path: "/transfer/reservation", screenId: "E-04", title: "예약이체 조회/취소", breadcrumb: ["이체", "예약이체", "예약이체등록 조회·취소"], activeId: "transfer" },
+  { path: "/transfer/reservation/history", screenId: "E-05", title: "예약이체 처리결과 조회", breadcrumb: ["이체", "예약이체", "예약이체 처리결과 조회"], activeId: "transfer" },
+
+  // F — 공통(마이페이지)
+  { path: "/user/profile", screenId: "F-01", title: "고객정보 조회/변경", breadcrumb: ["사용자관리", "고객정보관리"], activeId: "user" },
+  { path: "/user/password", screenId: "F-01", title: "고객정보 조회/변경", breadcrumb: ["사용자관리", "고객정보관리"], activeId: "user" },
+  { path: "/notifications", screenId: "F-02", title: "알림함", breadcrumb: ["헤더", "알림"] },
+
+  // G — 이체(자동이체)
+  { path: "/transfer/auto/new", screenId: "G-01", title: "자동이체 등록 1단계 - 정보입력", breadcrumb: ["이체", "자동이체", "자동이체 등록"], activeId: "transfer" },
+  { path: "/transfer/auto", screenId: "G-04", title: "자동이체 조회/변경/해지", breadcrumb: ["이체", "자동이체", "자동이체 조회·변경·해지"], activeId: "transfer" },
+  { path: "/transfer/auto/history", screenId: "G-05", title: "자동이체 결과조회", breadcrumb: ["이체", "자동이체", "자동이체결과 조회"], activeId: "transfer" },
+]
+
+/** 개발용 라우트 목록 — 파트(A~G)별 화면ID 그룹. 디자인 시스템에 포함되지 않는다. */
+interface DevRoute {
+  screenId: string
+  label: string
+  path: string
+}
+
+const DEV_ROUTES: DevRoute[] = [
+  { screenId: "A-01", label: "로그인", path: "/" },
+  { screenId: "A-02", label: "회원가입 1단계", path: "/signup/1" },
+  { screenId: "A-03", label: "회원가입 2단계", path: "/signup/2" },
+  { screenId: "A-04", label: "회원가입 3단계", path: "/signup/3" },
+  { screenId: "A-05", label: "회원가입 4단계", path: "/signup/4" },
+  { screenId: "A-06", label: "회원가입 5단계", path: "/signup/5" },
+  { screenId: "A-07", label: "아이디 찾기", path: "/find-id" },
+  { screenId: "A-08", label: "비밀번호 재설정", path: "/reset-password" },
+  { screenId: "A-09", label: "메인 대시보드", path: "/dashboard" },
+  { screenId: "A-10", label: "로그아웃 완료", path: "/logout" },
+  { screenId: "A-91~93", label: "공통 모달", path: "/dialogs" },
+
+  { screenId: "B-01", label: "전체계좌조회", path: "/accounts" },
+  { screenId: "B-02", label: "예금/적금 계좌조회", path: "/accounts/deposits" },
+  { screenId: "B-03", label: "거래내역조회", path: "/inquiry" },
+  { screenId: "B-04", label: "계좌비밀번호 변경", path: "/user/accounts/password" },
+  { screenId: "B-05", label: "출금계좌관리", path: "/user/accounts/withdrawal" },
+  { screenId: "B-06", label: "계좌별명 관리", path: "/user/accounts/alias" },
+  { screenId: "B-07", label: "계좌순서 변경", path: "/user/accounts/order" },
+
+  { screenId: "C-01", label: "상품목록", path: "/products" },
+  { screenId: "C-02", label: "상품상세", path: "/products/P001" },
+  { screenId: "C-03", label: "상품가입 1단계", path: "/product/P001/join/1" },
+  { screenId: "C-04", label: "상품가입 2단계", path: "/product/P001/join/2" },
+  { screenId: "C-05", label: "상품가입 3단계", path: "/product/P001/join/3" },
+  { screenId: "C-06", label: "상품가입 4단계", path: "/product/P001/join/4" },
+
+  { screenId: "D-01", label: "즉시이체", path: "/instant-transfer" },
+  { screenId: "D-03", label: "즉시이체 결과(데모)", path: "/result" },
+  { screenId: "D-04", label: "이체결과조회", path: "/transfer/history" },
+  { screenId: "D-05", label: "이체한도 조회/변경", path: "/user/transfer-limit" },
+
+  { screenId: "E-01", label: "예약이체 등록", path: "/transfer/reservation/new" },
+  { screenId: "E-04", label: "예약이체 조회/취소", path: "/transfer/reservation" },
+  { screenId: "E-05", label: "예약이체 처리결과 조회", path: "/transfer/reservation/history" },
+
+  { screenId: "F-01", label: "고객정보 관리", path: "/user/profile" },
+  { screenId: "F-01", label: "비밀번호 변경", path: "/user/password" },
+  { screenId: "F-02", label: "알림함", path: "/notifications" },
+
+  { screenId: "G-01", label: "자동이체 등록", path: "/transfer/auto/new" },
+  { screenId: "G-04", label: "자동이체 조회/변경/해지", path: "/transfer/auto" },
+  { screenId: "G-05", label: "자동이체 결과조회", path: "/transfer/auto/history" },
+]
+
+const DEV_PARTS = ["A", "B", "C", "D", "E", "F", "G"] as const
+
+function DevNav() {
   const location = useLocation()
+  const [open, setOpen] = React.useState(false)
+
   return (
-    <div className="fixed bottom-4 left-1/2 z-[500] -translate-x-1/2">
-      <div className="flex items-center gap-1 rounded-full border bg-white p-1 shadow-lg">
-        {DEMO_ROUTES.map((r) => (
-          <Link
-            key={r.path}
-            to={r.path}
-            className={cn(
-              "rounded-full px-4 py-1.5 text-sm font-bold transition-colors",
-              location.pathname === r.path
-                ? "bg-primary text-primary-foreground"
-                : "text-ink-muted hover:bg-surface",
-            )}
-          >
-            {r.label}
-          </Link>
-        ))}
-      </div>
+    <div className="fixed bottom-4 right-4 z-[500]">
+      {open && (
+        <div className="mb-2 max-h-[70vh] w-[720px] overflow-y-auto rounded-lg border bg-white p-4 shadow-lg">
+          <div className="grid grid-cols-4 gap-x-6 gap-y-4">
+            {DEV_PARTS.map((part) => {
+              const routes = DEV_ROUTES.filter((r) => r.screenId.startsWith(part))
+              if (routes.length === 0) return null
+              return (
+                <div key={part}>
+                  <p className="mb-1.5 text-[13px] font-bold text-ink-faint">
+                    {part}
+                  </p>
+                  <ul className="flex flex-col gap-1">
+                    {routes.map((r) => (
+                      <li key={`${r.screenId}-${r.path}`}>
+                        <Link
+                          to={r.path}
+                          onClick={() => setOpen(false)}
+                          className={cn(
+                            "block text-[13px] leading-snug",
+                            location.pathname === r.path
+                              ? "font-bold text-primary"
+                              : "text-ink-muted hover:text-primary",
+                          )}
+                        >
+                          {r.screenId} {r.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )}
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="rounded-full border bg-white px-4 py-1.5 text-sm font-bold text-ink-muted shadow-lg hover:bg-surface"
+      >
+        개발 메뉴
+      </button>
     </div>
   )
 }
@@ -46,8 +180,8 @@ function DemoSwitcher() {
 export default function App() {
   return (
     <>
-      {/* Demo view switcher (not part of the design system) */}
-      <DemoSwitcher />
+      {/* Dev-only route switcher (not part of the design system) */}
+      <DevNav />
 
       <Routes>
         <Route
@@ -126,25 +260,27 @@ export default function App() {
             </PageShell>
           }
         />
-        <Route
-          path="/transfer"
-          element={
-            <PageShell
-              activeId="transfer"
-              breadcrumb={["개인", "이체", "예약이체", "예약이체 등록"]}
-              title="예약이체 등록"
-              customerName="홍길동"
-              notice={[
-                "예약이체는 지정하신 날짜의 영업시간 개시 후 순차적으로 처리됩니다.",
-                "출금계좌 잔액이 부족한 경우 예약이체는 자동으로 취소되며, 별도 안내되지 않습니다.",
-                "예약이체 취소·변경은 처리 예정일 전 영업일 23시 30분까지 가능합니다.",
-                "1일 이체한도 및 1회 이체한도를 초과하는 금액은 예약할 수 없습니다.",
-              ]}
-            >
-              <ReservationTransferForm />
-            </PageShell>
-          }
-        />
+
+        {PLACEHOLDER_ROUTES.map((r) => (
+          <Route
+            key={`${r.screenId}-${r.path}`}
+            path={r.path}
+            element={
+              <PageShell
+                activeId={r.activeId}
+                breadcrumb={r.breadcrumb}
+                title={r.title}
+                customerName="홍길동"
+                loggedIn={r.loggedIn ?? true}
+              >
+                <EmptyState
+                  message="준비 중인 화면입니다."
+                  description={`화면ID: ${r.screenId}`}
+                />
+              </PageShell>
+            }
+          />
+        ))}
       </Routes>
     </>
   )

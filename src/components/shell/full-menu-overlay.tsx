@@ -1,4 +1,5 @@
 import * as React from "react"
+import { Link } from "react-router-dom"
 import { X } from "lucide-react"
 import { NAV } from "@/lib/nav"
 
@@ -65,14 +66,15 @@ export function FullMenuOverlay({ open, onClose }: FullMenuOverlayProps) {
                       </p>
                       <ul className="flex flex-col gap-1">
                         {group.items.map((item) => (
-                          <li key={item.screenId}>
-                            <a
-                              href="#"
+                          <li key={`${item.screenId}-${item.path}`}>
+                            <Link
+                              to={item.path}
                               data-screen-id={item.screenId}
+                              onClick={onClose}
                               className="inline-block py-0.5 text-[15px] text-ink [font-weight:var(--weight-label)] hover:text-primary hover:underline"
                             >
                               {item.label}
-                            </a>
+                            </Link>
                           </li>
                         ))}
                       </ul>

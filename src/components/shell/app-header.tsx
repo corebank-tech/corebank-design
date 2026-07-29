@@ -180,14 +180,15 @@ export function AppHeader({
                   <p className="mb-2 text-[13px] text-ink-faint">{group.title}</p>
                   <ul className="flex flex-col gap-1.5">
                     {group.items.map((item) => (
-                      <li key={item.screenId}>
-                        <a
-                          href="#"
+                      <li key={`${item.screenId}-${item.path}`}>
+                        <Link
+                          to={item.path}
                           data-screen-id={item.screenId}
+                          onClick={() => setHoverId(null)}
                           className="inline-block py-0.5 text-[15px] text-ink [font-weight:var(--weight-label)] hover:text-primary hover:underline"
                         >
                           {item.label}
-                        </a>
+                        </Link>
                       </li>
                     ))}
                   </ul>

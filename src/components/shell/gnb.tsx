@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 import { Menu } from "lucide-react"
 import { NAV } from "@/lib/nav"
@@ -31,7 +29,7 @@ export function Gnb({ activeId, onOpenFullMenu }: GnbProps) {
       aria-label="주 메뉴"
       onMouseLeave={scheduleClose}
     >
-      <div className="mx-auto flex h-12 max-w-[1200px] items-stretch px-4">
+      <div className="mx-auto flex h-12 max-w-[1280px] items-stretch px-4">
         <ul className="flex flex-1 items-stretch">
           {NAV.map((cat) => {
             const isActive = cat.id === activeId
@@ -74,8 +72,8 @@ export function Gnb({ activeId, onOpenFullMenu }: GnbProps) {
           onMouseEnter={() => open(activeCategory.id)}
           onMouseLeave={scheduleClose}
         >
-          <div className="mx-auto max-w-[1200px] px-4 py-6">
-            <div className="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-3">
+          <div className="mx-auto max-w-[1280px] px-4 py-6">
+            <div className="grid grid-cols-3 gap-x-8 gap-y-6">
               {activeCategory.groups.map((group) => (
                 <div key={group.title}>
                   <p className="mb-2 border-b border-primary/20 pb-1 text-sm font-bold text-primary">

@@ -2,7 +2,7 @@ import * as React from "react"
 import { cn } from "@/lib/utils"
 
 export interface FormSectionProps
-  extends React.HTMLAttributes<HTMLElement> {
+  extends Omit<React.HTMLAttributes<HTMLElement>, "title"> {
   title: React.ReactNode
   action?: React.ReactNode
 }

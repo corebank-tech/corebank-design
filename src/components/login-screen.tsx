@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 import { AlertCircle, ShieldCheck } from "lucide-react"
 import { Input } from "@/components/ui/input"

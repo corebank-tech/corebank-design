@@ -24,13 +24,13 @@ export function FormRow({
   return (
     <div
       className={cn(
-        "flex flex-col border-b border-l border-r first:border-t sm:flex-row",
+        "flex border-b border-l border-r first:border-t",
         className,
       )}
       {...props}
     >
       <div
-        className="flex shrink-0 items-center border-b bg-surface px-4 py-3 max-sm:!w-full sm:border-b-0 sm:border-r"
+        className="flex shrink-0 items-center border-r bg-surface px-4 py-3"
         style={{ width: labelWidth }}
       >
         <label

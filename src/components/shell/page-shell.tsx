@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 import { UtilityBar } from "./utility-bar"
 import { Gnb } from "./gnb"
@@ -47,7 +45,7 @@ export function PageShell({
       <FullMenuOverlay open={menuOpen} onClose={() => setMenuOpen(false)} />
 
       <main className="flex-1">
-        <div className="mx-auto w-full max-w-[1200px] px-4 py-8">
+        <div className="mx-auto w-full max-w-[1280px] px-4 py-8">
           {!bare && title != null && <PageHeader title={title} />}
           {children}
           {notice && notice.length > 0 && (

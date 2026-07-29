@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 import { Star, Type, Printer } from "lucide-react"
 import { cn } from "@/lib/utils"

@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 import { ChevronRight } from "lucide-react"
 
@@ -41,7 +39,7 @@ export function BreadcrumbBar({
 
   return (
     <div className="bg-[var(--color-primary-soft)]">
-      <div className="mx-auto flex h-10 max-w-[1200px] items-center justify-between gap-4 px-4">
+      <div className="mx-auto flex h-10 max-w-[1280px] items-center justify-between gap-4 px-4">
         <nav aria-label="현재 위치" className="min-w-0">
           <ol className="flex items-center gap-1 text-[13px] text-white/85">
             {trail.map((crumb, i) => {

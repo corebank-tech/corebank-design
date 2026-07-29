@@ -50,7 +50,10 @@
   --space-12: 48px;
 
   /* Radius */
-  --radius: 4px;
+  --radius: 2px;
+
+  /* Font */
+  --font-sans: "Pretendard Variable", Pretendard, -apple-system, sans-serif;
 
   /* z-index layers */
   --z-header: 100;
@@ -130,9 +133,7 @@
   --text-sm: var(--text-sm);
   --text-xs: var(--text-xs);
 
-  --radius-sm: 2px;
-  --radius: 4px;
-  --radius-md: 6px;
+  --radius: var(--radius);
 }
 
 * {

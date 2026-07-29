@@ -1,5 +1,3 @@
-"use client"
-
 import { Bell } from "lucide-react"
 
 export interface UtilityBarProps {
@@ -13,7 +11,7 @@ export function UtilityBar({
 }: UtilityBarProps) {
   return (
     <div className="h-12 border-b bg-white">
-      <div className="mx-auto flex h-full max-w-[1200px] items-center justify-between px-4">
+      <div className="mx-auto flex h-full max-w-[1280px] items-center justify-between px-4">
         <a
           href="#"
           className="text-[20px] font-black tracking-tight text-primary"

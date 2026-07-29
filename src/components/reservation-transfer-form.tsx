@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 import { Input } from "@/components/ui/input"
 import { Select } from "@/components/ui/select"
@@ -40,14 +38,6 @@ export function ReservationTransferForm() {
 
       <FormSection title="입금 정보">
         <div>
-          <FormRow label="입금은행" required htmlFor="to-bank">
-            <Select id="to-bank" className="max-w-xs">
-              <option>CoreBank</option>
-              <option>국민은행</option>
-              <option>신한은행</option>
-              <option>우리은행</option>
-            </Select>
-          </FormRow>
           <FormRow label="입금계좌번호" required htmlFor="to-acct">
             <Input
               id="to-acct"

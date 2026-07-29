@@ -1,5 +1,3 @@
-"use client"
-
 import { ArrowUp } from "lucide-react"
 
 const FOOTER_LINKS = [
@@ -20,7 +18,7 @@ export function Footer() {
 
   return (
     <footer className="mt-12 bg-[var(--color-footer-bg)] text-white/70">
-      <div className="mx-auto max-w-[1200px] px-4 py-8">
+      <div className="mx-auto max-w-[1280px] px-4 py-8">
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
             <ul className="flex flex-wrap items-center gap-x-4 gap-y-2">

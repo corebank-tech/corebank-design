@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 import { X } from "lucide-react"
 import { NAV } from "@/lib/nav"
@@ -38,7 +36,7 @@ export function FullMenuOverlay({ open, onClose }: FullMenuOverlayProps) {
         aria-hidden="true"
       />
       <div className="absolute inset-x-0 top-0 bg-white shadow-lg">
-        <div className="mx-auto max-w-[1200px] px-4">
+        <div className="mx-auto max-w-[1280px] px-4">
           <div className="flex h-12 items-center justify-between">
             <span className="text-[20px] font-black text-primary">
               전체메뉴
@@ -53,7 +51,7 @@ export function FullMenuOverlay({ open, onClose }: FullMenuOverlayProps) {
             </button>
           </div>
 
-          <div className="grid grid-cols-2 gap-6 border-t py-8 md:grid-cols-4">
+          <div className="grid grid-cols-4 gap-6 border-t py-8">
             {NAV.map((cat) => (
               <div key={cat.id}>
                 <h3 className="mb-3 border-b-2 border-primary pb-2 text-lg font-bold text-primary">

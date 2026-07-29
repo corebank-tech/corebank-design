@@ -121,8 +121,8 @@ export function OtpModal({
             variant="primary"
             size="lg"
             className="min-w-[120px]"
-            onClick={confirm}
-            disabled={issued == null || expired || attemptsExhausted}
+            onClick={attemptsExhausted ? onClose : confirm}
+            disabled={attemptsExhausted ? false : issued == null || expired}
           >
             확인
           </Button>
@@ -161,7 +161,7 @@ export function OtpModal({
               >
                 {formatClock(remaining)}
               </span>
-              {expired && (
+              {expired && !attemptsExhausted && (
                 <Button variant="outline" size="sm" onClick={issue}>
                   재발급
                 </Button>
@@ -196,7 +196,7 @@ export function OtpModal({
       )}
       {attemptsExhausted && (
         <p className="mt-2 text-sm text-ink-muted">
-          입력 횟수를 초과했습니다. OTP를 재발급한 뒤 다시 시도하세요.
+          입력 횟수를 초과했습니다. 처음부터 다시 진행하세요.
         </p>
       )}
     </Modal>

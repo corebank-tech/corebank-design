@@ -72,7 +72,7 @@ export function LimitModal({
       </table>
 
       <p className="mt-3 text-sm leading-relaxed text-ink-muted">
-        이체한도는 보안매체 등급에 따라 조정할 수 있습니다. 변경 후에는 다음 이체부터 적용됩니다.
+        1회 최대 50,000,000원, 1일 최대 100,000,000원까지 변경할 수 있습니다. 변경 후에는 다음 이체부터 적용됩니다.
       </p>
     </Modal>
   )

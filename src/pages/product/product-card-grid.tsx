@@ -136,12 +136,12 @@ export function ProductCardGrid({
               <div className="mt-5 flex gap-2">
                 <Button
                   variant="outline"
-                  fullWidth
+                  className="flex-1"
                   onClick={() => onViewDetail?.(p.id)}
                 >
                   상세보기
                 </Button>
-                <Button fullWidth onClick={() => onJoin?.(p.id)}>
+                <Button className="flex-1" onClick={() => onJoin?.(p.id)}>
                   가입하기
                 </Button>
               </div>

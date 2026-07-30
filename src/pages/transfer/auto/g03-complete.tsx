@@ -2,7 +2,7 @@ import * as React from "react"
 import { Button } from "@/shared/ui/button"
 import { StepLayout } from "@/widgets/transfer/step-layout"
 import { ResultPanel } from "@/widgets/transfer/result-panel"
-import type { DataGridColumn } from "@/widgets/query/data-grid"
+import type { DataGridColumn } from "@/shared/ui/data-grid"
 
 export type AutoCompleteRow = {
   fromAccount: React.ReactNode

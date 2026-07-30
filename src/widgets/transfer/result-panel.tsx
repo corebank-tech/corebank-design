@@ -1,6 +1,6 @@
 import * as React from "react"
 import { Check, X, Loader2 } from "lucide-react"
-import { DataGrid, type DataGridColumn } from "@/widgets/query/data-grid"
+import { DataGrid, type DataGridColumn } from "@/shared/ui/data-grid"
 import { cn } from "@/shared/lib/utils"
 
 export type ResultVariant = "success" | "fail" | "pending"

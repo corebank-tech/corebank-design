@@ -1,10 +1,10 @@
 import * as React from "react"
 import { ArrowUp, ArrowDown } from "lucide-react"
-import { NoticeBox, NoticeBoxFooter } from "@/widgets/shell/notice-box"
+import { NoticeBox, NoticeBoxFooter } from "@/shared/ui/notice-box"
 import { FormSection } from "@/shared/ui/form-section"
 import { Button } from "@/shared/ui/button"
 import { Alert } from "@/shared/ui/alert"
-import { DataGrid, type DataGridColumn } from "@/widgets/query/data-grid"
+import { DataGrid, type DataGridColumn } from "@/shared/ui/data-grid"
 import { formatAccountNo, formatAmount, formatDate } from "@/shared/lib/format"
 import { MOCK_ORDER_ACCOUNTS, sortByOpenedDateAsc, type OrderAccount } from "@/entities/account"
 

@@ -2,7 +2,7 @@ import * as React from "react"
 import { useNavigate } from "react-router-dom"
 import { Button } from "@/shared/ui/button"
 import { ResultPanel } from "@/widgets/transfer/result-panel"
-import type { DataGridColumn } from "@/widgets/query/data-grid"
+import type { DataGridColumn } from "@/shared/ui/data-grid"
 import { formatDateTime } from "@/shared/lib/format"
 
 type LogoutRow = {

@@ -1,10 +1,10 @@
 import * as React from "react"
-import { NoticeBox, NoticeBoxFooter } from "@/widgets/shell/notice-box"
+import { NoticeBox, NoticeBoxFooter } from "@/shared/ui/notice-box"
 import { FormSection } from "@/shared/ui/form-section"
 import { Button } from "@/shared/ui/button"
 import { Input } from "@/shared/ui/input"
 import { Alert } from "@/shared/ui/alert"
-import { DataGrid, type DataGridColumn } from "@/widgets/query/data-grid"
+import { DataGrid, type DataGridColumn } from "@/shared/ui/data-grid"
 import { ConfirmDialog } from "@/shared/ui/confirm-dialog"
 import { formatAccountNo } from "@/shared/lib/format"
 import {

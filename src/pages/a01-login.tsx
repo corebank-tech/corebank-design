@@ -4,7 +4,7 @@ import { AlertCircle } from "lucide-react"
 import { Input } from "@/shared/ui/input"
 import { Checkbox } from "@/shared/ui/checkbox"
 import { Button } from "@/shared/ui/button"
-import { NoticeBoxFooter } from "@/widgets/shell/notice-box"
+import { NoticeBoxFooter } from "@/shared/ui/notice-box"
 import { useSession } from "@/app/session-context"
 
 const MAX_ATTEMPTS = 5

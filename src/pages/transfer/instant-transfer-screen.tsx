@@ -5,7 +5,7 @@ import { Badge } from "@/shared/ui/badge"
 import { ConfirmDialog } from "@/shared/ui/confirm-dialog"
 import { OtpModal } from "@/shared/ui/otp-modal"
 import { ResultPanel, type ResultVariant } from "@/widgets/transfer/result-panel"
-import type { DataGridColumn } from "@/widgets/query/data-grid"
+import type { DataGridColumn } from "@/shared/ui/data-grid"
 import {
   MOCK_ACCOUNT_PASSWORDS,
   MOCK_FREQUENT_ACCOUNTS_MAX,

@@ -2,7 +2,7 @@ import * as React from "react"
 import { ChevronsUpDown, ChevronUp, ChevronDown } from "lucide-react"
 import { Checkbox } from "@/shared/ui/checkbox"
 import { Skeleton } from "@/shared/ui/skeleton"
-import { EmptyState } from "./empty-state"
+import { EmptyState } from "@/shared/ui/empty-state"
 import { cn } from "@/shared/lib/utils"
 
 type Align = "left" | "right" | "center"
@@ -81,7 +81,8 @@ export function DataGrid<Row>({
   }
 
   const allKeys = sortedRows.map((r, i) => keyOf(r, i))
-  const allSelected = allKeys.length > 0 && allKeys.every((k) => selected.has(k))
+  const allSelected =
+    allKeys.length > 0 && allKeys.every((k) => selected.has(k))
 
   const toggleAll = () => {
     emitSelection(allSelected ? new Set() : new Set(allKeys))
@@ -104,7 +105,7 @@ export function DataGrid<Row>({
   const totalCols = columns.length + (selectable ? 1 : 0)
 
   return (
-    <div className="border-t-2 border-t-[var(--color-navy)] border-b border-[var(--color-border)]">
+    <div className="border-t-2 border-b border-[var(--color-border)] border-t-[var(--color-navy)]">
       <table className="w-full border-collapse text-sm">
         <colgroup>
           {selectable && <col style={{ width: 44 }} />}
@@ -140,7 +141,7 @@ export function DataGrid<Row>({
                       : undefined
                   }
                   className={cn(
-                    "border-b border-r border-[var(--color-border)] px-3 py-2.5 text-sm font-bold text-ink last:border-r-0",
+                    "border-r border-b border-[var(--color-border)] px-3 py-2.5 text-sm font-bold text-ink last:border-r-0",
                     alignClass[col.align ?? "left"],
                   )}
                 >
@@ -149,7 +150,7 @@ export function DataGrid<Row>({
                       type="button"
                       onClick={() => toggleSort(col.key)}
                       className={cn(
-                        "inline-flex items-center gap-1 font-bold hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                        "inline-flex items-center gap-1 font-bold hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
                         col.align === "right" && "flex-row-reverse",
                       )}
                     >
@@ -194,7 +195,7 @@ export function DataGrid<Row>({
                 {columns.map((col) => (
                   <td
                     key={col.key}
-                    className="border-b border-r border-[var(--color-border)] px-3 py-2.5 last:border-r-0"
+                    className="border-r border-b border-[var(--color-border)] px-3 py-2.5 last:border-r-0"
                   >
                     <Skeleton className="h-4 w-full" />
                   </td>
@@ -234,7 +235,7 @@ export function DataGrid<Row>({
                     <td
                       key={col.key}
                       className={cn(
-                        "border-b border-r border-[var(--color-border)] px-3 py-2.5 text-sm text-ink last:border-r-0",
+                        "border-r border-b border-[var(--color-border)] px-3 py-2.5 text-sm text-ink last:border-r-0",
                         alignClass[col.align ?? "left"],
                         col.align === "right" && "tabular-nums",
                         col.className,

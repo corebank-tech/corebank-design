@@ -11,7 +11,7 @@ import {
   MemoField,
   TransferDateField,
 } from "@/widgets/transfer/transfer-fields"
-import { NoticeBoxFooter } from "@/widgets/shell/notice-box"
+import { NoticeBoxFooter } from "@/shared/ui/notice-box"
 import { maskName } from "@/shared/lib/format"
 import type { AccountOption } from "@/shared/types/account"
 import type { ReservedTransferForm } from "../reserved-transfer-screen"

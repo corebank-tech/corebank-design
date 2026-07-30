@@ -14,7 +14,7 @@ import {
   DayOfMonthField,
   TransferEndDateField,
 } from "@/widgets/transfer/transfer-fields"
-import { NoticeBoxFooter } from "@/widgets/shell/notice-box"
+import { NoticeBoxFooter } from "@/shared/ui/notice-box"
 import { maskName } from "@/shared/lib/format"
 import type { AccountOption } from "@/shared/types/account"
 import type { AutoTransferForm } from "../auto-transfer-screen"

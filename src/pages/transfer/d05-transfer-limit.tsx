@@ -1,5 +1,5 @@
 import * as React from "react"
-import { NoticeBox, NoticeBoxFooter } from "@/widgets/shell/notice-box"
+import { NoticeBox, NoticeBoxFooter } from "@/shared/ui/notice-box"
 import { FormSection } from "@/shared/ui/form-section"
 import { FormRow } from "@/shared/ui/form-row"
 import { Button } from "@/shared/ui/button"

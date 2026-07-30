@@ -2,7 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom"
 import { Button } from "@/shared/ui/button"
 import { StepLayout } from "@/widgets/transfer/step-layout"
 import { ResultPanel } from "@/widgets/transfer/result-panel"
-import { type DataGridColumn } from "@/widgets/query/data-grid"
+import { type DataGridColumn } from "@/shared/ui/data-grid"
 import { formatAccountNo, formatAmount, formatDate } from "@/shared/lib/format"
 import { PRODUCT_JOIN_STEPS, type ProductJoinResult } from "./join-shared"
 

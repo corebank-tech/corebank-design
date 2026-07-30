@@ -4,7 +4,7 @@ import { Button } from "@/shared/ui/button"
 import { Badge } from "@/shared/ui/badge"
 import { Modal } from "@/shared/ui/modal"
 import { AlertDialog } from "@/shared/ui/alert-dialog"
-import type { TermItem } from "@/entities/product"
+import type { TermItem } from "@/shared/types/term"
 
 type TermsAgreementProps = {
   terms: TermItem[]

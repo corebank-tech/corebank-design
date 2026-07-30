@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom"
 import { ProductDetail } from "./product-detail"
-import { EmptyState } from "@/widgets/query/empty-state"
+import { EmptyState } from "@/shared/ui/empty-state"
 import { MOCK_PRODUCT_DETAILS } from "@/entities/product"
 
 /** C-02 상품 상세. REQ-PRDT-003. */

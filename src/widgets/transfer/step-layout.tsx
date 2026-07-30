@@ -1,5 +1,5 @@
 import * as React from "react"
-import { NoticeBox } from "@/widgets/shell/notice-box"
+import { NoticeBox } from "@/shared/ui/notice-box"
 import { StepIndicator } from "./step-indicator"
 
 type StepLayoutProps = {

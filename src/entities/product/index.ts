@@ -6,7 +6,6 @@ export type {
   ProductGuideItem,
   ProductJoinMaster,
   ProductRateRow,
-  TermItem,
 } from "@/entities/product/model/types"
 export {
   MOCK_PRODUCTS,

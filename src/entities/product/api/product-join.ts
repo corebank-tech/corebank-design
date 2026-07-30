@@ -1,8 +1,8 @@
 import type {
   JoinWithdrawAccount,
   ProductJoinMaster,
-  TermItem,
 } from "@/entities/product/model/types"
+import type { TermItem } from "@/shared/types/term"
 
 /** 취급 상품은 정기예금·정기적금 2종뿐이다(POL-029). */
 export const MOCK_JOIN_PRODUCTS: Record<string, ProductJoinMaster> = {

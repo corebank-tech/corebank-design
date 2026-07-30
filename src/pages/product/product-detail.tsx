@@ -1,7 +1,7 @@
 import * as React from "react"
 import { Badge } from "@/shared/ui/badge"
 import { Button } from "@/shared/ui/button"
-import { DataGrid, type DataGridColumn } from "@/widgets/query/data-grid"
+import { DataGrid, type DataGridColumn } from "@/shared/ui/data-grid"
 import { formatAmount } from "@/shared/lib/format"
 import { cn } from "@/shared/lib/utils"
 import type { ProductDetailData, ProductRateRow } from "@/entities/product"

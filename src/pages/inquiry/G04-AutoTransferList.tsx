@@ -13,8 +13,26 @@ import { GridToolbar } from "@/widgets/query/grid-toolbar"
 import { DataGrid, type DataGridColumn } from "@/widgets/query/data-grid"
 import { Pagination } from "@/widgets/query/pagination"
 import { ConfirmDialog } from "@/shared/ui/confirm-dialog"
+import { OtpModal } from "@/shared/ui/otp-modal"
 import { ErrorDialog } from "@/shared/ui/error-dialog"
-import { formatAccountNo, formatAmount, formatDate, formatDateTime, maskName } from "@/shared/lib/format"
+import { AlertDialog } from "@/shared/ui/alert-dialog"
+import { TextViewModal } from "@/widgets/query/text-view-modal"
+import { downloadCsv } from "@/shared/lib/csv"
+import {
+  TransferEndDateField,
+  addMonths,
+  daysBetween,
+  parseISO,
+  toISO,
+} from "@/widgets/transfer/transfer-fields"
+import {
+  formatAccountNo,
+  formatAmount,
+  formatDate,
+  formatDateTime,
+  maskAccountNo,
+  maskName,
+} from "@/shared/lib/format"
 import {
   MOCK_AUTO_TRANSFERS,
   type AutoTransferRow,
@@ -48,6 +66,32 @@ function isTerminable(row: AutoTransferRow): boolean {
   return row.status === "정상" && row.nextExecDate != null && row.nextExecDate > TODAY
 }
 
+/**
+ * REQ-AUTO-010: 이체주기를 변경하면 다음 실행 예정일을 직전 실행 예정일 기준으로
+ * 다시 계산한다. 대상 월에 이체지정일이 없으면(29~31일) 그 달의 말일로 보정한다(POL-034).
+ */
+function recomputeNextExecDate(
+  prevNextExecDate: string,
+  cycleMonths: TransferCycle,
+  dayOfMonth: number,
+): string {
+  const prev = parseISO(prevNextExecDate)
+  const totalMonthIndex = prev.getMonth() + cycleMonths
+  const year = prev.getFullYear() + Math.floor(totalMonthIndex / 12)
+  const month = ((totalMonthIndex % 12) + 12) % 12
+  const lastDay = new Date(year, month + 1, 0).getDate()
+  return toISO(new Date(year, month, Math.min(dayOfMonth, lastDay)))
+}
+
+/** 이체종료일은 시작일 이후 ~ 시작일로부터 최대 60개월 이내여야 한다. */
+function isEndDateValid(startDate: string, endDate: string, maxMonths = 60): boolean {
+  if (!endDate) return false
+  const afterStart = daysBetween(startDate, endDate) > 0
+  const max = addMonths(startDate, maxMonths)
+  const withinMax = daysBetween(startDate, endDate) <= daysBetween(startDate, max)
+  return afterStart && withinMax
+}
+
 interface EditForm {
   amount: string
   cycleMonths: TransferCycle
@@ -64,10 +108,14 @@ export function G04AutoTransferList() {
   const [selectedIds, setSelectedIds] = React.useState<string[]>([])
   const [gridKey, setGridKey] = React.useState(0)
   const [terminateConfirmOpen, setTerminateConfirmOpen] = React.useState(false)
+  const [terminateOtpOpen, setTerminateOtpOpen] = React.useState(false)
   const [blockedOpen, setBlockedOpen] = React.useState(false)
   const [editTarget, setEditTarget] = React.useState<AutoTransferRow | null>(null)
   const [editForm, setEditForm] = React.useState<EditForm | null>(null)
   const [editConfirmOpen, setEditConfirmOpen] = React.useState(false)
+  const [editOtpOpen, setEditOtpOpen] = React.useState(false)
+  const [savedOpen, setSavedOpen] = React.useState(false)
+  const [brailleOpen, setBrailleOpen] = React.useState(false)
 
   const filtered = React.useMemo(() => {
     return rows.filter((r) => {
@@ -99,7 +147,13 @@ export function G04AutoTransferList() {
     setTerminateConfirmOpen(true)
   }
 
+  /** REQ-AUTO-011: 해지 확인 후 OTP 인증을 거쳐야 실제로 해지된다. */
   const handleConfirmTerminate = () => {
+    setTerminateConfirmOpen(false)
+    setTerminateOtpOpen(true)
+  }
+
+  const handleTerminateOtpConfirm = () => {
     setRows((prev) =>
       prev.map((r) =>
         selectedIds.includes(r.id)
@@ -107,7 +161,7 @@ export function G04AutoTransferList() {
           : r,
       ),
     )
-    setTerminateConfirmOpen(false)
+    setTerminateOtpOpen(false)
     setSelectedIds([])
     setGridKey((k) => k + 1)
   }
@@ -122,25 +176,59 @@ export function G04AutoTransferList() {
     })
   }
 
-  const handleSaveEdit = () => {
+  /** REQ-AUTO-010: 변경 확인 후 OTP 인증을 거쳐야 실제로 저장된다. */
+  const handleEditConfirm = () => {
+    setEditConfirmOpen(false)
+    setEditOtpOpen(true)
+  }
+
+  const handleEditOtpConfirm = () => {
     if (!editTarget || !editForm) return
     setRows((prev) =>
-      prev.map((r) =>
-        r.id === editTarget.id
-          ? {
-              ...r,
-              amount: Number(editForm.amount) || r.amount,
-              cycleMonths: editForm.cycleMonths,
-              endDate: editForm.endDate,
-              memo: editForm.memo,
-            }
-          : r,
-      ),
+      prev.map((r) => {
+        if (r.id !== editTarget.id) return r
+        const cycleChanged = editForm.cycleMonths !== editTarget.cycleMonths
+        const nextExecDate =
+          cycleChanged && r.nextExecDate != null
+            ? recomputeNextExecDate(r.nextExecDate, editForm.cycleMonths, r.dayOfMonth)
+            : r.nextExecDate
+        return {
+          ...r,
+          amount: Number(editForm.amount) || r.amount,
+          cycleMonths: editForm.cycleMonths,
+          endDate: editForm.endDate,
+          memo: editForm.memo,
+          nextExecDate,
+        }
+      }),
     )
-    setEditConfirmOpen(false)
+    setEditOtpOpen(false)
     setEditTarget(null)
     setEditForm(null)
   }
+
+  const exportHeaders = [
+    "출금계좌",
+    "입금계좌",
+    "예금주",
+    "이체금액",
+    "이체기간",
+    "이체지정일",
+    "이체주기",
+    "표시내용",
+    "상태",
+  ]
+  const exportRows = filtered.map((r) => [
+    `${r.fromAlias} ${maskAccountNo(r.fromAccountNo)}`,
+    maskAccountNo(r.toAccountNo),
+    maskName(r.payeeName),
+    formatAmount(r.amount),
+    `${formatDate(r.startDate)} ~ ${formatDate(r.endDate)}`,
+    `매월 ${r.dayOfMonth}일`,
+    CYCLE_LABEL[r.cycleMonths],
+    r.memo,
+    r.status,
+  ])
 
   const columns: DataGridColumn<AutoTransferRow>[] = [
     {
@@ -223,7 +311,11 @@ export function G04AutoTransferList() {
       />
 
       <FormSection title="조회조건">
-        <SearchPanel onReset={handleReset} onSearch={() => setPage(1)}>
+        <SearchPanel
+          onReset={handleReset}
+          onSearch={() => setPage(1)}
+          onSaveCondition={() => setSavedOpen(true)}
+        >
           <FormRow label="출금계좌번호" htmlFor="g04-from">
             <Select
               id="g04-from"
@@ -272,6 +364,9 @@ export function G04AutoTransferList() {
             setPage(1)
           }}
           baseTimeLabel={formatDateTime(BASE_TIME)}
+          onPrint={() => window.print()}
+          onBrailleView={() => setBrailleOpen(true)}
+          onSaveFile={() => downloadCsv(`자동이체조회_${TODAY}.csv`, exportHeaders, exportRows)}
         />
 
         <DataGrid
@@ -300,7 +395,10 @@ export function G04AutoTransferList() {
         onClose={() => setTerminateConfirmOpen(false)}
         onConfirm={handleConfirmTerminate}
         title="자동이체 해지"
-        messages={["선택한 자동이체를 해지합니다.", "해지 후에는 이후 회차가 실행되지 않습니다."]}
+        messages={[
+          "선택한 자동이체를 해지합니다.",
+          "해지 후에는 이후 회차가 실행되지 않으며, 확인을 누르면 OTP 인증으로 이어집니다.",
+        ]}
         confirmLabel="해지하기"
         cancelLabel="닫기"
         items={selectedRows.map((r) => ({
@@ -344,6 +442,12 @@ export function G04AutoTransferList() {
               variant="primary"
               size="lg"
               className="min-w-[120px]"
+              disabled={
+                !editForm ||
+                !editTarget ||
+                !(Number(editForm.amount) > 0) ||
+                !isEndDateValid(editTarget.startDate, editForm.endDate)
+              }
               onClick={() => setEditConfirmOpen(true)}
             >
               변경하기
@@ -389,11 +493,11 @@ export function G04AutoTransferList() {
               />
             </FormRow>
             <FormRow label="이체종료일" htmlFor="g04-edit-end" labelWidth={110}>
-              <Input
+              <TransferEndDateField
                 id="g04-edit-end"
-                type="date"
                 value={editForm.endDate}
-                onChange={(e) => setEditForm({ ...editForm, endDate: e.target.value })}
+                onChange={(v) => setEditForm({ ...editForm, endDate: v })}
+                startDate={editTarget.startDate}
               />
             </FormRow>
             <FormRow label="표시내용" htmlFor="g04-edit-memo" labelWidth={110}>
@@ -411,9 +515,9 @@ export function G04AutoTransferList() {
       <ConfirmDialog
         open={editConfirmOpen}
         onClose={() => setEditConfirmOpen(false)}
-        onConfirm={handleSaveEdit}
+        onConfirm={handleEditConfirm}
         title="자동이체 변경"
-        messages={["아래 내용으로 자동이체를 변경합니다."]}
+        messages={["아래 내용으로 자동이체를 변경합니다.", "확인을 누르면 OTP 인증으로 이어집니다."]}
         confirmLabel="변경하기"
         items={
           editForm
@@ -425,6 +529,34 @@ export function G04AutoTransferList() {
               ]
             : []
         }
+      />
+
+      <OtpModal
+        open={editOtpOpen}
+        onClose={() => setEditOtpOpen(false)}
+        onConfirm={handleEditOtpConfirm}
+        guide="자동이체 변경을 위해 OTP를 발급한 뒤 화면에 표시된 6자리 번호를 입력하세요."
+      />
+
+      <OtpModal
+        open={terminateOtpOpen}
+        onClose={() => setTerminateOtpOpen(false)}
+        onConfirm={handleTerminateOtpConfirm}
+        guide="자동이체 해지를 위해 OTP를 발급한 뒤 화면에 표시된 6자리 번호를 입력하세요."
+      />
+
+      <AlertDialog
+        open={savedOpen}
+        onClose={() => setSavedOpen(false)}
+        messages={["조회조건이 저장되었습니다."]}
+      />
+
+      <TextViewModal
+        open={brailleOpen}
+        onClose={() => setBrailleOpen(false)}
+        title="자동이체 조회 점자보기"
+        headers={exportHeaders}
+        rows={exportRows}
       />
     </div>
   )

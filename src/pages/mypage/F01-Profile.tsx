@@ -13,6 +13,7 @@ import {
   maskEmail,
   maskName,
   maskPhone,
+  maskUserId,
   formatPhone,
 } from "@/shared/lib/format"
 import { cn } from "@/shared/lib/utils"
@@ -249,7 +250,7 @@ export function F01Profile() {
             <span className="text-ink">{maskName(profile.name)}</span>
           </FormRow>
           <FormRow label="아이디" labelWidth={180}>
-            <span className="text-ink tabular-nums">{profile.userId}</span>
+            <span className="text-ink tabular-nums">{maskUserId(profile.userId)}</span>
           </FormRow>
           <FormRow label="생년월일" labelWidth={180}>
             <span className="text-ink tabular-nums">{formatDate(profile.dob)}</span>
@@ -445,7 +446,7 @@ export function F01Profile() {
 
       <NoticeBoxFooter
         items={[
-          "고객정보 조회 항목 중 성명·이메일·휴대폰번호는 마스킹되어 표시됩니다(REQ-CMN-018).",
+          "고객정보 조회 항목 중 성명·아이디·휴대폰번호·이메일은 마스킹되어 표시됩니다(REQ-MYPG-001).",
           "이메일 변경은 신규 이메일 인증번호 확인 완료 후에만 저장되며, 이미 가입된 이메일로는 변경할 수 없습니다(REQ-MYPG-002).",
           "로그인 비밀번호는 8~15자, 4종 중 3종 이상 조합이며 직전 비밀번호와 동일한 값은 사용할 수 없습니다(REQ-AUTH-011·012·034).",
         ]}

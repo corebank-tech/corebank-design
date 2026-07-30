@@ -7,13 +7,24 @@ import { Select } from "@/shared/ui/select"
 import { Button } from "@/shared/ui/button"
 import { Badge } from "@/shared/ui/badge"
 import { Modal } from "@/shared/ui/modal"
+import { AlertDialog } from "@/shared/ui/alert-dialog"
 import { SearchPanel } from "@/widgets/query/search-panel"
 import { PeriodField, RadioRowField } from "@/widgets/query/search-fields"
 import { SummaryRow } from "@/widgets/query/summary-row"
 import { GridToolbar } from "@/widgets/query/grid-toolbar"
 import { DataGrid, type DataGridColumn } from "@/widgets/query/data-grid"
 import { Pagination } from "@/widgets/query/pagination"
-import { formatAccountNo, formatAmount, formatDate, formatDateTime, maskName } from "@/shared/lib/format"
+import { TextViewModal } from "@/widgets/query/text-view-modal"
+import { GridSearchModal, type GridSearchField } from "@/widgets/query/grid-search-modal"
+import { downloadCsv } from "@/shared/lib/csv"
+import {
+  formatAccountNo,
+  formatAmount,
+  formatDate,
+  formatDateTime,
+  maskAccountNo,
+  maskName,
+} from "@/shared/lib/format"
 import {
   MOCK_TRANSFER_HISTORY,
   MOCK_MONTHLY_TRANSFER_STATS,
@@ -45,6 +56,14 @@ function toISODate(datetime: string) {
   return datetime.slice(0, 10)
 }
 
+/** REQ-CMN-020: 그리드가 보유한 컬럼 중 검색 대상 목록. */
+const SEARCH_FIELDS: GridSearchField[] = [
+  { key: "fromAccountNo", label: "출금계좌" },
+  { key: "toAccountNo", label: "입금계좌" },
+  { key: "payeeName", label: "예금주" },
+  { key: "txId", label: "거래번호" },
+]
+
 export function D04TransferHistory() {
   const [period, setPeriod] = React.useState({ start: "2026-06-23", end: TODAY })
   const [status, setStatus] = React.useState("all")
@@ -53,6 +72,10 @@ export function D04TransferHistory() {
   const [page, setPage] = React.useState(1)
   const [detail, setDetail] = React.useState<TransferHistoryRow | null>(null)
   const [statsOpen, setStatsOpen] = React.useState(false)
+  const [savedOpen, setSavedOpen] = React.useState(false)
+  const [brailleOpen, setBrailleOpen] = React.useState(false)
+  const [searchOpen, setSearchOpen] = React.useState(false)
+  const [search, setSearch] = React.useState<{ field: string; keyword: string } | null>(null)
 
   const rows = React.useMemo(() => {
     return MOCK_TRANSFER_HISTORY.filter((r) => {
@@ -60,9 +83,13 @@ export function D04TransferHistory() {
       if (d < period.start || d > period.end) return false
       if (status !== "all" && r.status !== status) return false
       if (fromAccount !== "all" && r.fromAccountNo !== fromAccount) return false
+      if (search && search.keyword) {
+        const value = String(r[search.field as keyof TransferHistoryRow] ?? "")
+        if (!value.includes(search.keyword)) return false
+      }
       return true
     }).sort((a, b) => b.datetime.localeCompare(a.datetime))
-  }, [period, status, fromAccount])
+  }, [period, status, fromAccount, search])
 
   const normalCount = rows.filter((r) => r.status === "정상").length
   const normalAmount = rows.filter((r) => r.status === "정상").reduce((s, r) => s + r.amount, 0)
@@ -78,8 +105,20 @@ export function D04TransferHistory() {
     setPeriod({ start: "2026-06-23", end: TODAY })
     setStatus("all")
     setFromAccount("all")
+    setSearch(null)
     setPage(1)
   }
+
+  const exportHeaders = ["이체일시", "출금계좌", "입금계좌", "예금주", "이체금액", "처리상태", "거래번호"]
+  const exportRows = rows.map((r) => [
+    formatDateTime(r.datetime),
+    `${r.fromAlias} ${maskAccountNo(r.fromAccountNo)}`,
+    maskAccountNo(r.toAccountNo),
+    maskName(r.payeeName),
+    formatAmount(r.amount),
+    r.status,
+    r.txId,
+  ])
 
   const columns: DataGridColumn<TransferHistoryRow>[] = [
     {
@@ -158,7 +197,11 @@ export function D04TransferHistory() {
       />
 
       <FormSection title="조회조건">
-        <SearchPanel onReset={handleReset} onSearch={() => setPage(1)}>
+        <SearchPanel
+          onReset={handleReset}
+          onSearch={() => setPage(1)}
+          onSaveCondition={() => setSavedOpen(true)}
+        >
           <FormRow label="조회기간">
             <PeriodField
               start={period.start}
@@ -233,6 +276,10 @@ export function D04TransferHistory() {
             setPage(1)
           }}
           baseTimeLabel={formatDateTime(BASE_TIME)}
+          onPrint={() => window.print()}
+          onBrailleView={() => setBrailleOpen(true)}
+          onSaveFile={() => downloadCsv(`이체결과조회_${TODAY}.csv`, exportHeaders, exportRows)}
+          onSearch={() => setSearchOpen(true)}
         />
 
         <DataGrid
@@ -321,6 +368,30 @@ export function D04TransferHistory() {
           rowKey={(r, i) => `${r.month}-${r.fromAlias}-${i}`}
         />
       </Modal>
+
+      <AlertDialog
+        open={savedOpen}
+        onClose={() => setSavedOpen(false)}
+        messages={["조회조건이 저장되었습니다."]}
+      />
+
+      <TextViewModal
+        open={brailleOpen}
+        onClose={() => setBrailleOpen(false)}
+        title="이체결과조회 점자보기"
+        headers={exportHeaders}
+        rows={exportRows}
+      />
+
+      <GridSearchModal
+        open={searchOpen}
+        onClose={() => setSearchOpen(false)}
+        fields={SEARCH_FIELDS}
+        onApply={(field, keyword) => {
+          setSearch(keyword ? { field, keyword } : null)
+          setPage(1)
+        }}
+      />
     </div>
   )
 }

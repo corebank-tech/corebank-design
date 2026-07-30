@@ -22,7 +22,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
             id={inputId}
             type="checkbox"
             className={cn(
-              "peer h-[18px] w-[18px] cursor-pointer appearance-none rounded-[var(--radius-sm)] border border-[var(--color-border-strong)] bg-white",
+              "peer h-[18px] w-[18px] cursor-pointer appearance-none rounded-[var(--radius)] border border-[var(--color-border-strong)] bg-white",
               "checked:border-primary checked:bg-primary",
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ring-soft)]",
               className,

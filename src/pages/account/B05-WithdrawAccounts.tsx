@@ -1,5 +1,5 @@
 import * as React from "react"
-import { NoticeBox } from "@/widgets/shell/notice-box"
+import { NoticeBox, NoticeBoxFooter } from "@/widgets/shell/notice-box"
 import { FormSection } from "@/shared/ui/form-section"
 import { Button } from "@/shared/ui/button"
 import { Input } from "@/shared/ui/input"
@@ -192,6 +192,14 @@ export function B05WithdrawAccounts() {
           emptyMessage="미등록 계좌가 없습니다."
         />
       </FormSection>
+
+      <NoticeBoxFooter
+        items={[
+          "예약 상태의 예약이체 또는 정상 상태의 자동이체가 등록된 계좌는 삭제할 수 없으며, 삭제 시도 시 사유가 계좌별로 안내됩니다(REQ-ACCT-011).",
+          "출금계좌 등록은 계좌비밀번호 검증과 OTP 인증을 모두 완료해야 처리됩니다(REQ-ACCT-010).",
+          "등록 해제된 계좌는 즉시이체의 출금계좌로 선택할 수 없으며, 다시 등록해야 이용할 수 있습니다.",
+        ]}
+      />
 
       <ConfirmDialog
         open={deleteConfirmOpen}

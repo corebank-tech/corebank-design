@@ -8,13 +8,14 @@ export interface AppHeaderProps {
   activeId?: string
   customerName?: string
   unreadCount?: number
-  /** session length in seconds */
-  sessionSeconds?: number
+  /** 세션 잔여시간(초). 상위(SessionProvider)가 1초 단위로 갱신해 전달한다. */
+  remainingSeconds?: number
   /** REQ-CMN-005: 비로그인 상태면 [로그인]만 노출 */
   loggedIn?: boolean
   onExtend?: () => void
   onLogout?: () => void
   onOpenFullMenu?: () => void
+  onOpenNotifications?: () => void
 }
 
 function formatSession(seconds: number) {
@@ -30,24 +31,16 @@ function formatSession(seconds: number) {
 export function AppHeader({
   activeId,
   customerName = "홍길동",
-  unreadCount = 3,
-  sessionSeconds = 568,
+  unreadCount = 0,
+  remainingSeconds = 0,
   loggedIn = true,
   onExtend,
   onLogout,
   onOpenFullMenu,
+  onOpenNotifications,
 }: AppHeaderProps) {
   const [hoverId, setHoverId] = React.useState<string | null>(null)
   const closeTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null)
-  const [remaining, setRemaining] = React.useState(sessionSeconds)
-
-  React.useEffect(() => {
-    if (!loggedIn) return
-    const id = setInterval(() => {
-      setRemaining((r) => (r > 0 ? r - 1 : 0))
-    }, 1000)
-    return () => clearInterval(id)
-  }, [loggedIn])
 
   const open = (id: string) => {
     if (closeTimer.current) clearTimeout(closeTimer.current)
@@ -56,11 +49,6 @@ export function AppHeader({
   const scheduleClose = () => {
     if (closeTimer.current) clearTimeout(closeTimer.current)
     closeTimer.current = setTimeout(() => setHoverId(null), 120)
-  }
-
-  const handleExtend = () => {
-    setRemaining(sessionSeconds)
-    onExtend?.()
   }
 
   const activeCategory = NAV.find((c) => c.id === hoverId)
@@ -108,6 +96,7 @@ export function AppHeader({
             <>
               <button
                 type="button"
+                onClick={onOpenNotifications}
                 className="relative inline-flex h-9 w-9 items-center justify-center rounded-full text-ink-muted hover:bg-[var(--color-primary-tint)] hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 aria-label={`알림 ${unreadCount}건`}
               >
@@ -124,12 +113,12 @@ export function AppHeader({
               </span>
 
               <span className="text-sm tabular-nums text-ink-muted" aria-live="off">
-                {formatSession(remaining)}
+                {formatSession(remainingSeconds)}
               </span>
 
               <button
                 type="button"
-                onClick={handleExtend}
+                onClick={onExtend}
                 className="text-sm text-ink-muted transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 연장

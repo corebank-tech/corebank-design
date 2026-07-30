@@ -1,5 +1,5 @@
 import * as React from "react"
-import { NoticeBox } from "@/widgets/shell/notice-box"
+import { NoticeBox, NoticeBoxFooter } from "@/widgets/shell/notice-box"
 import { FormSection } from "@/shared/ui/form-section"
 import { FormRow } from "@/shared/ui/form-row"
 import { Button } from "@/shared/ui/button"
@@ -195,6 +195,14 @@ export function B04AccountPassword() {
           </Button>
         </div>
       </FormSection>
+
+      <NoticeBoxFooter
+        items={[
+          "누적 오류 횟수는 계좌비밀번호 검증에 성공하면 0회로 초기화됩니다(REQ-ACCT-007).",
+          "계좌비밀번호는 단방향 해시로 저장되어 평문으로 조회하거나 복원할 수 없습니다(REQ-ACCT-009).",
+          "[오류횟수 조회] 버튼으로 현재 누적 오류 횟수와 제한 정책(5회)을 확인할 수 있습니다(REQ-ACCT-008).",
+        ]}
+      />
 
       <ConfirmDialog
         open={confirmOpen}

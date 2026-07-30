@@ -1,5 +1,5 @@
 import * as React from "react"
-import { NoticeBox } from "@/widgets/shell/notice-box"
+import { NoticeBox, NoticeBoxFooter } from "@/widgets/shell/notice-box"
 import { FormSection } from "@/shared/ui/form-section"
 import { Button } from "@/shared/ui/button"
 import { Input } from "@/shared/ui/input"
@@ -145,6 +145,14 @@ export function B06AccountAlias() {
       <FormSection title="계좌별명 관리" className="mb-0">
         <DataGrid columns={columns} rows={accounts} rowKey={(r) => r.id} emptyMessage="보유한 계좌가 없습니다." />
       </FormSection>
+
+      <NoticeBoxFooter
+        items={[
+          "별명은 한글 12자 또는 영문·숫자 24자 이내로 제한되며, 초과 입력 시 저장되지 않습니다(REQ-ACCT-013).",
+          "별명이 등록된 계좌는 계좌조회·이체 등 전 화면에서 상품명 대신 별명으로 표시됩니다(REQ-ACCT-013).",
+          "별명을 삭제하면 해당 계좌는 다시 상품명으로 표시됩니다.",
+        ]}
+      />
 
       <ConfirmDialog
         open={deleteTarget != null}

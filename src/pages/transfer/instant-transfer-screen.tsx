@@ -1,4 +1,5 @@
 import * as React from "react"
+import { useSearchParams } from "react-router-dom"
 import {
   MOCK_TRANSFER_ACCOUNTS,
   MOCK_TRANSFER_LIMITS,
@@ -42,8 +43,14 @@ const INITIAL_FORM: InstantTransferForm = {
  * is a pure presentation component that receives values and callbacks.
  */
 export function InstantTransferScreen() {
+  const [searchParams] = useSearchParams()
   const [step, setStep] = React.useState(1)
-  const [form, setForm] = React.useState<InstantTransferForm>(INITIAL_FORM)
+  const [form, setForm] = React.useState<InstantTransferForm>(() => {
+    /** REQ-INQR-005: 계좌목록의 [이체] 진입 시 출금계좌가 선택된 상태로 시작한다. */
+    const fromParam = searchParams.get("from")
+    const preselected = MOCK_TRANSFER_ACCOUNTS.find((a) => a.accountNo === fromParam)
+    return preselected ? { ...INITIAL_FORM, fromAccount: preselected.accountNo } : INITIAL_FORM
+  })
 
   const dailyRemaining =
     MOCK_TRANSFER_LIMITS.perDay - MOCK_TRANSFER_LIMITS.usedToday

@@ -10,8 +10,19 @@ import { GridToolbar } from "@/widgets/query/grid-toolbar"
 import { DataGrid, type DataGridColumn } from "@/widgets/query/data-grid"
 import { Pagination } from "@/widgets/query/pagination"
 import { ConfirmDialog } from "@/shared/ui/confirm-dialog"
+import { OtpModal } from "@/shared/ui/otp-modal"
 import { ErrorDialog } from "@/shared/ui/error-dialog"
-import { formatAccountNo, formatAmount, formatDate, formatDateTime, maskName } from "@/shared/lib/format"
+import { AlertDialog } from "@/shared/ui/alert-dialog"
+import { TextViewModal } from "@/widgets/query/text-view-modal"
+import { downloadCsv } from "@/shared/lib/csv"
+import {
+  formatAccountNo,
+  formatAmount,
+  formatDate,
+  formatDateTime,
+  maskAccountNo,
+  maskName,
+} from "@/shared/lib/format"
 import { MOCK_RESERVATIONS, type ReservationRow, type ReservationStatus } from "@/lib/mock/e04-reservations"
 
 const TODAY = "2026-07-23"
@@ -46,7 +57,10 @@ export function E04ReservationList() {
   const [selectedIds, setSelectedIds] = React.useState<string[]>([])
   const [gridKey, setGridKey] = React.useState(0)
   const [confirmOpen, setConfirmOpen] = React.useState(false)
+  const [otpOpen, setOtpOpen] = React.useState(false)
   const [blockedOpen, setBlockedOpen] = React.useState(false)
+  const [savedOpen, setSavedOpen] = React.useState(false)
+  const [brailleOpen, setBrailleOpen] = React.useState(false)
 
   const filtered = React.useMemo(() => {
     const next = rows.filter((r) => {
@@ -81,14 +95,32 @@ export function E04ReservationList() {
     setConfirmOpen(true)
   }
 
+  /** REQ-RSV-008: 취소 확인 후 OTP 인증을 거쳐야 실제로 취소된다. */
   const handleConfirmCancel = () => {
+    setConfirmOpen(false)
+    setOtpOpen(true)
+  }
+
+  const handleOtpConfirm = () => {
     setRows((prev) =>
       prev.map((r) => (selectedIds.includes(r.id) ? { ...r, status: "취소" as const } : r)),
     )
-    setConfirmOpen(false)
+    setOtpOpen(false)
     setSelectedIds([])
     setGridKey((k) => k + 1)
   }
+
+  const exportHeaders = ["상태", "이체예정일자", "출금계좌", "입금계좌", "예금주", "이체금액", "표시내용", "등록일시"]
+  const exportRows = filtered.map((r) => [
+    r.status,
+    formatDate(r.scheduledDate),
+    `${r.fromAlias} ${maskAccountNo(r.fromAccountNo)}`,
+    maskAccountNo(r.toAccountNo),
+    maskName(r.payeeName),
+    formatAmount(r.amount),
+    r.memo,
+    formatDateTime(r.registeredAt),
+  ])
 
   const columns: DataGridColumn<ReservationRow>[] = [
     {
@@ -159,7 +191,11 @@ export function E04ReservationList() {
       />
 
       <FormSection title="조회조건">
-        <SearchPanel onReset={handleReset} onSearch={() => setPage(1)}>
+        <SearchPanel
+          onReset={handleReset}
+          onSearch={() => setPage(1)}
+          onSaveCondition={() => setSavedOpen(true)}
+        >
           <FormRow label="상태">
             <RadioRowField
               name="e04-status"
@@ -205,6 +241,9 @@ export function E04ReservationList() {
             setPage(1)
           }}
           baseTimeLabel={formatDateTime(BASE_TIME)}
+          onPrint={() => window.print()}
+          onBrailleView={() => setBrailleOpen(true)}
+          onSaveFile={() => downloadCsv(`예약이체조회_${TODAY}.csv`, exportHeaders, exportRows)}
         />
 
         <DataGrid
@@ -235,10 +274,7 @@ export function E04ReservationList() {
         title="예약이체 취소"
         messages={[
           "선택한 예약이체를 취소합니다.",
-          <>
-            취소 후에는 되돌릴 수 없습니다.{" "}
-            <span className="text-2xs text-ink-faint">(OTP 인증 필요)</span>
-          </>,
+          "취소 후에는 되돌릴 수 없으며, 확인을 누르면 OTP 인증으로 이어집니다.",
         ]}
         confirmLabel="취소하기"
         cancelLabel="닫기"
@@ -246,6 +282,13 @@ export function E04ReservationList() {
           label: formatDate(r.scheduledDate),
           value: `${r.fromAlias} → ${maskName(r.payeeName)} / ${formatAmount(r.amount)}`,
         }))}
+      />
+
+      <OtpModal
+        open={otpOpen}
+        onClose={() => setOtpOpen(false)}
+        onConfirm={handleOtpConfirm}
+        guide="예약이체 취소를 위해 OTP를 발급한 뒤 화면에 표시된 6자리 번호를 입력하세요."
       />
 
       <ErrorDialog
@@ -256,6 +299,20 @@ export function E04ReservationList() {
           "대기 상태이고 이체 예정일 전일까지인 건만 취소할 수 있습니다.",
           "이체 예정일 당일이거나 이미 처리된 건은 선택에서 제외하세요.",
         ]}
+      />
+
+      <AlertDialog
+        open={savedOpen}
+        onClose={() => setSavedOpen(false)}
+        messages={["조회조건이 저장되었습니다."]}
+      />
+
+      <TextViewModal
+        open={brailleOpen}
+        onClose={() => setBrailleOpen(false)}
+        title="예약이체 조회 점자보기"
+        headers={exportHeaders}
+        rows={exportRows}
       />
     </div>
   )

@@ -9,7 +9,17 @@ import { SummaryRow } from "@/widgets/query/summary-row"
 import { GridToolbar } from "@/widgets/query/grid-toolbar"
 import { DataGrid, type DataGridColumn } from "@/widgets/query/data-grid"
 import { Pagination } from "@/widgets/query/pagination"
-import { formatAccountNo, formatAmount, formatDate, formatDateTime, maskName } from "@/shared/lib/format"
+import { AlertDialog } from "@/shared/ui/alert-dialog"
+import { TextViewModal } from "@/widgets/query/text-view-modal"
+import { downloadCsv } from "@/shared/lib/csv"
+import {
+  formatAccountNo,
+  formatAmount,
+  formatDate,
+  formatDateTime,
+  maskAccountNo,
+  maskName,
+} from "@/shared/lib/format"
 import {
   MOCK_RESERVATION_RESULTS,
   type ReservationResultRow,
@@ -35,6 +45,8 @@ export function E05ReservationResults() {
   const [order, setOrder] = React.useState("recent")
   const [pageSize, setPageSize] = React.useState<number | "all">(10)
   const [page, setPage] = React.useState(1)
+  const [savedOpen, setSavedOpen] = React.useState(false)
+  const [brailleOpen, setBrailleOpen] = React.useState(false)
 
   const rows = React.useMemo(() => {
     const next = MOCK_RESERVATION_RESULTS.filter(
@@ -62,6 +74,18 @@ export function E05ReservationResults() {
     setOrder("recent")
     setPage(1)
   }
+
+  const exportHeaders = ["처리결과", "이체일자", "출금계좌", "입금계좌", "예금주", "이체금액", "거래번호", "실패사유"]
+  const exportRows = rows.map((r) => [
+    r.result,
+    formatDate(r.transferDate),
+    `${r.fromAlias} ${maskAccountNo(r.fromAccountNo)}`,
+    maskAccountNo(r.toAccountNo),
+    maskName(r.payeeName),
+    formatAmount(r.amount),
+    r.txId ?? "-",
+    r.failReason ?? "-",
+  ])
 
   const columns: DataGridColumn<ReservationResultRow>[] = [
     {
@@ -138,7 +162,11 @@ export function E05ReservationResults() {
       />
 
       <FormSection title="조회조건">
-        <SearchPanel onReset={handleReset} onSearch={() => setPage(1)}>
+        <SearchPanel
+          onReset={handleReset}
+          onSearch={() => setPage(1)}
+          onSaveCondition={() => setSavedOpen(true)}
+        >
           <FormRow label="조회기간">
             <PeriodField
               start={period.start}
@@ -206,6 +234,9 @@ export function E05ReservationResults() {
             setPage(1)
           }}
           baseTimeLabel={formatDateTime(BASE_TIME)}
+          onPrint={() => window.print()}
+          onBrailleView={() => setBrailleOpen(true)}
+          onSaveFile={() => downloadCsv(`예약이체처리결과_${TODAY}.csv`, exportHeaders, exportRows)}
         />
 
         <DataGrid
@@ -223,6 +254,20 @@ export function E05ReservationResults() {
         items={[
           "처리 실패 건은 재시도 없이 실패로 확정되며, 실패 사유는 목록의 실패사유 열에서 확인할 수 있습니다.",
         ]}
+      />
+
+      <AlertDialog
+        open={savedOpen}
+        onClose={() => setSavedOpen(false)}
+        messages={["조회조건이 저장되었습니다."]}
+      />
+
+      <TextViewModal
+        open={brailleOpen}
+        onClose={() => setBrailleOpen(false)}
+        title="예약이체 처리결과 점자보기"
+        headers={exportHeaders}
+        rows={exportRows}
       />
     </div>
   )

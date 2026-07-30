@@ -5,15 +5,32 @@ import { FormSection } from "@/shared/ui/form-section"
 import { Button } from "@/shared/ui/button"
 import { DataGrid, type DataGridColumn } from "@/widgets/query/data-grid"
 import { SummaryRow } from "@/widgets/query/summary-row"
-import { formatAccountNo, formatAmount, formatDate, formatDateTime } from "@/shared/lib/format"
+import { GridToolbar } from "@/widgets/query/grid-toolbar"
+import { TextViewModal } from "@/widgets/query/text-view-modal"
+import { GridSearchModal, type GridSearchField } from "@/widgets/query/grid-search-modal"
+import { downloadCsv } from "@/shared/lib/csv"
+import {
+  formatAccountNo,
+  formatAmount,
+  formatDate,
+  formatDateTime,
+  maskAccountNo,
+} from "@/shared/lib/format"
 import { MOCK_OVERVIEW_ACCOUNTS, type AccountGroupId, type OverviewAccount } from "@/lib/mock/b01-accounts"
 
+const TODAY = "2026-07-23"
 const BASE_TIME = "2026-07-23T08:57:34"
 
 const GROUP_LABELS: Record<AccountGroupId, string> = {
   checking: "입출금계좌",
   deposit: "예금·적금계좌",
 }
+
+/** REQ-CMN-020: 그리드가 보유한 컬럼 중 검색 대상 목록. */
+const SEARCH_FIELDS: GridSearchField[] = [
+  { key: "alias", label: "계좌명" },
+  { key: "accountNo", label: "계좌번호" },
+]
 
 /** REQ-INQR-004: 계좌명, 계좌번호, 신규일, 최근거래일(예적금은 만기일), 잔액, 업무. */
 function buildColumns(
@@ -81,6 +98,10 @@ const GROUP_ORDER: AccountGroupId[] = ["checking", "deposit"]
 
 export function B01AllAccounts() {
   const navigate = useNavigate()
+  const [pageSize, setPageSize] = React.useState<number | "all">("all")
+  const [brailleOpen, setBrailleOpen] = React.useState(false)
+  const [searchOpen, setSearchOpen] = React.useState(false)
+  const [search, setSearch] = React.useState<{ field: string; keyword: string } | null>(null)
 
   const handleInquire = (accountNo: string) => {
     navigate(`/inquiry?account=${accountNo}`)
@@ -89,7 +110,26 @@ export function B01AllAccounts() {
     navigate(`/instant-transfer?from=${accountNo}`)
   }
 
-  const grandTotal = MOCK_OVERVIEW_ACCOUNTS.reduce((sum, a) => sum + a.balance, 0)
+  const filteredAccounts = React.useMemo(() => {
+    if (!search || !search.keyword) return MOCK_OVERVIEW_ACCOUNTS
+    return MOCK_OVERVIEW_ACCOUNTS.filter((a) => {
+      const value = search.field === "accountNo" ? formatAccountNo(a.accountNo) : a.alias
+      return value.includes(search.keyword)
+    })
+  }, [search])
+
+  const grandTotal = filteredAccounts.reduce((sum, a) => sum + a.balance, 0)
+
+  /** REQ-INQR-015: CSV 저장 시에만 계좌번호를 마스킹한다(화면 표시는 마스킹하지 않음, REQ-CMN-017). */
+  const exportHeaders = ["상품군", "계좌명", "계좌번호", "신규일", "최근거래일/만기일", "잔액"]
+  const exportRows = filteredAccounts.map((a) => [
+    GROUP_LABELS[a.group],
+    a.alias,
+    maskAccountNo(a.accountNo),
+    formatDate(a.openedDate),
+    formatDate(a.lastActivityDate),
+    formatAmount(a.balance),
+  ])
 
   return (
     <div className="flex flex-col gap-8">
@@ -101,14 +141,22 @@ export function B01AllAccounts() {
         ]}
       />
 
+      <GridToolbar
+        totalCount={filteredAccounts.length}
+        pageSize={pageSize}
+        onPageSizeChange={setPageSize}
+        baseTimeLabel={formatDateTime(BASE_TIME)}
+        onPrint={() => window.print()}
+        onBrailleView={() => setBrailleOpen(true)}
+        onSaveFile={() => downloadCsv(`전체계좌조회_${TODAY}.csv`, exportHeaders, exportRows)}
+        onSearch={() => setSearchOpen(true)}
+      />
+
       {GROUP_ORDER.map((group) => {
-        const rows = MOCK_OVERVIEW_ACCOUNTS.filter((a) => a.group === group)
+        const rows = filteredAccounts.filter((a) => a.group === group)
         const groupTotal = rows.reduce((sum, a) => sum + a.balance, 0)
         return (
           <FormSection key={group} title={GROUP_LABELS[group]} className="mb-0">
-            <p className="mb-2 text-right text-2xs text-ink-muted tabular-nums">
-              기준일시 : {formatDateTime(BASE_TIME)}
-            </p>
             <DataGrid
               columns={buildColumns(group, handleInquire, handleTransfer)}
               rows={rows}
@@ -145,7 +193,23 @@ export function B01AllAccounts() {
           "계좌 잔액은 조회 시점 기준으로 표시되며, 그룹별 총잔액과 총자산도 같은 시점의 잔액 합계로 집계됩니다(REQ-INQR-002·003).",
           "계좌명은 별명이 등록된 경우 별명을 우선 표시합니다(REQ-ACCT-013).",
           "[이체]는 출금계좌로 등록된 입출금계좌에만 노출됩니다(REQ-INQR-005).",
+          "계좌목록은 CSV 파일로 저장할 수 있으며, 파일에는 마스킹된 계좌번호가 사용됩니다(REQ-INQR-015).",
         ]}
+      />
+
+      <TextViewModal
+        open={brailleOpen}
+        onClose={() => setBrailleOpen(false)}
+        title="전체계좌조회 점자보기"
+        headers={exportHeaders}
+        rows={exportRows}
+      />
+
+      <GridSearchModal
+        open={searchOpen}
+        onClose={() => setSearchOpen(false)}
+        fields={SEARCH_FIELDS}
+        onApply={(field, keyword) => setSearch(keyword ? { field, keyword } : null)}
       />
     </div>
   )

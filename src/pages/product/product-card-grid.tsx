@@ -5,29 +5,10 @@ import { Select } from "@/shared/ui/select"
 import { EmptyState } from "@/widgets/query/empty-state"
 import { formatAmount } from "@/shared/lib/format"
 import { cn } from "@/shared/lib/utils"
+import type { ProductCard, ProductCategory } from "@/entities/product"
 
-export type ProductCategory = "정기예금" | "정기적금"
 type CategoryFilter = "전체" | ProductCategory
 type SortKey = "rate" | "latest"
-
-export interface ProductCard {
-  id: string
-  category: ProductCategory
-  name: string
-  summary: string
-  /** 최고 금리 (연, 세전, %). */
-  maxRate: number
-  /** 기본 금리 (연, 세전, %). */
-  baseRate: number
-  /** 가입기간 표기 문자열. */
-  period: string
-  /** 최소 가입금액 (원). */
-  minAmount: number
-  /** 가입금액 상한 (원). */
-  maxAmount: number
-  /** 최신순 정렬 기준일 (YYYY-MM-DD). */
-  updatedAt: string
-}
 
 export interface ProductCardGridProps {
   products: ProductCard[]

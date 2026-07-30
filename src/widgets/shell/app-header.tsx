@@ -1,7 +1,7 @@
 import * as React from "react"
 import { Link } from "react-router-dom"
 import { Bell, Menu } from "lucide-react"
-import { NAV } from "@/lib/nav"
+import { NAV } from "@/shared/config/nav"
 import { cn } from "@/shared/lib/utils"
 
 export interface AppHeaderProps {

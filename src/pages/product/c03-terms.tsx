@@ -4,7 +4,7 @@ import { Button } from "@/shared/ui/button"
 import { StepLayout } from "@/widgets/transfer/step-layout"
 import { TermsAgreement } from "@/pages/product/terms-agreement"
 import { NoticeBoxFooter } from "@/widgets/shell/notice-box"
-import { MOCK_JOIN_PRODUCTS, MOCK_JOIN_TERMS } from "@/lib/mock/product-join"
+import { MOCK_JOIN_PRODUCTS, MOCK_JOIN_TERMS } from "@/entities/product"
 import { PRODUCT_JOIN_STEPS } from "./join-shared"
 
 /** C-03 상품가입 1단계 · 약관동의 (REQ-PRDT-005) */

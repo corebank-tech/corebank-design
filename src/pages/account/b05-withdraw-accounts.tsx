@@ -14,7 +14,7 @@ import {
   MOCK_WITHDRAWAL_ACCOUNTS,
   getWithdrawalDeleteBlockReason,
   type WithdrawalAccount,
-} from "@/lib/mock/b05-withdrawal-accounts"
+} from "@/entities/account"
 
 const PASSWORD_LIMIT = 4
 

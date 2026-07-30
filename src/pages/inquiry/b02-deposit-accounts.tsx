@@ -7,7 +7,7 @@ import { Button } from "@/shared/ui/button"
 import { DataGrid, type DataGridColumn } from "@/widgets/query/data-grid"
 import { SummaryRow } from "@/widgets/query/summary-row"
 import { formatAccountNo, formatAmount, formatDate, formatDateTime } from "@/shared/lib/format"
-import { MOCK_OVERVIEW_ACCOUNTS, type OverviewAccount } from "@/lib/mock/b01-accounts"
+import { MOCK_OVERVIEW_ACCOUNTS, type OverviewAccount } from "@/entities/account"
 import { cn } from "@/shared/lib/utils"
 
 const BASE_TIME = "2026-07-23T08:57:34"

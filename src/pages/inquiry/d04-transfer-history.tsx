@@ -30,7 +30,7 @@ import {
   MOCK_MONTHLY_TRANSFER_STATS,
   type TransferHistoryRow,
   type TransferStatus,
-} from "@/lib/mock/d04-transfers"
+} from "@/entities/transfer"
 
 const TODAY = "2026-07-23"
 const BASE_TIME = "2026-07-23T08:57:34"

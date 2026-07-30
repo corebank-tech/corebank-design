@@ -23,7 +23,7 @@ import {
   maskAccountNo,
   maskName,
 } from "@/shared/lib/format"
-import { MOCK_RESERVATIONS, type ReservationRow, type ReservationStatus } from "@/lib/mock/e04-reservations"
+import { MOCK_RESERVATIONS, type ReservationRow, type ReservationStatus } from "@/entities/transfer"
 
 const TODAY = "2026-07-23"
 const BASE_TIME = "2026-07-23T08:57:34"

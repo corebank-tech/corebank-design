@@ -8,8 +8,8 @@ import { WithdrawAccountField } from "@/widgets/transfer/transfer-fields"
 import { TermMonthsField, JoinAmountField } from "@/pages/product/fields"
 import { NoticeBoxFooter } from "@/widgets/shell/notice-box"
 import { formatKoreanAmount } from "@/shared/lib/format"
-import { estimateMaturityAmount } from "@/lib/product-join-calc"
-import { MOCK_JOIN_ACCOUNTS, MOCK_JOIN_PRODUCTS } from "@/lib/mock/product-join"
+import { estimateMaturityAmount } from "@/entities/product"
+import { MOCK_JOIN_ACCOUNTS, MOCK_JOIN_PRODUCTS } from "@/entities/product"
 import { PRODUCT_JOIN_STEPS, type ProductJoinFormState } from "./join-shared"
 
 /** C-04 상품가입 2단계 · 정보입력 (REQ-PRDT-006~009) */

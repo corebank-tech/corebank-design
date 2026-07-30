@@ -1,26 +1,8 @@
-import type { TermItem } from "@/pages/product/terms-agreement"
-import type { AccountOption } from "@/shared/types/account"
-
-export type ProductCategory = "정기예금" | "정기적금"
-
-export interface ProductJoinMaster {
-  id: string
-  category: ProductCategory
-  name: string
-  /** 적용금리, 연 세전 %. Phase 1 데모용 고정값(POL-030). */
-  rate: number
-  minTermMonths: number
-  maxTermMonths: number
-  minAmount: number
-  maxAmount: number
-  /** 가입 완료 화면에 노출할 신규계좌번호(모의), 12자리. */
-  mockNewAccountNo: string
-}
-
-export interface JoinWithdrawAccount extends AccountOption {
-  /** 계좌비밀번호 인증용 모의 값(4자리). */
-  mockPassword: string
-}
+import type {
+  JoinWithdrawAccount,
+  ProductJoinMaster,
+  TermItem,
+} from "@/entities/product/model/types"
 
 /** 취급 상품은 정기예금·정기적금 2종뿐이다(POL-029). */
 export const MOCK_JOIN_PRODUCTS: Record<string, ProductJoinMaster> = {
@@ -72,7 +54,7 @@ export const MOCK_JOIN_PRODUCTS: Record<string, ProductJoinMaster> = {
     id: "P005",
     category: "정기예금",
     name: "코어 단기예금",
-    rate: 3.40,
+    rate: 3.4,
     minTermMonths: 1,
     maxTermMonths: 12,
     minAmount: 500_000,
@@ -83,7 +65,7 @@ export const MOCK_JOIN_PRODUCTS: Record<string, ProductJoinMaster> = {
     id: "P006",
     category: "정기적금",
     name: "코어 목표적금",
-    rate: 4.50,
+    rate: 4.5,
     minTermMonths: 12,
     maxTermMonths: 36,
     minAmount: 30_000,
@@ -94,8 +76,20 @@ export const MOCK_JOIN_PRODUCTS: Record<string, ProductJoinMaster> = {
 
 /** 상품가입 출금계좌 후보. 이체 도메인 계좌 목록과 별개로 계좌비밀번호(mockPassword)를 포함한다. */
 export const MOCK_JOIN_ACCOUNTS: JoinWithdrawAccount[] = [
-  { alias: "자유입출금", accountNo: "110632892336", balance: 12340500, withdrawable: 12000000, mockPassword: "1234" },
-  { alias: "급여통장", accountNo: "302998112233", balance: 3860000, withdrawable: 3860000, mockPassword: "1234" },
+  {
+    alias: "자유입출금",
+    accountNo: "110632892336",
+    balance: 12340500,
+    withdrawable: 12000000,
+    mockPassword: "1234",
+  },
+  {
+    alias: "급여통장",
+    accountNo: "302998112233",
+    balance: 3860000,
+    withdrawable: 3860000,
+    mockPassword: "1234",
+  },
 ]
 
 /** 가입일 앵커. 다른 화면(BASE_TIME 등)과 같은 방식으로 고정한 데모 기준일. */

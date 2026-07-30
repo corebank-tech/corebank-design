@@ -8,9 +8,9 @@ import { FormRow } from "@/shared/ui/form-row"
 import { NoticeBoxFooter } from "@/widgets/shell/notice-box"
 import { AlertDialog } from "@/shared/ui/alert-dialog"
 import { ConfirmDialog } from "@/shared/ui/confirm-dialog"
-import { evaluateIdRules, evaluatePasswordRules, isIdValid, isPasswordValid, type RuleCheck } from "@/lib/auth-rules"
+import { evaluateIdRules, evaluatePasswordRules, isIdValid, isPasswordValid, type RuleCheck } from "@/entities/auth"
 import { formatPhone } from "@/shared/lib/format"
-import { MOCK_EXISTING_USER_IDS, MOCK_EXISTING_EMAILS } from "@/lib/mock/auth"
+import { MOCK_EXISTING_USER_IDS, MOCK_EXISTING_EMAILS } from "@/entities/auth"
 import { SIGNUP_STEPS, type SignupData } from "./signup-flow"
 
 const EMAIL_OTP_TTL = 180

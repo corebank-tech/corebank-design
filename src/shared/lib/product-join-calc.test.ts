@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest"
 import {
   addMonthsWithEomCorrection,
   estimateMaturityAmount,
-} from "@/lib/product-join-calc"
+} from "@/entities/product"
 
 describe("addMonthsWithEomCorrection (REQ-PRDT-014)", () => {
   it("월말 보정 없이 개월 수를 더한다", () => {

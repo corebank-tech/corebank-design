@@ -7,7 +7,7 @@ import type { DataGridColumn } from "@/widgets/query/data-grid"
 import {
   MOCK_TRANSFER_RESULT,
   type TransferResultRow,
-} from "@/lib/mock/transfer"
+} from "@/entities/transfer"
 import {
   formatAccountNo,
   formatAmount,

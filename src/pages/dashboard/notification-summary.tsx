@@ -1,5 +1,5 @@
 import { ChevronRight } from "lucide-react"
-import type { NotificationItem } from "@/lib/mock/dashboard"
+import type { NotificationItem } from "@/entities/dashboard"
 import { formatDateTime } from "@/shared/lib/format"
 
 export interface NotificationSummaryProps {

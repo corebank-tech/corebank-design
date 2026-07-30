@@ -8,8 +8,8 @@ import { FormRow } from "@/shared/ui/form-row"
 import { Alert } from "@/shared/ui/alert"
 import { NoticeBoxFooter } from "@/widgets/shell/notice-box"
 import { AlertDialog } from "@/shared/ui/alert-dialog"
-import { evaluatePasswordRules, isPasswordValid, type RuleCheck } from "@/lib/auth-rules"
-import { MOCK_MEMBERS, type Member } from "@/lib/mock/auth"
+import { evaluatePasswordRules, isPasswordValid, type RuleCheck } from "@/entities/auth"
+import { MOCK_MEMBERS, type Member } from "@/entities/auth"
 
 const OTP_TTL = 180
 

@@ -6,8 +6,8 @@ import {
   MOCK_TRANSFER_ACCOUNTS,
   MOCK_TRANSFER_LIMITS,
   MOCK_PAYEE_NAME,
-} from "@/lib/mock/transfer"
-import { MOCK_RESERVATIONS } from "@/lib/mock/e04-reservations"
+} from "@/entities/transfer"
+import { MOCK_RESERVATIONS } from "@/entities/transfer"
 import {
   formatAccountNo,
   formatAmount,

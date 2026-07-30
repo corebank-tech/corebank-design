@@ -17,7 +17,7 @@ import {
   formatPhone,
 } from "@/shared/lib/format"
 import { cn } from "@/shared/lib/utils"
-import { MOCK_PROFILE, MOCK_REGISTERED_EMAILS } from "@/lib/mock/f01-profile"
+import { MOCK_PROFILE, MOCK_REGISTERED_EMAILS } from "@/entities/customer"
 
 const BASE_TIME = "2026-07-30T09:15:00"
 const EMAIL_CODE_TTL_SECONDS = 180

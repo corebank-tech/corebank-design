@@ -4,38 +4,7 @@ import { Button } from "@/shared/ui/button"
 import { DataGrid, type DataGridColumn } from "@/widgets/query/data-grid"
 import { formatAmount } from "@/shared/lib/format"
 import { cn } from "@/shared/lib/utils"
-import type { ProductCategory } from "./product-card-grid"
-
-export interface ProductGuideItem {
-  label: string
-  value: string
-}
-
-export interface ProductRateRow {
-  period: string
-  /** 기본금리 (%). */
-  baseRate: number
-  /** 우대금리 (%). */
-  primeRate: number
-  /** 최고금리 (%). */
-  maxRate: number
-}
-
-export interface ProductDetailData {
-  id: string
-  category: ProductCategory
-  name: string
-  summary: string
-  /** 최고 금리 (연, 세전, %). */
-  maxRate: number
-  period: string
-  minAmount: number
-  maxAmount: number
-  interestMethod: string
-  guide: ProductGuideItem[]
-  rates: ProductRateRow[]
-  notices: string[]
-}
+import type { ProductDetailData, ProductRateRow } from "@/entities/product"
 
 export interface ProductDetailProps {
   product: ProductDetailData

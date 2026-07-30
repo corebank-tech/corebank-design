@@ -1,4 +1,4 @@
-import type { ProductCategory } from "@/lib/mock/product-join"
+import type { ProductCategory } from "@/entities/product"
 
 /** C-03~C-06 공용 스텝 라벨. */
 export const PRODUCT_JOIN_STEPS = ["약관동의", "정보입력", "확인 및 인증", "완료"]

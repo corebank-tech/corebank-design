@@ -25,7 +25,7 @@ import {
   MOCK_AUTO_TRANSFER_RESULTS,
   type AutoTransferResultRow,
   type AutoTransferResult,
-} from "@/lib/mock/g05-auto-transfer-results"
+} from "@/entities/transfer"
 
 const TODAY = "2026-07-23"
 const BASE_TIME = "2026-07-23T08:57:34"

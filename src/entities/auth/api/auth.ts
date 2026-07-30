@@ -2,7 +2,7 @@
  * 회원가입(A-02~A-06) · 아이디 찾기(A-07) · 비밀번호 재설정(A-08) 목업 데이터.
  * 실제 인증서·SMS·메일 발송 없이 화면 표시형(Mock)으로만 동작한다.
  */
-import type { TermItem } from "@/pages/product/terms-agreement"
+import type { TermItem } from "@/entities/product"
 
 export interface VerifyAccount {
   accountNo: string

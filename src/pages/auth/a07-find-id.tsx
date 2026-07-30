@@ -9,7 +9,7 @@ import { NoticeBoxFooter } from "@/widgets/shell/notice-box"
 import { AlertDialog } from "@/shared/ui/alert-dialog"
 import { ErrorDialog } from "@/shared/ui/error-dialog"
 import { maskUserId } from "@/shared/lib/format"
-import { MOCK_MEMBERS, type Member } from "@/lib/mock/auth"
+import { MOCK_MEMBERS, type Member } from "@/entities/auth"
 
 const ERROR_LIMIT = 5
 

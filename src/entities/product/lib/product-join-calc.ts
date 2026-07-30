@@ -8,7 +8,10 @@ function daysInMonth(year: number, monthIndex0: number): number {
 }
 
 /** REQ-PRDT-014: 가입일 + 개월 수. 존재하지 않는 날짜(예: 1/31 + 1개월)는 해당 월의 말일로 보정한다. */
-export function addMonthsWithEomCorrection(iso: string, months: number): string {
+export function addMonthsWithEomCorrection(
+  iso: string,
+  months: number,
+): string {
   const [y, m, d] = iso.split("-").map(Number)
   const total = m - 1 + months
   const targetYear = y + Math.floor(total / 12)

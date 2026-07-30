@@ -6,8 +6,8 @@ import {
   MOCK_TRANSFER_ACCOUNTS,
   MOCK_TRANSFER_LIMITS,
   MOCK_PAYEE_NAME,
-} from "@/lib/mock/transfer"
-import { MOCK_AUTO_TRANSFERS } from "@/lib/mock/g04-auto-transfers"
+} from "@/entities/transfer"
+import { MOCK_AUTO_TRANSFERS } from "@/entities/transfer"
 import {
   formatAccountNo,
   formatAmount,

@@ -4,17 +4,7 @@ import { Button } from "@/shared/ui/button"
 import { Badge } from "@/shared/ui/badge"
 import { Modal } from "@/shared/ui/modal"
 import { AlertDialog } from "@/shared/ui/alert-dialog"
-
-export interface TermItem {
-  id: string
-  /** 필수 동의 항목 여부. */
-  required: boolean
-  title: string
-  /** 항목 하단에 노출되는 동의 질문 문구. */
-  question: string
-  /** [보기] 모달에 표시되는 약관 전문. */
-  body: string
-}
+import type { TermItem } from "@/entities/product"
 
 export interface TermsAgreementProps {
   terms: TermItem[]

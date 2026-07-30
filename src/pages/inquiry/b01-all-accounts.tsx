@@ -16,7 +16,7 @@ import {
   formatDateTime,
   maskAccountNo,
 } from "@/shared/lib/format"
-import { MOCK_OVERVIEW_ACCOUNTS, type AccountGroupId, type OverviewAccount } from "@/lib/mock/b01-accounts"
+import { MOCK_OVERVIEW_ACCOUNTS, type AccountGroupId, type OverviewAccount } from "@/entities/account"
 
 const TODAY = "2026-07-23"
 const BASE_TIME = "2026-07-23T08:57:34"

@@ -6,7 +6,7 @@ import { Button } from "@/shared/ui/button"
 import { Alert } from "@/shared/ui/alert"
 import { DataGrid, type DataGridColumn } from "@/widgets/query/data-grid"
 import { formatAccountNo, formatAmount, formatDate } from "@/shared/lib/format"
-import { MOCK_ORDER_ACCOUNTS, sortByOpenedDateAsc, type OrderAccount } from "@/lib/mock/b07-account-order"
+import { MOCK_ORDER_ACCOUNTS, sortByOpenedDateAsc, type OrderAccount } from "@/entities/account"
 
 /** REQ-ACCT-014: 계좌 표시순서 변경. [확인] 저장, [초기화] 시 개설일 오름차순 복원. */
 export function B07AccountOrder() {

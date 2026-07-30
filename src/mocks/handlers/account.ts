@@ -1,5 +1,5 @@
 import { delay, http, HttpResponse } from "msw"
-import { MOCK_OVERVIEW_ACCOUNTS } from "@/lib/mock/b01-accounts"
+import { MOCK_OVERVIEW_ACCOUNTS } from "@/entities/account"
 import { fail, ok } from "@/mocks/lib/envelope"
 
 const MOCK_LATENCY_MS = 300

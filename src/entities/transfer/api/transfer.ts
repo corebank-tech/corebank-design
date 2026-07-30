@@ -2,9 +2,24 @@ import type { AccountOption } from "@/shared/types/account"
 
 /** Withdrawal accounts available to the signed-in customer. */
 export const MOCK_TRANSFER_ACCOUNTS: AccountOption[] = [
-  { alias: "자유입출금", accountNo: "110632892336", balance: 12340500, withdrawable: 12000000 },
-  { alias: "급여통장", accountNo: "302998112233", balance: 3860000, withdrawable: 3860000 },
-  { alias: "비상금통장", accountNo: "255104778910", balance: 1500000, withdrawable: 1500000 },
+  {
+    alias: "자유입출금",
+    accountNo: "110632892336",
+    balance: 12340500,
+    withdrawable: 12000000,
+  },
+  {
+    alias: "급여통장",
+    accountNo: "302998112233",
+    balance: 3860000,
+    withdrawable: 3860000,
+  },
+  {
+    alias: "비상금통장",
+    accountNo: "255104778910",
+    balance: 1500000,
+    withdrawable: 1500000,
+  },
 ]
 
 /** MOCK_TRANSFER_ACCOUNTS 계좌비밀번호(4자리) 레지스트리. REQ-TRSF-009 검증용. */
@@ -32,7 +47,8 @@ export const MOCK_PAYEE_NAME = "김민수"
 /* ================================================================== */
 
 export type PayeeAccountStatus = "normal" | "closed" | "suspended"
-export type PayeeAccountType = "checking" | "savings_installment" | "time_deposit"
+export type PayeeAccountType =
+  "checking" | "savings_installment" | "time_deposit"
 
 export interface PayeeAccountRecord {
   accountNo: string
@@ -47,14 +63,54 @@ export interface PayeeAccountRecord {
 }
 
 export const MOCK_PAYEE_ACCOUNTS: PayeeAccountRecord[] = [
-  { accountNo: "333330730135", payeeName: "김민수", status: "normal", accountType: "checking" },
-  { accountNo: "441205567890", payeeName: "이서연", status: "normal", accountType: "savings_installment" },
-  { accountNo: "219934482201", payeeName: "오수빈", status: "normal", accountType: "checking" },
-  { accountNo: "128877234455", payeeName: "장하늘", status: "normal", accountType: "checking" },
-  { accountNo: "305566778899", payeeName: "배도윤", status: "normal", accountType: "savings_installment" },
-  { accountNo: "552678901234", payeeName: "박지훈", status: "closed", accountType: "checking" },
-  { accountNo: "663789012345", payeeName: "최유진", status: "suspended", accountType: "checking" },
-  { accountNo: "774890123456", payeeName: "정다은", status: "normal", accountType: "time_deposit" },
+  {
+    accountNo: "333330730135",
+    payeeName: "김민수",
+    status: "normal",
+    accountType: "checking",
+  },
+  {
+    accountNo: "441205567890",
+    payeeName: "이서연",
+    status: "normal",
+    accountType: "savings_installment",
+  },
+  {
+    accountNo: "219934482201",
+    payeeName: "오수빈",
+    status: "normal",
+    accountType: "checking",
+  },
+  {
+    accountNo: "128877234455",
+    payeeName: "장하늘",
+    status: "normal",
+    accountType: "checking",
+  },
+  {
+    accountNo: "305566778899",
+    payeeName: "배도윤",
+    status: "normal",
+    accountType: "savings_installment",
+  },
+  {
+    accountNo: "552678901234",
+    payeeName: "박지훈",
+    status: "closed",
+    accountType: "checking",
+  },
+  {
+    accountNo: "663789012345",
+    payeeName: "최유진",
+    status: "suspended",
+    accountType: "checking",
+  },
+  {
+    accountNo: "774890123456",
+    payeeName: "정다은",
+    status: "normal",
+    accountType: "time_deposit",
+  },
   {
     accountNo: "885901234567",
     payeeName: "한상우",
@@ -81,13 +137,22 @@ export interface PayeeLookupResult {
 export function lookupPayeeAccount(accountNo: string): PayeeLookupResult {
   const record = MOCK_PAYEE_ACCOUNTS.find((a) => a.accountNo === accountNo)
   if (!record) {
-    return { ok: false, error: "입금계좌를 찾을 수 없습니다. 계좌번호를 다시 확인하세요." }
+    return {
+      ok: false,
+      error: "입금계좌를 찾을 수 없습니다. 계좌번호를 다시 확인하세요.",
+    }
   }
   if (record.status === "closed") {
-    return { ok: false, error: "해지된 계좌입니다. 다른 입금계좌를 입력하세요." }
+    return {
+      ok: false,
+      error: "해지된 계좌입니다. 다른 입금계좌를 입력하세요.",
+    }
   }
   if (record.status === "suspended") {
-    return { ok: false, error: "거래정지된 계좌입니다. 다른 입금계좌를 입력하세요." }
+    return {
+      ok: false,
+      error: "거래정지된 계좌입니다. 다른 입금계좌를 입력하세요.",
+    }
   }
   if (record.accountType === "time_deposit") {
     return {
@@ -117,11 +182,31 @@ export interface RecentTransferAccount {
 
 /** 최근 이체에 사용한 입금계좌 5건(최신순). REQ-TRSF-027. */
 export const MOCK_RECENT_TRANSFER_ACCOUNTS: RecentTransferAccount[] = [
-  { accountNo: "333330730135", payeeName: "김민수", lastUsedAt: "2026-07-29T10:12:00" },
-  { accountNo: "441205567890", payeeName: "이서연", lastUsedAt: "2026-07-27T15:40:00" },
-  { accountNo: "219934482201", payeeName: "오수빈", lastUsedAt: "2026-07-24T09:05:00" },
-  { accountNo: "128877234455", payeeName: "장하늘", lastUsedAt: "2026-07-20T18:22:00" },
-  { accountNo: "305566778899", payeeName: "배도윤", lastUsedAt: "2026-07-18T11:47:00" },
+  {
+    accountNo: "333330730135",
+    payeeName: "김민수",
+    lastUsedAt: "2026-07-29T10:12:00",
+  },
+  {
+    accountNo: "441205567890",
+    payeeName: "이서연",
+    lastUsedAt: "2026-07-27T15:40:00",
+  },
+  {
+    accountNo: "219934482201",
+    payeeName: "오수빈",
+    lastUsedAt: "2026-07-24T09:05:00",
+  },
+  {
+    accountNo: "128877234455",
+    payeeName: "장하늘",
+    lastUsedAt: "2026-07-20T18:22:00",
+  },
+  {
+    accountNo: "305566778899",
+    payeeName: "배도윤",
+    lastUsedAt: "2026-07-18T11:47:00",
+  },
 ]
 
 export interface FrequentTransferAccount {

@@ -9,7 +9,7 @@ import { SummaryRow } from "@/widgets/query/summary-row"
 import { ConfirmDialog } from "@/shared/ui/confirm-dialog"
 import { OtpModal } from "@/shared/ui/otp-modal"
 import { formatAmount, formatDateTime } from "@/shared/lib/format"
-import { MOCK_TRANSFER_LIMIT } from "@/lib/mock/d05-transfer-limit"
+import { MOCK_TRANSFER_LIMIT } from "@/entities/transfer"
 
 const PER_TRANSFER_MAX = 50_000_000 // POL-015
 const PER_DAY_MAX = 100_000_000 // POL-016

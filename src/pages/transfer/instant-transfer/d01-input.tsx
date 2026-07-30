@@ -16,7 +16,7 @@ import type { AccountOption } from "@/shared/types/account"
 import type {
   FrequentTransferAccount,
   RecentTransferAccount,
-} from "@/lib/mock/transfer"
+} from "@/entities/transfer"
 import type { InstantTransferForm } from "../instant-transfer-screen"
 
 /** Muted, de-emphasized field label — reserves visual weight for 이체금액. */

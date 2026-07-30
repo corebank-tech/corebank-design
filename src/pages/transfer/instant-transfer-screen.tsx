@@ -17,7 +17,7 @@ import {
   lookupPayeeAccount,
   type FrequentTransferAccount,
   type TransferResultRow,
-} from "@/lib/mock/transfer"
+} from "@/entities/transfer"
 import {
   formatAccountNo,
   formatAmount,

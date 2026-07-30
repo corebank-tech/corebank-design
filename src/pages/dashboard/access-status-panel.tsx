@@ -1,4 +1,4 @@
-import type { AccessStatus } from "@/lib/mock/dashboard"
+import type { AccessStatus } from "@/entities/dashboard"
 import { formatDateTime } from "@/shared/lib/format"
 
 export interface AccessStatusPanelProps {

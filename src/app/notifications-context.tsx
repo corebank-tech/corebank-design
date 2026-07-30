@@ -2,7 +2,7 @@ import * as React from "react"
 import {
   MOCK_NOTIFICATION_INBOX,
   type NotificationInboxRow,
-} from "@/lib/mock/f02-notifications"
+} from "@/entities/notification"
 
 export interface NotificationsContextValue {
   notifications: NotificationInboxRow[]

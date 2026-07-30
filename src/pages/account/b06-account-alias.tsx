@@ -13,7 +13,7 @@ import {
   ALIAS_ALNUM_MAX,
   isAliasLengthValid,
   type AliasAccount,
-} from "@/lib/mock/b06-account-aliases"
+} from "@/entities/account"
 
 /** REQ-ACCT-013: 계좌별명 등록·수정·삭제. 한글 12자 / 영문·숫자 24자 이내. */
 export function B06AccountAlias() {

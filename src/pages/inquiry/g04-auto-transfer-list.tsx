@@ -38,7 +38,7 @@ import {
   type AutoTransferRow,
   type AutoTransferStatus,
   type TransferCycle,
-} from "@/lib/mock/g04-auto-transfers"
+} from "@/entities/transfer"
 
 const TODAY = "2026-07-23"
 const BASE_TIME = "2026-07-23T08:57:34"

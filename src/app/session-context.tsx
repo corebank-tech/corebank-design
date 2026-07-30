@@ -1,5 +1,5 @@
 import * as React from "react"
-import { MOCK_MEMBERS } from "@/lib/mock/auth"
+import { MOCK_MEMBERS } from "@/entities/auth"
 
 /** POL-001: 세션 타임아웃 10분(600초). */
 const SESSION_SECONDS = 600

@@ -3,8 +3,11 @@
  * 등록된 출금계좌 / 미등록 계좌 목록을 하나의 배열에서 registered 플래그로 구분한다.
  */
 
-import { MOCK_RESERVATIONS } from "./e04-reservations"
-import { MOCK_AUTO_TRANSFERS } from "./g04-auto-transfers"
+// NOTE: entities/account → entities/transfer 크로스 엔티티 참조. 출금계좌 삭제 가능 여부가
+// 예약이체·자동이체 등록 여부에 의존하는 도메인 규칙이라 불가피하다. eslint boundaries 설정에서
+// entities → entities 는 warn 으로 가시화만 하고 error 로 막지 않는다.
+import { MOCK_RESERVATIONS } from "@/entities/transfer/api/e04-reservations"
+import { MOCK_AUTO_TRANSFERS } from "@/entities/transfer/api/g04-auto-transfers"
 
 export interface WithdrawalAccount {
   id: string
@@ -69,7 +72,9 @@ export const MOCK_WITHDRAWAL_ACCOUNTS: WithdrawalAccount[] = [
  * REQ-ACCT-011: 대기 상태 예약이체 또는 정상 상태 자동이체가 등록된 계좌는 삭제할 수 없다.
  * 차단 사유가 없으면 null을 반환한다.
  */
-export function getWithdrawalDeleteBlockReason(accountNo: string): string | null {
+export function getWithdrawalDeleteBlockReason(
+  accountNo: string,
+): string | null {
   const hasPendingReservation = MOCK_RESERVATIONS.some(
     (r) => r.fromAccountNo === accountNo && r.status === "대기",
   )

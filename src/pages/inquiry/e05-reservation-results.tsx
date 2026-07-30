@@ -24,7 +24,7 @@ import {
   MOCK_RESERVATION_RESULTS,
   type ReservationResultRow,
   type ReservationResult,
-} from "@/lib/mock/e05-reservation-results"
+} from "@/entities/transfer"
 
 const TODAY = "2026-07-23"
 const BASE_TIME = "2026-07-23T08:57:34"

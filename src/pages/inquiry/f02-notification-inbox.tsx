@@ -8,7 +8,7 @@ import { Pagination } from "@/widgets/query/pagination"
 import { TextViewModal } from "@/widgets/query/text-view-modal"
 import { downloadCsv } from "@/shared/lib/csv"
 import { formatDateTime } from "@/shared/lib/format"
-import type { NotificationInboxRow } from "@/lib/mock/f02-notifications"
+import type { NotificationInboxRow } from "@/entities/notification"
 import { useNotifications } from "@/app/notifications-context"
 import { cn } from "@/shared/lib/utils"
 

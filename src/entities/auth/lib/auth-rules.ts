@@ -36,7 +36,11 @@ export function isIdValid(id: string): boolean {
 
 function hasFourRepeating(value: string): boolean {
   for (let i = 0; i <= value.length - 4; i++) {
-    if (value[i] === value[i + 1] && value[i] === value[i + 2] && value[i] === value[i + 3]) {
+    if (
+      value[i] === value[i + 1] &&
+      value[i] === value[i + 2] &&
+      value[i] === value[i + 3]
+    ) {
       return true
     }
   }
@@ -57,7 +61,10 @@ function hasFourSequential(value: string): boolean {
 }
 
 /** POL-010·POL-011: 8~15자 / 4종 중 3종 이상 / 아이디 미포함 / 동일문자·연속증감 4자리 금지. */
-export function evaluatePasswordRules(password: string, id: string): RuleCheck[] {
+export function evaluatePasswordRules(
+  password: string,
+  id: string,
+): RuleCheck[] {
   const kinds = [
     /[A-Z]/.test(password),
     /[a-z]/.test(password),
@@ -79,7 +86,9 @@ export function evaluatePasswordRules(password: string, id: string): RuleCheck[]
     {
       key: "no-id",
       label: "아이디를 포함하지 않습니다",
-      passed: !(id.length > 0 && password.toLowerCase().includes(id.toLowerCase())),
+      passed: !(
+        id.length > 0 && password.toLowerCase().includes(id.toLowerCase())
+      ),
     },
     {
       key: "no-repeat",

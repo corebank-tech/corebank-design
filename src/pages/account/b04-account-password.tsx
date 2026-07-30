@@ -10,7 +10,7 @@ import { Modal } from "@/shared/ui/modal"
 import { ConfirmDialog } from "@/shared/ui/confirm-dialog"
 import { ErrorDialog } from "@/shared/ui/error-dialog"
 import { formatAccountNo } from "@/shared/lib/format"
-import { MOCK_PASSWORD_ACCOUNTS, type PasswordAccount } from "@/lib/mock/b04-password-accounts"
+import { MOCK_PASSWORD_ACCOUNTS, type PasswordAccount } from "@/entities/account"
 
 const PASSWORD_LIMIT = 4
 const ERROR_LIMIT = 5

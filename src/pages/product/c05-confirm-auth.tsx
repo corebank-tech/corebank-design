@@ -8,8 +8,8 @@ import { AccountPasswordField } from "@/widgets/transfer/transfer-fields"
 import { OtpModal } from "@/shared/ui/otp-modal"
 import { ErrorDialog } from "@/shared/ui/error-dialog"
 import { formatAccountNo, formatAmount, formatDate, formatKoreanAmount } from "@/shared/lib/format"
-import { addMonthsWithEomCorrection, estimateMaturityAmount } from "@/lib/product-join-calc"
-import { JOIN_DATE, MOCK_JOIN_ACCOUNTS, MOCK_JOIN_PRODUCTS } from "@/lib/mock/product-join"
+import { addMonthsWithEomCorrection, estimateMaturityAmount } from "@/entities/product"
+import { JOIN_DATE, MOCK_JOIN_ACCOUNTS, MOCK_JOIN_PRODUCTS } from "@/entities/product"
 import { PRODUCT_JOIN_STEPS, type ProductJoinFormState, type ProductJoinResult } from "./join-shared"
 
 const PASSWORD_LIMIT = 4

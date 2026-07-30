@@ -24,7 +24,7 @@ import {
   MOCK_TRANSACTIONS,
   type AccountStatus,
   type Transaction,
-} from "@/lib/mock/transactions"
+} from "@/entities/transaction"
 import {
   formatAccountNo,
   formatAmount,

@@ -15,7 +15,7 @@ import {
   type AccessStatus,
   type DashboardAccount,
   type NotificationItem,
-} from "@/lib/mock/dashboard"
+} from "@/entities/dashboard"
 import { formatAccountNo, formatAmount, formatDate } from "@/shared/lib/format"
 
 const ACCOUNT_COLUMN_WIDTHS = {

@@ -20,6 +20,8 @@ import { B04AccountPassword } from "@/components/account/B04-AccountPassword"
 import { B05WithdrawAccounts } from "@/components/account/B05-WithdrawAccounts"
 import { B06AccountAlias } from "@/components/account/B06-AccountAlias"
 import { B07AccountOrder } from "@/components/account/B07-AccountOrder"
+import { F01Profile } from "@/components/mypage/F01-Profile"
+import { D05TransferLimit } from "@/components/transfer/D05-TransferLimit"
 import { cn } from "@/lib/utils"
 
 /**
@@ -54,15 +56,8 @@ const PLACEHOLDER_ROUTES: PlaceholderRoute[] = [
   { path: "/product/:productId/join/3", screenId: "C-05", title: "상품가입 3단계 - 확인/인증", breadcrumb: ["금융상품", "가입"], activeId: "product" },
   { path: "/product/:productId/join/4", screenId: "C-06", title: "상품가입 4단계 - 완료", breadcrumb: ["금융상품", "가입"], activeId: "product" },
 
-  // D — 이체(즉시이체)
-  { path: "/user/transfer-limit", screenId: "D-05", title: "이체한도 조회/변경", breadcrumb: ["사용자관리", "이체한도관리"], activeId: "user" },
-
   // E — 이체(예약이체)
   { path: "/transfer/reservation/new", screenId: "E-01", title: "예약이체 등록 1단계 - 정보입력", breadcrumb: ["이체", "예약이체", "예약이체 등록"], activeId: "transfer" },
-
-  // F — 공통(마이페이지)
-  { path: "/user/profile", screenId: "F-01", title: "고객정보 조회/변경", breadcrumb: ["사용자관리", "고객정보관리"], activeId: "user" },
-  { path: "/user/password", screenId: "F-01", title: "고객정보 조회/변경", breadcrumb: ["사용자관리", "고객정보관리"], activeId: "user" },
 
   // G — 이체(자동이체)
   { path: "/transfer/auto/new", screenId: "G-01", title: "자동이체 등록 1단계 - 정보입력", breadcrumb: ["이체", "자동이체", "자동이체 등록"], activeId: "transfer" },
@@ -399,6 +394,45 @@ export default function App() {
               customerName="홍길동"
             >
               <B07AccountOrder />
+            </PageShell>
+          }
+        />
+        <Route
+          path="/user/profile"
+          element={
+            <PageShell
+              activeId="user"
+              breadcrumb={["사용자관리", "고객정보관리"]}
+              title="고객정보 조회/변경"
+              customerName="홍길동"
+            >
+              <F01Profile />
+            </PageShell>
+          }
+        />
+        <Route
+          path="/user/password"
+          element={
+            <PageShell
+              activeId="user"
+              breadcrumb={["사용자관리", "고객정보관리"]}
+              title="고객정보 조회/변경"
+              customerName="홍길동"
+            >
+              <F01Profile />
+            </PageShell>
+          }
+        />
+        <Route
+          path="/user/transfer-limit"
+          element={
+            <PageShell
+              activeId="user"
+              breadcrumb={["사용자관리", "이체한도관리"]}
+              title="이체한도 조회/변경"
+              customerName="홍길동"
+            >
+              <D05TransferLimit />
             </PageShell>
           }
         />

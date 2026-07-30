@@ -1,6 +1,6 @@
-import type { TermItem } from "@/components/product/terms-agreement"
-import type { ProductCard } from "@/components/product/product-card-grid"
-import type { ProductDetailData } from "@/components/product/product-detail"
+import type { TermItem } from "@/pages/product/terms-agreement"
+import type { ProductCard } from "@/pages/product/product-card-grid"
+import type { ProductDetailData } from "@/pages/product/product-detail"
 
 /**
  * 상품가입·회원가입 약관동의 항목.

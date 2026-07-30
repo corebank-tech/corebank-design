@@ -30,9 +30,23 @@
   /* Feedback — 기관 톤. 소비자 앱 채도를 피한다 */
   --color-danger: #c8322e;
   --color-danger-tint: #fbf0ef;
+  --color-danger-border: color-mix(in srgb, var(--color-danger) 25%, white);
+  --color-danger-ring: color-mix(in srgb, var(--color-danger) 20%, white);
   --color-success: #12703f;
+  --color-success-tint: #e7f4ee;
+  --color-success-border: color-mix(in srgb, var(--color-success) 25%, white);
   --color-warning: #a35c00;
+  --color-warning-tint: #fbf3e2;
+  --color-warning-border: color-mix(in srgb, var(--color-warning) 30%, white);
   --color-info: #17539e;
+  --color-primary-border: color-mix(in srgb, var(--color-primary) 25%, white);
+  --color-ring-soft: color-mix(in srgb, var(--color-primary) 30%, white);
+
+  /* Overlay / veil — 투명도 표기(`bg-white/15` 등) 대신 단일 토큰으로 정의한다 */
+  --color-overlay: rgba(23, 32, 46, 0.5);
+  --color-white-veil: rgba(255, 255, 255, 0.15);
+  --color-white-ring: rgba(255, 255, 255, 0.7);
+  --color-skeleton: color-mix(in srgb, var(--color-border) 60%, white);
 
   /* Grid / ledger */
   --color-deposit: #17539e; /* 입금 amounts */

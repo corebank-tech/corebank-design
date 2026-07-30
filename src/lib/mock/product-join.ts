@@ -1,4 +1,4 @@
-import type { TermItem } from "@/components/product/terms-agreement"
+import type { TermItem } from "@/pages/product/terms-agreement"
 import type { AccountOption } from "@/shared/types/account"
 
 export type ProductCategory = "정기예금" | "정기적금"

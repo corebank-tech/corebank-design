@@ -28,6 +28,10 @@ import { C05ConfirmAuth } from "@/components/product/C05-ConfirmAuth"
 import { C06Complete } from "@/components/product/C06-Complete"
 import { F01Profile } from "@/components/mypage/F01-Profile"
 import { D05TransferLimit } from "@/components/transfer/D05-TransferLimit"
+import { SignupFlow } from "@/components/auth/SignupFlow"
+import { A07FindId } from "@/components/auth/A07-FindId"
+import { A08ResetPassword } from "@/components/auth/A08-ResetPassword"
+import { A10LogoutComplete } from "@/components/auth/A10-LogoutComplete"
 import { cn } from "@/lib/utils"
 
 /**
@@ -44,16 +48,6 @@ interface PlaceholderRoute {
 }
 
 const PLACEHOLDER_ROUTES: PlaceholderRoute[] = [
-  // A — 공통(로그인/회원가입)
-  { path: "/signup/1", screenId: "A-02", title: "회원가입 1단계 - 약관동의", breadcrumb: ["홈", "로그인", "회원가입"], loggedIn: false },
-  { path: "/signup/2", screenId: "A-03", title: "회원가입 2단계 - 본인확인", breadcrumb: ["홈", "로그인", "회원가입"], loggedIn: false },
-  { path: "/signup/3", screenId: "A-04", title: "회원가입 3단계 - 정보입력", breadcrumb: ["홈", "로그인", "회원가입"], loggedIn: false },
-  { path: "/signup/4", screenId: "A-05", title: "회원가입 4단계 - 입력확인", breadcrumb: ["홈", "로그인", "회원가입"], loggedIn: false },
-  { path: "/signup/5", screenId: "A-06", title: "회원가입 5단계 - 가입완료", breadcrumb: ["홈", "로그인", "회원가입"], loggedIn: false },
-  { path: "/find-id", screenId: "A-07", title: "아이디 찾기", breadcrumb: ["홈", "로그인", "아이디 찾기"], loggedIn: false },
-  { path: "/reset-password", screenId: "A-08", title: "비밀번호 재설정", breadcrumb: ["홈", "로그인", "비밀번호 재설정"], loggedIn: false },
-  { path: "/logout", screenId: "A-10", title: "로그아웃 완료", breadcrumb: ["홈", "로그아웃"], loggedIn: false },
-
   // C — 수신(금융상품)
   { path: "/products", screenId: "C-01", title: "상품몰 - 상품목록", breadcrumb: ["금융상품", "예금·적금", "상품목록"], activeId: "product" },
   { path: "/products/:productId", screenId: "C-02", title: "상품 상세", breadcrumb: ["금융상품", "예금·적금", "상품상세"], activeId: "product" },
@@ -68,11 +62,11 @@ interface DevRoute {
 
 const DEV_ROUTES: DevRoute[] = [
   { screenId: "A-01", label: "로그인", path: "/" },
-  { screenId: "A-02", label: "회원가입 1단계", path: "/signup/1" },
-  { screenId: "A-03", label: "회원가입 2단계", path: "/signup/2" },
-  { screenId: "A-04", label: "회원가입 3단계", path: "/signup/3" },
-  { screenId: "A-05", label: "회원가입 4단계", path: "/signup/4" },
-  { screenId: "A-06", label: "회원가입 5단계", path: "/signup/5" },
+  { screenId: "A-02", label: "회원가입 1단계", path: "/signup?step=1" },
+  { screenId: "A-03", label: "회원가입 2단계", path: "/signup?step=2" },
+  { screenId: "A-04", label: "회원가입 3단계", path: "/signup?step=3" },
+  { screenId: "A-05", label: "회원가입 4단계", path: "/signup?step=4" },
+  { screenId: "A-06", label: "회원가입 5단계", path: "/signup?step=5" },
   { screenId: "A-07", label: "아이디 찾기", path: "/find-id" },
   { screenId: "A-08", label: "비밀번호 재설정", path: "/reset-password" },
   { screenId: "A-09", label: "메인 대시보드", path: "/dashboard" },
@@ -453,6 +447,49 @@ export default function App() {
               customerName="홍길동"
             >
               <D05TransferLimit />
+            </PageShell>
+          }
+        />
+        <Route
+          path="/signup"
+          element={
+            <PageShell
+              breadcrumb={["홈", "로그인", "회원가입"]}
+              loggedIn={false}
+            >
+              <SignupFlow />
+            </PageShell>
+          }
+        />
+        <Route
+          path="/find-id"
+          element={
+            <PageShell
+              breadcrumb={["홈", "로그인", "아이디 찾기"]}
+              title="아이디 찾기"
+              loggedIn={false}
+            >
+              <A07FindId />
+            </PageShell>
+          }
+        />
+        <Route
+          path="/reset-password"
+          element={
+            <PageShell
+              breadcrumb={["홈", "로그인", "비밀번호 재설정"]}
+              title="비밀번호 재설정"
+              loggedIn={false}
+            >
+              <A08ResetPassword />
+            </PageShell>
+          }
+        />
+        <Route
+          path="/logout"
+          element={
+            <PageShell breadcrumb={["홈", "로그아웃"]} title="로그아웃 완료" loggedIn={false}>
+              <A10LogoutComplete />
             </PageShell>
           }
         />

@@ -116,17 +116,25 @@ export function maskEmail(email: string): string {
   return `${visible}${"*".repeat(local.length - 3)}@${domain}`
 }
 
-/** "01098765432" -> "010-9876-5432" (3-4-4). Non-digits are stripped. */
+/** "01012345678" -> "010-1234-5678" (3-4-4). Non-digits are stripped. */
 export function formatPhone(raw: string): string {
-  const digits = raw.replace(/\D/g, "")
-  if (digits.length !== 11) return digits
-  return `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7)}`
+  const digits = raw.replace(/\D/g, "").slice(0, 11)
+  const p1 = digits.slice(0, 3)
+  const p2 = digits.slice(3, 7)
+  const p3 = digits.slice(7, 11)
+  return [p1, p2, p3].filter(Boolean).join("-")
 }
 
-/** "01098765432" -> "010-****-5678". Masks the middle group. (REQ-CMN-018) */
+/** "010-1234-5678" -> "010-****-5678". Masks the middle group. (REQ-CMN-018) */
 export function maskPhone(raw: string): string {
   const formatted = formatPhone(raw)
   const groups = formatted.split("-")
   if (groups.length !== 3) return formatted
   return `${groups[0]}-${"*".repeat(groups[1].length)}-${groups[2]}`
+}
+
+/** "honggildong" -> "hon********". Masks everything after the first 3 characters. (REQ-AUTH-032) */
+export function maskUserId(id: string): string {
+  if (id.length <= 3) return id
+  return `${id.slice(0, 3)}${"*".repeat(id.length - 3)}`
 }

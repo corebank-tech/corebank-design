@@ -1,7 +1,7 @@
 import * as React from "react"
 import { cn } from "@/shared/lib/utils"
 
-export interface StepIndicatorProps {
+type StepIndicatorProps = {
   /** Ordered step labels, e.g. ["정보입력", "정보확인 및 인증", "완료"]. */
   steps: string[]
   /** 1-based index of the active step. */
@@ -29,7 +29,7 @@ export function StepIndicator({ steps, currentStep }: StepIndicatorProps) {
             key={label}
             aria-current={isCurrent ? "step" : undefined}
             className={cn(
-              "flex items-center gap-1.5 whitespace-nowrap text-sm tabular-nums",
+              "flex items-center gap-1.5 text-sm whitespace-nowrap tabular-nums",
               active ? "text-primary" : "text-ink-faint",
             )}
           >
@@ -44,7 +44,7 @@ export function StepIndicator({ steps, currentStep }: StepIndicatorProps) {
               {stepNo}
             </span>
             {isCurrent && (
-              <span className="whitespace-nowrap border-b-2 border-primary pb-0.5 font-bold">
+              <span className="border-b-2 border-primary pb-0.5 font-bold whitespace-nowrap">
                 {label}
               </span>
             )}

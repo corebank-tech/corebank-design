@@ -1,15 +1,15 @@
 import { Link } from "react-router-dom"
 import { ChevronRight } from "lucide-react"
 
-export interface ShortcutLink {
+export type ShortcutLink = {
   id: string
   label: string
   href: string
 }
 
-export interface BankingShortcutsProps {
+type BankingShortcutsProps = {
   label?: string
-  /** 표시할 바로가기 목록. 기본값은 호출 측(MainDashboard)에서 주입한다. */
+  /** 표시할 바로가기 목록. 기본값은 호출 측(A09MainDashboard)에서 주입한다. */
   links: ShortcutLink[]
   onSelect?: (id: string) => void
 }
@@ -37,10 +37,13 @@ export function BankingShortcuts({
                   onSelect(link.id)
                 }
               }}
-              className="flex items-center justify-between whitespace-nowrap rounded-[var(--radius)] border border-[var(--color-border)] bg-surface-elevated px-4 py-3 text-sm font-bold text-ink transition-colors hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="flex items-center justify-between rounded-[var(--radius)] border border-[var(--color-border)] bg-surface-elevated px-4 py-3 text-sm font-bold whitespace-nowrap text-ink transition-colors hover:border-primary hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
             >
               {link.label}
-              <ChevronRight className="h-4 w-4 text-ink-faint" aria-hidden="true" />
+              <ChevronRight
+                className="h-4 w-4 text-ink-faint"
+                aria-hidden="true"
+              />
             </Link>
           </li>
         ))}

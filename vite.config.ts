@@ -1,4 +1,4 @@
-import { defineConfig } from "vite"
+import { defineConfig } from "vitest/config"
 import react from "@vitejs/plugin-react"
 import path from "node:path"
 
@@ -16,5 +16,11 @@ export default defineConfig({
       "X-Frame-Options": "SAMEORIGIN",
       "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
     },
+  },
+  test: {
+    environment: "jsdom",
+    globals: false,
+    setupFiles: ["./src/shared/lib/test-setup.ts"],
+    include: ["src/**/*.test.{ts,tsx}"],
   },
 })

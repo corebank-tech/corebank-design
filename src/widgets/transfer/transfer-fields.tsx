@@ -7,14 +7,13 @@ import {
   formatAmount,
   formatKoreanAmount,
 } from "@/shared/lib/format"
-import { cn } from "@/shared/lib/utils"
 import type { AccountOption } from "@/shared/types/account"
 
 /* ================================================================== */
 /* WithdrawAccountField — 출금계좌 선택                                 */
 /* ================================================================== */
 
-export interface WithdrawAccountFieldProps {
+type WithdrawAccountFieldProps = {
   id?: string
   options: AccountOption[]
   value?: string
@@ -35,7 +34,7 @@ export function WithdrawAccountField({
   return (
     <div className="flex w-full flex-col gap-2">
       <div className="flex items-center gap-2">
-        <div className="min-w-0 max-w-md flex-1">
+        <div className="max-w-md min-w-0 flex-1">
           <Select
             id={id}
             value={value}
@@ -58,7 +57,7 @@ export function WithdrawAccountField({
       {selected && (
         <p className="text-sm text-ink-muted">
           출금가능금액{" "}
-          <span className="font-bold tabular-nums text-ink">
+          <span className="font-bold text-ink tabular-nums">
             {formatAmount(selected.withdrawable)}
           </span>
         </p>
@@ -71,7 +70,7 @@ export function WithdrawAccountField({
 /* AccountPasswordField — 계좌비밀번호 4자리                            */
 /* ================================================================== */
 
-export interface AccountPasswordFieldProps {
+type AccountPasswordFieldProps = {
   id?: string
   value: string
   onChange: (value: string) => void
@@ -84,7 +83,7 @@ export function AccountPasswordField({
   onChange,
   onCheckErrorCount,
 }: AccountPasswordFieldProps) {
-  const refs = React.useRef<Array<HTMLInputElement | null>>([])
+  const refs = React.useRef<(HTMLInputElement | null)[]>([])
   const digits = value.padEnd(4, " ").slice(0, 4).split("")
 
   const setDigit = (index: number, raw: string) => {
@@ -107,7 +106,11 @@ export function AccountPasswordField({
 
   return (
     <div className="flex w-full items-center gap-2">
-      <div className="flex items-center gap-1.5" role="group" aria-label="계좌비밀번호 4자리">
+      <div
+        className="flex items-center gap-1.5"
+        role="group"
+        aria-label="계좌비밀번호 4자리"
+      >
         {[0, 1, 2, 3].map((i) => (
           <Input
             key={i}
@@ -137,7 +140,7 @@ export function AccountPasswordField({
 /* AccountNumberField — 입금계좌번호 + 계좌확인                         */
 /* ================================================================== */
 
-export interface AccountNumberFieldProps {
+type AccountNumberFieldProps = {
   id?: string
   value: string
   onChange: (value: string) => void
@@ -145,6 +148,8 @@ export interface AccountNumberFieldProps {
   /** Resolved payee name once the number is confirmed. */
   holderName?: string
   confirmed?: boolean
+  /** REQ-TRSF-004·007·030: 미존재·해지·거래정지·유형제한·동일계좌 등 조회 오류 안내. */
+  error?: string | null
 }
 
 export function AccountNumberField({
@@ -154,6 +159,7 @@ export function AccountNumberField({
   onConfirm,
   holderName,
   confirmed,
+  error,
 }: AccountNumberFieldProps) {
   return (
     <div className="flex w-full flex-col gap-2">
@@ -162,6 +168,7 @@ export function AccountNumberField({
           id={id}
           inputMode="numeric"
           placeholder="- 없이 숫자만 입력"
+          invalid={!!error}
           value={value}
           onChange={(e) => onChange(e.target.value.replace(/\D/g, ""))}
           className="max-w-xs"
@@ -172,8 +179,15 @@ export function AccountNumberField({
       </div>
       {confirmed && holderName && (
         <p className="text-sm text-ink-muted">
-          예금주명{" "}
-          <span className="font-bold text-ink">{holderName}</span>
+          예금주명 <span className="font-bold text-ink">{holderName}</span>
+        </p>
+      )}
+      {error && (
+        <p
+          role="alert"
+          className="text-xs font-bold text-[var(--color-danger)]"
+        >
+          {error}
         </p>
       )}
     </div>
@@ -193,7 +207,7 @@ const QUICK_AMOUNTS = [
   { label: "1만", value: 10_000 },
 ] as const
 
-export interface AmountFieldProps {
+type AmountFieldProps = {
   id?: string
   /** Amount in KRW, or null when empty. */
   value: number | null
@@ -246,7 +260,7 @@ export function AmountField({
       </div>
 
       {value != null && value > 0 && (
-        <span className="text-page font-bold tabular-nums text-primary">
+        <span className="text-page font-bold text-primary tabular-nums">
           {formatKoreanAmount(value)}
         </span>
       )}
@@ -257,7 +271,7 @@ export function AmountField({
             key={chip.label}
             type="button"
             onClick={() => onChange(Math.min((value ?? 0) + chip.value, limit))}
-            className="h-8 whitespace-nowrap rounded-[var(--radius-pill)] border border-[var(--color-border-strong)] bg-surface-elevated px-3 text-sm text-ink transition-colors hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="h-8 rounded-[var(--radius-pill)] border border-[var(--color-border-strong)] bg-surface-elevated px-3 text-sm whitespace-nowrap text-ink transition-colors hover:bg-surface focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
           >
             {chip.label}
           </button>
@@ -266,7 +280,7 @@ export function AmountField({
           <button
             type="button"
             onClick={() => onChange(fullAmount)}
-            className="h-8 whitespace-nowrap rounded-[var(--radius-pill)] border border-primary bg-primary-tint px-3 text-sm font-bold text-primary transition-colors hover:bg-surface-elevated focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="h-8 rounded-[var(--radius-pill)] border border-primary bg-primary-tint px-3 text-sm font-bold whitespace-nowrap text-primary transition-colors hover:bg-surface-elevated focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
           >
             전액
           </button>
@@ -274,7 +288,7 @@ export function AmountField({
         <button
           type="button"
           onClick={() => onChange(null)}
-          className="h-8 whitespace-nowrap rounded-[var(--radius-pill)] border border-[var(--color-border-strong)] bg-surface px-3 text-sm text-ink-muted transition-colors hover:bg-[var(--color-border)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="h-8 rounded-[var(--radius-pill)] border border-[var(--color-border-strong)] bg-surface px-3 text-sm whitespace-nowrap text-ink-muted transition-colors hover:bg-[var(--color-border)] focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
         >
           정정
         </button>
@@ -301,7 +315,7 @@ export function AmountField({
 /* MemoField — 통장 표시내용 (받는분 / 나)                              */
 /* ================================================================== */
 
-export interface MemoFieldProps {
+type MemoFieldProps = {
   id?: string
   value: string
   onChange: (value: string) => void
@@ -314,7 +328,7 @@ export function MemoField({
   value,
   onChange,
   placeholder,
-  maxLength = 7,
+  maxLength = 10,
 }: MemoFieldProps) {
   return (
     <div className="flex w-full items-center gap-2">
@@ -371,7 +385,7 @@ export function addMonths(iso: string, months: number): string {
   return toISO(new Date(year, month, Math.min(day, lastDay)))
 }
 
-export interface TransferDateFieldProps {
+type TransferDateFieldProps = {
   id?: string
   value: string
   onChange: (value: string) => void
@@ -425,7 +439,7 @@ export function TransferDateField({
 
 export type TransferCycleMonths = 1 | 3 | 6
 
-export interface TransferCycleFieldProps {
+type TransferCycleFieldProps = {
   id?: string
   value: TransferCycleMonths
   onChange: (value: TransferCycleMonths) => void
@@ -441,7 +455,9 @@ export function TransferCycleField({
       <Select
         id={id}
         value={value}
-        onChange={(e) => onChange(Number(e.target.value) as TransferCycleMonths)}
+        onChange={(e) =>
+          onChange(Number(e.target.value) as TransferCycleMonths)
+        }
         className="w-[160px]"
       >
         <option value={1}>1개월</option>
@@ -459,17 +475,13 @@ export function TransferCycleField({
 /* DayOfMonthField — 이체지정일 (1~31, POL-034)                        */
 /* ================================================================== */
 
-export interface DayOfMonthFieldProps {
+type DayOfMonthFieldProps = {
   id?: string
   value: number
   onChange: (value: number) => void
 }
 
-export function DayOfMonthField({
-  id,
-  value,
-  onChange,
-}: DayOfMonthFieldProps) {
+export function DayOfMonthField({ id, value, onChange }: DayOfMonthFieldProps) {
   return (
     <div className="flex w-full flex-col gap-2">
       <Select
@@ -495,7 +507,7 @@ export function DayOfMonthField({
 /* TransferEndDateField — 이체종료일 (시작일 이후 ~ 시작일+60개월, POL-035) */
 /* ================================================================== */
 
-export interface TransferEndDateFieldProps {
+type TransferEndDateFieldProps = {
   id?: string
   value: string
   onChange: (value: string) => void
@@ -514,7 +526,9 @@ export function TransferEndDateField({
   const min = addDays(startDate, 1)
   const max = addMonths(startDate, maxMonths)
   const afterStart = value ? daysBetween(startDate, value) > 0 : true
-  const withinMax = value ? daysBetween(startDate, value) <= daysBetween(startDate, max) : true
+  const withinMax = value
+    ? daysBetween(startDate, value) <= daysBetween(startDate, max)
+    : true
   const outOfRange = value !== "" && (!afterStart || !withinMax)
 
   return (

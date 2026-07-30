@@ -3,8 +3,7 @@ import { Bookmark } from "lucide-react"
 import { Button } from "@/shared/ui/button"
 import { cn } from "@/shared/lib/utils"
 
-export interface SearchPanelProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+type SearchPanelProps = React.HTMLAttributes<HTMLDivElement> & {
   /** FormRow rows forming the condition table. */
   children: React.ReactNode
   onSearch?: () => void
@@ -33,7 +32,7 @@ export function SearchPanel({
         <button
           type="button"
           onClick={onSaveCondition}
-          className="inline-flex items-center gap-1 text-sm text-[var(--color-link)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="inline-flex items-center gap-1 text-sm text-[var(--color-link)] hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
         >
           <Bookmark className="h-4 w-4" aria-hidden="true" />
           조회조건저장
@@ -43,10 +42,20 @@ export function SearchPanel({
       <div>{children}</div>
 
       <div className="mt-4 flex items-center justify-center gap-2">
-        <Button variant="primary" size="md" className="min-w-[100px]" onClick={onSearch}>
+        <Button
+          variant="primary"
+          size="md"
+          className="min-w-[100px]"
+          onClick={onSearch}
+        >
           {searchLabel}
         </Button>
-        <Button variant="secondary" size="md" className="min-w-[100px]" onClick={onReset}>
+        <Button
+          variant="secondary"
+          size="md"
+          className="min-w-[100px]"
+          onClick={onReset}
+        >
           초기화
         </Button>
       </div>

@@ -31,7 +31,10 @@ export function Footer() {
                     {link}
                   </a>
                   {i < FOOTER_LINKS.length - 1 && (
-                    <span className="text-[var(--color-footer-divider)]" aria-hidden="true">
+                    <span
+                      className="text-[var(--color-footer-divider)]"
+                      aria-hidden="true"
+                    >
                       |
                     </span>
                   )}
@@ -41,18 +44,24 @@ export function Footer() {
 
             <div className="mt-4 flex flex-col gap-1 text-xs text-[var(--color-footer-fg-faint)]">
               <p>
-                <span className="font-bold text-[var(--color-footer-fg-strong)]">고객센터 1599-0000</span>
-                <span className="ml-2">평일 09:00~18:00 (주말·공휴일 휴무)</span>
+                <span className="font-bold text-[var(--color-footer-fg-strong)]">
+                  고객센터 1599-0000
+                </span>
+                <span className="ml-2">
+                  평일 09:00~18:00 (주말·공휴일 휴무)
+                </span>
               </p>
               <p>서울특별시 중구 코어대로 100, CoreBank Tower</p>
-              <p>&copy; {new Date().getFullYear()} CoreBank. All rights reserved.</p>
+              <p>
+                &copy; {new Date().getFullYear()} CoreBank. All rights reserved.
+              </p>
             </div>
           </div>
 
           <button
             type="button"
             onClick={scrollTop}
-            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[var(--color-footer-divider)] text-[var(--color-footer-fg-strong)] hover:bg-[var(--color-footer-hover-bg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-footer-fg-strong)]"
+            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[var(--color-footer-divider)] text-[var(--color-footer-fg-strong)] hover:bg-[var(--color-footer-hover-bg)] focus-visible:ring-2 focus-visible:ring-[var(--color-footer-fg-strong)] focus-visible:outline-none"
             aria-label="맨 위로 이동"
           >
             <ArrowUp className="h-5 w-5" aria-hidden="true" />

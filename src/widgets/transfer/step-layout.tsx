@@ -1,8 +1,8 @@
 import * as React from "react"
-import { NoticeBox } from "@/widgets/shell/notice-box"
+import { NoticeBox } from "@/shared/ui/notice-box"
 import { StepIndicator } from "./step-indicator"
 
-export interface StepLayoutProps {
+type StepLayoutProps = {
   /** Ordered step labels shared across the whole flow. */
   steps: string[]
   /** 1-based index of the active step. */
@@ -34,7 +34,7 @@ export function StepLayout({
   return (
     <div>
       <div className="mb-6 flex items-center justify-between gap-4">
-        <h1 className="text-page font-bold text-ink text-balance">{title}</h1>
+        <h1 className="text-page font-bold text-balance text-ink">{title}</h1>
         <StepIndicator steps={steps} currentStep={currentStep} />
       </div>
 

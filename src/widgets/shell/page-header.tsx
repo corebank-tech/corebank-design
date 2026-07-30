@@ -2,11 +2,19 @@ import * as React from "react"
 import { Star, Type, Printer } from "lucide-react"
 import { cn } from "@/shared/lib/utils"
 
-export interface PageHeaderProps {
+type PageHeaderProps = {
   title: React.ReactNode
+  /** [텍스트 크기 조절] 클릭 시 호출. 생략 시 버튼은 비활성 표시된다. */
+  onCycleTextScale?: () => void
+  /** 현재 텍스트 확대가 적용된 상태인지(버튼 강조 표시용). */
+  textScaleActive?: boolean
 }
 
-export function PageHeader({ title }: PageHeaderProps) {
+export function PageHeader({
+  title,
+  onCycleTextScale,
+  textScaleActive = false,
+}: PageHeaderProps) {
   const [favorite, setFavorite] = React.useState(false)
 
   const iconBtn =
@@ -14,7 +22,7 @@ export function PageHeader({ title }: PageHeaderProps) {
 
   return (
     <div className="mb-6 flex items-center justify-between gap-4">
-      <h1 className="text-page font-bold text-ink text-balance">{title}</h1>
+      <h1 className="text-page font-bold text-balance text-ink">{title}</h1>
       <div className="flex shrink-0 items-center gap-1.5">
         <button
           type="button"
@@ -29,10 +37,24 @@ export function PageHeader({ title }: PageHeaderProps) {
             aria-hidden="true"
           />
         </button>
-        <button type="button" className={iconBtn} aria-label="텍스트 크기 조절">
+        <button
+          type="button"
+          onClick={onCycleTextScale}
+          aria-pressed={textScaleActive}
+          className={cn(
+            iconBtn,
+            textScaleActive && "border-primary text-primary",
+          )}
+          aria-label="텍스트 크기 조절"
+        >
           <Type className="h-[18px] w-[18px]" aria-hidden="true" />
         </button>
-        <button type="button" className={iconBtn} aria-label="인쇄">
+        <button
+          type="button"
+          onClick={() => window.print()}
+          className={iconBtn}
+          aria-label="인쇄"
+        >
           <Printer className="h-[18px] w-[18px]" aria-hidden="true" />
         </button>
       </div>

@@ -5,7 +5,7 @@ import { formatAmount, formatKoreanAmount } from "@/shared/lib/format"
 /* TermMonthsField — 가입기간(개월)                                    */
 /* ================================================================== */
 
-export interface TermMonthsFieldProps {
+type TermMonthsFieldProps = {
   id?: string
   value: number | null
   onChange: (value: number | null) => void
@@ -14,7 +14,13 @@ export interface TermMonthsFieldProps {
 }
 
 /** REQ-PRDT-006·007: 상품 마스터의 허용 범위 내에서만 가입기간을 입력받는다. */
-export function TermMonthsField({ id, value, onChange, min, max }: TermMonthsFieldProps) {
+export function TermMonthsField({
+  id,
+  value,
+  onChange,
+  min,
+  max,
+}: TermMonthsFieldProps) {
   const outOfRange = value != null && (value < min || value > max)
 
   return (
@@ -50,7 +56,7 @@ export function TermMonthsField({ id, value, onChange, min, max }: TermMonthsFie
 /* JoinAmountField — 가입금액(일시납입 / 월납입금액)                    */
 /* ================================================================== */
 
-export interface JoinAmountFieldProps {
+type JoinAmountFieldProps = {
   id?: string
   value: number | null
   onChange: (value: number | null) => void
@@ -93,7 +99,7 @@ export function JoinAmountField({
       </div>
 
       {value != null && value > 0 && (
-        <span className="text-page font-bold tabular-nums text-primary">
+        <span className="text-page font-bold text-primary tabular-nums">
           {formatKoreanAmount(value)}
         </span>
       )}
@@ -104,12 +110,14 @@ export function JoinAmountField({
 
       {(belowMin || aboveMax) && (
         <p className="text-xs font-bold text-[var(--color-danger)]">
-          가입금액은 {formatAmount(min)} 이상 {formatAmount(max)} 이하로 입력하세요.
+          가입금액은 {formatAmount(min)} 이상 {formatAmount(max)} 이하로
+          입력하세요.
         </p>
       )}
       {insufficientBalance && (
         <p className="text-xs font-bold text-[var(--color-danger)]">
-          출금계좌의 출금가능금액({formatAmount(withdrawable ?? 0)})이 부족합니다. 금액을 낮추거나 출금계좌를 변경하세요.
+          출금계좌의 출금가능금액({formatAmount(withdrawable ?? 0)})이
+          부족합니다. 금액을 낮추거나 출금계좌를 변경하세요.
         </p>
       )}
     </div>

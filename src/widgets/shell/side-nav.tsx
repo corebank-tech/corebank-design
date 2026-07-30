@@ -1,8 +1,8 @@
 import { Link, useLocation } from "react-router-dom"
-import { NAV } from "@/lib/nav"
+import { NAV, type NavGroup, type NavItem } from "@/shared/config/nav"
 import { cn } from "@/shared/lib/utils"
 
-export interface SideNavProps {
+type SideNavProps = {
   /** Current top-level NAV category id, e.g. "inquiry". */
   activeId: string
 }
@@ -24,11 +24,11 @@ export function SideNav({ activeId }: SideNavProps) {
       aria-label={`${category.label} 메뉴`}
     >
       <h2 className="text-h3 font-bold text-ink">{category.label}</h2>
-      {category.groups.map((group) => (
+      {category.groups.map((group: NavGroup) => (
         <div key={group.title} className="flex flex-col gap-1">
           <p className="text-xs text-ink-faint">{group.title}</p>
           <ul className="flex flex-col gap-0.5">
-            {group.items.map((item) => {
+            {group.items.map((item: NavItem) => {
               const active = pathname === item.path
               return (
                 <li key={`${item.screenId}-${item.path}`}>
@@ -36,7 +36,7 @@ export function SideNav({ activeId }: SideNavProps) {
                     to={item.path}
                     data-screen-id={item.screenId}
                     className={cn(
-                      "block whitespace-nowrap px-2 py-1.5 text-sm transition-colors",
+                      "block px-2 py-1.5 text-sm whitespace-nowrap transition-colors",
                       active
                         ? "bg-primary-tint font-bold text-primary"
                         : "text-ink-muted hover:bg-surface hover:text-ink",

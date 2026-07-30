@@ -3,10 +3,18 @@
 이 파일은 Claude Code가 매 세션 자동으로 읽는 상시 규약이다.
 개별 작업 프롬프트에서 아래 내용을 반복하지 않는다.
 
+## 우선순위
+
+코드 규약은 [frontend-fundamentals 가이드](https://frontend-fundamentals.com/code-quality/code/)를 따른다.
+이 문서의 규칙이 가이드와 충돌하면 **가이드가 우선**한다.
+단, 레이아웃·색상·모서리 반경·화면 질감 규칙은 이 프로젝트 고유 정책이며 가이드보다 우선한다.
+
 ## 프로젝트
 
-한국 인터넷뱅킹 시뮬레이션 "CoreBank"의 Phase 1 채널계 프론트엔드.
+한국 인터넷뱅킹 시뮬레이션 "CoreBank"의 채널계 프론트엔드.
 데스크톱 전용 업무 시스템. 화면 47개, 요구사항 210건.
+1차 프론트엔드 코드는 2차에서도 그대로 재사용되며 고도화된다 — 백엔드 계정계만 별도로 고도화된다.
+즉 지금 정하는 규약이 이후 화면 마이그레이션과 실 API 연동의 기준이 된다.
 
 **요구사항 단일 출처: `docs/requirements.md`**
 화면을 구현하기 전에 반드시 해당 화면ID의 대응 요구사항을 읽는다.
@@ -18,12 +26,122 @@
 - `"use client"` / `"use server"` 지시어 금지
 - `next/link`, `next/image`, `next/font`, `next/navigation` import 금지
   → 링크는 `react-router-dom`의 `<Link>`, 이미지는 `<img>`
-- `app/` 디렉터리, `page.tsx`, `layout.tsx` 파일 규약 금지
-- **데이터 페칭 코드 금지.** fetch / axios / TanStack Query 사용 금지.
-  모든 컴포넌트는 props를 받는 순수 프레젠테이션 컴포넌트다.
-  상태는 최소한만 `useState`, 나머지는 props와 콜백으로 위임한다.
-- 더미 데이터는 컴포넌트가 아니라 `src/lib/mock/` 에 분리한다
+- Next.js **app router** 디렉터리 규약(`page.tsx`, `layout.tsx` 파일명 규약) 금지.
+  FSD-lite의 `src/app` 레이어와는 무관하다 — 아래 "FSD-lite 구조" 참고
+- 서버 상태는 **TanStack Query**, HTTP 통신은 `src/shared/api/custom-fetch.ts`의 `customFetch`로 한다.
+  화면은 fetch/axios를 직접 쓰지 않고 entities 레이어의 래퍼 훅을 통해 서버 상태를 쓴다
+- 클래스 병합은 `cn()`(`src/shared/lib/utils.ts`), variant는 `cva`
+- 폼·검증은 React Hook Form + Zod, 클라이언트 상태는 Zustand, 날짜 처리는 date-fns
 - 경로 별칭 `@/`
+
+## 네이밍
+
+| 대상 | 규칙 | 예시 |
+|---|---|---|
+| 변수 / 함수 | `camelCase` | `parseTransferFilters` |
+| 컴포넌트 / 타입 | `PascalCase` | `TransferHistoryPage` |
+| 모듈 상수 | `UPPER_SNAKE_CASE` | `TRANSFER_STATUS_OPTIONS` |
+| 커스텀 훅 | `use` 접두사 | `useGetAccounts` |
+| 이벤트 핸들러 | `handle + 대상 + 동작` | `handleModalClose` |
+| 핸들러 prop | `on` 접두사 | `onClose` |
+| 불리언 | `is`, `has`, `can`, `should` 접두사 | `isLoading`, `hasNextPage` |
+
+- 파일명은 `kebab-case`. 화면 컴포넌트는 화면ID를 소문자로 접두한다 — 아래 "파일 규칙" 참고
+- 컴포넌트 props 타입은 컴포넌트 상단에 `type Props = { ... }`로 선언한다
+- 컴포넌트 전용 `Props` 타입은 export하지 않는다
+- 의미가 불명확한 `data`, `value`, `item`, `handleClick` 같은 이름은 쓰지 않는다
+
+## TypeScript
+
+- `interface` 대신 `type`을 쓴다. `interface`는 선언 병합이 실제로 필요할 때만 예외로 허용한다
+- 배열 타입은 `Array<T>` 대신 `T[]`
+- 타입 전용 import는 `type` modifier를 쓴다
+- 객체·옵션 배열의 타입 검증에는 `satisfies`를 우선 쓴다
+- `any`를 쓰지 않는다
+
+## 함수와 컴포넌트
+
+- 컴포넌트는 선언형 `function`으로 작성한다
+- 컴포넌트 내부 함수, 커스텀 훅, 유틸 함수는 화살표 함수로 작성한다
+- 모듈은 named export를 쓴다. default export는 라이브러리가 요구할 때만 허용한다
+- 조건 중첩보다 early return을 쓴다
+- 사용하지 않는 함수·옵션·파라미터는 제거한다
+
+## 상수
+
+- 반복되거나 의미가 있는 숫자·문자열은 모듈 상단 상수로 선언한다 (`UPPER_SNAKE_CASE`)
+- 시간·거리·개수처럼 단위가 있는 값은 이름에 단위를 포함한다
+- 큰 숫자는 숫자 구분자 `_`를 쓴다 (`const MAX_TRANSFER_AMOUNT = 10_000_000`)
+
+## Import와 공개 API
+
+- import는 `@/...` 절대경로만 쓴다
+- 각 슬라이스는 `index.ts`를 외부 공개 API로 쓴다. 다른 슬라이스에서는 내부 파일을 직접 import하지 않는다
+- 같은 슬라이스 내부에서는 `index.ts`를 거치지 않는다
+- 값은 `export`, 타입은 `export type`으로 구분한다
+
+## FSD-lite 구조
+
+```
+src/
+├── app/       # 라우터·프로바이더·전역 설정
+├── pages/     # URL 단위 화면
+├── widgets/   # 독립적인 화면 블록
+├── features/  # 사용자 액션·유스케이스
+├── entities/  # 도메인 모델·도메인 API·도메인 UI
+└── shared/
+    ├── api/   # customFetch, query-client, session-events
+    ├── config/
+    ├── lib/
+    └── ui/    # shadcn/ui 기반 범용 컴포넌트
+```
+
+의존성은 `app → pages → widgets → features → entities → shared` 방향만 허용한다.
+하위 레이어에서 상위 레이어를 import하지 않는다. 같은 레이어의 다른 슬라이스를 직접 import하지 않는다.
+`atoms`/`molecules`/`organisms` 폴더는 만들지 않는다.
+
+- URL 단위 화면은 `pages`, 독립적인 화면 블록은 `widgets`, 사용자 액션·유스케이스는 `features`에 둔다
+- 도메인 모델·도메인 API·도메인 UI는 `entities`에 둔다
+- 도메인과 무관한 UI·유틸·설정은 `shared`에 둔다. shadcn/ui 기반 범용 UI는 `shared/ui`,
+  도메인 데이터를 표현하는 UI는 `entities`, 사용자 액션이 포함된 UI는 `features`
+
+`src/lib`는 더 이상 없다. 예전에 여기 있던 목업·유틸은 각 `entities/*`와 `shared/config`로 옮겼다.
+새 코드에서 `src/lib`를 다시 만들지 않는다.
+
+## API와 TanStack Query
+
+- Orval이 생성한 코드(`src/shared/api/generated/`)는 화면에서 직접 쓰지 않는다.
+  각 `entities/*/api`의 얇은 래퍼 훅을 통해 쓴다
+- query key는 함수 또는 query options로 관리하고, 조회·prefetch·invalidate에서 동일한 key를 재사용한다
+  ```ts
+  export const accountKeys = {
+    all: () => ["accounts"] as const,
+    list: (filters: AccountFilters) => [...accountKeys.all(), "list", filters] as const,
+    detail: (accountNo: string) => [...accountKeys.all(), "detail", accountNo] as const,
+  }
+  ```
+- API 응답 변환은 UI 컴포넌트 내부에서 하지 않는다
+- `src/shared/api/query-client.ts`의 QueryClient 기본값은 뱅킹 앱의 보안 요구에서 나온 것이다 — 바꾸지 않는다:
+  `refetchOnWindowFocus: false` / `refetchInterval: false`는 사용자 조작 없는 백그라운드 재조회가
+  서버 세션을 갱신해 POL-001의 10분 자동 로그아웃을 무력화하는 것을 막기 위함이다
+- **멱등키 재시도 함정**: `mutations.retry`는 `0`으로 고정돼 있다. 자동 재시도가 매번 새
+  `Idempotency-Key`를 만들면 서버가 같은 요청을 별개 거래로 처리한다 (REQ-CMN-014). 재제출 UI가
+  필요한 곳(이체 확인 화면 등)은 `withIdempotencyKey()`로 키를 1회 생성해 고정한다
+- 오류 메시지는 서버가 준 `ApiError.message`를 그대로 쓴다. 화면에 code→message 표를 만들지 않는다
+  (REQ-CMN-008)
+
+## URL Query Parameter
+
+- URL 쿼리 파라미터는 React Router의 `useSearchParams`를 쓴다
+- 쿼리 문자열을 직접 조합하지 않는다
+- 기존 `URLSearchParams`를 복사한 뒤 필요한 값만 수정한다
+
+## 커스텀 훅
+
+- 공통 훅은 `shared/lib/hooks`, 도메인 훅은 해당 `entities`, 사용자 액션 훅은 해당 `features`에 둔다
+- 훅 이름은 `use`로 시작한다
+- 훅은 외부에서 실제 사용하는 값만 반환한다
+- 하나의 훅에서 조회·mutation·라우팅·모달·폼 상태를 모두 관리하지 않는다
 
 ## 레이아웃 — REQ-NFR-012 / POL-032
 
@@ -66,13 +184,19 @@ radius는 장식이 아니라 **포함 관계**를 나타낸다.
 
 | 영역 | 위치 |
 |---|---|
-| 앱 셸 (A-90) | `shell/app-header.tsx`, `page-shell.tsx`, `breadcrumb-bar.tsx`, `footer.tsx`, `full-menu-overlay.tsx`, `notice-box.tsx`, `page-header.tsx` |
-| 기본 컴포넌트 | `ui/` — button, input, select, checkbox, radio, badge, alert, skeleton, modal, form-row, form-section |
-| 조회 그리드 (A-94) | `query/` — data-grid, search-panel, fields, grid-toolbar, pagination, summary-row, empty-state |
-| 스텝 레이아웃 (A-95) | `transfer/step-layout.tsx`, `step-indicator.tsx`, `confirm-summary.tsx`, `fields.tsx`, `result-panel.tsx` |
-| 모달 (A-91·92·93) | `feedback/` — confirm-dialog, error-dialog, otp-modal, limit-modal, session-expired-modal |
-| 포맷 유틸 | `lib/format.ts` — formatAmount, formatAccountNo, formatDate, formatDateTime, formatKoreanAmount |
-| 메뉴 정의 | `lib/nav.ts` — 화면ID·경로 포함 |
+| 앱 셸 (A-90) | `src/widgets/shell/` — app-header, page-shell, breadcrumb-bar, footer, full-menu-overlay, notice-box, page-header |
+| 기본 컴포넌트 | `src/shared/ui/` — button, input, select, checkbox, radio, badge, alert, skeleton, modal, form-row, form-section |
+| 조회 그리드 (A-94) | `src/widgets/query/` — search-panel, search-fields, grid-toolbar, pagination, summary-row / `src/shared/ui/` — data-grid, empty-state |
+| 스텝 레이아웃 (A-95) | `src/widgets/transfer/` — step-layout, step-indicator, confirm-summary, transfer-fields, result-panel |
+| 모달 (A-91·92·93) | `src/shared/ui/` — alert-dialog, confirm-dialog, error-dialog, otp-modal, limit-modal, session-expired-modal |
+| 안내 박스 | `src/shared/ui/notice-box.tsx` — NoticeBox, NoticeBoxFooter |
+| 약관동의 블록 | `src/widgets/terms-agreement.tsx` — 회원가입(A-02)·상품가입(C-03) 공용 |
+| 포맷 유틸 | `src/shared/lib/format.ts` — formatAmount, formatAccountNo, formatDate, formatDateTime, formatKoreanAmount, maskName, maskEmail, maskAccountNo, maskPhone, maskUserId |
+| 클래스 병합 | `src/shared/lib/utils.ts` — `cn()` |
+| 메뉴 정의 | `src/shared/config/nav.ts` — 화면ID·경로 포함 |
+| 도메인 데이터 | `src/entities/{account,transfer,product,auth,customer,notification,transaction,dashboard}` — 각 슬라이스 `index.ts`가 공개 API |
+| HTTP·세션 | `src/shared/api/` — custom-fetch, query-client, api-error, session-events |
+| Mock 서버 | `src/mocks/` — MSW 핸들러 예시 1세트(`handlers/account.ts`). 나머지 도메인은 `entities/*/api`의 정적 mock을 그대로 쓴다 |
 
 ## 마이크로카피
 
@@ -84,13 +208,14 @@ radius는 장식이 아니라 **포함 관계**를 나타낸다.
 
 ## 파일 규칙
 
-- 화면 컴포넌트 파일명은 **화면ID를 접두어**로 한다. 예: `D03-TransferResult.tsx`
-- 컴포넌트 단위로 파일을 분리하고 props 인터페이스를 export 한다
-- 모든 작업 후 `npx tsc --noEmit` 이 통과해야 한다
+- 파일명은 kebab-case. 화면 컴포넌트는 화면ID를 소문자로 접두한다. 예: `d03-transfer-result.tsx`
+  (컴포넌트명은 `D03TransferResult`처럼 PascalCase로 유지 — requirements.md 화면ID 추적성 확보)
+- 컴포넌트 단위로 파일을 분리한다. Props 타입은 export하지 않는다 — 다른 파일이 실제로 쓰는 타입만 export한다
+- 모든 작업 후 `pnpm check` (typecheck + lint + format:check + test) 가 통과해야 한다
 
 ## 작업 완료 기준
 
-1. `npx tsc --noEmit` 에러 0
+1. `pnpm check` 통과 (`tsc --noEmit` 에러 0 / `eslint` error 0 — warning은 마이그레이션 완료 전까지 허용 / `prettier --check` 통과 / `vitest` 통과)
 2. `next/*` · `"use client"` 0건
 3. 반응형 클래스 0건 (size 키 제외)
 4. 색상 리터럴 · 기본 색상 클래스 · 투명도 표기 0건
@@ -109,3 +234,22 @@ radius는 장식이 아니라 **포함 관계**를 나타낸다.
 - `--color-navy` 는 DataGrid 상단 룰과 FormSection 하단 라인에 쓴다. 장식에 쓰지 않는다
 - 안내 문구는 단서와 예외를 괄호로 명시한다. 느낌표·이모지·소비자 앱 어투 금지
 - 수치는 반드시 `docs/requirements.md` §2 POL에서 가져온다
+
+## 남은 마이그레이션
+
+FSD-lite 전환(`src/lib` 해체, 화면 파일 41개 kebab-case 리네임, `interface`→`type` 127건,
+컴포넌트 전용 Props export 해제 71건, 레이어 위반 8건 수정, lint/format 래칫)은 완료했다.
+남은 항목:
+
+- `entities/account`(`b05-withdrawal-accounts.ts`) → `entities/transfer` 참조 1건은 의도적으로
+  남겨뒀다. 출금계좌 삭제 가능 여부가 예약이체·자동이체 등록 여부에 의존하는 도메인 규칙이라
+  엔티티 간 참조가 불가피했다. `eslint.config.js`의 `boundaries/dependencies`가 warn으로
+  가시화하고 있다 — 실제 문제가 되면(순환 참조 등) 그때 `features` 레이어로 재구성한다
+- 상대경로 import 약 40건이 남아 있다(`@typescript-eslint/no-restricted-imports`가 warn으로
+  표시). 화면당 몇 건씩 흩어져 있어 기계적으로 한 번에 처리하기보다 화면을 만질 때 그 김에
+  `@/` 절대경로로 바꾸는 편이 안전하다
+- `react-hooks` 컴파일러 계열 규칙(`set-state-in-effect` 등)과 `react-refresh/only-export-components`
+  경고가 일부 남아 있다(주로 `transfer-fields.tsx`가 필드 컴포넌트와 유틸 함수를 한 파일에 섞어 둔
+  탓). 파일 분리가 필요한 실제 리팩터링이라 화면 작업과 함께 처리한다
+- `openapi.yaml` 작성 및 Orval 코드젠 활성화 (REQ-NFR-013) — 백엔드 계약 확정 대기
+- REQ-NFR-020 docker-compose 배포 구성 (Dockerfile, nginx.conf, 런타임 환경변수 주입 방식 결정)

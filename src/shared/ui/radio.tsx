@@ -1,8 +1,7 @@
 import * as React from "react"
 import { cn } from "@/shared/lib/utils"
 
-export interface RadioProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "type"> {
+type RadioProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "type"> & {
   label?: React.ReactNode
 }
 
@@ -13,7 +12,7 @@ export const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
     return (
       <label
         htmlFor={inputId}
-        className="inline-flex cursor-pointer select-none items-center gap-2 text-base"
+        className="inline-flex cursor-pointer items-center gap-2 text-base select-none"
       >
         <span className="relative inline-flex h-[18px] w-[18px] items-center justify-center">
           <input
@@ -23,7 +22,7 @@ export const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
             className={cn(
               "peer h-[18px] w-[18px] cursor-pointer appearance-none rounded-full border border-[var(--color-border-strong)] bg-surface-elevated",
               "checked:border-primary",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ring-soft)]",
+              "focus-visible:ring-2 focus-visible:ring-[var(--color-ring-soft)] focus-visible:outline-none",
               className,
             )}
             {...props}

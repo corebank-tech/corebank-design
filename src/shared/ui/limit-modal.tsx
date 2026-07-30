@@ -3,7 +3,7 @@ import { Modal } from "@/shared/ui/modal"
 import { Button } from "@/shared/ui/button"
 import { formatAmount } from "@/shared/lib/format"
 
-export interface LimitModalProps {
+type LimitModalProps = {
   open: boolean
   onClose: () => void
   /** 1일 이체한도 (KRW). */
@@ -59,11 +59,11 @@ export function LimitModal({
             <tr key={row.label}>
               <th
                 scope="row"
-                className="w-[45%] whitespace-nowrap border-b border-r border-[var(--color-border)] bg-surface px-3 py-3 text-left font-bold text-ink"
+                className="w-[45%] border-r border-b border-[var(--color-border)] bg-surface px-3 py-3 text-left font-bold whitespace-nowrap text-ink"
               >
                 {row.label}
               </th>
-              <td className="border-b border-[var(--color-border)] bg-surface-elevated px-3 py-3 text-right tabular-nums text-ink">
+              <td className="border-b border-[var(--color-border)] bg-surface-elevated px-3 py-3 text-right text-ink tabular-nums">
                 {formatAmount(row.value)}
               </td>
             </tr>
@@ -72,7 +72,8 @@ export function LimitModal({
       </table>
 
       <p className="mt-3 text-sm leading-relaxed text-ink-muted">
-        1회 최대 50,000,000원, 1일 최대 100,000,000원까지 변경할 수 있습니다. 변경 후에는 다음 이체부터 적용됩니다.
+        1회 최대 50,000,000원, 1일 최대 100,000,000원까지 변경할 수 있습니다.
+        변경 후에는 다음 이체부터 적용됩니다.
       </p>
     </Modal>
   )

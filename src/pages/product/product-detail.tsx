@@ -1,43 +1,12 @@
 import * as React from "react"
 import { Badge } from "@/shared/ui/badge"
 import { Button } from "@/shared/ui/button"
-import { DataGrid, type DataGridColumn } from "@/widgets/query/data-grid"
+import { DataGrid, type DataGridColumn } from "@/shared/ui/data-grid"
 import { formatAmount } from "@/shared/lib/format"
 import { cn } from "@/shared/lib/utils"
-import type { ProductCategory } from "./product-card-grid"
+import type { ProductDetailData, ProductRateRow } from "@/entities/product"
 
-export interface ProductGuideItem {
-  label: string
-  value: string
-}
-
-export interface ProductRateRow {
-  period: string
-  /** 기본금리 (%). */
-  baseRate: number
-  /** 우대금리 (%). */
-  primeRate: number
-  /** 최고금리 (%). */
-  maxRate: number
-}
-
-export interface ProductDetailData {
-  id: string
-  category: ProductCategory
-  name: string
-  summary: string
-  /** 최고 금리 (연, 세전, %). */
-  maxRate: number
-  period: string
-  minAmount: number
-  maxAmount: number
-  interestMethod: string
-  guide: ProductGuideItem[]
-  rates: ProductRateRow[]
-  notices: string[]
-}
-
-export interface ProductDetailProps {
+type ProductDetailProps = {
   product: ProductDetailData
   onJoin?: (id: string) => void
 }
@@ -83,7 +52,9 @@ export function ProductDetail({ product, onJoin }: ProductDetailProps) {
       {/* 좌측 요약 카드 */}
       <aside className="w-80 shrink-0">
         <div className="sticky top-6 overflow-hidden rounded-[var(--radius-lg)] bg-surface-elevated p-6 [box-shadow:var(--shadow-card)]">
-          <Badge variant={product.category === "정기예금" ? "primary" : "success"}>
+          <Badge
+            variant={product.category === "정기예금" ? "primary" : "success"}
+          >
             {product.category}
           </Badge>
           <h2 className="mt-3 text-h2 font-bold text-ink">{product.name}</h2>
@@ -92,7 +63,7 @@ export function ProductDetail({ product, onJoin }: ProductDetailProps) {
           </p>
 
           <div className="mt-5 flex items-baseline gap-1 border-t border-[var(--color-border)] pt-5">
-            <span className="text-[32px] font-bold leading-none tabular-nums text-primary">
+            <span className="text-[32px] leading-none font-bold text-primary tabular-nums">
               {product.maxRate.toFixed(2)}
             </span>
             <span className="text-lg font-bold text-primary">%</span>
@@ -107,7 +78,7 @@ export function ProductDetail({ product, onJoin }: ProductDetailProps) {
             </div>
             <div className="flex items-center justify-between">
               <dt className="text-ink-muted">가입금액</dt>
-              <dd className="font-bold tabular-nums text-ink">
+              <dd className="font-bold text-ink tabular-nums">
                 {formatAmount(product.minAmount)} ~{" "}
                 {formatAmount(product.maxAmount)}
               </dd>
@@ -146,7 +117,7 @@ export function ProductDetail({ product, onJoin }: ProductDetailProps) {
                 aria-selected={active}
                 onClick={() => setTab(t.key)}
                 className={cn(
-                  "relative -mb-px whitespace-nowrap border-b-2 px-1 pb-3 pt-2 text-base font-bold transition-colors",
+                  "relative -mb-px border-b-2 px-1 pt-2 pb-3 text-base font-bold whitespace-nowrap transition-colors",
                   active
                     ? "border-primary text-primary"
                     : "border-transparent text-ink-muted hover:text-ink",

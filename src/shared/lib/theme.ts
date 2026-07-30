@@ -6,7 +6,9 @@ const STORAGE_KEY = "corebank-theme"
 
 function readInitialTheme(): Theme {
   if (typeof document === "undefined") return "light"
-  return document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light"
+  return document.documentElement.getAttribute("data-theme") === "dark"
+    ? "dark"
+    : "light"
 }
 
 function applyTheme(theme: Theme) {

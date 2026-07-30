@@ -6,7 +6,7 @@ import { cn } from "@/shared/lib/utils"
 
 const PAGE_SIZE_OPTIONS = [5, 10, 20, 30, 50] as const
 
-export interface GridToolbarProps extends React.HTMLAttributes<HTMLDivElement> {
+type GridToolbarProps = React.HTMLAttributes<HTMLDivElement> & {
   /** Period range label, e.g. "2026.06.23 ~ 2026.07.23". */
   periodLabel?: React.ReactNode
   /** Total result count. */
@@ -45,9 +45,7 @@ export function GridToolbar({
               <span className="text-ink-faint" aria-hidden="true">
                 |
               </span>
-              <span className="text-ink-muted tabular-nums">
-                {periodLabel}
-              </span>
+              <span className="text-ink-muted tabular-nums">{periodLabel}</span>
             </>
           )}
           <span className="font-bold text-primary tabular-nums">

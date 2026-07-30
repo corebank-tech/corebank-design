@@ -6,7 +6,7 @@ import { ErrorDialog } from "@/shared/ui/error-dialog"
 import { OtpModal } from "@/shared/ui/otp-modal"
 import { LimitModal } from "@/shared/ui/limit-modal"
 import { SessionExpiredModal } from "@/shared/ui/session-expired-modal"
-import { MOCK_TRANSFER_LIMITS } from "@/lib/mock/transfer"
+import { MOCK_TRANSFER_LIMITS } from "@/entities/transfer"
 
 type OpenModal = "confirm" | "error" | "otp" | "limit" | "session" | null
 

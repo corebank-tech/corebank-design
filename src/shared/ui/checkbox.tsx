@@ -2,8 +2,10 @@ import * as React from "react"
 import { Check } from "lucide-react"
 import { cn } from "@/shared/lib/utils"
 
-export interface CheckboxProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "type"> {
+type CheckboxProps = Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  "type"
+> & {
   label?: React.ReactNode
 }
 
@@ -14,7 +16,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
     return (
       <label
         htmlFor={inputId}
-        className="inline-flex cursor-pointer select-none items-center gap-2 text-base"
+        className="inline-flex cursor-pointer items-center gap-2 text-base select-none"
       >
         <span className="relative inline-flex h-[18px] w-[18px] items-center justify-center">
           <input
@@ -22,9 +24,9 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
             id={inputId}
             type="checkbox"
             className={cn(
-              "peer h-[18px] w-[18px] cursor-pointer appearance-none rounded-[var(--radius-sm)] border border-[var(--color-border-strong)] bg-surface-elevated",
+              "peer h-[18px] w-[18px] cursor-pointer appearance-none rounded-[var(--radius)] border border-[var(--color-border-strong)] bg-surface-elevated",
               "checked:border-primary checked:bg-primary",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ring-soft)]",
+              "focus-visible:ring-2 focus-visible:ring-[var(--color-ring-soft)] focus-visible:outline-none",
               className,
             )}
             {...props}

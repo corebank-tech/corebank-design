@@ -1,7 +1,7 @@
 import * as React from "react"
 import { cn } from "@/shared/lib/utils"
 
-export interface FormRowProps extends React.HTMLAttributes<HTMLDivElement> {
+type FormRowProps = React.HTMLAttributes<HTMLDivElement> & {
   label: React.ReactNode
   required?: boolean
   htmlFor?: string
@@ -24,7 +24,7 @@ export function FormRow({
   return (
     <div
       className={cn(
-        "flex border-b border-l border-r first:border-t",
+        "flex border-r border-b border-l first:border-t",
         className,
       )}
       {...props}
@@ -38,7 +38,7 @@ export function FormRow({
           className="flex items-center gap-1 text-[14px] font-bold text-ink"
         >
           {required && (
-            <span className="whitespace-nowrap text-[13px] font-bold text-[var(--color-danger)]">
+            <span className="text-[13px] font-bold whitespace-nowrap text-[var(--color-danger)]">
               [필수]
             </span>
           )}

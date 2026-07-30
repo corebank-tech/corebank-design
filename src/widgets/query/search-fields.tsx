@@ -11,7 +11,7 @@ import type { AccountOption } from "@/shared/types/account"
 /* AccountSelectField                                                  */
 /* ------------------------------------------------------------------ */
 
-export interface AccountSelectFieldProps {
+type AccountSelectFieldProps = {
   id?: string
   options: AccountOption[]
   value?: string
@@ -44,12 +44,14 @@ export function AccountSelectField({
 /* PeriodField                                                         */
 /* ------------------------------------------------------------------ */
 
+/** REQ-INQR-009: 조회기간 프리셋(오늘·1주일·1개월·3개월·6개월·1년). */
 const PERIOD_CHIPS = [
   { id: "today", label: "오늘", days: 0 },
   { id: "1w", label: "1주일", days: 7 },
-  { id: "15d", label: "15일", days: 15 },
   { id: "1m", label: "1개월", days: 30 },
   { id: "3m", label: "3개월", days: 90 },
+  { id: "6m", label: "6개월", days: 182 },
+  { id: "1y", label: "1년", days: 365 },
 ] as const
 
 const MAX_RANGE_DAYS = 365
@@ -71,7 +73,7 @@ function daysBetween(startISO: string, endISO: string): number {
   return Math.round(ms / 86_400_000)
 }
 
-export interface PeriodFieldProps {
+type PeriodFieldProps = {
   start: string
   end: string
   onChange: (range: { start: string; end: string }) => void
@@ -121,7 +123,7 @@ export function PeriodField({ start, end, onChange, today }: PeriodFieldProps) {
                 onClick={() => applyChip(chip.days)}
                 aria-pressed={active}
                 className={cn(
-                  "h-8 whitespace-nowrap rounded-[var(--radius-pill)] border px-3 text-[14px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                  "h-8 rounded-[var(--radius-pill)] border px-3 text-[14px] whitespace-nowrap transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
                   active
                     ? "border-ink bg-ink font-bold text-surface-elevated"
                     : "border-[var(--color-border-strong)] bg-surface-elevated text-ink hover:bg-surface",
@@ -218,12 +220,12 @@ export function PeriodField({ start, end, onChange, today }: PeriodFieldProps) {
 /* RadioRowField                                                       */
 /* ------------------------------------------------------------------ */
 
-export interface RadioRowOption {
+export type RadioRowOption = {
   label: string
   value: string
 }
 
-export interface RadioRowFieldProps {
+type RadioRowFieldProps = {
   name: string
   options: RadioRowOption[]
   value: string
@@ -256,7 +258,7 @@ export function RadioRowField({
 /* KeywordField                                                        */
 /* ------------------------------------------------------------------ */
 
-export interface KeywordFieldProps {
+type KeywordFieldProps = {
   id?: string
   value: string
   onChange: (value: string) => void

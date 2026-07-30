@@ -13,7 +13,8 @@ const variantStyles: Record<Variant, string> = {
     "bg-surface text-ink hover:bg-[var(--color-border)] border border-[var(--color-border-strong)] disabled:text-ink-faint",
   outline:
     "bg-surface-elevated text-primary hover:bg-primary-tint border border-primary disabled:border-[var(--color-border)] disabled:text-ink-faint",
-  ghost: "bg-transparent text-ink hover:bg-surface border border-transparent disabled:text-ink-faint",
+  ghost:
+    "bg-transparent text-ink hover:bg-surface border border-transparent disabled:text-ink-faint",
   danger:
     "bg-[var(--color-danger)] text-white hover:opacity-90 border border-[var(--color-danger)] disabled:border-[var(--color-border)] disabled:bg-surface disabled:text-ink-faint",
 }
@@ -24,8 +25,7 @@ const sizeStyles: Record<Size, string> = {
   lg: "h-12 px-6 text-lg gap-2",
 }
 
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: Variant
   size?: Size
   fullWidth?: boolean
@@ -41,8 +41,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         type={type ?? "button"}
         className={cn(
-          "inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-[var(--radius)] font-bold transition-colors",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
+          "inline-flex shrink-0 items-center justify-center rounded-[var(--radius)] font-bold whitespace-nowrap transition-colors",
+          "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:outline-none",
           "disabled:cursor-not-allowed",
           variantStyles[variant],
           sizeStyles[size],

@@ -2,30 +2,15 @@ import * as React from "react"
 import { Badge } from "@/shared/ui/badge"
 import { Button } from "@/shared/ui/button"
 import { Select } from "@/shared/ui/select"
-import { EmptyState } from "@/widgets/query/empty-state"
+import { EmptyState } from "@/shared/ui/empty-state"
 import { formatAmount } from "@/shared/lib/format"
 import { cn } from "@/shared/lib/utils"
+import type { ProductCard, ProductCategory } from "@/entities/product"
 
-export type ProductCategory = "정기예금" | "정기적금"
 type CategoryFilter = "전체" | ProductCategory
 type SortKey = "rate" | "latest"
 
-export interface ProductCard {
-  id: string
-  category: ProductCategory
-  name: string
-  summary: string
-  /** 최고 금리 (연, 세전, %). */
-  maxRate: number
-  /** 가입기간 표기 문자열. */
-  period: string
-  /** 최소 가입금액 (원). */
-  minAmount: number
-  /** 최신순 정렬 기준일 (YYYY-MM-DD). */
-  updatedAt: string
-}
-
-export interface ProductCardGridProps {
+type ProductCardGridProps = {
   products: ProductCard[]
   onViewDetail?: (id: string) => void
   onJoin?: (id: string) => void
@@ -67,7 +52,7 @@ export function ProductCardGrid({
                 onClick={() => setFilter(f)}
                 aria-pressed={active}
                 className={cn(
-                  "h-9 whitespace-nowrap rounded-[var(--radius-pill)] border px-4 text-sm font-bold transition-colors",
+                  "h-9 rounded-[var(--radius-pill)] border px-4 text-sm font-bold whitespace-nowrap transition-colors",
                   active
                     ? "border-primary bg-primary text-primary-foreground"
                     : "border-[var(--color-border-strong)] bg-surface-elevated text-ink-muted hover:bg-surface",
@@ -103,7 +88,9 @@ export function ProductCardGrid({
               className="flex flex-col overflow-hidden rounded-[var(--radius-lg)] bg-surface-elevated p-5 [box-shadow:var(--shadow-card)]"
             >
               <div className="mb-3">
-                <Badge variant={p.category === "정기예금" ? "primary" : "success"}>
+                <Badge
+                  variant={p.category === "정기예금" ? "primary" : "success"}
+                >
                   {p.category}
                 </Badge>
               </div>
@@ -114,13 +101,18 @@ export function ProductCardGrid({
               </p>
 
               <div className="mt-5 flex items-baseline gap-1">
-                <span className="text-[32px] font-bold leading-none tabular-nums text-primary">
+                <span className="text-[32px] leading-none font-bold text-primary tabular-nums">
                   {p.maxRate.toFixed(2)}
                 </span>
                 <span className="text-lg font-bold text-primary">%</span>
                 <span className="ml-1 text-xs text-ink-faint">(연, 세전)</span>
               </div>
-              <p className="mt-1 text-xs text-ink-faint">최고 금리</p>
+              <p className="mt-1 text-xs text-ink-faint">
+                최고 금리{" "}
+                <span className="tabular-nums">
+                  (기본금리 {p.baseRate.toFixed(2)}%)
+                </span>
+              </p>
 
               <dl className="mt-5 flex flex-col gap-2 border-t border-[var(--color-border)] pt-4 text-sm">
                 <div className="flex items-center justify-between">
@@ -129,8 +121,14 @@ export function ProductCardGrid({
                 </div>
                 <div className="flex items-center justify-between">
                   <dt className="text-ink-muted">최소금액</dt>
-                  <dd className="font-bold tabular-nums text-ink">
+                  <dd className="font-bold text-ink tabular-nums">
                     {formatAmount(p.minAmount)}
+                  </dd>
+                </div>
+                <div className="flex items-center justify-between">
+                  <dt className="text-ink-muted">최대금액</dt>
+                  <dd className="font-bold text-ink tabular-nums">
+                    {formatAmount(p.maxAmount)}
                   </dd>
                 </div>
               </dl>

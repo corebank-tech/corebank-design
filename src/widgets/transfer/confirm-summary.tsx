@@ -1,7 +1,7 @@
 import * as React from "react"
 import { cn } from "@/shared/lib/utils"
 
-export interface ConfirmSummaryColumn {
+export type ConfirmSummaryColumn = {
   /** Header cell label, e.g. "이체금액(원)". */
   label: React.ReactNode
   /** Value cell content. */
@@ -10,8 +10,7 @@ export interface ConfirmSummaryColumn {
   emphasis?: boolean
 }
 
-export interface ConfirmSummaryProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+type ConfirmSummaryProps = React.HTMLAttributes<HTMLDivElement> & {
   columns: ConfirmSummaryColumn[]
 }
 
@@ -58,9 +57,9 @@ export function ConfirmSummary({
               <td
                 key={i}
                 className={cn(
-                  "bg-surface-elevated px-3 py-3 text-center align-middle text-ink whitespace-nowrap [&:not(:first-child)]:border-l [&:not(:first-child)]:border-[var(--color-border)]",
+                  "bg-surface-elevated px-3 py-3 text-center align-middle whitespace-nowrap text-ink [&:not(:first-child)]:border-l [&:not(:first-child)]:border-[var(--color-border)]",
                   col.emphasis
-                    ? "text-h2 font-bold tabular-nums text-primary"
+                    ? "text-h2 font-bold text-primary tabular-nums"
                     : "text-md font-bold",
                 )}
               >

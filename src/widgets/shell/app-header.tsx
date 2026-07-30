@@ -1,21 +1,22 @@
 import * as React from "react"
 import { Link } from "react-router-dom"
 import { Bell, Menu, Moon, Sun } from "lucide-react"
-import { NAV } from "@/lib/nav"
+import { NAV } from "@/shared/config/nav"
 import { cn } from "@/shared/lib/utils"
 import { useTheme } from "@/shared/lib/theme"
 
-export interface AppHeaderProps {
+type AppHeaderProps = {
   activeId?: string
   customerName?: string
   unreadCount?: number
-  /** session length in seconds */
-  sessionSeconds?: number
+  /** 세션 잔여시간(초). 상위(SessionProvider)가 1초 단위로 갱신해 전달한다. */
+  remainingSeconds?: number
   /** REQ-CMN-005: 비로그인 상태면 [로그인]만 노출 */
   loggedIn?: boolean
   onExtend?: () => void
   onLogout?: () => void
   onOpenFullMenu?: () => void
+  onOpenNotifications?: () => void
 }
 
 function formatSession(seconds: number) {
@@ -31,25 +32,17 @@ function formatSession(seconds: number) {
 export function AppHeader({
   activeId,
   customerName = "홍길동",
-  unreadCount = 3,
-  sessionSeconds = 568,
+  unreadCount = 0,
+  remainingSeconds = 0,
   loggedIn = true,
   onExtend,
   onLogout,
   onOpenFullMenu,
+  onOpenNotifications,
 }: AppHeaderProps) {
   const [hoverId, setHoverId] = React.useState<string | null>(null)
   const closeTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null)
-  const [remaining, setRemaining] = React.useState(sessionSeconds)
   const { theme, toggleTheme } = useTheme()
-
-  React.useEffect(() => {
-    if (!loggedIn) return
-    const id = setInterval(() => {
-      setRemaining((r) => (r > 0 ? r - 1 : 0))
-    }, 1000)
-    return () => clearInterval(id)
-  }, [loggedIn])
 
   const open = (id: string) => {
     if (closeTimer.current) clearTimeout(closeTimer.current)
@@ -58,11 +51,6 @@ export function AppHeader({
   const scheduleClose = () => {
     if (closeTimer.current) clearTimeout(closeTimer.current)
     closeTimer.current = setTimeout(() => setHoverId(null), 120)
-  }
-
-  const handleExtend = () => {
-    setRemaining(sessionSeconds)
-    onExtend?.()
   }
 
   const activeCategory = NAV.find((c) => c.id === hoverId)
@@ -76,11 +64,16 @@ export function AppHeader({
         <div className="flex items-stretch">
           <Link
             to="/"
-            className="flex shrink-0 items-center pr-8 text-[20px] text-primary [font-weight:var(--weight-heading)]"
+            className="flex shrink-0 items-center pr-8 text-[20px] [font-weight:var(--weight-heading)] text-primary"
           >
             CoreBank
           </Link>
-          <ul className={cn("flex items-stretch gap-[28px]", !loggedIn && "hidden")}>
+          <ul
+            className={cn(
+              "flex items-stretch gap-[28px]",
+              !loggedIn && "hidden",
+            )}
+          >
             {NAV.map((cat) => {
               const isActive = cat.id === activeId
               return (
@@ -93,8 +86,8 @@ export function AppHeader({
                     className={cn(
                       "flex items-center text-[16px] transition-colors",
                       isActive
-                        ? "-mb-px border-b-2 border-primary text-primary [font-weight:var(--weight-heading)]"
-                        : "text-ink-muted [font-weight:var(--weight-label)] hover:text-primary",
+                        ? "-mb-px border-b-2 border-primary [font-weight:var(--weight-heading)] text-primary"
+                        : "[font-weight:var(--weight-label)] text-ink-muted hover:text-primary",
                     )}
                   >
                     {cat.label}
@@ -109,8 +102,10 @@ export function AppHeader({
           <button
             type="button"
             onClick={toggleTheme}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full text-ink-muted transition-colors hover:bg-[var(--color-primary-tint)] hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            aria-label={theme === "dark" ? "라이트 모드로 전환" : "다크 모드로 전환"}
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full text-ink-muted transition-colors hover:bg-[var(--color-primary-tint)] hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+            aria-label={
+              theme === "dark" ? "라이트 모드로 전환" : "다크 모드로 전환"
+            }
             aria-pressed={theme === "dark"}
           >
             {theme === "dark" ? (
@@ -124,39 +119,49 @@ export function AppHeader({
             <>
               <button
                 type="button"
-                className="relative inline-flex h-9 w-9 items-center justify-center rounded-full text-ink-muted hover:bg-[var(--color-primary-tint)] hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                onClick={onOpenNotifications}
+                className="relative inline-flex h-9 w-9 items-center justify-center rounded-full text-ink-muted hover:bg-[var(--color-primary-tint)] hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                 aria-label={`알림 ${unreadCount}건`}
               >
                 <Bell className="h-5 w-5" aria-hidden="true" />
                 {unreadCount > 0 && (
-                  <span className="absolute right-0.5 top-0.5 inline-flex min-w-[16px] items-center justify-center rounded-full bg-[var(--color-danger)] px-1 text-[10px] font-bold leading-4 text-white">
+                  <span className="absolute top-0.5 right-0.5 inline-flex min-w-[16px] items-center justify-center rounded-full bg-[var(--color-danger)] px-1 text-[10px] leading-4 font-bold text-white">
                     {unreadCount > 99 ? "99+" : unreadCount}
                   </span>
                 )}
               </button>
 
               <span className="text-sm text-ink">
-                <span className="[font-weight:var(--weight-value)]">{customerName}</span> 님
+                <span className="[font-weight:var(--weight-value)]">
+                  {customerName}
+                </span>{" "}
+                님
               </span>
 
-              <span className="text-sm tabular-nums text-ink-muted" aria-live="off">
-                {formatSession(remaining)}
+              <span
+                className="text-sm text-ink-muted tabular-nums"
+                aria-live="off"
+              >
+                {formatSession(remainingSeconds)}
               </span>
 
               <button
                 type="button"
-                onClick={handleExtend}
-                className="text-sm text-ink-muted transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                onClick={onExtend}
+                className="text-sm text-ink-muted transition-colors hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
               >
                 연장
               </button>
-              <span className="text-[var(--color-border-strong)]" aria-hidden="true">
+              <span
+                className="text-[var(--color-border-strong)]"
+                aria-hidden="true"
+              >
                 |
               </span>
               <button
                 type="button"
                 onClick={onLogout}
-                className="text-sm text-ink-muted transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="text-sm text-ink-muted transition-colors hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
               >
                 로그아웃
               </button>
@@ -165,7 +170,7 @@ export function AppHeader({
                 type="button"
                 onClick={onOpenFullMenu}
                 onMouseEnter={scheduleClose}
-                className="inline-flex h-9 w-9 items-center justify-center rounded-[var(--radius)] text-ink-muted transition-colors hover:bg-[var(--color-primary-tint)] hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-[var(--radius)] text-ink-muted transition-colors hover:bg-[var(--color-primary-tint)] hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                 aria-label="전체메뉴 열기"
               >
                 <Menu className="h-5 w-5" aria-hidden="true" />
@@ -193,7 +198,9 @@ export function AppHeader({
             <div className="grid grid-cols-4 gap-x-8 gap-y-6">
               {activeCategory.groups.map((group) => (
                 <div key={group.title}>
-                  <p className="mb-2 whitespace-nowrap text-[14px] text-ink-faint">{group.title}</p>
+                  <p className="mb-2 text-[14px] whitespace-nowrap text-ink-faint">
+                    {group.title}
+                  </p>
                   <ul className="flex flex-col gap-1.5">
                     {group.items.map((item) => (
                       <li key={`${item.screenId}-${item.path}`}>
@@ -201,7 +208,7 @@ export function AppHeader({
                           to={item.path}
                           data-screen-id={item.screenId}
                           onClick={() => setHoverId(null)}
-                          className="inline-block whitespace-nowrap py-0.5 text-[16px] text-ink [font-weight:var(--weight-label)] hover:text-primary hover:underline"
+                          className="inline-block py-0.5 text-[16px] [font-weight:var(--weight-label)] whitespace-nowrap text-ink hover:text-primary hover:underline"
                         >
                           {item.label}
                         </Link>

@@ -2,7 +2,7 @@ import * as React from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { cn } from "@/shared/lib/utils"
 
-export interface PaginationProps {
+type PaginationProps = {
   /** 1-based current page. */
   page: number
   /** Total number of pages. */
@@ -59,7 +59,7 @@ export function Pagination({
             onClick={() => go(p)}
             aria-current={active ? "page" : undefined}
             className={cn(
-              "inline-flex h-9 min-w-9 items-center justify-center whitespace-nowrap rounded-[var(--radius)] border px-2 text-sm tabular-nums focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+              "inline-flex h-9 min-w-9 items-center justify-center rounded-[var(--radius)] border px-2 text-sm whitespace-nowrap tabular-nums focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
               active
                 ? "border-primary bg-primary font-bold text-primary-foreground"
                 : "border-[var(--color-border)] bg-surface-elevated text-ink hover:bg-surface",

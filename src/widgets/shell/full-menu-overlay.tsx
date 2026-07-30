@@ -1,9 +1,9 @@
 import * as React from "react"
 import { Link } from "react-router-dom"
 import { X } from "lucide-react"
-import { NAV } from "@/lib/nav"
+import { NAV } from "@/shared/config/nav"
 
-export interface FullMenuOverlayProps {
+type FullMenuOverlayProps = {
   open: boolean
   onClose: () => void
 }
@@ -39,13 +39,13 @@ export function FullMenuOverlay({ open, onClose }: FullMenuOverlayProps) {
       <div className="absolute inset-x-0 top-0 bg-surface-elevated [box-shadow:var(--shadow-pop)]">
         <div className="mx-auto w-[1280px] px-4">
           <div className="flex h-[72px] items-center justify-between border-b border-[var(--color-border)]">
-            <span className="text-[20px] text-primary [font-weight:var(--weight-heading)]">
+            <span className="text-[20px] [font-weight:var(--weight-heading)] text-primary">
               전체메뉴
             </span>
             <button
               type="button"
               onClick={onClose}
-              className="inline-flex h-9 w-9 items-center justify-center rounded-[var(--radius)] text-ink-muted hover:bg-[var(--color-primary-tint)] hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-[var(--radius)] text-ink-muted hover:bg-[var(--color-primary-tint)] hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
               aria-label="전체메뉴 닫기"
             >
               <X className="h-5 w-5" aria-hidden="true" />
@@ -55,13 +55,13 @@ export function FullMenuOverlay({ open, onClose }: FullMenuOverlayProps) {
           <div className="grid grid-cols-4 gap-8 pt-8 pb-12">
             {NAV.map((cat) => (
               <div key={cat.id}>
-                <h3 className="mb-3 text-[16px] text-primary [font-weight:var(--weight-heading)]">
+                <h3 className="mb-3 text-[16px] [font-weight:var(--weight-heading)] text-primary">
                   {cat.label}
                 </h3>
                 <div className="flex flex-col gap-4">
                   {cat.groups.map((group) => (
                     <div key={group.title}>
-                      <p className="mb-1 whitespace-nowrap text-[14px] text-ink-faint">
+                      <p className="mb-1 text-[14px] whitespace-nowrap text-ink-faint">
                         {group.title}
                       </p>
                       <ul className="flex flex-col gap-1">
@@ -71,7 +71,7 @@ export function FullMenuOverlay({ open, onClose }: FullMenuOverlayProps) {
                               to={item.path}
                               data-screen-id={item.screenId}
                               onClick={onClose}
-                              className="inline-block whitespace-nowrap py-0.5 text-[16px] text-ink [font-weight:var(--weight-label)] hover:text-primary hover:underline"
+                              className="inline-block py-0.5 text-[16px] [font-weight:var(--weight-label)] whitespace-nowrap text-ink hover:text-primary hover:underline"
                             >
                               {item.label}
                             </Link>

@@ -16,6 +16,11 @@ export default defineConfig({
       "X-Frame-Options": "SAMEORIGIN",
       "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
     },
+    watch: {
+      // .claude/worktrees/ 아래 다른 세션의 워크트리 체크아웃 변경까지 감지해
+      // 불필요한 전체 새로고침을 유발하지 않도록 제외한다.
+      ignored: ["**/.claude/**"],
+    },
   },
   test: {
     environment: "jsdom",

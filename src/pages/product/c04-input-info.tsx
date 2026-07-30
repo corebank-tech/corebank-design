@@ -91,7 +91,12 @@ export function C04InputInfo() {
       >
         <FormSection title="가입정보 입력">
           <div>
-            <FormRow label="가입기간" required htmlFor="c04-term">
+            <FormRow
+              label="가입기간"
+              required
+              htmlFor="c04-term"
+              labelWidth={220}
+            >
               <TermMonthsField
                 id="c04-term"
                 value={termMonths}
@@ -100,7 +105,12 @@ export function C04InputInfo() {
                 max={product.maxTermMonths}
               />
             </FormRow>
-            <FormRow label="출금계좌" required htmlFor="c04-account">
+            <FormRow
+              label="출금계좌"
+              required
+              htmlFor="c04-account"
+              labelWidth={220}
+            >
               <WithdrawAccountField
                 id="c04-account"
                 options={MOCK_JOIN_ACCOUNTS}
@@ -108,7 +118,12 @@ export function C04InputInfo() {
                 onChange={setFromAccount}
               />
             </FormRow>
-            <FormRow label={amountLabel} required htmlFor="c04-amount">
+            <FormRow
+              label={amountLabel}
+              required
+              htmlFor="c04-amount"
+              labelWidth={220}
+            >
               <JoinAmountField
                 id="c04-amount"
                 value={amount}
@@ -122,7 +137,7 @@ export function C04InputInfo() {
                 }
               />
             </FormRow>
-            <FormRow label="만기 시 처리방법">
+            <FormRow label="만기 시 처리방법" labelWidth={220}>
               <div className="flex flex-col gap-1">
                 <span className="text-sm font-bold text-ink">
                   만기해지(원리금 지급)

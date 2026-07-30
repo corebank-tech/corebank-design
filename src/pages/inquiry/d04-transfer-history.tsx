@@ -289,16 +289,20 @@ export function D04TransferHistory() {
             {
               label: "총 이체금액",
               value: (
-                <span className="text-page font-bold">
+                <span className="text-h2 font-bold">
                   {formatAmount(normalAmount)}
                 </span>
               ),
-              valueColor: "var(--color-deposit)",
+              valueColor: "var(--color-success)",
             },
             {
               label: "총 오류금액",
-              value: formatAmount(errorAmount),
-              valueColor: "var(--color-withdraw)",
+              value: (
+                <span className="text-h2 font-bold">
+                  {formatAmount(errorAmount)}
+                </span>
+              ),
+              valueColor: "var(--color-danger)",
             },
             { label: "총 수수료", value: formatAmount(totalFee) },
           ]}
@@ -360,26 +364,62 @@ export function D04TransferHistory() {
         }
       >
         {detail && (
-          <dl className="flex flex-col gap-3 text-sm">
-            {[
-              ["거래번호", detail.txId],
-              ["이체일시", formatDateTime(detail.datetime)],
+          <dl className="flex flex-col gap-3">
+            {(
               [
-                "출금계좌",
-                `${detail.fromAlias} / ${formatAccountNo(detail.fromAccountNo)}`,
-              ],
-              ["입금계좌", formatAccountNo(detail.toAccountNo)],
-              ["예금주", maskName(detail.payeeName)],
-              ["이체금액", formatAmount(detail.amount)],
-              ["수수료", formatAmount(detail.fee)],
-              ["표시내용", detail.memo],
-              ["처리상태", detail.status],
-              ...(detail.errorReason ? [["오류사유", detail.errorReason]] : []),
-            ].map(([label, value]) => (
-              <div key={label} className="flex gap-2">
-                <dt className="w-24 shrink-0 font-bold text-ink">{label}</dt>
-                <dd className="min-w-0 flex-1 text-ink tabular-nums">
-                  {value}
+                { label: "거래번호", value: detail.txId },
+                { label: "이체일시", value: formatDateTime(detail.datetime) },
+                {
+                  label: "출금계좌",
+                  value: `${detail.fromAlias} / ${formatAccountNo(detail.fromAccountNo)}`,
+                },
+                {
+                  label: "입금계좌",
+                  value: formatAccountNo(detail.toAccountNo),
+                },
+                { label: "예금주", value: maskName(detail.payeeName) },
+                {
+                  label: "이체금액",
+                  value: formatAmount(detail.amount),
+                  dominant: true,
+                },
+                { label: "수수료", value: formatAmount(detail.fee) },
+                { label: "표시내용", value: detail.memo },
+                {
+                  label: "처리상태",
+                  value: (
+                    <Badge variant={STATUS_BADGE[detail.status]}>
+                      {detail.status}
+                    </Badge>
+                  ),
+                },
+                ...(detail.errorReason
+                  ? [{ label: "오류사유", value: detail.errorReason }]
+                  : []),
+              ] satisfies {
+                label: string
+                value: React.ReactNode
+                dominant?: boolean
+              }[]
+            ).map((item) => (
+              <div key={item.label} className="flex gap-2">
+                <dt
+                  className={
+                    item.dominant
+                      ? "w-24 shrink-0 text-xs text-ink-faint"
+                      : "w-24 shrink-0 text-sm text-ink-muted"
+                  }
+                >
+                  {item.label}
+                </dt>
+                <dd
+                  className={
+                    item.dominant
+                      ? "min-w-0 flex-1 text-h2 font-bold text-primary tabular-nums"
+                      : "min-w-0 flex-1 text-sm font-bold text-ink tabular-nums"
+                  }
+                >
+                  {item.value}
                 </dd>
               </div>
             ))}

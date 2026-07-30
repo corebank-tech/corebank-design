@@ -244,7 +244,7 @@ export function G05AutoTransferResults() {
                   </span>
                 </span>
               ),
-              valueColor: "var(--color-withdraw)",
+              valueColor: "var(--color-danger)",
             },
           ]}
         />

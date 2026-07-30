@@ -269,7 +269,7 @@ export function B03TransactionInquiry() {
   }
 
   return (
-    <div className="border border-[var(--color-border)] bg-white p-6">
+    <div className="border border-[var(--color-border)] bg-surface-elevated p-6">
       <FormSection title="조회조건">
         <SearchPanel
           onReset={handleReset}

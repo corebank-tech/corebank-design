@@ -237,7 +237,7 @@ export function E05ReservationResults() {
                   </span>
                 </span>
               ),
-              valueColor: "var(--color-withdraw)",
+              valueColor: "var(--color-danger)",
             },
             {
               label: "취소처리",

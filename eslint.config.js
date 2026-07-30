@@ -16,9 +16,6 @@ const ELEMENTS = [
   { type: "features", pattern: "src/features/**/*", partialMatch: false },
   { type: "entities", pattern: "src/entities/**/*", partialMatch: false },
   { type: "shared", pattern: "src/shared/**/*", partialMatch: false },
-  // TEMPORARY: 레이어 밖 레거시 디렉터리. src/lib 해체 커밋에서 이 요소와
-  // 아래 관련 정책을 함께 삭제한다.
-  { type: "legacy", pattern: "src/lib/**/*", partialMatch: false },
   // dev 전용 mock 서버. 제품 코드에서는 절대 import 되지 않는다.
   { type: "mocks", pattern: "src/mocks/**/*", partialMatch: false },
 ]
@@ -89,23 +86,24 @@ export default tseslint.config(
         "error",
         { "src/**/": "KEBAB_CASE" },
       ],
-
-      /* ---- warn: 기존 위반이 있어 가시성만 확보. FSD 마이그레이션 커밋에서 error로 승격 ---- */
-      "@typescript-eslint/consistent-type-definitions": ["warn", "type"],
-      "@typescript-eslint/array-type": ["warn", { default: "array" }],
+      // FSD 마이그레이션 완료로 error 승격 (모두 위반 0건 확인됨)
+      "@typescript-eslint/consistent-type-definitions": ["error", "type"],
+      "@typescript-eslint/array-type": ["error", { default: "array" }],
       "@typescript-eslint/consistent-type-imports": [
-        "warn",
+        "error",
         { prefer: "type-imports", fixStyle: "inline-type-imports" },
       ],
       "@typescript-eslint/no-unused-vars": [
-        "warn",
+        "error",
         { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
       ],
       "check-file/filename-naming-convention": [
-        "warn",
+        "error",
         { "**/*.{ts,tsx}": "KEBAB_CASE" },
         { ignoreMiddleExtensions: true },
       ],
+
+      /* ---- warn: 아직 위반이 남아 있어 가시성만 확보. 해소되는 대로 error로 승격 ---- */
       "@typescript-eslint/no-restricted-imports": [
         "warn",
         {
@@ -128,24 +126,14 @@ export default tseslint.config(
               "features",
               "entities",
               "shared",
-              "legacy",
               "mocks",
             ]),
-            allowTo("pages", [
-              "widgets",
-              "features",
-              "entities",
-              "shared",
-              "legacy",
-            ]),
-            allowTo("widgets", ["features", "entities", "shared", "legacy"]),
-            allowTo("features", ["entities", "shared", "legacy"]),
-            allowTo("entities", ["shared", "legacy"]),
+            allowTo("pages", ["widgets", "features", "entities", "shared"]),
+            allowTo("widgets", ["features", "entities", "shared"]),
+            allowTo("features", ["entities", "shared"]),
+            allowTo("entities", ["shared"]),
             allowTo("shared", ["shared"]),
-            // TEMPORARY: legacy 는 어디서든 import 가능하고 무엇이든 import 가능
-            allowTo("legacy", ["legacy", "shared", "pages"]),
-            { allow: { to: { element: { type: "legacy" } } } },
-            allowTo("mocks", ["mocks", "shared", "legacy", "entities"]),
+            allowTo("mocks", ["mocks", "shared", "entities"]),
           ],
         },
       ],
@@ -165,6 +153,11 @@ export default tseslint.config(
     // 라이브러리가 default export를 요구하는 문서화된 예외
     files: ["src/App.tsx", "*.config.{ts,js,mjs}", "eslint.config.js"],
     rules: { "no-restricted-exports": "off" },
+  },
+  {
+    // App.tsx는 앱 합성 루트 관례상 PascalCase 파일명을 유지한다
+    files: ["src/App.tsx"],
+    rules: { "check-file/filename-naming-convention": "off" },
   },
   {
     files: [

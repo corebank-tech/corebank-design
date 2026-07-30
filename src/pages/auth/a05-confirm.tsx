@@ -27,10 +27,20 @@ export function A05Confirm({ data, onEdit, onComplete }: A05ConfirmProps) {
       notice={["아래 입력하신 정보를 확인한 뒤 가입완료를 진행하세요."]}
       footer={
         <>
-          <Button variant="secondary" size="lg" className="min-w-[160px]" onClick={onEdit}>
+          <Button
+            variant="secondary"
+            size="lg"
+            className="min-w-[160px]"
+            onClick={onEdit}
+          >
             정보수정
           </Button>
-          <Button variant="primary" size="lg" className="min-w-[160px]" onClick={onComplete}>
+          <Button
+            variant="primary"
+            size="lg"
+            className="min-w-[160px]"
+            onClick={onComplete}
+          >
             가입완료
           </Button>
         </>
@@ -45,10 +55,14 @@ export function A05Confirm({ data, onEdit, onComplete }: A05ConfirmProps) {
             <span className="text-sm text-ink">{data.userId}</span>
           </FormRow>
           <FormRow label="생년월일" labelWidth={180}>
-            <span className="text-sm tabular-nums text-ink">{birthToDisplay(data.birth)}</span>
+            <span className="text-sm text-ink tabular-nums">
+              {birthToDisplay(data.birth)}
+            </span>
           </FormRow>
           <FormRow label="휴대폰번호" labelWidth={180}>
-            <span className="text-sm tabular-nums text-ink">{maskPhone(data.phone)}</span>
+            <span className="text-sm text-ink tabular-nums">
+              {maskPhone(data.phone)}
+            </span>
           </FormRow>
           <FormRow label="이메일" labelWidth={180}>
             <span className="text-sm text-ink">{maskEmail(data.email)}</span>

@@ -57,9 +57,9 @@ export function ConfirmSummary({
               <td
                 key={i}
                 className={cn(
-                  "bg-white px-3 py-3 text-center align-middle text-ink whitespace-nowrap [&:not(:first-child)]:border-l [&:not(:first-child)]:border-[var(--color-border)]",
+                  "bg-white px-3 py-3 text-center align-middle whitespace-nowrap text-ink [&:not(:first-child)]:border-l [&:not(:first-child)]:border-[var(--color-border)]",
                   col.emphasis
-                    ? "text-page font-bold tabular-nums text-primary"
+                    ? "text-page font-bold text-primary tabular-nums"
                     : "text-sm",
                 )}
               >

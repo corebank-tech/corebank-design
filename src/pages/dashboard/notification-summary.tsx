@@ -27,12 +27,16 @@ export function NotificationSummary({
     >
       <div className="flex items-center justify-between border-b border-[var(--color-border)] bg-surface px-4 py-2.5">
         <h2 className="text-sm font-bold text-ink">
-          미읽음 알림 <span className="text-primary tabular-nums">{totalCount ?? items.length}</span>건
+          미읽음 알림{" "}
+          <span className="text-primary tabular-nums">
+            {totalCount ?? items.length}
+          </span>
+          건
         </h2>
         <button
           type="button"
           onClick={onOpenInbox}
-          className="inline-flex items-center gap-0.5 text-sm font-bold text-link hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="inline-flex items-center gap-0.5 text-sm font-bold text-link hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
         >
           알림함
           <ChevronRight className="h-4 w-4" aria-hidden="true" />

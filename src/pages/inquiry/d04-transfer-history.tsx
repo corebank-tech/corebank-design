@@ -15,7 +15,10 @@ import { GridToolbar } from "@/widgets/query/grid-toolbar"
 import { DataGrid, type DataGridColumn } from "@/shared/ui/data-grid"
 import { Pagination } from "@/widgets/query/pagination"
 import { TextViewModal } from "@/widgets/query/text-view-modal"
-import { GridSearchModal, type GridSearchField } from "@/widgets/query/grid-search-modal"
+import {
+  GridSearchModal,
+  type GridSearchField,
+} from "@/widgets/query/grid-search-modal"
 import { downloadCsv } from "@/shared/lib/csv"
 import {
   formatAccountNo,
@@ -49,7 +52,9 @@ const STATUS_BADGE: Record<TransferStatus, "success" | "danger" | "warning"> = {
 }
 
 const FROM_ACCOUNTS = Array.from(
-  new Map(MOCK_TRANSFER_HISTORY.map((r) => [r.fromAccountNo, r.fromAlias])).entries(),
+  new Map(
+    MOCK_TRANSFER_HISTORY.map((r) => [r.fromAccountNo, r.fromAlias]),
+  ).entries(),
 )
 
 function toISODate(datetime: string) {
@@ -65,7 +70,10 @@ const SEARCH_FIELDS: GridSearchField[] = [
 ]
 
 export function D04TransferHistory() {
-  const [period, setPeriod] = React.useState({ start: "2026-06-23", end: TODAY })
+  const [period, setPeriod] = React.useState({
+    start: "2026-06-23",
+    end: TODAY,
+  })
   const [status, setStatus] = React.useState("all")
   const [fromAccount, setFromAccount] = React.useState("all")
   const [pageSize, setPageSize] = React.useState<number | "all">(10)
@@ -75,7 +83,10 @@ export function D04TransferHistory() {
   const [savedOpen, setSavedOpen] = React.useState(false)
   const [brailleOpen, setBrailleOpen] = React.useState(false)
   const [searchOpen, setSearchOpen] = React.useState(false)
-  const [search, setSearch] = React.useState<{ field: string; keyword: string } | null>(null)
+  const [search, setSearch] = React.useState<{
+    field: string
+    keyword: string
+  } | null>(null)
 
   const rows = React.useMemo(() => {
     return MOCK_TRANSFER_HISTORY.filter((r) => {
@@ -92,8 +103,12 @@ export function D04TransferHistory() {
   }, [period, status, fromAccount, search])
 
   const normalCount = rows.filter((r) => r.status === "정상").length
-  const normalAmount = rows.filter((r) => r.status === "정상").reduce((s, r) => s + r.amount, 0)
-  const errorAmount = rows.filter((r) => r.status === "오류").reduce((s, r) => s + r.amount, 0)
+  const normalAmount = rows
+    .filter((r) => r.status === "정상")
+    .reduce((s, r) => s + r.amount, 0)
+  const errorAmount = rows
+    .filter((r) => r.status === "오류")
+    .reduce((s, r) => s + r.amount, 0)
   const totalFee = rows.reduce((s, r) => s + r.fee, 0)
 
   const size = pageSize === "all" ? rows.length || 1 : pageSize
@@ -109,7 +124,15 @@ export function D04TransferHistory() {
     setPage(1)
   }
 
-  const exportHeaders = ["이체일시", "출금계좌", "입금계좌", "예금주", "이체금액", "처리상태", "거래번호"]
+  const exportHeaders = [
+    "이체일시",
+    "출금계좌",
+    "입금계좌",
+    "예금주",
+    "이체금액",
+    "처리상태",
+    "거래번호",
+  ]
   const exportRows = rows.map((r) => [
     formatDateTime(r.datetime),
     `${r.fromAlias} ${maskAccountNo(r.fromAccountNo)}`,
@@ -127,7 +150,9 @@ export function D04TransferHistory() {
       width: 150,
       sortable: true,
       sortValue: (r) => r.datetime,
-      render: (r) => <span className="tabular-nums">{formatDateTime(r.datetime)}</span>,
+      render: (r) => (
+        <span className="tabular-nums">{formatDateTime(r.datetime)}</span>
+      ),
     },
     {
       key: "fromAccountNo",
@@ -136,7 +161,9 @@ export function D04TransferHistory() {
       render: (r) => (
         <span>
           {r.fromAlias} <span className="text-ink-faint">/</span>{" "}
-          <span className="tabular-nums">{formatAccountNo(r.fromAccountNo)}</span>
+          <span className="tabular-nums">
+            {formatAccountNo(r.fromAccountNo)}
+          </span>
         </span>
       ),
     },
@@ -144,7 +171,9 @@ export function D04TransferHistory() {
       key: "toAccountNo",
       header: "입금계좌",
       width: 150,
-      render: (r) => <span className="tabular-nums">{formatAccountNo(r.toAccountNo)}</span>,
+      render: (r) => (
+        <span className="tabular-nums">{formatAccountNo(r.toAccountNo)}</span>
+      ),
     },
     {
       key: "payeeName",
@@ -177,7 +206,7 @@ export function D04TransferHistory() {
         <button
           type="button"
           onClick={() => setDetail(r)}
-          className="text-sm tabular-nums text-[var(--color-link)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="text-sm text-[var(--color-link)] tabular-nums hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
         >
           {r.txId}
         </button>
@@ -240,7 +269,11 @@ export function D04TransferHistory() {
         title="이체결과"
         className="mb-0"
         action={
-          <Button variant="secondary" size="sm" onClick={() => setStatsOpen(true)}>
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => setStatsOpen(true)}
+          >
             <BarChart3 className="h-4 w-4" aria-hidden="true" />
             이체결과 통계
           </Button>
@@ -259,10 +292,18 @@ export function D04TransferHistory() {
             },
             {
               label: "총 이체금액",
-              value: <span className="text-page font-bold">{formatAmount(normalAmount)}</span>,
+              value: (
+                <span className="text-page font-bold">
+                  {formatAmount(normalAmount)}
+                </span>
+              ),
               valueColor: "var(--color-deposit)",
             },
-            { label: "총 오류금액", value: formatAmount(errorAmount), valueColor: "var(--color-withdraw)" },
+            {
+              label: "총 오류금액",
+              value: formatAmount(errorAmount),
+              valueColor: "var(--color-withdraw)",
+            },
             { label: "총 수수료", value: formatAmount(totalFee) },
           ]}
         />
@@ -278,7 +319,9 @@ export function D04TransferHistory() {
           baseTimeLabel={formatDateTime(BASE_TIME)}
           onPrint={() => window.print()}
           onBrailleView={() => setBrailleOpen(true)}
-          onSaveFile={() => downloadCsv(`이체결과조회_${TODAY}.csv`, exportHeaders, exportRows)}
+          onSaveFile={() =>
+            downloadCsv(`이체결과조회_${TODAY}.csv`, exportHeaders, exportRows)
+          }
           onSearch={() => setSearchOpen(true)}
         />
 
@@ -289,7 +332,11 @@ export function D04TransferHistory() {
           emptyMessage="조회 결과가 없습니다."
         />
 
-        <Pagination page={safePage} totalPages={totalPages} onPageChange={setPage} />
+        <Pagination
+          page={safePage}
+          totalPages={totalPages}
+          onPageChange={setPage}
+        />
       </FormSection>
 
       <NoticeBoxFooter
@@ -306,7 +353,12 @@ export function D04TransferHistory() {
         title="이체 상세"
         size="sm"
         footer={
-          <Button variant="primary" size="lg" className="min-w-[120px]" onClick={() => setDetail(null)}>
+          <Button
+            variant="primary"
+            size="lg"
+            className="min-w-[120px]"
+            onClick={() => setDetail(null)}
+          >
             확인
           </Button>
         }
@@ -316,7 +368,10 @@ export function D04TransferHistory() {
             {[
               ["거래번호", detail.txId],
               ["이체일시", formatDateTime(detail.datetime)],
-              ["출금계좌", `${detail.fromAlias} / ${formatAccountNo(detail.fromAccountNo)}`],
+              [
+                "출금계좌",
+                `${detail.fromAlias} / ${formatAccountNo(detail.fromAccountNo)}`,
+              ],
               ["입금계좌", formatAccountNo(detail.toAccountNo)],
               ["예금주", maskName(detail.payeeName)],
               ["이체금액", formatAmount(detail.amount)],
@@ -327,7 +382,9 @@ export function D04TransferHistory() {
             ].map(([label, value]) => (
               <div key={label} className="flex gap-2">
                 <dt className="w-24 shrink-0 font-bold text-ink">{label}</dt>
-                <dd className="min-w-0 flex-1 tabular-nums text-ink">{value}</dd>
+                <dd className="min-w-0 flex-1 text-ink tabular-nums">
+                  {value}
+                </dd>
               </div>
             ))}
           </dl>
@@ -343,7 +400,12 @@ export function D04TransferHistory() {
         title="이체결과 통계"
         size="md"
         footer={
-          <Button variant="primary" size="lg" className="min-w-[120px]" onClick={() => setStatsOpen(false)}>
+          <Button
+            variant="primary"
+            size="lg"
+            className="min-w-[120px]"
+            onClick={() => setStatsOpen(false)}
+          >
             확인
           </Button>
         }
@@ -355,7 +417,13 @@ export function D04TransferHistory() {
           columns={[
             { key: "month", header: "월", align: "center", width: 90 },
             { key: "fromAlias", header: "출금계좌", align: "left" },
-            { key: "count", header: "이체건수", align: "right", width: 90, render: (r) => `${r.count}건` },
+            {
+              key: "count",
+              header: "이체건수",
+              align: "right",
+              width: 90,
+              render: (r) => `${r.count}건`,
+            },
             {
               key: "amount",
               header: "이체금액",

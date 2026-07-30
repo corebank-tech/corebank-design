@@ -4,7 +4,10 @@ import { Button } from "@/shared/ui/button"
 import { Badge } from "@/shared/ui/badge"
 import { ConfirmDialog } from "@/shared/ui/confirm-dialog"
 import { OtpModal } from "@/shared/ui/otp-modal"
-import { ResultPanel, type ResultVariant } from "@/widgets/transfer/result-panel"
+import {
+  ResultPanel,
+  type ResultVariant,
+} from "@/widgets/transfer/result-panel"
 import type { DataGridColumn } from "@/shared/ui/data-grid"
 import {
   MOCK_ACCOUNT_PASSWORDS,
@@ -81,16 +84,22 @@ export function InstantTransferScreen() {
   const [form, setForm] = React.useState<InstantTransferForm>(() => {
     /** REQ-INQR-005: 계좌목록의 [이체] 진입 시 출금계좌가 선택된 상태로 시작한다. */
     const fromParam = searchParams.get("from")
-    const preselected = MOCK_TRANSFER_ACCOUNTS.find((a) => a.accountNo === fromParam)
-    return preselected ? { ...INITIAL_FORM, fromAccount: preselected.accountNo } : INITIAL_FORM
+    const preselected = MOCK_TRANSFER_ACCOUNTS.find(
+      (a) => a.accountNo === fromParam,
+    )
+    return preselected
+      ? { ...INITIAL_FORM, fromAccount: preselected.accountNo }
+      : INITIAL_FORM
   })
   const [confirmOpen, setConfirmOpen] = React.useState(false)
   const [otpOpen, setOtpOpen] = React.useState(false)
   const [authError, setAuthError] = React.useState<string | null>(null)
-  const [result, setResult] = React.useState<InstantTransferResultState | null>(null)
-  const [frequentAccounts, setFrequentAccounts] = React.useState<FrequentTransferAccount[]>(
-    MOCK_FREQUENT_TRANSFER_ACCOUNTS,
+  const [result, setResult] = React.useState<InstantTransferResultState | null>(
+    null,
   )
+  const [frequentAccounts, setFrequentAccounts] = React.useState<
+    FrequentTransferAccount[]
+  >(MOCK_FREQUENT_TRANSFER_ACCOUNTS)
 
   const dailyRemaining =
     MOCK_TRANSFER_LIMITS.perDay - MOCK_TRANSFER_LIMITS.usedToday
@@ -126,7 +135,8 @@ export function InstantTransferScreen() {
         toConfirmed: false,
         payeeName: "",
         executionFails: false,
-        toAccountError: "출금계좌와 입금계좌가 동일합니다. 다른 계좌를 입력하세요.",
+        toAccountError:
+          "출금계좌와 입금계좌가 동일합니다. 다른 계좌를 입력하세요.",
       }))
       return
     }
@@ -161,8 +171,12 @@ export function InstantTransferScreen() {
 
   if (step === 2) {
     const amount = form.amount ?? 0
-    const balanceInsufficient = selectedAccount != null && amount > selectedAccount.withdrawable
-    const balanceAfter = Math.max((selectedAccount?.withdrawable ?? 0) - amount, 0)
+    const balanceInsufficient =
+      selectedAccount != null && amount > selectedAccount.withdrawable
+    const balanceAfter = Math.max(
+      (selectedAccount?.withdrawable ?? 0) - amount,
+      0,
+    )
 
     const handleTransferClick = () => {
       if (balanceInsufficient) {
@@ -178,7 +192,9 @@ export function InstantTransferScreen() {
     const handleConfirmDialogConfirm = () => {
       setConfirmOpen(false)
       if (form.password !== MOCK_ACCOUNT_PASSWORDS[form.fromAccount]) {
-        setAuthError("계좌비밀번호가 일치하지 않습니다. 이전 단계에서 계좌비밀번호를 다시 확인하세요.")
+        setAuthError(
+          "계좌비밀번호가 일치하지 않습니다. 이전 단계에서 계좌비밀번호를 다시 확인하세요.",
+        )
         return
       }
       setAuthError(null)
@@ -202,7 +218,8 @@ export function InstantTransferScreen() {
             balanceAfter: selectedAccount?.withdrawable ?? 0,
           },
           errorCode: "ERR-9001",
-          failReason: "일시적인 시스템 오류로 이체가 처리되지 않았습니다. 잠시 후 다시 시도하세요.",
+          failReason:
+            "일시적인 시스템 오류로 이체가 처리되지 않았습니다. 잠시 후 다시 시도하세요.",
         })
       } else {
         setResult({
@@ -236,7 +253,9 @@ export function InstantTransferScreen() {
             </span>
           }
           toAccount={
-            <span className="tabular-nums">{formatAccountNo(form.toAccount)}</span>
+            <span className="tabular-nums">
+              {formatAccountNo(form.toAccount)}
+            </span>
           }
           payeeName={maskName(form.payeeName)}
           amount={formatAmount(amount, { suffix: false })}
@@ -253,13 +272,25 @@ export function InstantTransferScreen() {
           open={confirmOpen}
           onClose={() => setConfirmOpen(false)}
           onConfirm={handleConfirmDialogConfirm}
-          messages={["아래 내용으로 즉시이체를 실행합니다.", "확인을 누르면 계좌비밀번호 검증과 OTP 인증으로 이어집니다."]}
+          messages={[
+            "아래 내용으로 즉시이체를 실행합니다.",
+            "확인을 누르면 계좌비밀번호 검증과 OTP 인증으로 이어집니다.",
+          ]}
           confirmLabel="확인"
           items={[
             { label: "1. 거래일자", value: formatDate(BASE_TIME) },
-            { label: "2. 거래시각", value: formatDateTime(BASE_TIME).slice(11) },
-            { label: "3. 출금계좌번호", value: formatAccountNo(form.fromAccount) },
-            { label: "4. 입금계좌번호", value: formatAccountNo(form.toAccount) },
+            {
+              label: "2. 거래시각",
+              value: formatDateTime(BASE_TIME).slice(11),
+            },
+            {
+              label: "3. 출금계좌번호",
+              value: formatAccountNo(form.fromAccount),
+            },
+            {
+              label: "4. 입금계좌번호",
+              value: formatAccountNo(form.toAccount),
+            },
             { label: "5. 수취인성명", value: maskName(form.payeeName) },
             { label: "6. 이체금액", value: formatAmount(amount) },
           ]}
@@ -304,19 +335,27 @@ export function InstantTransferScreen() {
         header: "거래일시",
         align: "center",
         width: 150,
-        render: (r) => <span className="tabular-nums">{formatDateTime(r.processedAt)}</span>,
+        render: (r) => (
+          <span className="tabular-nums">{formatDateTime(r.processedAt)}</span>
+        ),
       },
       {
         key: "fromAccountNo",
         header: "출금계좌",
         align: "center",
-        render: (r) => <span className="tabular-nums">{formatAccountNo(r.fromAccountNo)}</span>,
+        render: (r) => (
+          <span className="tabular-nums">
+            {formatAccountNo(r.fromAccountNo)}
+          </span>
+        ),
       },
       {
         key: "toAccountNo",
         header: "입금계좌",
         align: "center",
-        render: (r) => <span className="tabular-nums">{formatAccountNo(r.toAccountNo)}</span>,
+        render: (r) => (
+          <span className="tabular-nums">{formatAccountNo(r.toAccountNo)}</span>
+        ),
       },
       {
         key: "payeeName",
@@ -348,12 +387,17 @@ export function InstantTransferScreen() {
       },
     ]
 
-    const alreadyFrequent = frequentAccounts.some((a) => a.accountNo === row.toAccountNo)
+    const alreadyFrequent = frequentAccounts.some(
+      (a) => a.accountNo === row.toAccountNo,
+    )
     const frequentFull = frequentAccounts.length >= MOCK_FREQUENT_ACCOUNTS_MAX
 
     const handleRegisterFrequent = () => {
       if (alreadyFrequent || frequentFull) return
-      setFrequentAccounts((prev) => [...prev, { accountNo: row.toAccountNo, payeeName: row.payeeName }])
+      setFrequentAccounts((prev) => [
+        ...prev,
+        { accountNo: row.toAccountNo, payeeName: row.payeeName },
+      ])
     }
 
     return (
@@ -368,7 +412,11 @@ export function InstantTransferScreen() {
         resultSlot={
           <ResultPanel
             variant={result.variant}
-            message={isSuccess ? "이체가 완료되었습니다." : "이체가 처리되지 않았습니다."}
+            message={
+              isSuccess
+                ? "이체가 완료되었습니다."
+                : "이체가 처리되지 않았습니다."
+            }
             description={
               isSuccess
                 ? "이체결과조회에서 처리 내역을 확인할 수 있습니다."
@@ -394,7 +442,9 @@ export function InstantTransferScreen() {
                 </Button>
                 {isSuccess && (
                   <Button
-                    variant={alreadyFrequent || frequentFull ? "secondary" : "primary"}
+                    variant={
+                      alreadyFrequent || frequentFull ? "secondary" : "primary"
+                    }
                     size="lg"
                     className="min-w-[160px]"
                     disabled={alreadyFrequent || frequentFull}

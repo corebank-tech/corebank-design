@@ -45,9 +45,7 @@ export function GridToolbar({
               <span className="text-ink-faint" aria-hidden="true">
                 |
               </span>
-              <span className="text-ink-muted tabular-nums">
-                {periodLabel}
-              </span>
+              <span className="text-ink-muted tabular-nums">{periodLabel}</span>
             </>
           )}
           <span className="font-bold text-primary tabular-nums">

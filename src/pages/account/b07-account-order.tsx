@@ -6,12 +6,18 @@ import { Button } from "@/shared/ui/button"
 import { Alert } from "@/shared/ui/alert"
 import { DataGrid, type DataGridColumn } from "@/shared/ui/data-grid"
 import { formatAccountNo, formatAmount, formatDate } from "@/shared/lib/format"
-import { MOCK_ORDER_ACCOUNTS, sortByOpenedDateAsc, type OrderAccount } from "@/entities/account"
+import {
+  MOCK_ORDER_ACCOUNTS,
+  sortByOpenedDateAsc,
+  type OrderAccount,
+} from "@/entities/account"
 
 /** REQ-ACCT-014: 계좌 표시순서 변경. [확인] 저장, [초기화] 시 개설일 오름차순 복원. */
 export function B07AccountOrder() {
   const [order, setOrder] = React.useState(MOCK_ORDER_ACCOUNTS)
-  const [successMessage, setSuccessMessage] = React.useState<string | null>(null)
+  const [successMessage, setSuccessMessage] = React.useState<string | null>(
+    null,
+  )
 
   const move = (index: number, direction: -1 | 1) => {
     const target = index + direction
@@ -46,14 +52,18 @@ export function B07AccountOrder() {
       key: "accountNo",
       header: "계좌번호",
       width: 180,
-      render: (r) => <span className="tabular-nums">{formatAccountNo(r.accountNo)}</span>,
+      render: (r) => (
+        <span className="tabular-nums">{formatAccountNo(r.accountNo)}</span>
+      ),
     },
     {
       key: "openedDate",
       header: "신규일",
       align: "center",
       width: 120,
-      render: (r) => <span className="tabular-nums">{formatDate(r.openedDate)}</span>,
+      render: (r) => (
+        <span className="tabular-nums">{formatDate(r.openedDate)}</span>
+      ),
     },
     {
       key: "balance",
@@ -105,13 +115,28 @@ export function B07AccountOrder() {
       {successMessage && <Alert variant="success">{successMessage}</Alert>}
 
       <FormSection title="계좌순서 변경" className="mb-0">
-        <DataGrid columns={columns} rows={order} rowKey={(r) => r.id} emptyMessage="보유한 계좌가 없습니다." />
+        <DataGrid
+          columns={columns}
+          rows={order}
+          rowKey={(r) => r.id}
+          emptyMessage="보유한 계좌가 없습니다."
+        />
 
         <div className="mt-6 flex justify-center gap-2">
-          <Button variant="secondary" size="lg" className="min-w-[120px]" onClick={handleReset}>
+          <Button
+            variant="secondary"
+            size="lg"
+            className="min-w-[120px]"
+            onClick={handleReset}
+          >
             초기화
           </Button>
-          <Button variant="primary" size="lg" className="min-w-[120px]" onClick={handleSave}>
+          <Button
+            variant="primary"
+            size="lg"
+            className="min-w-[120px]"
+            onClick={handleSave}
+          >
             확인
           </Button>
         </div>

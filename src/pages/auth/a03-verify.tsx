@@ -22,7 +22,8 @@ type A03VerifyProps = {
 
 /** A-03 회원가입 2단계 · 본인확인(계좌 실명확인). REQ-AUTH-005·006·007. */
 export function A03Verify({ onVerified }: A03VerifyProps) {
-  const [accounts, setAccounts] = React.useState<VerifyAccount[]>(MOCK_SIGNUP_ACCOUNTS)
+  const [accounts, setAccounts] =
+    React.useState<VerifyAccount[]>(MOCK_SIGNUP_ACCOUNTS)
   const [name, setName] = React.useState("")
   const [birth, setBirth] = React.useState("")
   const [accountNo, setAccountNo] = React.useState("")
@@ -59,7 +60,9 @@ export function A03Verify({ onVerified }: A03VerifyProps) {
 
     const account = accounts.find((a) => a.accountNo === accountNo)
     if (!account) {
-      setAlert("입력하신 계좌번호를 찾을 수 없습니다. 계좌번호를 다시 확인해 주세요.")
+      setAlert(
+        "입력하신 계좌번호를 찾을 수 없습니다. 계좌번호를 다시 확인해 주세요.",
+      )
       return
     }
     if (account.status === "거래정지") {
@@ -79,7 +82,11 @@ export function A03Verify({ onVerified }: A03VerifyProps) {
       setAccounts((prev) =>
         prev.map((a) =>
           a.accountNo === accountNo
-            ? { ...a, errorCount: Math.min(nextCount, ERROR_LIMIT), status: isBlocked ? "거래정지" : a.status }
+            ? {
+                ...a,
+                errorCount: Math.min(nextCount, ERROR_LIMIT),
+                status: isBlocked ? "거래정지" : a.status,
+              }
             : a,
         ),
       )
@@ -90,7 +97,9 @@ export function A03Verify({ onVerified }: A03VerifyProps) {
           "영업점 또는 고객센터에서 거래정지 해제 후 다시 시도하세요.",
         ])
       } else {
-        setAlert(`계좌비밀번호가 일치하지 않습니다. (누적 오류 ${nextCount}/${ERROR_LIMIT}회)`)
+        setAlert(
+          `계좌비밀번호가 일치하지 않습니다. (누적 오류 ${nextCount}/${ERROR_LIMIT}회)`,
+        )
       }
       return
     }
@@ -109,7 +118,12 @@ export function A03Verify({ onVerified }: A03VerifyProps) {
           "휴대폰 본인인증·ARS·i-PIN 등 외부 인증 수단은 제공하지 않습니다.",
         ]}
         footer={
-          <Button variant="primary" size="lg" className="min-w-[160px]" onClick={handleVerify}>
+          <Button
+            variant="primary"
+            size="lg"
+            className="min-w-[160px]"
+            onClick={handleVerify}
+          >
             다음
           </Button>
         }
@@ -138,7 +152,9 @@ export function A03Verify({ onVerified }: A03VerifyProps) {
                   placeholder="YYMMDD"
                   className="w-40 tracking-[0.2em]"
                 />
-                <p className="text-2xs text-ink-muted">※ 주민등록번호 뒷자리는 수집하지 않습니다.</p>
+                <p className="text-2xs text-ink-muted">
+                  ※ 주민등록번호 뒷자리는 수집하지 않습니다.
+                </p>
               </div>
             </FormRow>
             <FormRow label="당행 계좌번호" required htmlFor="signup-account">
@@ -166,7 +182,8 @@ export function A03Verify({ onVerified }: A03VerifyProps) {
                   className="w-32 text-center tracking-[0.4em]"
                 />
                 <p className="text-2xs text-ink-muted">
-                  ※ 계좌비밀번호를 5회 연속 잘못 입력하면 해당 계좌가 거래정지 상태로 전환됩니다.
+                  ※ 계좌비밀번호를 5회 연속 잘못 입력하면 해당 계좌가 거래정지
+                  상태로 전환됩니다.
                 </p>
               </div>
             </FormRow>
@@ -182,8 +199,18 @@ export function A03Verify({ onVerified }: A03VerifyProps) {
         ]}
       />
 
-      <AlertDialog open={alert !== null} onClose={() => setAlert(null)} title="본인확인 안내" messages={alert ? [alert] : []} />
-      <ErrorDialog open={blocked !== null} onClose={() => setBlocked(null)} title="본인확인 실패" messages={blocked ?? []} />
+      <AlertDialog
+        open={alert !== null}
+        onClose={() => setAlert(null)}
+        title="본인확인 안내"
+        messages={alert ? [alert] : []}
+      />
+      <ErrorDialog
+        open={blocked !== null}
+        onClose={() => setBlocked(null)}
+        title="본인확인 실패"
+        messages={blocked ?? []}
+      />
     </>
   )
 }

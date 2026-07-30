@@ -30,12 +30,18 @@ function formatDraft(value: string): string {
  */
 export function D05TransferLimit() {
   const [limit, setLimit] = React.useState(MOCK_TRANSFER_LIMIT)
-  const [perTransferDraft, setPerTransferDraft] = React.useState(String(limit.perTransferLimit))
-  const [perDayDraft, setPerDayDraft] = React.useState(String(limit.perDayLimit))
+  const [perTransferDraft, setPerTransferDraft] = React.useState(
+    String(limit.perTransferLimit),
+  )
+  const [perDayDraft, setPerDayDraft] = React.useState(
+    String(limit.perDayLimit),
+  )
   const [fieldError, setFieldError] = React.useState<string | null>(null)
   const [confirmOpen, setConfirmOpen] = React.useState(false)
   const [otpOpen, setOtpOpen] = React.useState(false)
-  const [successMessage, setSuccessMessage] = React.useState<string | null>(null)
+  const [successMessage, setSuccessMessage] = React.useState<string | null>(
+    null,
+  )
 
   const dailyRemaining = limit.perDayLimit - limit.usedToday
   const perTransferValue = Number(perTransferDraft || 0)
@@ -58,11 +64,15 @@ export function D05TransferLimit() {
       return
     }
     if (perTransferValue > PER_TRANSFER_MAX) {
-      setFieldError(`1회 이체한도는 최대 ${formatAmount(PER_TRANSFER_MAX)}까지 변경할 수 있습니다.`)
+      setFieldError(
+        `1회 이체한도는 최대 ${formatAmount(PER_TRANSFER_MAX)}까지 변경할 수 있습니다.`,
+      )
       return
     }
     if (perDayValue > PER_DAY_MAX) {
-      setFieldError(`1일 이체한도는 최대 ${formatAmount(PER_DAY_MAX)}까지 변경할 수 있습니다.`)
+      setFieldError(
+        `1일 이체한도는 최대 ${formatAmount(PER_DAY_MAX)}까지 변경할 수 있습니다.`,
+      )
       return
     }
     if (perTransferValue > perDayValue) {
@@ -79,9 +89,15 @@ export function D05TransferLimit() {
   }
 
   const handleOtpConfirm = () => {
-    setLimit((prev) => ({ ...prev, perTransferLimit: perTransferValue, perDayLimit: perDayValue }))
+    setLimit((prev) => ({
+      ...prev,
+      perTransferLimit: perTransferValue,
+      perDayLimit: perDayValue,
+    }))
     setOtpOpen(false)
-    setSuccessMessage("이체한도가 변경되었습니다. 다음 이체부터 신규 한도가 적용됩니다.")
+    setSuccessMessage(
+      "이체한도가 변경되었습니다. 다음 이체부터 신규 한도가 적용됩니다.",
+    )
   }
 
   return (
@@ -99,14 +115,19 @@ export function D05TransferLimit() {
       <FormSection title="이체한도 조회">
         <SummaryRow
           items={[
-            { label: "1회 이체한도", value: formatAmount(limit.perTransferLimit) },
+            {
+              label: "1회 이체한도",
+              value: formatAmount(limit.perTransferLimit),
+            },
             { label: "1일 이체한도", value: formatAmount(limit.perDayLimit) },
             { label: "당일 사용금액", value: formatAmount(limit.usedToday) },
           ]}
         />
         <div className="mt-4 flex flex-col items-end gap-1 border-t-2 border-t-[var(--color-navy)] pt-3">
-          <span className="text-xs font-normal text-ink-faint">당일 잔여 이체가능금액</span>
-          <span className="text-page font-bold tabular-nums text-primary">
+          <span className="text-xs font-normal text-ink-faint">
+            당일 잔여 이체가능금액
+          </span>
+          <span className="text-page font-bold text-primary tabular-nums">
             {formatAmount(dailyRemaining)}
           </span>
         </div>
@@ -117,7 +138,12 @@ export function D05TransferLimit() {
 
       <FormSection title="이체한도 변경" className="mb-0">
         <div>
-          <FormRow label="신규 1회 이체한도" required htmlFor="d05-per-transfer" labelWidth={200}>
+          <FormRow
+            label="신규 1회 이체한도"
+            required
+            htmlFor="d05-per-transfer"
+            labelWidth={200}
+          >
             <Input
               id="d05-per-transfer"
               inputMode="numeric"
@@ -127,7 +153,12 @@ export function D05TransferLimit() {
             />
             <span className="shrink-0 text-sm text-ink-muted">원</span>
           </FormRow>
-          <FormRow label="신규 1일 이체한도" required htmlFor="d05-per-day" labelWidth={200}>
+          <FormRow
+            label="신규 1일 이체한도"
+            required
+            htmlFor="d05-per-day"
+            labelWidth={200}
+          >
             <Input
               id="d05-per-day"
               inputMode="numeric"
@@ -139,21 +170,35 @@ export function D05TransferLimit() {
           </FormRow>
         </div>
         <p className="mt-2 text-2xs text-ink-muted">
-          ※ 1회 한도는 최대 {formatAmount(PER_TRANSFER_MAX)}, 1일 한도는 최대 {formatAmount(PER_DAY_MAX)}까지
-          변경할 수 있으며, 1회 한도는 1일 한도를 초과할 수 없습니다.
+          ※ 1회 한도는 최대 {formatAmount(PER_TRANSFER_MAX)}, 1일 한도는 최대{" "}
+          {formatAmount(PER_DAY_MAX)}까지 변경할 수 있으며, 1회 한도는 1일
+          한도를 초과할 수 없습니다.
         </p>
 
         {fieldError && (
-          <p role="alert" className="mt-2 text-sm font-bold text-[var(--color-danger)]">
+          <p
+            role="alert"
+            className="mt-2 text-sm font-bold text-[var(--color-danger)]"
+          >
             {fieldError}
           </p>
         )}
 
         <div className="mt-6 flex justify-center gap-2">
-          <Button variant="secondary" size="lg" className="min-w-[120px]" onClick={resetDraft}>
+          <Button
+            variant="secondary"
+            size="lg"
+            className="min-w-[120px]"
+            onClick={resetDraft}
+          >
             초기화
           </Button>
-          <Button variant="primary" size="lg" className="min-w-[120px]" onClick={handleSubmitClick}>
+          <Button
+            variant="primary"
+            size="lg"
+            className="min-w-[120px]"
+            onClick={handleSubmitClick}
+          >
             변경하기
           </Button>
         </div>
@@ -164,7 +209,10 @@ export function D05TransferLimit() {
         onClose={() => setConfirmOpen(false)}
         onConfirm={handleConfirm}
         title="이체한도 변경"
-        messages={["아래 내용으로 이체한도를 변경합니다.", "확인 후 OTP 인증을 거쳐 적용됩니다."]}
+        messages={[
+          "아래 내용으로 이체한도를 변경합니다.",
+          "확인 후 OTP 인증을 거쳐 적용됩니다.",
+        ]}
         confirmLabel="다음"
         items={[
           { label: "신규 1회 이체한도", value: formatAmount(perTransferValue) },

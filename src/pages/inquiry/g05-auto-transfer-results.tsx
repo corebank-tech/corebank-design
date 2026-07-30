@@ -30,7 +30,11 @@ import {
 const TODAY = "2026-07-23"
 const BASE_TIME = "2026-07-23T08:57:34"
 
-const CYCLE_LABEL: Record<number, string> = { 1: "1개월", 3: "3개월", 6: "6개월" }
+const CYCLE_LABEL: Record<number, string> = {
+  1: "1개월",
+  3: "3개월",
+  6: "6개월",
+}
 
 const RESULT_BADGE: Record<AutoTransferResult, "success" | "danger"> = {
   정상: "success",
@@ -38,12 +42,17 @@ const RESULT_BADGE: Record<AutoTransferResult, "success" | "danger"> = {
 }
 
 const FROM_ACCOUNTS = Array.from(
-  new Map(MOCK_AUTO_TRANSFER_RESULTS.map((r) => [r.fromAccountNo, r.fromAlias])).entries(),
+  new Map(
+    MOCK_AUTO_TRANSFER_RESULTS.map((r) => [r.fromAccountNo, r.fromAlias]),
+  ).entries(),
 )
 
 export function G05AutoTransferResults() {
   const [fromAccount, setFromAccount] = React.useState("all")
-  const [period, setPeriod] = React.useState({ start: "2026-06-23", end: TODAY })
+  const [period, setPeriod] = React.useState({
+    start: "2026-06-23",
+    end: TODAY,
+  })
   const [pageSize, setPageSize] = React.useState<number | "all">(10)
   const [page, setPage] = React.useState(1)
   const [savedOpen, setSavedOpen] = React.useState(false)
@@ -60,7 +69,8 @@ export function G05AutoTransferResults() {
 
   const normal = rows.filter((r) => r.result === "정상")
   const error = rows.filter((r) => r.result === "오류")
-  const sum = (list: AutoTransferResultRow[]) => list.reduce((s, r) => s + r.amount, 0)
+  const sum = (list: AutoTransferResultRow[]) =>
+    list.reduce((s, r) => s + r.amount, 0)
 
   const size = pageSize === "all" ? rows.length || 1 : pageSize
   const totalPages = Math.max(1, Math.ceil(rows.length / size))
@@ -110,7 +120,9 @@ export function G05AutoTransferResults() {
       width: 150,
       sortable: true,
       sortValue: (r) => r.processedAt,
-      render: (r) => <span className="tabular-nums">{formatDateTime(r.processedAt)}</span>,
+      render: (r) => (
+        <span className="tabular-nums">{formatDateTime(r.processedAt)}</span>
+      ),
     },
     {
       key: "fromAccountNo",
@@ -119,7 +131,9 @@ export function G05AutoTransferResults() {
       render: (r) => (
         <span>
           {r.fromAlias} <span className="text-ink-faint">/</span>{" "}
-          <span className="tabular-nums">{formatAccountNo(r.fromAccountNo)}</span>
+          <span className="tabular-nums">
+            {formatAccountNo(r.fromAccountNo)}
+          </span>
         </span>
       ),
     },
@@ -127,7 +141,9 @@ export function G05AutoTransferResults() {
       key: "toAccountNo",
       header: "입금계좌",
       width: 150,
-      render: (r) => <span className="tabular-nums">{formatAccountNo(r.toAccountNo)}</span>,
+      render: (r) => (
+        <span className="tabular-nums">{formatAccountNo(r.toAccountNo)}</span>
+      ),
     },
     {
       key: "payeeName",
@@ -155,7 +171,8 @@ export function G05AutoTransferResults() {
       key: "failReason",
       header: "실패사유",
       align: "left",
-      render: (r) => r.failReason ?? <span className="text-2xs text-ink-faint">-</span>,
+      render: (r) =>
+        r.failReason ?? <span className="text-2xs text-ink-faint">-</span>,
     },
   ]
 
@@ -210,7 +227,9 @@ export function G05AutoTransferResults() {
               value: (
                 <span className="text-page font-bold">
                   {formatAmount(sum(normal))}{" "}
-                  <span className="text-xs font-normal text-ink-faint">({normal.length}건)</span>
+                  <span className="text-xs font-normal text-ink-faint">
+                    ({normal.length}건)
+                  </span>
                 </span>
               ),
               valueColor: "var(--color-success)",
@@ -220,7 +239,9 @@ export function G05AutoTransferResults() {
               value: (
                 <span>
                   {formatAmount(sum(error))}{" "}
-                  <span className="text-xs font-normal text-ink-faint">({error.length}건)</span>
+                  <span className="text-xs font-normal text-ink-faint">
+                    ({error.length}건)
+                  </span>
                 </span>
               ),
               valueColor: "var(--color-withdraw)",
@@ -228,7 +249,8 @@ export function G05AutoTransferResults() {
           ]}
         />
         <p className="mb-3 text-2xs text-ink-faint">
-          ※ 집계 금액은 페이징과 무관하게 조회 조건에 해당하는 전체 건 기준입니다.
+          ※ 집계 금액은 페이징과 무관하게 조회 조건에 해당하는 전체 건
+          기준입니다.
         </p>
 
         <GridToolbar
@@ -242,7 +264,13 @@ export function G05AutoTransferResults() {
           baseTimeLabel={formatDateTime(BASE_TIME)}
           onPrint={() => window.print()}
           onBrailleView={() => setBrailleOpen(true)}
-          onSaveFile={() => downloadCsv(`자동이체결과조회_${TODAY}.csv`, exportHeaders, exportRows)}
+          onSaveFile={() =>
+            downloadCsv(
+              `자동이체결과조회_${TODAY}.csv`,
+              exportHeaders,
+              exportRows,
+            )
+          }
         />
 
         <DataGrid
@@ -252,7 +280,11 @@ export function G05AutoTransferResults() {
           emptyMessage="조회 결과가 없습니다."
         />
 
-        <Pagination page={safePage} totalPages={totalPages} onPageChange={setPage} />
+        <Pagination
+          page={safePage}
+          totalPages={totalPages}
+          onPageChange={setPage}
+        />
       </FormSection>
 
       <NoticeBoxFooter

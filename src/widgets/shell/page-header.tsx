@@ -10,7 +10,11 @@ type PageHeaderProps = {
   textScaleActive?: boolean
 }
 
-export function PageHeader({ title, onCycleTextScale, textScaleActive = false }: PageHeaderProps) {
+export function PageHeader({
+  title,
+  onCycleTextScale,
+  textScaleActive = false,
+}: PageHeaderProps) {
   const [favorite, setFavorite] = React.useState(false)
 
   const iconBtn =
@@ -18,7 +22,7 @@ export function PageHeader({ title, onCycleTextScale, textScaleActive = false }:
 
   return (
     <div className="mb-6 flex items-center justify-between gap-4">
-      <h1 className="text-page font-bold text-ink text-balance">{title}</h1>
+      <h1 className="text-page font-bold text-balance text-ink">{title}</h1>
       <div className="flex shrink-0 items-center gap-1.5">
         <button
           type="button"
@@ -37,7 +41,10 @@ export function PageHeader({ title, onCycleTextScale, textScaleActive = false }:
           type="button"
           onClick={onCycleTextScale}
           aria-pressed={textScaleActive}
-          className={cn(iconBtn, textScaleActive && "border-primary text-primary")}
+          className={cn(
+            iconBtn,
+            textScaleActive && "border-primary text-primary",
+          )}
           aria-label="텍스트 크기 조절"
         >
           <Type className="h-[18px] w-[18px]" aria-hidden="true" />

@@ -7,7 +7,6 @@ import {
   formatAmount,
   formatKoreanAmount,
 } from "@/shared/lib/format"
-import { cn } from "@/shared/lib/utils"
 import type { AccountOption } from "@/shared/types/account"
 
 /* ================================================================== */
@@ -35,7 +34,7 @@ export function WithdrawAccountField({
   return (
     <div className="flex w-full flex-col gap-2">
       <div className="flex items-center gap-2">
-        <div className="min-w-0 max-w-md flex-1">
+        <div className="max-w-md min-w-0 flex-1">
           <Select
             id={id}
             value={value}
@@ -58,7 +57,7 @@ export function WithdrawAccountField({
       {selected && (
         <p className="text-sm text-ink-muted">
           출금가능금액{" "}
-          <span className="font-bold tabular-nums text-ink">
+          <span className="font-bold text-ink tabular-nums">
             {formatAmount(selected.withdrawable)}
           </span>
         </p>
@@ -84,7 +83,7 @@ export function AccountPasswordField({
   onChange,
   onCheckErrorCount,
 }: AccountPasswordFieldProps) {
-  const refs = React.useRef<Array<HTMLInputElement | null>>([])
+  const refs = React.useRef<(HTMLInputElement | null)[]>([])
   const digits = value.padEnd(4, " ").slice(0, 4).split("")
 
   const setDigit = (index: number, raw: string) => {
@@ -107,7 +106,11 @@ export function AccountPasswordField({
 
   return (
     <div className="flex w-full items-center gap-2">
-      <div className="flex items-center gap-1.5" role="group" aria-label="계좌비밀번호 4자리">
+      <div
+        className="flex items-center gap-1.5"
+        role="group"
+        aria-label="계좌비밀번호 4자리"
+      >
         {[0, 1, 2, 3].map((i) => (
           <Input
             key={i}
@@ -176,12 +179,14 @@ export function AccountNumberField({
       </div>
       {confirmed && holderName && (
         <p className="text-sm text-ink-muted">
-          예금주명{" "}
-          <span className="font-bold text-ink">{holderName}</span>
+          예금주명 <span className="font-bold text-ink">{holderName}</span>
         </p>
       )}
       {error && (
-        <p role="alert" className="text-xs font-bold text-[var(--color-danger)]">
+        <p
+          role="alert"
+          className="text-xs font-bold text-[var(--color-danger)]"
+        >
           {error}
         </p>
       )}
@@ -255,7 +260,7 @@ export function AmountField({
       </div>
 
       {value != null && value > 0 && (
-        <span className="text-page font-bold tabular-nums text-primary">
+        <span className="text-page font-bold text-primary tabular-nums">
           {formatKoreanAmount(value)}
         </span>
       )}
@@ -266,7 +271,7 @@ export function AmountField({
             key={chip.label}
             type="button"
             onClick={() => onChange(Math.min((value ?? 0) + chip.value, limit))}
-            className="h-8 rounded-[var(--radius-pill)] border border-[var(--color-border-strong)] bg-white px-3 text-sm text-ink transition-colors hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="h-8 rounded-[var(--radius-pill)] border border-[var(--color-border-strong)] bg-white px-3 text-sm text-ink transition-colors hover:bg-surface focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
           >
             {chip.label}
           </button>
@@ -275,7 +280,7 @@ export function AmountField({
           <button
             type="button"
             onClick={() => onChange(fullAmount)}
-            className="h-8 rounded-[var(--radius-pill)] border border-primary bg-primary-tint px-3 text-sm font-bold text-primary transition-colors hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="h-8 rounded-[var(--radius-pill)] border border-primary bg-primary-tint px-3 text-sm font-bold text-primary transition-colors hover:bg-white focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
           >
             전액
           </button>
@@ -283,7 +288,7 @@ export function AmountField({
         <button
           type="button"
           onClick={() => onChange(null)}
-          className="h-8 rounded-[var(--radius-pill)] border border-[var(--color-border-strong)] bg-surface px-3 text-sm text-ink-muted transition-colors hover:bg-[var(--color-border)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="h-8 rounded-[var(--radius-pill)] border border-[var(--color-border-strong)] bg-surface px-3 text-sm text-ink-muted transition-colors hover:bg-[var(--color-border)] focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
         >
           정정
         </button>
@@ -450,7 +455,9 @@ export function TransferCycleField({
       <Select
         id={id}
         value={value}
-        onChange={(e) => onChange(Number(e.target.value) as TransferCycleMonths)}
+        onChange={(e) =>
+          onChange(Number(e.target.value) as TransferCycleMonths)
+        }
         className="w-[160px]"
       >
         <option value={1}>1개월</option>
@@ -474,11 +481,7 @@ type DayOfMonthFieldProps = {
   onChange: (value: number) => void
 }
 
-export function DayOfMonthField({
-  id,
-  value,
-  onChange,
-}: DayOfMonthFieldProps) {
+export function DayOfMonthField({ id, value, onChange }: DayOfMonthFieldProps) {
   return (
     <div className="flex w-full flex-col gap-2">
       <Select
@@ -523,7 +526,9 @@ export function TransferEndDateField({
   const min = addDays(startDate, 1)
   const max = addMonths(startDate, maxMonths)
   const afterStart = value ? daysBetween(startDate, value) > 0 : true
-  const withinMax = value ? daysBetween(startDate, value) <= daysBetween(startDate, max) : true
+  const withinMax = value
+    ? daysBetween(startDate, value) <= daysBetween(startDate, max)
+    : true
   const outOfRange = value !== "" && (!afterStart || !withinMax)
 
   return (

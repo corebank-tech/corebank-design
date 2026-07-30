@@ -47,7 +47,10 @@ export function F02NotificationInbox() {
           <span className="text-2xs text-ink-faint">읽음</span>
         ) : (
           <span className="inline-flex items-center gap-1 text-xs font-bold text-primary">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary" aria-hidden="true" />
+            <span
+              className="h-1.5 w-1.5 rounded-full bg-primary"
+              aria-hidden="true"
+            />
             안읽음
           </span>
         ),
@@ -59,7 +62,9 @@ export function F02NotificationInbox() {
       sortable: true,
       sortValue: (r) => r.occurredAt,
       render: (r) => (
-        <span className="text-2xs tabular-nums text-ink-faint">{formatDateTime(r.occurredAt)}</span>
+        <span className="text-2xs text-ink-faint tabular-nums">
+          {formatDateTime(r.occurredAt)}
+        </span>
       ),
     },
     {
@@ -77,9 +82,14 @@ export function F02NotificationInbox() {
         <button
           type="button"
           onClick={() => markRead(r.id)}
-          className="flex w-full flex-col items-start gap-1 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="flex w-full flex-col items-start gap-1 text-left focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
         >
-          <span className={cn("text-sm", r.read ? "text-ink" : "font-bold text-ink")}>
+          <span
+            className={cn(
+              "text-sm",
+              r.read ? "text-ink" : "font-bold text-ink",
+            )}
+          >
             {r.title}
           </span>
           <span className="text-xs text-ink-muted">{r.content}</span>
@@ -113,7 +123,9 @@ export function F02NotificationInbox() {
           baseTimeLabel={formatDateTime(BASE_TIME)}
           onPrint={() => window.print()}
           onBrailleView={() => setBrailleOpen(true)}
-          onSaveFile={() => downloadCsv(`알림함_${TODAY}.csv`, exportHeaders, exportRows)}
+          onSaveFile={() =>
+            downloadCsv(`알림함_${TODAY}.csv`, exportHeaders, exportRows)
+          }
         />
 
         <DataGrid
@@ -123,7 +135,11 @@ export function F02NotificationInbox() {
           emptyMessage="도착한 알림이 없습니다."
         />
 
-        <Pagination page={safePage} totalPages={totalPages} onPageChange={setPage} />
+        <Pagination
+          page={safePage}
+          totalPages={totalPages}
+          onPageChange={setPage}
+        />
       </FormSection>
 
       <NoticeBoxFooter

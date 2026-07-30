@@ -30,7 +30,12 @@ export function A07FindId() {
 
   const handleSearch = () => {
     setFoundId(null)
-    if (name.trim().length === 0 || birth.length !== 6 || accountNo.length !== 12 || password.length !== 4) {
+    if (
+      name.trim().length === 0 ||
+      birth.length !== 6 ||
+      accountNo.length !== 12 ||
+      password.length !== 4
+    ) {
       setAlert("성명·생년월일·계좌번호·계좌비밀번호를 모두 정확히 입력하세요.")
       return
     }
@@ -41,7 +46,10 @@ export function A07FindId() {
       return
     }
     if (member.status === "거래정지") {
-      setBlocked(["누적 오류로 거래정지된 계좌입니다.", "영업점 또는 고객센터에서 거래정지 해제 후 다시 시도하세요."])
+      setBlocked([
+        "누적 오류로 거래정지된 계좌입니다.",
+        "영업점 또는 고객센터에서 거래정지 해제 후 다시 시도하세요.",
+      ])
       return
     }
     if (member.ownerName !== name.trim() || member.birth !== birth) {
@@ -54,15 +62,23 @@ export function A07FindId() {
       setMembers((prev) =>
         prev.map((m) =>
           m.accountNo === accountNo
-            ? { ...m, errorCount: Math.min(nextCount, ERROR_LIMIT), status: isBlocked ? "거래정지" : m.status }
+            ? {
+                ...m,
+                errorCount: Math.min(nextCount, ERROR_LIMIT),
+                status: isBlocked ? "거래정지" : m.status,
+              }
             : m,
         ),
       )
       setPassword("")
       if (isBlocked) {
-        setBlocked(["계좌비밀번호를 5회 연속 잘못 입력해 이 계좌가 거래정지 상태로 전환되었습니다."])
+        setBlocked([
+          "계좌비밀번호를 5회 연속 잘못 입력해 이 계좌가 거래정지 상태로 전환되었습니다.",
+        ])
       } else {
-        setAlert(`계좌비밀번호가 일치하지 않습니다. (누적 오류 ${nextCount}/${ERROR_LIMIT}회)`)
+        setAlert(
+          `계좌비밀번호가 일치하지 않습니다. (누적 오류 ${nextCount}/${ERROR_LIMIT}회)`,
+        )
       }
       return
     }
@@ -75,14 +91,22 @@ export function A07FindId() {
       {foundId && (
         <Alert variant="success" title="조회 결과">
           회원님의 아이디는{" "}
-          <span className="font-bold tabular-nums text-ink">{maskUserId(foundId)}</span> 입니다.
+          <span className="font-bold text-ink tabular-nums">
+            {maskUserId(foundId)}
+          </span>{" "}
+          입니다.
         </Alert>
       )}
 
       <FormSection title="본인확인">
         <div>
           <FormRow label="성명" required htmlFor="findid-name">
-            <Input id="findid-name" value={name} onChange={(e) => setName(e.target.value)} className="max-w-xs" />
+            <Input
+              id="findid-name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="max-w-xs"
+            />
           </FormRow>
           <FormRow label="생년월일" required htmlFor="findid-birth">
             <Input
@@ -120,16 +144,29 @@ export function A07FindId() {
         </div>
 
         <div className="mt-6 flex items-center justify-center gap-2">
-          <Button variant="primary" size="lg" className="min-w-[160px]" onClick={handleSearch}>
+          <Button
+            variant="primary"
+            size="lg"
+            className="min-w-[160px]"
+            onClick={handleSearch}
+          >
             아이디 찾기
           </Button>
         </div>
 
         <div className="mt-4 flex items-center justify-center gap-3 text-sm text-ink-muted">
-          <Link to="/reset-password" className="hover:text-primary hover:underline">
+          <Link
+            to="/reset-password"
+            className="hover:text-primary hover:underline"
+          >
             비밀번호 재설정
           </Link>
-          <span className="text-[var(--color-border-strong)]" aria-hidden="true">|</span>
+          <span
+            className="text-[var(--color-border-strong)]"
+            aria-hidden="true"
+          >
+            |
+          </span>
           <Link to="/" className="hover:text-primary hover:underline">
             로그인
           </Link>
@@ -143,8 +180,18 @@ export function A07FindId() {
         ]}
       />
 
-      <AlertDialog open={alert !== null} onClose={() => setAlert(null)} title="아이디 찾기" messages={alert ? [alert] : []} />
-      <ErrorDialog open={blocked !== null} onClose={() => setBlocked(null)} title="아이디 찾기 실패" messages={blocked ?? []} />
+      <AlertDialog
+        open={alert !== null}
+        onClose={() => setAlert(null)}
+        title="아이디 찾기"
+        messages={alert ? [alert] : []}
+      />
+      <ErrorDialog
+        open={blocked !== null}
+        onClose={() => setBlocked(null)}
+        title="아이디 찾기 실패"
+        messages={blocked ?? []}
+      />
     </div>
   )
 }

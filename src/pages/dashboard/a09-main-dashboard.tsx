@@ -77,13 +77,22 @@ export function A09MainDashboard({
     onTransfer ??
     ((accountId: string) => {
       const account = accounts.find((a) => a.id === accountId)
-      navigate(account ? `/instant-transfer?from=${account.accountNo}` : "/instant-transfer")
+      navigate(
+        account
+          ? `/instant-transfer?from=${account.accountNo}`
+          : "/instant-transfer",
+      )
     })
   const handleBrowseProducts = onBrowseProducts ?? (() => navigate("/products"))
   const handleOpenInbox = onOpenInbox ?? (() => navigate("/notifications"))
 
   const columns: DataGridColumn<DashboardAccount>[] = [
-    { key: "alias", header: "계좌명", align: "left", width: ACCOUNT_COLUMN_WIDTHS.alias },
+    {
+      key: "alias",
+      header: "계좌명",
+      align: "left",
+      width: ACCOUNT_COLUMN_WIDTHS.alias,
+    },
     {
       key: "accountNo",
       header: "계좌번호",
@@ -129,10 +138,18 @@ export function A09MainDashboard({
       width: ACCOUNT_COLUMN_WIDTHS.actions,
       render: (r) => (
         <div className="flex items-center justify-center gap-1.5">
-          <Button size="sm" variant="outline" onClick={() => handleInquiry(r.id)}>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => handleInquiry(r.id)}
+          >
             조회
           </Button>
-          <Button size="sm" variant="primary" onClick={() => handleTransfer(r.id)}>
+          <Button
+            size="sm"
+            variant="primary"
+            onClick={() => handleTransfer(r.id)}
+          >
             이체
           </Button>
         </div>
@@ -148,8 +165,9 @@ export function A09MainDashboard({
           <p className="text-h2 font-bold text-ink">
             {customerName} 고객님, 안녕하세요.
           </p>
-          <p className="mt-2 text-base text-ink-muted text-pretty">
-            오늘도 CoreBank를 이용해 주셔서 감사합니다. 자주 쓰는 업무는 아래 바로가기에서 바로 시작할 수 있습니다.
+          <p className="mt-2 text-base text-pretty text-ink-muted">
+            오늘도 CoreBank를 이용해 주셔서 감사합니다. 자주 쓰는 업무는 아래
+            바로가기에서 바로 시작할 수 있습니다.
           </p>
         </div>
         <div className="w-1/3">
@@ -161,7 +179,7 @@ export function A09MainDashboard({
       <div className="border border-[var(--color-border)] bg-white p-6">
         <FormSection title="대표계좌" className="mb-0">
           {accounts.length === 0 ? (
-            <div className="border-t-2 border-t-[var(--color-navy)] border-b border-[var(--color-border)]">
+            <div className="border-t-2 border-b border-[var(--color-border)] border-t-[var(--color-navy)]">
               <EmptyState
                 message="등록된 계좌가 없습니다."
                 description="상품을 둘러보고 첫 계좌를 개설해 보세요."
@@ -183,15 +201,21 @@ export function A09MainDashboard({
                     {formatAccountNo(accounts[0].accountNo)}
                   </span>
                 </div>
-                <span className="text-page tabular-nums text-ink [font-weight:var(--weight-value)]">
+                <span className="text-page [font-weight:var(--weight-value)] text-ink tabular-nums">
                   {formatAmount(accounts[0].balance)}
                 </span>
               </div>
-              <DataGrid columns={columns} rows={accounts} rowKey={(r) => r.id} />
+              <DataGrid
+                columns={columns}
+                rows={accounts}
+                rowKey={(r) => r.id}
+              />
               <SummaryRow
                 className="mt-3"
                 labelWidth={SUMMARY_LABEL_WIDTH}
-                items={[{ label: "총 잔액", value: formatAmount(totalBalance) }]}
+                items={[
+                  { label: "총 잔액", value: formatAmount(totalBalance) },
+                ]}
               />
             </>
           )}
@@ -199,10 +223,16 @@ export function A09MainDashboard({
       </div>
 
       {/* [3] 업무 바로가기 */}
-      <BankingShortcuts links={shortcuts ?? DEFAULT_SHORTCUTS} onSelect={onSelectShortcut} />
+      <BankingShortcuts
+        links={shortcuts ?? DEFAULT_SHORTCUTS}
+        onSelect={onSelectShortcut}
+      />
 
       {/* [4] 미읽음 알림 */}
-      <NotificationSummary items={notifications} onOpenInbox={handleOpenInbox} />
+      <NotificationSummary
+        items={notifications}
+        onOpenInbox={handleOpenInbox}
+      />
     </div>
   )
 }

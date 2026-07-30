@@ -85,12 +85,20 @@ function InfoRow({ items, gridCols }: { items: InfoItem[]; gridCols: string }) {
     <dl className={cn("grid divide-x divide-[var(--color-border)]", gridCols)}>
       {items.map((item) => (
         <div key={item.term} className="flex flex-col gap-1 px-4 py-3">
-          <dt className={item.dominant ? "text-2xs text-ink-faint" : "text-xs text-ink-faint"}>
+          <dt
+            className={
+              item.dominant
+                ? "text-2xs text-ink-faint"
+                : "text-xs text-ink-faint"
+            }
+          >
             {item.term}
           </dt>
           <dd
             className={cn(
-              item.dominant ? "text-page font-bold text-primary" : "text-sm font-bold text-ink",
+              item.dominant
+                ? "text-page font-bold text-primary"
+                : "text-sm font-bold text-ink",
               item.numeric && "tabular-nums",
             )}
           >
@@ -121,7 +129,9 @@ export function B03TransactionInquiry() {
   const [page, setPage] = React.useState(1)
   const [savedOpen, setSavedOpen] = React.useState(false)
   const [brailleOpen, setBrailleOpen] = React.useState(false)
-  const [periodAlertMessage, setPeriodAlertMessage] = React.useState<string | null>(null)
+  const [periodAlertMessage, setPeriodAlertMessage] = React.useState<
+    string | null
+  >(null)
 
   const selectedAccount =
     MOCK_ACCOUNTS.find((a) => a.accountNo === account) ?? MOCK_ACCOUNTS[0]
@@ -136,13 +146,16 @@ export function B03TransactionInquiry() {
       if (t.date < period.start || t.date > period.end) return false
       if (content === "deposit" && t.deposit <= 0) return false
       if (content === "withdraw" && t.withdraw <= 0) return false
-      if (trimmedKeyword && !t.description.includes(trimmedKeyword)) return false
+      if (trimmedKeyword && !t.description.includes(trimmedKeyword))
+        return false
       return true
     })
     next = [...next].sort((a, b) => {
       const aKey = `${a.date}T${a.time}`
       const bKey = `${b.date}T${b.time}`
-      return order === "recent" ? bKey.localeCompare(aKey) : aKey.localeCompare(bKey)
+      return order === "recent"
+        ? bKey.localeCompare(aKey)
+        : aKey.localeCompare(bKey)
     })
     return next
   }, [period, content, order, keyword])
@@ -240,11 +253,15 @@ export function B03TransactionInquiry() {
   const handleSearch = () => {
     /** REQ-INQR-010: 시작일이 1년을 초과하거나 종료일보다 늦으면 조회를 거부한다. */
     if (periodReversed) {
-      setPeriodAlertMessage("종료일이 시작일보다 빠릅니다. 조회기간을 다시 지정하세요.")
+      setPeriodAlertMessage(
+        "종료일이 시작일보다 빠릅니다. 조회기간을 다시 지정하세요.",
+      )
       return
     }
     if (periodOverLimit) {
-      setPeriodAlertMessage("조회 시작일은 조회 시점으로부터 최대 1년 이내로 지정할 수 있습니다.")
+      setPeriodAlertMessage(
+        "조회 시작일은 조회 시점으로부터 최대 1년 이내로 지정할 수 있습니다.",
+      )
       return
     }
     setPeriod(periodDraft)
@@ -275,7 +292,8 @@ export function B03TransactionInquiry() {
               today={TODAY}
             />
             <p className="mt-1 text-2xs text-ink-muted">
-              ※ 조회기간은 시작일 기준 최대 1년 이내로 지정할 수 있습니다(기본값은 최근 1개월입니다).
+              ※ 조회기간은 시작일 기준 최대 1년 이내로 지정할 수
+              있습니다(기본값은 최근 1개월입니다).
             </p>
           </FormRow>
           <FormRow label="조회내용">
@@ -287,7 +305,11 @@ export function B03TransactionInquiry() {
             />
           </FormRow>
           <FormRow label="적요검색" htmlFor="inq-keyword">
-            <KeywordField id="inq-keyword" value={keyword} onChange={setKeyword} />
+            <KeywordField
+              id="inq-keyword"
+              value={keyword}
+              onChange={setKeyword}
+            />
           </FormRow>
           <FormRow label="조회결과순서">
             <RadioRowField
@@ -306,7 +328,7 @@ export function B03TransactionInquiry() {
           type="button"
           onClick={() => setAccountOpen((v) => !v)}
           aria-expanded={accountOpen}
-          className="flex w-full items-center justify-between bg-surface px-4 py-2.5 text-sm font-bold text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="flex w-full items-center justify-between bg-surface px-4 py-2.5 text-sm font-bold text-ink focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
         >
           <span>계좌정보</span>
           <ChevronDown
@@ -324,7 +346,11 @@ export function B03TransactionInquiry() {
               items={[
                 { term: "계좌명", desc: selectedAccount.alias },
                 { term: "예금주", desc: maskName(selectedAccount.ownerName) },
-                { term: "계좌번호", desc: formatAccountNo(selectedAccount.accountNo), numeric: true },
+                {
+                  term: "계좌번호",
+                  desc: formatAccountNo(selectedAccount.accountNo),
+                  numeric: true,
+                },
                 {
                   term: "계좌상태",
                   desc: (
@@ -339,9 +365,22 @@ export function B03TransactionInquiry() {
               <InfoRow
                 gridCols="grid-cols-3"
                 items={[
-                  { term: "계좌잔액", desc: formatAmount(selectedAccount.balance), numeric: true, dominant: true },
-                  { term: "출금가능금액", desc: formatAmount(selectedAccount.withdrawable), numeric: true },
-                  { term: "신규일자", desc: formatDate(selectedAccount.openedDate), numeric: true },
+                  {
+                    term: "계좌잔액",
+                    desc: formatAmount(selectedAccount.balance),
+                    numeric: true,
+                    dominant: true,
+                  },
+                  {
+                    term: "출금가능금액",
+                    desc: formatAmount(selectedAccount.withdrawable),
+                    numeric: true,
+                  },
+                  {
+                    term: "신규일자",
+                    desc: formatDate(selectedAccount.openedDate),
+                    numeric: true,
+                  },
                 ]}
               />
             </div>
@@ -391,7 +430,9 @@ export function B03TransactionInquiry() {
           baseTimeLabel={formatDateTime(BASE_TIME)}
           onPrint={() => window.print()}
           onBrailleView={() => setBrailleOpen(true)}
-          onSaveFile={() => downloadCsv(`거래내역조회_${TODAY}.csv`, exportHeaders, exportRows)}
+          onSaveFile={() =>
+            downloadCsv(`거래내역조회_${TODAY}.csv`, exportHeaders, exportRows)
+          }
         />
 
         <DataGrid

@@ -2,7 +2,10 @@ import * as React from "react"
 import { Button } from "@/shared/ui/button"
 import { Badge } from "@/shared/ui/badge"
 import { InstantTransferStep3 } from "./d03-result"
-import { ResultPanel, type ResultVariant } from "@/widgets/transfer/result-panel"
+import {
+  ResultPanel,
+  type ResultVariant,
+} from "@/widgets/transfer/result-panel"
 import type { DataGridColumn } from "@/shared/ui/data-grid"
 import {
   MOCK_TRANSFER_RESULT,
@@ -36,19 +39,22 @@ const COPY: Record<
     message: "이체가 완료되었습니다.",
     description: "이체결과조회에서 처리 내역을 확인할 수 있습니다.",
     badge: <Badge variant="success">정상</Badge>,
-    footnote: "※ 이체 후 출금계좌 잔액은 이체결과조회에서 다시 확인할 수 있습니다.",
+    footnote:
+      "※ 이체 후 출금계좌 잔액은 이체결과조회에서 다시 확인할 수 있습니다.",
   },
   fail: {
     message: "이체가 처리되지 않았습니다.",
     description: "출금계좌 잔액과 이체한도를 확인한 뒤 다시 시도하세요.",
     badge: <Badge variant="danger">오류</Badge>,
-    footnote: "※ 실패한 이체는 원장에 반영되지 않으며, 잔액과 거래내역이 변동하지 않습니다.",
+    footnote:
+      "※ 실패한 이체는 원장에 반영되지 않으며, 잔액과 거래내역이 변동하지 않습니다.",
   },
   pending: {
     message: "이체를 처리하고 있습니다.",
     description: "잠시 후 이체결과조회에서 최종 처리 상태를 확인하세요.",
     badge: <Badge variant="warning">처리중</Badge>,
-    footnote: "※ 처리중 상태는 확정 전 임시 상태이며, 이체결과조회에서 확정 상태를 확인할 수 있습니다.",
+    footnote:
+      "※ 처리중 상태는 확정 전 임시 상태이며, 이체결과조회에서 확정 상태를 확인할 수 있습니다.",
   },
 }
 

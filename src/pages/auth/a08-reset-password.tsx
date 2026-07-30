@@ -8,7 +8,11 @@ import { FormRow } from "@/shared/ui/form-row"
 import { Alert } from "@/shared/ui/alert"
 import { NoticeBoxFooter } from "@/shared/ui/notice-box"
 import { AlertDialog } from "@/shared/ui/alert-dialog"
-import { evaluatePasswordRules, isPasswordValid, type RuleCheck } from "@/entities/auth"
+import {
+  evaluatePasswordRules,
+  isPasswordValid,
+  type RuleCheck,
+} from "@/entities/auth"
 import { MOCK_MEMBERS, type Member } from "@/entities/auth"
 
 const OTP_TTL = 180
@@ -27,11 +31,22 @@ function RuleList({ rules }: { rules: RuleCheck[] }) {
   return (
     <ul className="flex flex-col gap-1">
       {rules.map((r) => (
-        <li key={r.key} className={`flex items-center gap-1.5 text-2xs ${r.passed ? "text-primary" : "text-ink-faint"}`}>
+        <li
+          key={r.key}
+          className={`flex items-center gap-1.5 text-2xs ${r.passed ? "text-primary" : "text-ink-faint"}`}
+        >
           {r.passed ? (
-            <Check className="h-3 w-3 shrink-0" strokeWidth={3} aria-hidden="true" />
+            <Check
+              className="h-3 w-3 shrink-0"
+              strokeWidth={3}
+              aria-hidden="true"
+            />
           ) : (
-            <X className="h-3 w-3 shrink-0" strokeWidth={3} aria-hidden="true" />
+            <X
+              className="h-3 w-3 shrink-0"
+              strokeWidth={3}
+              aria-hidden="true"
+            />
           )}
           {r.label}
         </li>
@@ -60,21 +75,33 @@ export function A08ResetPassword() {
   const [done, setDone] = React.useState(false)
 
   const expired = issued != null && remaining <= 0
-  const rules = member ? evaluatePasswordRules(newPassword, member.memberId) : []
+  const rules = member
+    ? evaluatePasswordRules(newPassword, member.memberId)
+    : []
 
   React.useEffect(() => {
     if (issued == null || remaining <= 0) return
-    const id = window.setInterval(() => setRemaining((prev) => (prev <= 1 ? 0 : prev - 1)), 1000)
+    const id = window.setInterval(
+      () => setRemaining((prev) => (prev <= 1 ? 0 : prev - 1)),
+      1000,
+    )
     return () => window.clearInterval(id)
   }, [issued, remaining])
 
   const verifyIdentity = () => {
-    if (userId.trim().length === 0 || name.trim().length === 0 || email.trim().length === 0) {
+    if (
+      userId.trim().length === 0 ||
+      name.trim().length === 0 ||
+      email.trim().length === 0
+    ) {
       setIdentityAlert("아이디·성명·가입 이메일을 모두 입력하세요.")
       return
     }
     const found = MOCK_MEMBERS.find(
-      (m) => m.memberId === userId.trim() && m.ownerName === name.trim() && m.email === email.trim(),
+      (m) =>
+        m.memberId === userId.trim() &&
+        m.ownerName === name.trim() &&
+        m.email === email.trim(),
     )
     if (!found) {
       setIdentityAlert("입력하신 정보와 일치하는 회원을 찾을 수 없습니다.")
@@ -134,10 +161,22 @@ export function A08ResetPassword() {
       <FormSection title="본인확인">
         <div>
           <FormRow label="아이디" required htmlFor="reset-id">
-            <Input id="reset-id" value={userId} disabled={!!member} onChange={(e) => setUserId(e.target.value)} className="max-w-xs" />
+            <Input
+              id="reset-id"
+              value={userId}
+              disabled={!!member}
+              onChange={(e) => setUserId(e.target.value)}
+              className="max-w-xs"
+            />
           </FormRow>
           <FormRow label="성명" required htmlFor="reset-name">
-            <Input id="reset-name" value={name} disabled={!!member} onChange={(e) => setName(e.target.value)} className="max-w-xs" />
+            <Input
+              id="reset-name"
+              value={name}
+              disabled={!!member}
+              onChange={(e) => setName(e.target.value)}
+              className="max-w-xs"
+            />
           </FormRow>
           <FormRow label="가입 이메일" required htmlFor="reset-email">
             <Input
@@ -152,7 +191,12 @@ export function A08ResetPassword() {
         </div>
         {!member && (
           <div className="mt-6 flex justify-center">
-            <Button variant="primary" size="lg" className="min-w-[160px]" onClick={verifyIdentity}>
+            <Button
+              variant="primary"
+              size="lg"
+              className="min-w-[160px]"
+              onClick={verifyIdentity}
+            >
               본인확인
             </Button>
           </div>
@@ -163,12 +207,14 @@ export function A08ResetPassword() {
         <FormSection title="이메일 인증">
           <div className="flex items-center gap-2 rounded-[var(--radius)] border border-[var(--color-border)] bg-surface px-3 py-2">
             <span
-              className={`text-lg font-bold tabular-nums tracking-[0.2em] ${expired ? "text-ink-faint line-through" : "text-primary"}`}
+              className={`text-lg font-bold tracking-[0.2em] tabular-nums ${expired ? "text-ink-faint line-through" : "text-primary"}`}
               aria-label="발송된 이메일 인증번호"
             >
               {issued}
             </span>
-            <span className={`text-sm font-bold tabular-nums ${expired ? "text-ink-faint" : "text-ink"}`}>
+            <span
+              className={`text-sm font-bold tabular-nums ${expired ? "text-ink-faint" : "text-ink"}`}
+            >
               {formatClock(remaining)}
             </span>
             <Input
@@ -191,8 +237,14 @@ export function A08ResetPassword() {
               </Button>
             )}
           </div>
-          {codeError && <p className="mt-2 text-2xs font-bold text-[var(--color-danger)]">{codeError}</p>}
-          <p className="mt-2 text-2xs text-ink-muted">※ 이메일로 발송된 인증번호는 180초간 유효합니다(Mock 표시형).</p>
+          {codeError && (
+            <p className="mt-2 text-2xs font-bold text-[var(--color-danger)]">
+              {codeError}
+            </p>
+          )}
+          <p className="mt-2 text-2xs text-ink-muted">
+            ※ 이메일로 발송된 인증번호는 180초간 유효합니다(Mock 표시형).
+          </p>
         </FormSection>
       )}
 
@@ -211,19 +263,32 @@ export function A08ResetPassword() {
                 <RuleList rules={rules} />
               </div>
             </FormRow>
-            <FormRow label="새 비밀번호 확인" required htmlFor="reset-new-pw-confirm">
+            <FormRow
+              label="새 비밀번호 확인"
+              required
+              htmlFor="reset-new-pw-confirm"
+            >
               <Input
                 id="reset-new-pw-confirm"
                 type="password"
                 value={newPasswordConfirm}
-                onChange={(e) => setNewPasswordConfirm(e.target.value.slice(0, 15))}
+                onChange={(e) =>
+                  setNewPasswordConfirm(e.target.value.slice(0, 15))
+                }
                 className="max-w-xs"
               />
             </FormRow>
           </div>
-          <p className="mt-2 text-2xs text-ink-muted">※ 직전 비밀번호와 동일한 비밀번호로는 재설정할 수 없습니다.</p>
+          <p className="mt-2 text-2xs text-ink-muted">
+            ※ 직전 비밀번호와 동일한 비밀번호로는 재설정할 수 없습니다.
+          </p>
           <div className="mt-6 flex justify-center">
-            <Button variant="primary" size="lg" className="min-w-[160px]" onClick={submit}>
+            <Button
+              variant="primary"
+              size="lg"
+              className="min-w-[160px]"
+              onClick={submit}
+            >
               비밀번호 재설정
             </Button>
           </div>
@@ -234,7 +299,9 @@ export function A08ResetPassword() {
         <Link to="/find-id" className="hover:text-primary hover:underline">
           아이디 찾기
         </Link>
-        <span className="text-[var(--color-border-strong)]" aria-hidden="true">|</span>
+        <span className="text-[var(--color-border-strong)]" aria-hidden="true">
+          |
+        </span>
         <Link to="/" className="hover:text-primary hover:underline">
           로그인
         </Link>
@@ -247,8 +314,18 @@ export function A08ResetPassword() {
         ]}
       />
 
-      <AlertDialog open={identityAlert !== null} onClose={() => setIdentityAlert(null)} title="본인확인" messages={identityAlert ? [identityAlert] : []} />
-      <AlertDialog open={passwordAlert !== null} onClose={() => setPasswordAlert(null)} title="비밀번호 재설정" messages={passwordAlert ? [passwordAlert] : []} />
+      <AlertDialog
+        open={identityAlert !== null}
+        onClose={() => setIdentityAlert(null)}
+        title="본인확인"
+        messages={identityAlert ? [identityAlert] : []}
+      />
+      <AlertDialog
+        open={passwordAlert !== null}
+        onClose={() => setPasswordAlert(null)}
+        title="비밀번호 재설정"
+        messages={passwordAlert ? [passwordAlert] : []}
+      />
     </div>
   )
 }

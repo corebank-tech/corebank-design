@@ -20,21 +20,35 @@ export function C04InputInfo() {
   const product = MOCK_JOIN_PRODUCTS[productId] ?? MOCK_JOIN_PRODUCTS.P001
   const prev = location.state as ProductJoinFormState | null
 
-  const [termMonths, setTermMonths] = React.useState<number | null>(prev?.termMonths ?? null)
-  const [fromAccount, setFromAccount] = React.useState(prev?.fromAccount ?? MOCK_JOIN_ACCOUNTS[0].accountNo)
-  const [amount, setAmount] = React.useState<number | null>(prev?.amount ?? null)
+  const [termMonths, setTermMonths] = React.useState<number | null>(
+    prev?.termMonths ?? null,
+  )
+  const [fromAccount, setFromAccount] = React.useState(
+    prev?.fromAccount ?? MOCK_JOIN_ACCOUNTS[0].accountNo,
+  )
+  const [amount, setAmount] = React.useState<number | null>(
+    prev?.amount ?? null,
+  )
 
-  const selectedAccount = MOCK_JOIN_ACCOUNTS.find((a) => a.accountNo === fromAccount)
-  const amountLabel = product.category === "정기적금" ? "가입금액(월납입금액)" : "가입금액(일시납입액)"
+  const selectedAccount = MOCK_JOIN_ACCOUNTS.find(
+    (a) => a.accountNo === fromAccount,
+  )
+  const amountLabel =
+    product.category === "정기적금"
+      ? "가입금액(월납입금액)"
+      : "가입금액(일시납입액)"
 
   const termValid =
-    termMonths != null && termMonths >= product.minTermMonths && termMonths <= product.maxTermMonths
+    termMonths != null &&
+    termMonths >= product.minTermMonths &&
+    termMonths <= product.maxTermMonths
   const amountValid =
     amount != null &&
     amount >= product.minAmount &&
     amount <= product.maxAmount &&
     // 정기예금만 출금가능금액을 검증한다(REQ-PRDT-008). 정기적금은 가입 시점에 출금이 발생하지 않는다.
-    (product.category === "정기적금" || (selectedAccount != null && amount <= selectedAccount.withdrawable))
+    (product.category === "정기적금" ||
+      (selectedAccount != null && amount <= selectedAccount.withdrawable))
 
   const canSubmit = termValid && amountValid && fromAccount !== ""
 
@@ -101,13 +115,21 @@ export function C04InputInfo() {
                 onChange={setAmount}
                 min={product.minAmount}
                 max={product.maxAmount}
-                withdrawable={product.category === "정기예금" ? selectedAccount?.withdrawable : undefined}
+                withdrawable={
+                  product.category === "정기예금"
+                    ? selectedAccount?.withdrawable
+                    : undefined
+                }
               />
             </FormRow>
             <FormRow label="만기 시 처리방법">
               <div className="flex flex-col gap-1">
-                <span className="text-sm font-bold text-ink">만기해지(원리금 지급)</span>
-                <p className="text-2xs text-ink-faint">※ 재예치는 제공하지 않습니다.</p>
+                <span className="text-sm font-bold text-ink">
+                  만기해지(원리금 지급)
+                </span>
+                <p className="text-2xs text-ink-faint">
+                  ※ 재예치는 제공하지 않습니다.
+                </p>
               </div>
             </FormRow>
           </div>
@@ -116,11 +138,14 @@ export function C04InputInfo() {
         <FormSection title="예상 만기금액(참고)">
           <div className="border border-[var(--color-border)] bg-surface px-5 py-4">
             <p className="text-2xs text-ink-faint">세전 단리 기준 참고값</p>
-            <p className="mt-1 text-page font-bold tabular-nums text-primary">
-              {expectedMaturity != null ? formatKoreanAmount(expectedMaturity) : "-"}
+            <p className="mt-1 text-page font-bold text-primary tabular-nums">
+              {expectedMaturity != null
+                ? formatKoreanAmount(expectedMaturity)
+                : "-"}
             </p>
             <p className="mt-2 text-2xs text-ink-muted">
-              ※ 실제 지급액은 적용금리 변경, 중도해지 등의 사유로 위 참고값과 다를 수 있습니다.
+              ※ 실제 지급액은 적용금리 변경, 중도해지 등의 사유로 위 참고값과
+              다를 수 있습니다.
             </p>
           </div>
         </FormSection>

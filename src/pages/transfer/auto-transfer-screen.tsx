@@ -15,7 +15,12 @@ import {
   formatDateTime,
   maskName,
 } from "@/shared/lib/format"
-import { addMonths, daysBetween, parseISO, toISO } from "@/widgets/transfer/transfer-fields"
+import {
+  addMonths,
+  daysBetween,
+  parseISO,
+  toISO,
+} from "@/widgets/transfer/transfer-fields"
 import type { TransferCycleMonths } from "@/widgets/transfer/transfer-fields"
 import { AutoTransferStep1 } from "./auto/g01-input"
 import { AutoTransferStep2 } from "./auto/g02-confirm"
@@ -101,7 +106,11 @@ function clampToMonth(year: number, monthIndex: number, day: number): Date {
 /** 시작일 이후 첫 이체지정일(말일 보정 포함)을 첫 실행 예정일로 산출한다. */
 function computeFirstExecDate(startISO: string, dayOfMonth: number): string {
   const start = parseISO(startISO)
-  let candidate = clampToMonth(start.getFullYear(), start.getMonth(), dayOfMonth)
+  let candidate = clampToMonth(
+    start.getFullYear(),
+    start.getMonth(),
+    dayOfMonth,
+  )
   if (candidate < start) {
     const nextMonthIndex = start.getMonth() + 1
     const year = start.getFullYear() + Math.floor(nextMonthIndex / 12)
@@ -121,7 +130,9 @@ export function AutoTransferScreen() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const [step, setStep] = React.useState(1)
-  const [form, setForm] = React.useState<AutoTransferForm>(() => buildInitialForm(searchParams))
+  const [form, setForm] = React.useState<AutoTransferForm>(() =>
+    buildInitialForm(searchParams),
+  )
   const [confirmOpen, setConfirmOpen] = React.useState(false)
   const [otpOpen, setOtpOpen] = React.useState(false)
 
@@ -139,9 +150,13 @@ export function AutoTransferScreen() {
   const startSpan = form.startDate ? daysBetween(TODAY, form.startDate) : null
   const startValid = startSpan != null && startSpan >= 1 && startSpan <= 365
   const endSpan =
-    form.startDate && form.endDate ? daysBetween(form.startDate, form.endDate) : null
+    form.startDate && form.endDate
+      ? daysBetween(form.startDate, form.endDate)
+      : null
   const endValid =
-    endSpan != null && endSpan > 0 && form.endDate <= addMonths(form.startDate, 60)
+    endSpan != null &&
+    endSpan > 0 &&
+    form.endDate <= addMonths(form.startDate, 60)
   const duplicate = isDuplicate(form)
 
   const canSubmit =
@@ -174,7 +189,11 @@ export function AutoTransferScreen() {
               {selectedAccount?.alias} {formatAccountNo(form.fromAccount)}
             </span>
           }
-          toAccount={<span className="tabular-nums">{formatAccountNo(form.toAccount)}</span>}
+          toAccount={
+            <span className="tabular-nums">
+              {formatAccountNo(form.toAccount)}
+            </span>
+          }
           payeeName={maskName(MOCK_PAYEE_NAME)}
           amount={formatAmount(form.amount ?? 0, { suffix: false })}
           cycle={`${form.cycleMonths}개월`}
@@ -192,13 +211,22 @@ export function AutoTransferScreen() {
             setConfirmOpen(false)
             setOtpOpen(true)
           }}
-          messages={["아래 내용으로 자동이체를 등록합니다.", "확인을 누르면 OTP 인증으로 이어집니다."]}
+          messages={[
+            "아래 내용으로 자동이체를 등록합니다.",
+            "확인을 누르면 OTP 인증으로 이어집니다.",
+          ]}
           confirmLabel="확인"
           items={[
             { label: "1. 거래일자", value: formatDate(NOW) },
             { label: "2. 거래시각", value: formatDateTime(NOW).slice(11) },
-            { label: "3. 출금계좌번호", value: formatAccountNo(form.fromAccount) },
-            { label: "4. 입금계좌번호", value: formatAccountNo(form.toAccount) },
+            {
+              label: "3. 출금계좌번호",
+              value: formatAccountNo(form.fromAccount),
+            },
+            {
+              label: "4. 입금계좌번호",
+              value: formatAccountNo(form.toAccount),
+            },
             { label: "5. 수취인성명", value: maskName(MOCK_PAYEE_NAME) },
             { label: "6. 이체금액", value: formatAmount(form.amount ?? 0) },
           ]}

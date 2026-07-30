@@ -10,7 +10,10 @@ import { Modal } from "@/shared/ui/modal"
 import { ConfirmDialog } from "@/shared/ui/confirm-dialog"
 import { ErrorDialog } from "@/shared/ui/error-dialog"
 import { formatAccountNo } from "@/shared/lib/format"
-import { MOCK_PASSWORD_ACCOUNTS, type PasswordAccount } from "@/entities/account"
+import {
+  MOCK_PASSWORD_ACCOUNTS,
+  type PasswordAccount,
+} from "@/entities/account"
 
 const PASSWORD_LIMIT = 4
 const ERROR_LIMIT = 5
@@ -30,9 +33,13 @@ export function B04AccountPassword() {
   const [confirmOpen, setConfirmOpen] = React.useState(false)
   const [errorDialog, setErrorDialog] = React.useState<string[] | null>(null)
   const [infoOpen, setInfoOpen] = React.useState(false)
-  const [successMessage, setSuccessMessage] = React.useState<string | null>(null)
+  const [successMessage, setSuccessMessage] = React.useState<string | null>(
+    null,
+  )
 
-  const account = accounts.find((a) => a.accountNo === accountNo) as PasswordAccount
+  const account = accounts.find(
+    (a) => a.accountNo === accountNo,
+  ) as PasswordAccount
 
   const resetFields = () => {
     setCurrentPw("")
@@ -73,7 +80,11 @@ export function B04AccountPassword() {
       setAccounts((prev) =>
         prev.map((a) =>
           a.accountNo === accountNo
-            ? { ...a, errorCount: Math.min(nextCount, ERROR_LIMIT), status: blocked ? "거래정지" : a.status }
+            ? {
+                ...a,
+                errorCount: Math.min(nextCount, ERROR_LIMIT),
+                status: blocked ? "거래정지" : a.status,
+              }
             : a,
         ),
       )
@@ -92,10 +103,16 @@ export function B04AccountPassword() {
       return
     }
     setAccounts((prev) =>
-      prev.map((a) => (a.accountNo === accountNo ? { ...a, errorCount: 0, mockPassword: newPw } : a)),
+      prev.map((a) =>
+        a.accountNo === accountNo
+          ? { ...a, errorCount: 0, mockPassword: newPw }
+          : a,
+      ),
     )
     resetFields()
-    setSuccessMessage("계좌비밀번호가 변경되었습니다. 다음 거래부터 신규 비밀번호가 적용됩니다.")
+    setSuccessMessage(
+      "계좌비밀번호가 변경되었습니다. 다음 거래부터 신규 비밀번호가 적용됩니다.",
+    )
   }
 
   const blocked = account?.status === "거래정지"
@@ -113,13 +130,19 @@ export function B04AccountPassword() {
       {successMessage && <Alert variant="success">{successMessage}</Alert>}
       {blocked && (
         <Alert variant="danger" title="거래정지 계좌">
-          누적 오류 5회로 거래정지된 계좌입니다. 영업점 또는 고객센터에서 해제 후 다시 시도하세요.
+          누적 오류 5회로 거래정지된 계좌입니다. 영업점 또는 고객센터에서 해제
+          후 다시 시도하세요.
         </Alert>
       )}
 
       <FormSection title="계좌비밀번호 변경">
         <div>
-          <FormRow label="계좌 선택" required htmlFor="b04-account" labelWidth={180}>
+          <FormRow
+            label="계좌 선택"
+            required
+            htmlFor="b04-account"
+            labelWidth={180}
+          >
             <Select
               id="b04-account"
               className="max-w-md"
@@ -133,7 +156,12 @@ export function B04AccountPassword() {
               ))}
             </Select>
           </FormRow>
-          <FormRow label="현재 비밀번호" required htmlFor="b04-current" labelWidth={180}>
+          <FormRow
+            label="현재 비밀번호"
+            required
+            htmlFor="b04-current"
+            labelWidth={180}
+          >
             <Input
               id="b04-current"
               type="password"
@@ -141,14 +169,25 @@ export function B04AccountPassword() {
               maxLength={PASSWORD_LIMIT}
               value={currentPw}
               disabled={blocked}
-              onChange={(e) => setCurrentPw(onlyDigits(e.target.value, PASSWORD_LIMIT))}
+              onChange={(e) =>
+                setCurrentPw(onlyDigits(e.target.value, PASSWORD_LIMIT))
+              }
               className="w-32 text-center tracking-[0.4em]"
             />
-            <Button variant="outline" size="sm" onClick={() => setInfoOpen(true)}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setInfoOpen(true)}
+            >
               오류횟수 조회
             </Button>
           </FormRow>
-          <FormRow label="신규 비밀번호" required htmlFor="b04-new" labelWidth={180}>
+          <FormRow
+            label="신규 비밀번호"
+            required
+            htmlFor="b04-new"
+            labelWidth={180}
+          >
             <Input
               id="b04-new"
               type="password"
@@ -156,11 +195,18 @@ export function B04AccountPassword() {
               maxLength={PASSWORD_LIMIT}
               value={newPw}
               disabled={blocked}
-              onChange={(e) => setNewPw(onlyDigits(e.target.value, PASSWORD_LIMIT))}
+              onChange={(e) =>
+                setNewPw(onlyDigits(e.target.value, PASSWORD_LIMIT))
+              }
               className="w-32 text-center tracking-[0.4em]"
             />
           </FormRow>
-          <FormRow label="신규 비밀번호 확인" required htmlFor="b04-confirm" labelWidth={180}>
+          <FormRow
+            label="신규 비밀번호 확인"
+            required
+            htmlFor="b04-confirm"
+            labelWidth={180}
+          >
             <Input
               id="b04-confirm"
               type="password"
@@ -168,20 +214,30 @@ export function B04AccountPassword() {
               maxLength={PASSWORD_LIMIT}
               value={confirmPw}
               disabled={blocked}
-              onChange={(e) => setConfirmPw(onlyDigits(e.target.value, PASSWORD_LIMIT))}
+              onChange={(e) =>
+                setConfirmPw(onlyDigits(e.target.value, PASSWORD_LIMIT))
+              }
               className="w-32 text-center tracking-[0.4em]"
             />
           </FormRow>
         </div>
 
         {fieldError && (
-          <p role="alert" className="mt-2 text-sm font-bold text-[var(--color-danger)]">
+          <p
+            role="alert"
+            className="mt-2 text-sm font-bold text-[var(--color-danger)]"
+          >
             {fieldError}
           </p>
         )}
 
         <div className="mt-6 flex justify-center gap-2">
-          <Button variant="secondary" size="lg" className="min-w-[120px]" onClick={resetFields}>
+          <Button
+            variant="secondary"
+            size="lg"
+            className="min-w-[120px]"
+            onClick={resetFields}
+          >
             초기화
           </Button>
           <Button
@@ -209,10 +265,16 @@ export function B04AccountPassword() {
         onClose={() => setConfirmOpen(false)}
         onConfirm={handleConfirm}
         title="계좌비밀번호 변경"
-        messages={["아래 계좌의 비밀번호를 변경합니다.", "확인을 누르면 신규 비밀번호로 적용됩니다."]}
+        messages={[
+          "아래 계좌의 비밀번호를 변경합니다.",
+          "확인을 누르면 신규 비밀번호로 적용됩니다.",
+        ]}
         confirmLabel="변경하기"
         items={[
-          { label: "대상계좌", value: `${account?.alias} / ${formatAccountNo(accountNo)}` },
+          {
+            label: "대상계좌",
+            value: `${account?.alias} / ${formatAccountNo(accountNo)}`,
+          },
         ]}
       />
 
@@ -229,7 +291,12 @@ export function B04AccountPassword() {
         title="오류횟수 조회"
         size="sm"
         footer={
-          <Button variant="primary" size="lg" className="min-w-[120px]" onClick={() => setInfoOpen(false)}>
+          <Button
+            variant="primary"
+            size="lg"
+            className="min-w-[120px]"
+            onClick={() => setInfoOpen(false)}
+          >
             확인
           </Button>
         }
@@ -237,11 +304,17 @@ export function B04AccountPassword() {
         <dl className="flex flex-col gap-2 text-sm text-ink">
           <div className="flex justify-between">
             <dt className="font-bold">대상계좌</dt>
-            <dd className="tabular-nums">{account ? `${account.alias} / ${formatAccountNo(account.accountNo)}` : "-"}</dd>
+            <dd className="tabular-nums">
+              {account
+                ? `${account.alias} / ${formatAccountNo(account.accountNo)}`
+                : "-"}
+            </dd>
           </div>
           <div className="flex justify-between">
             <dt className="font-bold">현재 누적 오류 횟수</dt>
-            <dd className="tabular-nums font-bold text-primary">{account?.errorCount ?? 0}회</dd>
+            <dd className="font-bold text-primary tabular-nums">
+              {account?.errorCount ?? 0}회
+            </dd>
           </div>
           <div className="flex justify-between">
             <dt className="font-bold">제한 정책</dt>

@@ -18,5 +18,10 @@ export function C02ProductDetail() {
     )
   }
 
-  return <ProductDetail product={product} onJoin={(id) => navigate(`/product/${id}/join/1`)} />
+  return (
+    <ProductDetail
+      product={product}
+      onJoin={(id) => navigate(`/product/${id}/join/1`)}
+    />
+  )
 }

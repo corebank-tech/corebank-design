@@ -123,7 +123,7 @@ export function PeriodField({ start, end, onChange, today }: PeriodFieldProps) {
                 onClick={() => applyChip(chip.days)}
                 aria-pressed={active}
                 className={cn(
-                  "h-8 rounded-[var(--radius-pill)] border px-3 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                  "h-8 rounded-[var(--radius-pill)] border px-3 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
                   active
                     ? "border-ink bg-ink font-bold text-white"
                     : "border-[var(--color-border-strong)] bg-white text-ink hover:bg-surface",

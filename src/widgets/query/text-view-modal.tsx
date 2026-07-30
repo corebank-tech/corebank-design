@@ -28,13 +28,19 @@ export function TextViewModal({
       title={title}
       size="md"
       footer={
-        <Button variant="primary" size="lg" className="min-w-[120px]" onClick={onClose}>
+        <Button
+          variant="primary"
+          size="lg"
+          className="min-w-[120px]"
+          onClick={onClose}
+        >
           확인
         </Button>
       }
     >
       <p className="mb-4 text-2xs text-ink-faint">
-        스크린리더로 읽기 쉬운 순차 텍스트 형식입니다. 총 {rows.length.toLocaleString("ko-KR")}건입니다.
+        스크린리더로 읽기 쉬운 순차 텍스트 형식입니다. 총{" "}
+        {rows.length.toLocaleString("ko-KR")}건입니다.
       </p>
       {rows.length === 0 ? (
         <p className="text-sm text-ink-muted">조회 결과가 없습니다.</p>

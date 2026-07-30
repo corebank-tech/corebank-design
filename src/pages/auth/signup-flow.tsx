@@ -6,7 +6,13 @@ import { A04Info } from "./a04-info"
 import { A05Confirm } from "./a05-confirm"
 import { A06Complete } from "./a06-complete"
 
-export const SIGNUP_STEPS = ["약관동의", "본인확인", "정보입력", "입력확인", "가입완료"]
+export const SIGNUP_STEPS = [
+  "약관동의",
+  "본인확인",
+  "정보입력",
+  "입력확인",
+  "가입완료",
+]
 
 export type SignupData = {
   name: string
@@ -34,7 +40,9 @@ export function SignupFlow() {
   const [searchParams] = useSearchParams()
   const initialStep = Number(searchParams.get("step") ?? "1")
   const [step, setStep] = React.useState(
-    Number.isInteger(initialStep) && initialStep >= 1 && initialStep <= 5 ? initialStep : 1,
+    Number.isInteger(initialStep) && initialStep >= 1 && initialStep <= 5
+      ? initialStep
+      : 1,
   )
   const [data, setData] = React.useState<SignupData>(EMPTY_DATA)
 
@@ -54,13 +62,7 @@ export function SignupFlow() {
         />
       )
     case 3:
-      return (
-        <A04Info
-          data={data}
-          onChange={patch}
-          onNext={() => setStep(4)}
-        />
-      )
+      return <A04Info data={data} onChange={patch} onNext={() => setStep(4)} />
     case 4:
       return (
         <A05Confirm

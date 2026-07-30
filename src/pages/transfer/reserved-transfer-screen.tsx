@@ -47,7 +47,8 @@ const INITIAL_FORM: ReservedTransferForm = {
 }
 
 function isDuplicate(form: ReservedTransferForm): boolean {
-  if (!form.toConfirmed || form.amount == null || !form.scheduledDate) return false
+  if (!form.toConfirmed || form.amount == null || !form.scheduledDate)
+    return false
   return MOCK_RESERVATIONS.some(
     (r) =>
       r.status === "대기" &&
@@ -82,7 +83,9 @@ export function ReservedTransferScreen() {
     (a) => a.accountNo === form.fromAccount,
   )
 
-  const dateSpan = form.scheduledDate ? daysBetween(TODAY, form.scheduledDate) : null
+  const dateSpan = form.scheduledDate
+    ? daysBetween(TODAY, form.scheduledDate)
+    : null
   const dateValid = dateSpan != null && dateSpan >= 1 && dateSpan <= 365
   const duplicate = isDuplicate(form)
 
@@ -105,13 +108,21 @@ export function ReservedTransferScreen() {
       <>
         <ReservedTransferStep2
           steps={STEPS}
-          scheduledDate={<span className="tabular-nums">{formatDate(form.scheduledDate)}</span>}
+          scheduledDate={
+            <span className="tabular-nums">
+              {formatDate(form.scheduledDate)}
+            </span>
+          }
           fromAccount={
             <span className="tabular-nums">
               {selectedAccount?.alias} {formatAccountNo(form.fromAccount)}
             </span>
           }
-          toAccount={<span className="tabular-nums">{formatAccountNo(form.toAccount)}</span>}
+          toAccount={
+            <span className="tabular-nums">
+              {formatAccountNo(form.toAccount)}
+            </span>
+          }
           payeeName={maskName(MOCK_PAYEE_NAME)}
           amount={formatAmount(form.amount ?? 0, { suffix: false })}
           fee={formatAmount(0, { suffix: false })}
@@ -127,13 +138,22 @@ export function ReservedTransferScreen() {
             setConfirmOpen(false)
             setOtpOpen(true)
           }}
-          messages={["아래 내용으로 예약이체를 등록합니다.", "확인을 누르면 OTP 인증으로 이어집니다."]}
+          messages={[
+            "아래 내용으로 예약이체를 등록합니다.",
+            "확인을 누르면 OTP 인증으로 이어집니다.",
+          ]}
           confirmLabel="확인"
           items={[
             { label: "1. 거래일자", value: formatDate(NOW) },
             { label: "2. 거래시각", value: formatDateTime(NOW).slice(11) },
-            { label: "3. 출금계좌번호", value: formatAccountNo(form.fromAccount) },
-            { label: "4. 입금계좌번호", value: formatAccountNo(form.toAccount) },
+            {
+              label: "3. 출금계좌번호",
+              value: formatAccountNo(form.fromAccount),
+            },
+            {
+              label: "4. 입금계좌번호",
+              value: formatAccountNo(form.toAccount),
+            },
             { label: "5. 수취인성명", value: maskName(MOCK_PAYEE_NAME) },
             { label: "6. 이체금액", value: formatAmount(form.amount ?? 0) },
           ]}

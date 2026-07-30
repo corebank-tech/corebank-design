@@ -30,7 +30,12 @@ const COLUMNS: DataGridColumn<AutoCompleteRow>[] = [
   { key: "period", header: "이체기간", align: "center", width: 190 },
   { key: "cycle", header: "이체주기", align: "center", width: 90 },
   { key: "dayOfMonth", header: "이체지정일", align: "center", width: 90 },
-  { key: "nextExecDate", header: "다음 실행 예정일", align: "center", width: 130 },
+  {
+    key: "nextExecDate",
+    header: "다음 실행 예정일",
+    align: "center",
+    width: 130,
+  },
 ]
 
 /** G-03 자동이체 등록 3단계 · 완료 */

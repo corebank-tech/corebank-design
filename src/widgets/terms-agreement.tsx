@@ -82,7 +82,9 @@ export const TermsAgreement = React.forwardRef<
           openTerm: unviewed,
         })
       } else {
-        setBlocked({ message: "필수 약관에 모두 동의해야 다음 단계로 진행할 수 있습니다." })
+        setBlocked({
+          message: "필수 약관에 모두 동의해야 다음 단계로 진행할 수 있습니다.",
+        })
       }
       return false
     },
@@ -106,10 +108,7 @@ export const TermsAgreement = React.forwardRef<
 
       <ul>
         {terms.map((term) => (
-          <li
-            key={term.id}
-            className="border-t border-[var(--color-border)]"
-          >
+          <li key={term.id} className="border-t border-[var(--color-border)]">
             {/* 윗줄: 뱃지 + 약관명 + 보기 */}
             <div className="flex items-center justify-between gap-3 px-5 pt-4">
               <div className="flex items-center gap-2">
@@ -167,7 +166,7 @@ export const TermsAgreement = React.forwardRef<
           )
         }
       >
-        <div className="max-h-[52vh] overflow-y-auto whitespace-pre-line text-sm leading-relaxed text-ink">
+        <div className="max-h-[52vh] overflow-y-auto text-sm leading-relaxed whitespace-pre-line text-ink">
           {viewing?.body}
         </div>
       </Modal>

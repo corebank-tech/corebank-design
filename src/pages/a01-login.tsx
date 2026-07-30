@@ -83,7 +83,8 @@ export function A01Login() {
                 invalid={!!failure}
               />
               <p className="text-2xs text-ink-muted">
-                ※ 아이디·비밀번호 방식만 제공되며, 공동인증서·간편인증은 지원하지 않습니다.
+                ※ 아이디·비밀번호 방식만 제공되며, 공동인증서·간편인증은
+                지원하지 않습니다.
               </p>
             </div>
 
@@ -101,7 +102,8 @@ export function A01Login() {
                 invalid={!!failure}
               />
               <p className="text-2xs text-ink-muted">
-                ※ 비밀번호를 5회 연속 잘못 입력하면 계정이 잠깁니다(관리자 확인 후 해제 가능).
+                ※ 비밀번호를 5회 연속 잘못 입력하면 계정이 잠깁니다(관리자 확인
+                후 해제 가능).
               </p>
             </div>
 
@@ -116,13 +118,22 @@ export function A01Login() {
             <Link to="/find-id" className="hover:text-primary hover:underline">
               아이디 찾기
             </Link>
-            <span className="text-[var(--color-border-strong)]" aria-hidden="true">
+            <span
+              className="text-[var(--color-border-strong)]"
+              aria-hidden="true"
+            >
               |
             </span>
-            <Link to="/reset-password" className="hover:text-primary hover:underline">
+            <Link
+              to="/reset-password"
+              className="hover:text-primary hover:underline"
+            >
               비밀번호 재설정
             </Link>
-            <span className="text-[var(--color-border-strong)]" aria-hidden="true">
+            <span
+              className="text-[var(--color-border-strong)]"
+              aria-hidden="true"
+            >
               |
             </span>
             <Link to="/signup" className="hover:text-primary hover:underline">

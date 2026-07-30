@@ -49,21 +49,34 @@ const STATUS_OPTIONS = [
   { label: "해지", value: "해지" },
 ]
 
-const STATUS_BADGE: Record<AutoTransferStatus, "success" | "neutral" | "danger"> = {
+const STATUS_BADGE: Record<
+  AutoTransferStatus,
+  "success" | "neutral" | "danger"
+> = {
   정상: "success",
   종료: "neutral",
   해지: "danger",
 }
 
-const CYCLE_LABEL: Record<TransferCycle, string> = { 1: "1개월", 3: "3개월", 6: "6개월" }
+const CYCLE_LABEL: Record<TransferCycle, string> = {
+  1: "1개월",
+  3: "3개월",
+  6: "6개월",
+}
 
 const FROM_ACCOUNTS = Array.from(
-  new Map(MOCK_AUTO_TRANSFERS.map((r) => [r.fromAccountNo, r.fromAlias])).entries(),
+  new Map(
+    MOCK_AUTO_TRANSFERS.map((r) => [r.fromAccountNo, r.fromAlias]),
+  ).entries(),
 )
 
 /** REQ-AUTO-011: 다음 실행 예정일 전일까지만 해지 가능, 당일은 해지 불가. */
 function isTerminable(row: AutoTransferRow): boolean {
-  return row.status === "정상" && row.nextExecDate != null && row.nextExecDate > TODAY
+  return (
+    row.status === "정상" &&
+    row.nextExecDate != null &&
+    row.nextExecDate > TODAY
+  )
 }
 
 /**
@@ -84,11 +97,16 @@ function recomputeNextExecDate(
 }
 
 /** 이체종료일은 시작일 이후 ~ 시작일로부터 최대 60개월 이내여야 한다. */
-function isEndDateValid(startDate: string, endDate: string, maxMonths = 60): boolean {
+function isEndDateValid(
+  startDate: string,
+  endDate: string,
+  maxMonths = 60,
+): boolean {
   if (!endDate) return false
   const afterStart = daysBetween(startDate, endDate) > 0
   const max = addMonths(startDate, maxMonths)
-  const withinMax = daysBetween(startDate, endDate) <= daysBetween(startDate, max)
+  const withinMax =
+    daysBetween(startDate, endDate) <= daysBetween(startDate, max)
   return afterStart && withinMax
 }
 
@@ -110,7 +128,9 @@ export function G04AutoTransferList() {
   const [terminateConfirmOpen, setTerminateConfirmOpen] = React.useState(false)
   const [terminateOtpOpen, setTerminateOtpOpen] = React.useState(false)
   const [blockedOpen, setBlockedOpen] = React.useState(false)
-  const [editTarget, setEditTarget] = React.useState<AutoTransferRow | null>(null)
+  const [editTarget, setEditTarget] = React.useState<AutoTransferRow | null>(
+    null,
+  )
   const [editForm, setEditForm] = React.useState<EditForm | null>(null)
   const [editConfirmOpen, setEditConfirmOpen] = React.useState(false)
   const [editOtpOpen, setEditOtpOpen] = React.useState(false)
@@ -190,7 +210,11 @@ export function G04AutoTransferList() {
         const cycleChanged = editForm.cycleMonths !== editTarget.cycleMonths
         const nextExecDate =
           cycleChanged && r.nextExecDate != null
-            ? recomputeNextExecDate(r.nextExecDate, editForm.cycleMonths, r.dayOfMonth)
+            ? recomputeNextExecDate(
+                r.nextExecDate,
+                editForm.cycleMonths,
+                r.dayOfMonth,
+              )
             : r.nextExecDate
         return {
           ...r,
@@ -235,7 +259,9 @@ export function G04AutoTransferList() {
       key: "toAccountNo",
       header: "입금계좌",
       width: 150,
-      render: (r) => <span className="tabular-nums">{formatAccountNo(r.toAccountNo)}</span>,
+      render: (r) => (
+        <span className="tabular-nums">{formatAccountNo(r.toAccountNo)}</span>
+      ),
     },
     {
       key: "payeeName",
@@ -366,7 +392,9 @@ export function G04AutoTransferList() {
           baseTimeLabel={formatDateTime(BASE_TIME)}
           onPrint={() => window.print()}
           onBrailleView={() => setBrailleOpen(true)}
-          onSaveFile={() => downloadCsv(`자동이체조회_${TODAY}.csv`, exportHeaders, exportRows)}
+          onSaveFile={() =>
+            downloadCsv(`자동이체조회_${TODAY}.csv`, exportHeaders, exportRows)
+          }
         />
 
         <DataGrid
@@ -379,7 +407,11 @@ export function G04AutoTransferList() {
           emptyMessage="조회된 자동이체가 없습니다."
         />
 
-        <Pagination page={safePage} totalPages={totalPages} onPageChange={setPage} />
+        <Pagination
+          page={safePage}
+          totalPages={totalPages}
+          onPageChange={setPage}
+        />
       </FormSection>
 
       <NoticeBoxFooter
@@ -459,23 +491,35 @@ export function G04AutoTransferList() {
           <div className="flex flex-col gap-0">
             <FormRow label="출금계좌" labelWidth={110}>
               <span className="text-ink-muted">
-                {editTarget.fromAlias} / {formatAccountNo(editTarget.fromAccountNo)}
-                <span className="ml-1 text-2xs text-ink-faint">(변경 불가)</span>
+                {editTarget.fromAlias} /{" "}
+                {formatAccountNo(editTarget.fromAccountNo)}
+                <span className="ml-1 text-2xs text-ink-faint">
+                  (변경 불가)
+                </span>
               </span>
             </FormRow>
             <FormRow label="입금계좌" labelWidth={110}>
               <span className="text-ink-muted">
-                {formatAccountNo(editTarget.toAccountNo)} ({maskName(editTarget.payeeName)})
-                <span className="ml-1 text-2xs text-ink-faint">(변경 불가)</span>
+                {formatAccountNo(editTarget.toAccountNo)} (
+                {maskName(editTarget.payeeName)})
+                <span className="ml-1 text-2xs text-ink-faint">
+                  (변경 불가)
+                </span>
               </span>
             </FormRow>
-            <FormRow label="이체금액" htmlFor="g04-edit-amount" labelWidth={110}>
+            <FormRow
+              label="이체금액"
+              htmlFor="g04-edit-amount"
+              labelWidth={110}
+            >
               <Input
                 id="g04-edit-amount"
                 type="number"
                 min={1}
                 value={editForm.amount}
-                onChange={(e) => setEditForm({ ...editForm, amount: e.target.value })}
+                onChange={(e) =>
+                  setEditForm({ ...editForm, amount: e.target.value })
+                }
               />
             </FormRow>
             <FormRow label="이체주기" labelWidth={110}>
@@ -488,7 +532,10 @@ export function G04AutoTransferList() {
                 ]}
                 value={String(editForm.cycleMonths)}
                 onChange={(v) =>
-                  setEditForm({ ...editForm, cycleMonths: Number(v) as TransferCycle })
+                  setEditForm({
+                    ...editForm,
+                    cycleMonths: Number(v) as TransferCycle,
+                  })
                 }
               />
             </FormRow>
@@ -505,7 +552,9 @@ export function G04AutoTransferList() {
                 id="g04-edit-memo"
                 maxLength={10}
                 value={editForm.memo}
-                onChange={(e) => setEditForm({ ...editForm, memo: e.target.value })}
+                onChange={(e) =>
+                  setEditForm({ ...editForm, memo: e.target.value })
+                }
               />
             </FormRow>
           </div>
@@ -517,12 +566,18 @@ export function G04AutoTransferList() {
         onClose={() => setEditConfirmOpen(false)}
         onConfirm={handleEditConfirm}
         title="자동이체 변경"
-        messages={["아래 내용으로 자동이체를 변경합니다.", "확인을 누르면 OTP 인증으로 이어집니다."]}
+        messages={[
+          "아래 내용으로 자동이체를 변경합니다.",
+          "확인을 누르면 OTP 인증으로 이어집니다.",
+        ]}
         confirmLabel="변경하기"
         items={
           editForm
             ? [
-                { label: "이체금액", value: formatAmount(Number(editForm.amount) || 0) },
+                {
+                  label: "이체금액",
+                  value: formatAmount(Number(editForm.amount) || 0),
+                },
                 { label: "이체주기", value: CYCLE_LABEL[editForm.cycleMonths] },
                 { label: "이체종료일", value: formatDate(editForm.endDate) },
                 { label: "표시내용", value: editForm.memo },

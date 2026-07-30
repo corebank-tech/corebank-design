@@ -36,7 +36,8 @@ export function PageShell({
   const [menuOpen, setMenuOpen] = React.useState(false)
   const [textScaleIndex, setTextScaleIndex] = React.useState(0)
   const navigate = useNavigate()
-  const { isAuthenticated, customerName, remainingSeconds, extend, logout } = useSession()
+  const { isAuthenticated, customerName, remainingSeconds, extend, logout } =
+    useSession()
   const { unreadCount } = useNotifications()
 
   const handleLogout = () => {

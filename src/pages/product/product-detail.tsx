@@ -52,7 +52,9 @@ export function ProductDetail({ product, onJoin }: ProductDetailProps) {
       {/* 좌측 요약 카드 */}
       <aside className="w-80 shrink-0">
         <div className="sticky top-6 overflow-hidden rounded-[var(--radius-lg)] bg-white p-6 [box-shadow:var(--shadow-card)]">
-          <Badge variant={product.category === "정기예금" ? "primary" : "success"}>
+          <Badge
+            variant={product.category === "정기예금" ? "primary" : "success"}
+          >
             {product.category}
           </Badge>
           <h2 className="mt-3 text-h2 font-bold text-ink">{product.name}</h2>
@@ -61,7 +63,7 @@ export function ProductDetail({ product, onJoin }: ProductDetailProps) {
           </p>
 
           <div className="mt-5 flex items-baseline gap-1 border-t border-[var(--color-border)] pt-5">
-            <span className="text-[32px] font-bold leading-none tabular-nums text-primary">
+            <span className="text-[32px] leading-none font-bold text-primary tabular-nums">
               {product.maxRate.toFixed(2)}
             </span>
             <span className="text-lg font-bold text-primary">%</span>
@@ -76,7 +78,7 @@ export function ProductDetail({ product, onJoin }: ProductDetailProps) {
             </div>
             <div className="flex items-center justify-between">
               <dt className="text-ink-muted">가입금액</dt>
-              <dd className="font-bold tabular-nums text-ink">
+              <dd className="font-bold text-ink tabular-nums">
                 {formatAmount(product.minAmount)} ~{" "}
                 {formatAmount(product.maxAmount)}
               </dd>
@@ -115,7 +117,7 @@ export function ProductDetail({ product, onJoin }: ProductDetailProps) {
                 aria-selected={active}
                 onClick={() => setTab(t.key)}
                 className={cn(
-                  "relative -mb-px border-b-2 px-1 pb-3 pt-2 text-base font-bold transition-colors",
+                  "relative -mb-px border-b-2 px-1 pt-2 pb-3 text-base font-bold transition-colors",
                   active
                     ? "border-primary text-primary"
                     : "border-transparent text-ink-muted hover:text-ink",

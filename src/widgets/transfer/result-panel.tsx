@@ -7,10 +7,17 @@ export type ResultVariant = "success" | "fail" | "pending"
 
 const variantIcon: Record<
   ResultVariant,
-  { icon: React.ComponentType<{ className?: string; strokeWidth?: number }>; ring: string; spin?: boolean }
+  {
+    icon: React.ComponentType<{ className?: string; strokeWidth?: number }>
+    ring: string
+    spin?: boolean
+  }
 > = {
   success: { icon: Check, ring: "bg-primary-tint text-primary" },
-  fail: { icon: X, ring: "bg-[var(--color-danger-tint)] text-[var(--color-danger)]" },
+  fail: {
+    icon: X,
+    ring: "bg-[var(--color-danger-tint)] text-[var(--color-danger)]",
+  },
   pending: { icon: Loader2, ring: "bg-surface text-ink-muted", spin: true },
 }
 
@@ -68,7 +75,9 @@ export function ResultPanel<Row>({
             strokeWidth={2.5}
           />
         </span>
-        <p className="mt-4 text-xl font-bold text-ink text-balance">{message}</p>
+        <p className="mt-4 text-xl font-bold text-balance text-ink">
+          {message}
+        </p>
         {description && (
           <p className="mt-2 text-sm leading-relaxed text-ink-muted">
             {description}
@@ -77,7 +86,7 @@ export function ResultPanel<Row>({
         {highlightValue != null && (
           <div className="mt-4 flex flex-col items-center gap-1">
             <span className="text-2xs text-ink-faint">{highlightLabel}</span>
-            <span className="text-page font-bold tabular-nums text-primary">
+            <span className="text-page font-bold text-primary tabular-nums">
               {highlightValue}
             </span>
           </div>

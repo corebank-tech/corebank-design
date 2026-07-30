@@ -8,7 +8,13 @@ import { FormRow } from "@/shared/ui/form-row"
 import { NoticeBoxFooter } from "@/shared/ui/notice-box"
 import { AlertDialog } from "@/shared/ui/alert-dialog"
 import { ConfirmDialog } from "@/shared/ui/confirm-dialog"
-import { evaluateIdRules, evaluatePasswordRules, isIdValid, isPasswordValid, type RuleCheck } from "@/entities/auth"
+import {
+  evaluateIdRules,
+  evaluatePasswordRules,
+  isIdValid,
+  isPasswordValid,
+  type RuleCheck,
+} from "@/entities/auth"
 import { formatPhone } from "@/shared/lib/format"
 import { MOCK_EXISTING_USER_IDS, MOCK_EXISTING_EMAILS } from "@/entities/auth"
 import { SIGNUP_STEPS, type SignupData } from "./signup-flow"
@@ -38,9 +44,17 @@ function RuleList({ rules }: { rules: RuleCheck[] }) {
           className={`flex items-center gap-1.5 text-2xs ${r.passed ? "text-primary" : "text-ink-faint"}`}
         >
           {r.passed ? (
-            <Check className="h-3 w-3 shrink-0" strokeWidth={3} aria-hidden="true" />
+            <Check
+              className="h-3 w-3 shrink-0"
+              strokeWidth={3}
+              aria-hidden="true"
+            />
           ) : (
-            <X className="h-3 w-3 shrink-0" strokeWidth={3} aria-hidden="true" />
+            <X
+              className="h-3 w-3 shrink-0"
+              strokeWidth={3}
+              aria-hidden="true"
+            />
           )}
           {r.label}
         </li>
@@ -81,7 +95,8 @@ export function A04Info({ data, onChange, onNext }: A04InfoProps) {
   const idConfirmed = confirmedId !== null && confirmedId === data.userId
   const emailVerified = verifiedEmail !== null && verifiedEmail === data.email
   const emailExpired = emailIssued != null && emailRemaining <= 0
-  const passwordMismatch = passwordConfirm.length > 0 && passwordConfirm !== data.password
+  const passwordMismatch =
+    passwordConfirm.length > 0 && passwordConfirm !== data.password
 
   // 이메일 인증번호 카운트다운
   React.useEffect(() => {
@@ -179,7 +194,12 @@ export function A04Info({ data, onChange, onNext }: A04InfoProps) {
         currentStep={3}
         title="회원가입"
         footer={
-          <Button variant="primary" size="lg" className="min-w-[160px]" onClick={handleNext}>
+          <Button
+            variant="primary"
+            size="lg"
+            className="min-w-[160px]"
+            onClick={handleNext}
+          >
             다음
           </Button>
         }
@@ -194,7 +214,11 @@ export function A04Info({ data, onChange, onNext }: A04InfoProps) {
                     ref={idRef}
                     value={data.userId}
                     onChange={(e) => {
-                      onChange({ userId: e.target.value.replace(/[^a-z0-9]/g, "").slice(0, 16) })
+                      onChange({
+                        userId: e.target.value
+                          .replace(/[^a-z0-9]/g, "")
+                          .slice(0, 16),
+                      })
                     }}
                     placeholder="영문 소문자로 시작, 영문/숫자 6~16자"
                     className="max-w-xs"
@@ -203,7 +227,9 @@ export function A04Info({ data, onChange, onNext }: A04InfoProps) {
                     중복확인
                   </Button>
                   {idConfirmed && (
-                    <span className="text-xs font-bold text-primary">확인 완료</span>
+                    <span className="text-xs font-bold text-primary">
+                      확인 완료
+                    </span>
                   )}
                 </div>
                 <RuleList rules={idRules} />
@@ -216,7 +242,9 @@ export function A04Info({ data, onChange, onNext }: A04InfoProps) {
                   ref={passwordRef}
                   type="password"
                   value={data.password}
-                  onChange={(e) => onChange({ password: e.target.value.slice(0, 15) })}
+                  onChange={(e) =>
+                    onChange({ password: e.target.value.slice(0, 15) })
+                  }
                   placeholder="8~15자, 영문 대/소문자·숫자·특수문자 중 3종 이상"
                   className="max-w-xs"
                 />
@@ -230,7 +258,9 @@ export function A04Info({ data, onChange, onNext }: A04InfoProps) {
                   ref={passwordConfirmRef}
                   type="password"
                   value={passwordConfirm}
-                  onChange={(e) => setPasswordConfirm(e.target.value.slice(0, 15))}
+                  onChange={(e) =>
+                    setPasswordConfirm(e.target.value.slice(0, 15))
+                  }
                   invalid={passwordMismatch}
                   className="max-w-xs"
                 />
@@ -264,13 +294,17 @@ export function A04Info({ data, onChange, onNext }: A04InfoProps) {
                       {emailIssued == null ? "인증번호 발송" : "재발송"}
                     </Button>
                   )}
-                  {emailVerified && <span className="text-xs font-bold text-primary">인증 완료</span>}
+                  {emailVerified && (
+                    <span className="text-xs font-bold text-primary">
+                      인증 완료
+                    </span>
+                  )}
                 </div>
 
                 {emailIssued != null && !emailVerified && (
                   <div className="flex items-center gap-2 rounded-[var(--radius)] border border-[var(--color-border)] bg-surface px-3 py-2">
                     <span
-                      className={`text-lg font-bold tabular-nums tracking-[0.2em] ${emailExpired ? "text-ink-faint line-through" : "text-primary"}`}
+                      className={`text-lg font-bold tracking-[0.2em] tabular-nums ${emailExpired ? "text-ink-faint line-through" : "text-primary"}`}
                       aria-label="발송된 이메일 인증번호"
                     >
                       {emailIssued}
@@ -285,23 +319,32 @@ export function A04Info({ data, onChange, onNext }: A04InfoProps) {
                       maxLength={6}
                       value={emailCode}
                       onChange={(e) => {
-                        setEmailCode(e.target.value.replace(/\D/g, "").slice(0, 6))
+                        setEmailCode(
+                          e.target.value.replace(/\D/g, "").slice(0, 6),
+                        )
                         if (emailError) setEmailError(null)
                       }}
                       placeholder="인증번호 6자리"
                       className="w-32 text-center tracking-[0.3em]"
                       aria-label="이메일 인증번호 입력"
                     />
-                    <Button variant="secondary" size="sm" onClick={confirmEmailCode}>
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      onClick={confirmEmailCode}
+                    >
                       확인
                     </Button>
                   </div>
                 )}
                 {emailError && (
-                  <p className="text-2xs font-bold text-[var(--color-danger)]">{emailError}</p>
+                  <p className="text-2xs font-bold text-[var(--color-danger)]">
+                    {emailError}
+                  </p>
                 )}
                 <p className="text-2xs text-ink-muted">
-                  ※ 이메일 인증은 공동인증서를 대체하는 Mock 인증입니다. 이미 가입된 이메일로는 인증번호를 발송하지 않습니다.
+                  ※ 이메일 인증은 공동인증서를 대체하는 Mock 인증입니다. 이미
+                  가입된 이메일로는 인증번호를 발송하지 않습니다.
                 </p>
               </div>
             </FormRow>
@@ -312,11 +355,15 @@ export function A04Info({ data, onChange, onNext }: A04InfoProps) {
                   ref={phoneRef}
                   inputMode="numeric"
                   value={formatPhone(data.phone)}
-                  onChange={(e) => onChange({ phone: onlyDigits(e.target.value, 11) })}
+                  onChange={(e) =>
+                    onChange({ phone: onlyDigits(e.target.value, 11) })
+                  }
                   placeholder="010-0000-0000"
                   className="max-w-xs"
                 />
-                <p className="text-2xs text-ink-muted">※ 별도의 휴대폰 본인인증은 진행하지 않습니다.</p>
+                <p className="text-2xs text-ink-muted">
+                  ※ 별도의 휴대폰 본인인증은 진행하지 않습니다.
+                </p>
               </div>
             </FormRow>
           </div>
@@ -331,8 +378,18 @@ export function A04Info({ data, onChange, onNext }: A04InfoProps) {
         ]}
       />
 
-      <AlertDialog open={alert !== null} onClose={() => setAlert(null)} title="정보입력 안내" messages={alert ? [alert] : []} />
-      <AlertDialog open={dupAlert !== null} onClose={() => setDupAlert(null)} title="아이디 중복확인" messages={dupAlert ? [dupAlert] : []} />
+      <AlertDialog
+        open={alert !== null}
+        onClose={() => setAlert(null)}
+        title="정보입력 안내"
+        messages={alert ? [alert] : []}
+      />
+      <AlertDialog
+        open={dupAlert !== null}
+        onClose={() => setDupAlert(null)}
+        title="아이디 중복확인"
+        messages={dupAlert ? [dupAlert] : []}
+      />
       <ConfirmDialog
         open={dupConfirmOpen}
         onClose={() => setDupConfirmOpen(false)}

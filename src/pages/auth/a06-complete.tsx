@@ -18,7 +18,12 @@ export function A06Complete({ name }: A06CompleteProps) {
       currentStep={5}
       title="회원가입"
       footer={
-        <Button variant="primary" size="lg" className="min-w-[200px]" onClick={() => navigate("/")}>
+        <Button
+          variant="primary"
+          size="lg"
+          className="min-w-[200px]"
+          onClick={() => navigate("/")}
+        >
           로그인 화면으로 이동
         </Button>
       }
@@ -30,7 +35,7 @@ export function A06Complete({ name }: A06CompleteProps) {
         >
           <Check className="h-9 w-9" strokeWidth={2.5} />
         </span>
-        <p className="mt-4 text-xl font-bold text-ink text-balance">
+        <p className="mt-4 text-xl font-bold text-balance text-ink">
           {name}님, 회원가입이 완료되었습니다.
         </p>
         <p className="mt-2 text-sm leading-relaxed text-ink-muted">

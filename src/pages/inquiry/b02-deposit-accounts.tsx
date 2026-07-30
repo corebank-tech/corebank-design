@@ -6,8 +6,16 @@ import { FormSection } from "@/shared/ui/form-section"
 import { Button } from "@/shared/ui/button"
 import { DataGrid, type DataGridColumn } from "@/shared/ui/data-grid"
 import { SummaryRow } from "@/widgets/query/summary-row"
-import { formatAccountNo, formatAmount, formatDate, formatDateTime } from "@/shared/lib/format"
-import { MOCK_OVERVIEW_ACCOUNTS, type OverviewAccount } from "@/entities/account"
+import {
+  formatAccountNo,
+  formatAmount,
+  formatDate,
+  formatDateTime,
+} from "@/shared/lib/format"
+import {
+  MOCK_OVERVIEW_ACCOUNTS,
+  type OverviewAccount,
+} from "@/entities/account"
 import { cn } from "@/shared/lib/utils"
 
 const BASE_TIME = "2026-07-23T08:57:34"
@@ -31,7 +39,9 @@ export function B02DepositAccounts() {
       key: "accountNo",
       header: "계좌번호",
       width: 160,
-      render: (r) => <span className="tabular-nums">{formatAccountNo(r.accountNo)}</span>,
+      render: (r) => (
+        <span className="tabular-nums">{formatAccountNo(r.accountNo)}</span>
+      ),
     },
     {
       key: "openedDate",
@@ -39,7 +49,9 @@ export function B02DepositAccounts() {
       align: "center",
       width: 120,
       render: (r) => (
-        <span className="text-xs tabular-nums text-ink-faint">{formatDate(r.openedDate)}</span>
+        <span className="text-xs text-ink-faint tabular-nums">
+          {formatDate(r.openedDate)}
+        </span>
       ),
     },
     {
@@ -48,7 +60,9 @@ export function B02DepositAccounts() {
       align: "center",
       width: 120,
       render: (r) => (
-        <span className="text-xs tabular-nums text-ink-faint">{formatDate(r.lastActivityDate)}</span>
+        <span className="text-xs text-ink-faint tabular-nums">
+          {formatDate(r.lastActivityDate)}
+        </span>
       ),
     },
     {
@@ -95,11 +109,14 @@ export function B02DepositAccounts() {
             type="button"
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
-            className="inline-flex items-center gap-1 text-sm font-bold text-ink-muted hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="inline-flex items-center gap-1 text-sm font-bold text-ink-muted hover:text-ink focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
           >
             {open ? "그룹 접기" : "그룹 펼치기"}
             <ChevronDown
-              className={cn("h-4 w-4 transition-transform", open && "rotate-180")}
+              className={cn(
+                "h-4 w-4 transition-transform",
+                open && "rotate-180",
+              )}
               aria-hidden="true"
             />
           </button>
@@ -123,14 +140,23 @@ export function B02DepositAccounts() {
           className="mt-3"
           items={[
             {
-              label: <span className="text-xs font-normal text-ink-faint">예금·적금계좌 총잔액</span>,
-              value: <span className="text-h2 font-bold">{formatAmount(groupTotal)}</span>,
+              label: (
+                <span className="text-xs font-normal text-ink-faint">
+                  예금·적금계좌 총잔액
+                </span>
+              ),
+              value: (
+                <span className="text-h2 font-bold">
+                  {formatAmount(groupTotal)}
+                </span>
+              ),
               valueColor: "var(--color-primary)",
             },
           ]}
         />
         <p className="mt-1.5 text-2xs text-ink-faint">
-          그룹 내 전체 계좌의 잔액 합계이며, 그룹을 접어도 이 행은 유지됩니다(REQ-INQR-006).
+          그룹 내 전체 계좌의 잔액 합계이며, 그룹을 접어도 이 행은
+          유지됩니다(REQ-INQR-006).
         </p>
       </FormSection>
 

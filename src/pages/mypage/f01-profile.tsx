@@ -63,7 +63,9 @@ function validateLoginPassword(pw: string, userId: string): string | null {
     if (!/^\d{4}$/.test(chunk)) continue
     const digits = chunk.split("").map(Number)
     const asc = digits.every((d, idx) => idx === 0 || d === digits[idx - 1] + 1)
-    const desc = digits.every((d, idx) => idx === 0 || d === digits[idx - 1] - 1)
+    const desc = digits.every(
+      (d, idx) => idx === 0 || d === digits[idx - 1] - 1,
+    )
     if (asc || desc) {
       return "연속으로 증가·감소하는 숫자를 4자리 이상 사용할 수 없습니다."
     }
@@ -82,16 +84,21 @@ export function F01Profile() {
   // ② 고객정보 변경 -------------------------------------------------------
   const [phoneDraft, setPhoneDraft] = React.useState(profile.phone)
   const [emailDraft, setEmailDraft] = React.useState(profile.email)
-  const [verifiedEmail, setVerifiedEmail] = React.useState<string | null>(profile.email)
+  const [verifiedEmail, setVerifiedEmail] = React.useState<string | null>(
+    profile.email,
+  )
   const [issuedCode, setIssuedCode] = React.useState<string | null>(null)
-  const [codeRemaining, setCodeRemaining] = React.useState(EMAIL_CODE_TTL_SECONDS)
+  const [codeRemaining, setCodeRemaining] = React.useState(
+    EMAIL_CODE_TTL_SECONDS,
+  )
   const [codeInput, setCodeInput] = React.useState("")
   const [codeError, setCodeError] = React.useState<string | null>(null)
   const [infoError, setInfoError] = React.useState<string | null>(null)
   const [infoSuccess, setInfoSuccess] = React.useState<string | null>(null)
 
   const emailChanged = emailDraft.trim() !== profile.email
-  const emailVerifiedForDraft = verifiedEmail !== null && verifiedEmail === emailDraft.trim()
+  const emailVerifiedForDraft =
+    verifiedEmail !== null && verifiedEmail === emailDraft.trim()
   const codeExpired = issuedCode != null && codeRemaining <= 0
 
   React.useEffect(() => {
@@ -121,7 +128,11 @@ export function F01Profile() {
       setInfoError("이메일 형식을 확인하세요.")
       return
     }
-    if (MOCK_REGISTERED_EMAILS.some((e) => e.toLowerCase() === trimmed.toLowerCase())) {
+    if (
+      MOCK_REGISTERED_EMAILS.some(
+        (e) => e.toLowerCase() === trimmed.toLowerCase(),
+      )
+    ) {
       setInfoError("이미 가입된 이메일입니다. 다른 이메일을 입력하세요.")
       return
     }
@@ -189,7 +200,9 @@ export function F01Profile() {
   const [confirmPw, setConfirmPw] = React.useState("")
   const [pwError, setPwError] = React.useState<string | null>(null)
   const [pwConfirmOpen, setPwConfirmOpen] = React.useState(false)
-  const [pwErrorDialog, setPwErrorDialog] = React.useState<string[] | null>(null)
+  const [pwErrorDialog, setPwErrorDialog] = React.useState<string[] | null>(
+    null,
+  )
   const [pwSuccess, setPwSuccess] = React.useState<string | null>(null)
 
   const resetPwDraft = () => {
@@ -231,7 +244,9 @@ export function F01Profile() {
     }
     setProfile((prev) => ({ ...prev, currentPassword: newPw }))
     resetPwDraft()
-    setPwSuccess("로그인 비밀번호가 변경되었습니다. 다음 로그인부터 신규 비밀번호가 적용됩니다.")
+    setPwSuccess(
+      "로그인 비밀번호가 변경되었습니다. 다음 로그인부터 신규 비밀번호가 적용됩니다.",
+    )
   }
 
   return (
@@ -250,13 +265,19 @@ export function F01Profile() {
             <span className="text-ink">{maskName(profile.name)}</span>
           </FormRow>
           <FormRow label="아이디" labelWidth={180}>
-            <span className="text-ink tabular-nums">{maskUserId(profile.userId)}</span>
+            <span className="text-ink tabular-nums">
+              {maskUserId(profile.userId)}
+            </span>
           </FormRow>
           <FormRow label="생년월일" labelWidth={180}>
-            <span className="text-ink tabular-nums">{maskBirthDate(profile.dob)}</span>
+            <span className="text-ink tabular-nums">
+              {maskBirthDate(profile.dob)}
+            </span>
           </FormRow>
           <FormRow label="휴대폰번호" labelWidth={180}>
-            <span className="text-ink tabular-nums">{maskPhone(profile.phone)}</span>
+            <span className="text-ink tabular-nums">
+              {maskPhone(profile.phone)}
+            </span>
           </FormRow>
           <FormRow label="이메일" labelWidth={180}>
             <span className="text-ink">{maskEmail(profile.email)}</span>
@@ -271,7 +292,12 @@ export function F01Profile() {
 
       <FormSection title="고객정보 변경">
         <div>
-          <FormRow label="휴대폰번호" required htmlFor="f01-phone" labelWidth={180}>
+          <FormRow
+            label="휴대폰번호"
+            required
+            htmlFor="f01-phone"
+            labelWidth={180}
+          >
             <Input
               id="f01-phone"
               inputMode="numeric"
@@ -284,7 +310,9 @@ export function F01Profile() {
               className="max-w-[180px] tabular-nums"
             />
             {phoneDraft.length === 11 && (
-              <span className="text-sm text-ink-muted tabular-nums">{formatPhone(phoneDraft)}</span>
+              <span className="text-sm text-ink-muted tabular-nums">
+                {formatPhone(phoneDraft)}
+              </span>
             )}
           </FormRow>
           <FormRow label="이메일" required htmlFor="f01-email" labelWidth={180}>
@@ -297,7 +325,12 @@ export function F01Profile() {
                   onChange={(e) => handleEmailDraftChange(e.target.value)}
                   className="max-w-xs"
                 />
-                <Button variant="outline" size="sm" onClick={handleSendCode} disabled={!emailChanged}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleSendCode}
+                  disabled={!emailChanged}
+                >
                   인증번호 발송
                 </Button>
               </div>
@@ -306,13 +339,15 @@ export function F01Profile() {
                 <div className="flex items-center gap-2">
                   <span
                     className={cn(
-                      "text-lg font-bold tabular-nums tracking-[0.15em]",
-                      codeExpired ? "text-ink-faint line-through" : "text-primary",
+                      "text-lg font-bold tracking-[0.15em] tabular-nums",
+                      codeExpired
+                        ? "text-ink-faint line-through"
+                        : "text-primary",
                     )}
                   >
                     {issuedCode}
                   </span>
-                  <span className="text-sm font-bold tabular-nums text-ink">
+                  <span className="text-sm font-bold text-ink tabular-nums">
                     {formatClock(codeRemaining)}
                   </span>
                   <Input
@@ -322,18 +357,28 @@ export function F01Profile() {
                     value={codeInput}
                     disabled={codeExpired || emailVerifiedForDraft}
                     onChange={(e) => {
-                      setCodeInput(e.target.value.replace(/\D/g, "").slice(0, 6))
+                      setCodeInput(
+                        e.target.value.replace(/\D/g, "").slice(0, 6),
+                      )
                       if (codeError) setCodeError(null)
                     }}
                     className="w-32 text-center tracking-[0.3em]"
                   />
                   {!emailVerifiedForDraft && (
-                    <Button variant="secondary" size="sm" onClick={handleVerifyCode}>
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      onClick={handleVerifyCode}
+                    >
                       인증확인
                     </Button>
                   )}
                   {codeExpired && !emailVerifiedForDraft && (
-                    <Button variant="outline" size="sm" onClick={handleSendCode}>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleSendCode}
+                    >
                       재발송
                     </Button>
                   )}
@@ -346,7 +391,10 @@ export function F01Profile() {
                 </p>
               )}
               {codeError && (
-                <p role="alert" className="text-xs font-bold text-[var(--color-danger)]">
+                <p
+                  role="alert"
+                  className="text-xs font-bold text-[var(--color-danger)]"
+                >
                   {codeError}
                 </p>
               )}
@@ -354,21 +402,34 @@ export function F01Profile() {
           </FormRow>
         </div>
         <p className="mt-2 text-2xs text-ink-muted">
-          ※ 이메일을 변경하면 신규 이메일로 인증번호를 재발송해 확인해야 저장할 수 있습니다. 이미 가입된
-          이메일로는 변경할 수 없습니다.
+          ※ 이메일을 변경하면 신규 이메일로 인증번호를 재발송해 확인해야 저장할
+          수 있습니다. 이미 가입된 이메일로는 변경할 수 없습니다.
         </p>
 
         {infoError && (
-          <p role="alert" className="mt-2 text-sm font-bold text-[var(--color-danger)]">
+          <p
+            role="alert"
+            className="mt-2 text-sm font-bold text-[var(--color-danger)]"
+          >
             {infoError}
           </p>
         )}
 
         <div className="mt-6 flex justify-center gap-2">
-          <Button variant="secondary" size="lg" className="min-w-[120px]" onClick={resetInfoDraft}>
+          <Button
+            variant="secondary"
+            size="lg"
+            className="min-w-[120px]"
+            onClick={resetInfoDraft}
+          >
             초기화
           </Button>
-          <Button variant="primary" size="lg" className="min-w-[120px]" onClick={handleInfoSubmit}>
+          <Button
+            variant="primary"
+            size="lg"
+            className="min-w-[120px]"
+            onClick={handleInfoSubmit}
+          >
             변경하기
           </Button>
         </div>
@@ -378,7 +439,12 @@ export function F01Profile() {
 
       <FormSection title="로그인 비밀번호 변경" className="mb-0">
         <div>
-          <FormRow label="현재 비밀번호" required htmlFor="f01-current-pw" labelWidth={180}>
+          <FormRow
+            label="현재 비밀번호"
+            required
+            htmlFor="f01-current-pw"
+            labelWidth={180}
+          >
             <Input
               id="f01-current-pw"
               type="password"
@@ -387,7 +453,12 @@ export function F01Profile() {
               className="max-w-xs"
             />
           </FormRow>
-          <FormRow label="신규 비밀번호" required htmlFor="f01-new-pw" labelWidth={180}>
+          <FormRow
+            label="신규 비밀번호"
+            required
+            htmlFor="f01-new-pw"
+            labelWidth={180}
+          >
             <Input
               id="f01-new-pw"
               type="password"
@@ -396,7 +467,12 @@ export function F01Profile() {
               className="max-w-xs"
             />
           </FormRow>
-          <FormRow label="신규 비밀번호 확인" required htmlFor="f01-confirm-pw" labelWidth={180}>
+          <FormRow
+            label="신규 비밀번호 확인"
+            required
+            htmlFor="f01-confirm-pw"
+            labelWidth={180}
+          >
             <Input
               id="f01-confirm-pw"
               type="password"
@@ -407,21 +483,35 @@ export function F01Profile() {
           </FormRow>
         </div>
         <p className="mt-2 text-2xs text-ink-muted">
-          ※ 비밀번호는 {PASSWORD_MIN}~{PASSWORD_MAX}자, 영문 대문자·소문자·숫자·특수문자 중 3종 이상 조합이며
-          아이디 포함, 동일문자 4자리 연속, 연속 증감 숫자 4자리는 사용할 수 없습니다.
+          ※ 비밀번호는 {PASSWORD_MIN}~{PASSWORD_MAX}자, 영문
+          대문자·소문자·숫자·특수문자 중 3종 이상 조합이며 아이디 포함, 동일문자
+          4자리 연속, 연속 증감 숫자 4자리는 사용할 수 없습니다.
         </p>
 
         {pwError && (
-          <p role="alert" className="mt-2 text-sm font-bold text-[var(--color-danger)]">
+          <p
+            role="alert"
+            className="mt-2 text-sm font-bold text-[var(--color-danger)]"
+          >
             {pwError}
           </p>
         )}
 
         <div className="mt-6 flex justify-center gap-2">
-          <Button variant="secondary" size="lg" className="min-w-[120px]" onClick={resetPwDraft}>
+          <Button
+            variant="secondary"
+            size="lg"
+            className="min-w-[120px]"
+            onClick={resetPwDraft}
+          >
             초기화
           </Button>
-          <Button variant="primary" size="lg" className="min-w-[120px]" onClick={handlePwSubmitClick}>
+          <Button
+            variant="primary"
+            size="lg"
+            className="min-w-[120px]"
+            onClick={handlePwSubmitClick}
+          >
             변경하기
           </Button>
         </div>
@@ -432,7 +522,10 @@ export function F01Profile() {
         onClose={() => setPwConfirmOpen(false)}
         onConfirm={handlePwConfirm}
         title="로그인 비밀번호 변경"
-        messages={["현재 비밀번호를 확인한 뒤 신규 비밀번호로 변경합니다.", "확인을 누르면 즉시 적용됩니다."]}
+        messages={[
+          "현재 비밀번호를 확인한 뒤 신규 비밀번호로 변경합니다.",
+          "확인을 누르면 즉시 적용됩니다.",
+        ]}
         confirmLabel="변경하기"
         items={[{ label: "대상 아이디", value: profile.userId }]}
       />

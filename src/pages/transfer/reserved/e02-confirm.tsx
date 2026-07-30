@@ -77,7 +77,8 @@ export function ReservedTransferStep2({
           ※ 당행이체는 수수료가 발생하지 않습니다.
         </p>
         <p className="mt-1 text-2xs text-ink-faint">
-          ※ 이체 예정시각은 별도로 지정하지 않으며, 예정일자의 배치 실행 시각에 일괄 처리됩니다.
+          ※ 이체 예정시각은 별도로 지정하지 않으며, 예정일자의 배치 실행 시각에
+          일괄 처리됩니다.
         </p>
       </FormSection>
     </StepLayout>

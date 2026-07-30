@@ -1,7 +1,10 @@
 import * as React from "react"
 import { Button } from "@/shared/ui/button"
 import { StepLayout } from "@/widgets/transfer/step-layout"
-import { TermsAgreement, type TermsAgreementHandle } from "@/widgets/terms-agreement"
+import {
+  TermsAgreement,
+  type TermsAgreementHandle,
+} from "@/widgets/terms-agreement"
 import { NoticeBoxFooter } from "@/shared/ui/notice-box"
 import { SIGNUP_TERMS } from "@/entities/auth"
 import { SIGNUP_STEPS } from "./signup-flow"

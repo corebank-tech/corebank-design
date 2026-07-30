@@ -7,10 +7,26 @@ import { ConfirmSummary } from "@/widgets/transfer/confirm-summary"
 import { AccountPasswordField } from "@/widgets/transfer/transfer-fields"
 import { OtpModal } from "@/shared/ui/otp-modal"
 import { ErrorDialog } from "@/shared/ui/error-dialog"
-import { formatAccountNo, formatAmount, formatDate, formatKoreanAmount } from "@/shared/lib/format"
-import { addMonthsWithEomCorrection, estimateMaturityAmount } from "@/entities/product"
-import { JOIN_DATE, MOCK_JOIN_ACCOUNTS, MOCK_JOIN_PRODUCTS } from "@/entities/product"
-import { PRODUCT_JOIN_STEPS, type ProductJoinFormState, type ProductJoinResult } from "./join-shared"
+import {
+  formatAccountNo,
+  formatAmount,
+  formatDate,
+  formatKoreanAmount,
+} from "@/shared/lib/format"
+import {
+  addMonthsWithEomCorrection,
+  estimateMaturityAmount,
+} from "@/entities/product"
+import {
+  JOIN_DATE,
+  MOCK_JOIN_ACCOUNTS,
+  MOCK_JOIN_PRODUCTS,
+} from "@/entities/product"
+import {
+  PRODUCT_JOIN_STEPS,
+  type ProductJoinFormState,
+  type ProductJoinResult,
+} from "./join-shared"
 
 const PASSWORD_LIMIT = 4
 const ERROR_LIMIT = 5
@@ -22,14 +38,15 @@ export function C05ConfirmAuth() {
   const location = useLocation()
   const product = MOCK_JOIN_PRODUCTS[productId] ?? MOCK_JOIN_PRODUCTS.P001
 
-  const form =
-    (location.state as ProductJoinFormState | null) ?? {
-      termMonths: product.minTermMonths,
-      fromAccount: MOCK_JOIN_ACCOUNTS[0].accountNo,
-      amount: product.minAmount,
-    }
+  const form = (location.state as ProductJoinFormState | null) ?? {
+    termMonths: product.minTermMonths,
+    fromAccount: MOCK_JOIN_ACCOUNTS[0].accountNo,
+    amount: product.minAmount,
+  }
 
-  const account = MOCK_JOIN_ACCOUNTS.find((a) => a.accountNo === form.fromAccount) ?? MOCK_JOIN_ACCOUNTS[0]
+  const account =
+    MOCK_JOIN_ACCOUNTS.find((a) => a.accountNo === form.fromAccount) ??
+    MOCK_JOIN_ACCOUNTS[0]
   const termMonths = form.termMonths ?? product.minTermMonths
   const amount = form.amount ?? product.minAmount
 
@@ -98,7 +115,12 @@ export function C05ConfirmAuth() {
         ]}
         footer={
           <>
-            <Button variant="secondary" size="lg" className="min-w-[120px]" onClick={() => navigate(-1)}>
+            <Button
+              variant="secondary"
+              size="lg"
+              className="min-w-[120px]"
+              onClick={() => navigate(-1)}
+            >
               이전
             </Button>
             <Button
@@ -120,7 +142,10 @@ export function C05ConfirmAuth() {
               { label: "가입유형", value: product.category },
               { label: "가입기간", value: `${termMonths}개월` },
               {
-                label: product.category === "정기적금" ? "월납입금액(원)" : "가입금액(원)",
+                label:
+                  product.category === "정기적금"
+                    ? "월납입금액(원)"
+                    : "가입금액(원)",
                 value: formatAmount(amount, { suffix: false }),
                 emphasis: true,
               },
@@ -132,7 +157,8 @@ export function C05ConfirmAuth() {
             ]}
           />
           <p className="mt-2 text-2xs text-ink-faint">
-            ※ 예상 만기금액(세전 단리 참고값) {formatKoreanAmount(expectedMaturity)} · 실제 지급액과 다를 수
+            ※ 예상 만기금액(세전 단리 참고값){" "}
+            {formatKoreanAmount(expectedMaturity)} · 실제 지급액과 다를 수
             있습니다.
           </p>
         </FormSection>
@@ -148,14 +174,17 @@ export function C05ConfirmAuth() {
               }}
             />
             {passwordError && (
-              <p role="alert" className="text-xs font-bold text-[var(--color-danger)]">
+              <p
+                role="alert"
+                className="text-xs font-bold text-[var(--color-danger)]"
+              >
                 {passwordError}
               </p>
             )}
             {blocked && (
               <p className="text-xs font-bold text-[var(--color-danger)]">
-                오류 횟수를 초과해 이 계좌가 거래정지되었습니다. 영업점 또는 고객센터에서 해제 후 다시
-                시도하세요.
+                오류 횟수를 초과해 이 계좌가 거래정지되었습니다. 영업점 또는
+                고객센터에서 해제 후 다시 시도하세요.
               </p>
             )}
           </div>

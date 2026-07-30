@@ -88,7 +88,9 @@ export function ProductCardGrid({
               className="flex flex-col overflow-hidden rounded-[var(--radius-lg)] bg-white p-5 [box-shadow:var(--shadow-card)]"
             >
               <div className="mb-3">
-                <Badge variant={p.category === "정기예금" ? "primary" : "success"}>
+                <Badge
+                  variant={p.category === "정기예금" ? "primary" : "success"}
+                >
                   {p.category}
                 </Badge>
               </div>
@@ -99,14 +101,17 @@ export function ProductCardGrid({
               </p>
 
               <div className="mt-5 flex items-baseline gap-1">
-                <span className="text-[32px] font-bold leading-none tabular-nums text-primary">
+                <span className="text-[32px] leading-none font-bold text-primary tabular-nums">
                   {p.maxRate.toFixed(2)}
                 </span>
                 <span className="text-lg font-bold text-primary">%</span>
                 <span className="ml-1 text-xs text-ink-faint">(연, 세전)</span>
               </div>
               <p className="mt-1 text-xs text-ink-faint">
-                최고 금리 <span className="tabular-nums">(기본금리 {p.baseRate.toFixed(2)}%)</span>
+                최고 금리{" "}
+                <span className="tabular-nums">
+                  (기본금리 {p.baseRate.toFixed(2)}%)
+                </span>
               </p>
 
               <dl className="mt-5 flex flex-col gap-2 border-t border-[var(--color-border)] pt-4 text-sm">
@@ -116,13 +121,13 @@ export function ProductCardGrid({
                 </div>
                 <div className="flex items-center justify-between">
                   <dt className="text-ink-muted">최소금액</dt>
-                  <dd className="font-bold tabular-nums text-ink">
+                  <dd className="font-bold text-ink tabular-nums">
                     {formatAmount(p.minAmount)}
                   </dd>
                 </div>
                 <div className="flex items-center justify-between">
                   <dt className="text-ink-muted">최대금액</dt>
-                  <dd className="font-bold tabular-nums text-ink">
+                  <dd className="font-bold text-ink tabular-nums">
                     {formatAmount(p.maxAmount)}
                   </dd>
                 </div>

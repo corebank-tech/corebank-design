@@ -20,14 +20,20 @@ const resultColumns: DataGridColumn<JoinResultRow>[] = [
     key: "newAccountNo",
     header: "신규계좌번호",
     align: "center",
-    render: (r) => <span className="tabular-nums">{formatAccountNo(r.newAccountNo)}</span>,
+    render: (r) => (
+      <span className="tabular-nums">{formatAccountNo(r.newAccountNo)}</span>
+    ),
   },
   { key: "productName", header: "상품명", align: "center" },
   {
     key: "amount",
     header: "가입금액(원)",
     align: "right",
-    render: (r) => <span className="tabular-nums">{formatAmount(r.amount, { suffix: false })}</span>,
+    render: (r) => (
+      <span className="tabular-nums">
+        {formatAmount(r.amount, { suffix: false })}
+      </span>
+    ),
   },
   {
     key: "termMonths",
@@ -45,7 +51,9 @@ const resultColumns: DataGridColumn<JoinResultRow>[] = [
     key: "rate",
     header: "적용금리(%)",
     align: "right",
-    render: (r) => <span className="font-bold text-primary">{r.rate.toFixed(2)}</span>,
+    render: (r) => (
+      <span className="font-bold text-primary">{r.rate.toFixed(2)}</span>
+    ),
   },
 ]
 
@@ -110,7 +118,9 @@ export function C06Complete() {
                 variant="primary"
                 size="lg"
                 className="min-w-[160px]"
-                onClick={() => navigate(`/transfer/auto/new?${autoTransferSearch}`)}
+                onClick={() =>
+                  navigate(`/transfer/auto/new?${autoTransferSearch}`)
+                }
               >
                 자동이체 등록
               </Button>

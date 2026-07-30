@@ -27,10 +27,20 @@ export function A10LogoutComplete() {
       row={{ loggedOutAt }}
       actions={
         <>
-          <Button variant="secondary" size="lg" className="min-w-[140px]" onClick={() => navigate("/dashboard")}>
+          <Button
+            variant="secondary"
+            size="lg"
+            className="min-w-[140px]"
+            onClick={() => navigate("/dashboard")}
+          >
             메인으로
           </Button>
-          <Button variant="primary" size="lg" className="min-w-[140px]" onClick={() => navigate("/")}>
+          <Button
+            variant="primary"
+            size="lg"
+            className="min-w-[140px]"
+            onClick={() => navigate("/")}
+          >
             다시 로그인
           </Button>
         </>

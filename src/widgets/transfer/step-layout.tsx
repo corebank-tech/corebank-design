@@ -34,7 +34,7 @@ export function StepLayout({
   return (
     <div>
       <div className="mb-6 flex items-center justify-between gap-4">
-        <h1 className="text-page font-bold text-ink text-balance">{title}</h1>
+        <h1 className="text-page font-bold text-balance text-ink">{title}</h1>
         <StepIndicator steps={steps} currentStep={currentStep} />
       </div>
 

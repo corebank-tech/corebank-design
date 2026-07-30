@@ -22,7 +22,12 @@ type GridSearchModalProps = {
  * A-94 공통 그리드 검색 모달(REQ-CMN-020). 그리드 컬럼 중 검색 대상을 선택하고
  * 검색어를 입력해 목록을 필터링한다.
  */
-export function GridSearchModal({ open, onClose, fields, onApply }: GridSearchModalProps) {
+export function GridSearchModal({
+  open,
+  onClose,
+  fields,
+  onApply,
+}: GridSearchModalProps) {
   const [fieldKey, setFieldKey] = React.useState(fields[0]?.key ?? "")
   const [keyword, setKeyword] = React.useState("")
 
@@ -45,7 +50,12 @@ export function GridSearchModal({ open, onClose, fields, onApply }: GridSearchMo
       size="sm"
       footer={
         <>
-          <Button variant="secondary" size="lg" className="min-w-[120px]" onClick={onClose}>
+          <Button
+            variant="secondary"
+            size="lg"
+            className="min-w-[120px]"
+            onClick={onClose}
+          >
             취소
           </Button>
           <Button

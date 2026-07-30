@@ -25,15 +25,25 @@ function onlyDigits(value: string, maxLength: number): string {
 /** REQ-ACCT-010·011·012: 출금계좌관리. 등록/미등록 목록을 상하로 구분해 표시한다. */
 export function B05WithdrawAccounts() {
   const [accounts, setAccounts] = React.useState(MOCK_WITHDRAWAL_ACCOUNTS)
-  const [registeredSelected, setRegisteredSelected] = React.useState<string[]>([])
-  const [unregisteredSelected, setUnregisteredSelected] = React.useState<string[]>([])
+  const [registeredSelected, setRegisteredSelected] = React.useState<string[]>(
+    [],
+  )
+  const [unregisteredSelected, setUnregisteredSelected] = React.useState<
+    string[]
+  >([])
   const [gridKey, setGridKey] = React.useState(0)
-  const [successMessage, setSuccessMessage] = React.useState<string | null>(null)
+  const [successMessage, setSuccessMessage] = React.useState<string | null>(
+    null,
+  )
 
   const [deleteConfirmOpen, setDeleteConfirmOpen] = React.useState(false)
-  const [deleteBlocked, setDeleteBlocked] = React.useState<string[] | null>(null)
+  const [deleteBlocked, setDeleteBlocked] = React.useState<string[] | null>(
+    null,
+  )
 
-  const [registerQueue, setRegisterQueue] = React.useState<WithdrawalAccount[] | null>(null)
+  const [registerQueue, setRegisterQueue] = React.useState<
+    WithdrawalAccount[] | null
+  >(null)
   const [queueIndex, setQueueIndex] = React.useState(0)
   const [pwValue, setPwValue] = React.useState("")
   const [pwError, setPwError] = React.useState<string | null>(null)
@@ -42,16 +52,22 @@ export function B05WithdrawAccounts() {
   const registered = accounts.filter((a) => a.registered)
   const unregistered = accounts.filter((a) => !a.registered)
 
-  const registeredRows = registered.filter((a) => registeredSelected.includes(a.id))
-  const unregisteredRows = unregistered.filter((a) => unregisteredSelected.includes(a.id))
+  const registeredRows = registered.filter((a) =>
+    registeredSelected.includes(a.id),
+  )
+  const unregisteredRows = unregistered.filter((a) =>
+    unregisteredSelected.includes(a.id),
+  )
 
-  const columns = (selectable: boolean): DataGridColumn<WithdrawalAccount>[] => [
+  const columns: DataGridColumn<WithdrawalAccount>[] = [
     { key: "alias", header: "계좌명", width: 200 },
     {
       key: "accountNo",
       header: "계좌번호",
       width: 180,
-      render: (r) => <span className="tabular-nums">{formatAccountNo(r.accountNo)}</span>,
+      render: (r) => (
+        <span className="tabular-nums">{formatAccountNo(r.accountNo)}</span>
+      ),
     },
     {
       key: "balance",
@@ -67,9 +83,16 @@ export function B05WithdrawAccounts() {
     if (registeredRows.length === 0) return
     const blocked = registeredRows
       .map((r) => ({ r, reason: getWithdrawalDeleteBlockReason(r.accountNo) }))
-      .filter((x): x is { r: WithdrawalAccount; reason: string } => x.reason != null)
+      .filter(
+        (x): x is { r: WithdrawalAccount; reason: string } => x.reason != null,
+      )
     if (blocked.length > 0) {
-      setDeleteBlocked(blocked.map(({ r, reason }) => `${r.alias} (${formatAccountNo(r.accountNo)}) : ${reason}`))
+      setDeleteBlocked(
+        blocked.map(
+          ({ r, reason }) =>
+            `${r.alias} (${formatAccountNo(r.accountNo)}) : ${reason}`,
+        ),
+      )
       return
     }
     setDeleteConfirmOpen(true)
@@ -77,7 +100,9 @@ export function B05WithdrawAccounts() {
 
   const handleConfirmDelete = () => {
     setAccounts((prev) =>
-      prev.map((a) => (registeredSelected.includes(a.id) ? { ...a, registered: false } : a)),
+      prev.map((a) =>
+        registeredSelected.includes(a.id) ? { ...a, registered: false } : a,
+      ),
     )
     setDeleteConfirmOpen(false)
     setRegisteredSelected([])
@@ -125,7 +150,9 @@ export function B05WithdrawAccounts() {
 
   const handleOtpConfirm = () => {
     const ids = new Set((registerQueue ?? []).map((a) => a.id))
-    setAccounts((prev) => prev.map((a) => (ids.has(a.id) ? { ...a, registered: true } : a)))
+    setAccounts((prev) =>
+      prev.map((a) => (ids.has(a.id) ? { ...a, registered: true } : a)),
+    )
     setUnregisteredSelected([])
     setGridKey((k) => k + 1)
     setSuccessMessage("선택한 계좌가 출금계좌로 등록되었습니다.")
@@ -159,7 +186,7 @@ export function B05WithdrawAccounts() {
       >
         <DataGrid
           key={`reg-${gridKey}`}
-          columns={columns(true)}
+          columns={columns}
           rows={registered}
           rowKey={(r) => r.id}
           selectable
@@ -184,7 +211,7 @@ export function B05WithdrawAccounts() {
       >
         <DataGrid
           key={`unreg-${gridKey}`}
-          columns={columns(true)}
+          columns={columns}
           rows={unregistered}
           rowKey={(r) => r.id}
           selectable
@@ -206,7 +233,10 @@ export function B05WithdrawAccounts() {
         onClose={() => setDeleteConfirmOpen(false)}
         onConfirm={handleConfirmDelete}
         title="출금계좌 삭제"
-        messages={["선택한 계좌의 출금계좌 등록을 해제합니다.", "해제 후에는 해당 계좌로 즉시이체를 할 수 없습니다."]}
+        messages={[
+          "선택한 계좌의 출금계좌 등록을 해제합니다.",
+          "해제 후에는 해당 계좌로 즉시이체를 할 수 없습니다.",
+        ]}
         confirmLabel="삭제하기"
         items={registeredRows.map((r) => ({
           label: r.alias,
@@ -228,11 +258,23 @@ export function B05WithdrawAccounts() {
         size="sm"
         footer={
           <>
-            <Button variant="secondary" size="lg" className="min-w-[120px]" onClick={closeRegisterFlow}>
+            <Button
+              variant="secondary"
+              size="lg"
+              className="min-w-[120px]"
+              onClick={closeRegisterFlow}
+            >
               취소
             </Button>
-            <Button variant="primary" size="lg" className="min-w-[120px]" onClick={handlePasswordConfirm}>
-              {registerQueue && queueIndex + 1 < registerQueue.length ? "다음" : "확인"}
+            <Button
+              variant="primary"
+              size="lg"
+              className="min-w-[120px]"
+              onClick={handlePasswordConfirm}
+            >
+              {registerQueue && queueIndex + 1 < registerQueue.length
+                ? "다음"
+                : "확인"}
             </Button>
           </>
         }
@@ -262,7 +304,10 @@ export function B05WithdrawAccounts() {
               autoFocus
             />
             {pwError && (
-              <p role="alert" className="text-sm font-bold text-[var(--color-danger)]">
+              <p
+                role="alert"
+                className="text-sm font-bold text-[var(--color-danger)]"
+              >
                 {pwError}
               </p>
             )}

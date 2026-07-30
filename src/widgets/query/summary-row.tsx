@@ -37,15 +37,15 @@ export function SummaryRow({
       {items.map((item, i) => (
         <div key={i} className="flex min-w-0 flex-1">
           <div
-            className="flex shrink-0 items-center border-b border-r bg-surface px-3 py-2.5 text-sm font-bold text-ink"
+            className="flex shrink-0 items-center border-r border-b bg-surface px-3 py-2.5 text-sm font-bold text-ink"
             style={{ width: labelWidth }}
           >
             {item.label}
           </div>
           <div
             className={cn(
-              "flex min-w-0 flex-1 items-center border-b border-r bg-white px-3 py-2.5 text-sm text-ink",
-              (item.numeric ?? true) && "justify-end tabular-nums font-bold",
+              "flex min-w-0 flex-1 items-center border-r border-b bg-white px-3 py-2.5 text-sm text-ink",
+              (item.numeric ?? true) && "justify-end font-bold tabular-nums",
             )}
             style={item.valueColor ? { color: item.valueColor } : undefined}
           >

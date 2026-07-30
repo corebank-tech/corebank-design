@@ -7,7 +7,10 @@ import { DataGrid, type DataGridColumn } from "@/shared/ui/data-grid"
 import { SummaryRow } from "@/widgets/query/summary-row"
 import { GridToolbar } from "@/widgets/query/grid-toolbar"
 import { TextViewModal } from "@/widgets/query/text-view-modal"
-import { GridSearchModal, type GridSearchField } from "@/widgets/query/grid-search-modal"
+import {
+  GridSearchModal,
+  type GridSearchField,
+} from "@/widgets/query/grid-search-modal"
 import { downloadCsv } from "@/shared/lib/csv"
 import {
   formatAccountNo,
@@ -16,7 +19,11 @@ import {
   formatDateTime,
   maskAccountNo,
 } from "@/shared/lib/format"
-import { MOCK_OVERVIEW_ACCOUNTS, type AccountGroupId, type OverviewAccount } from "@/entities/account"
+import {
+  MOCK_OVERVIEW_ACCOUNTS,
+  type AccountGroupId,
+  type OverviewAccount,
+} from "@/entities/account"
 
 const TODAY = "2026-07-23"
 const BASE_TIME = "2026-07-23T08:57:34"
@@ -53,7 +60,9 @@ function buildColumns(
       header: "신규일",
       align: "center",
       width: 120,
-      render: (r) => <span className="tabular-nums">{formatDate(r.openedDate)}</span>,
+      render: (r) => (
+        <span className="tabular-nums">{formatDate(r.openedDate)}</span>
+      ),
     },
     {
       key: "lastActivityDate",
@@ -80,11 +89,19 @@ function buildColumns(
       width: 140,
       render: (r) => (
         <div className="flex items-center justify-center gap-1.5">
-          <Button variant="secondary" size="sm" onClick={() => onInquire(r.accountNo)}>
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => onInquire(r.accountNo)}
+          >
             조회
           </Button>
           {r.isWithdrawalAccount && (
-            <Button variant="outline" size="sm" onClick={() => onTransfer(r.accountNo)}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => onTransfer(r.accountNo)}
+            >
               이체
             </Button>
           )}
@@ -101,7 +118,10 @@ export function B01AllAccounts() {
   const [pageSize, setPageSize] = React.useState<number | "all">("all")
   const [brailleOpen, setBrailleOpen] = React.useState(false)
   const [searchOpen, setSearchOpen] = React.useState(false)
-  const [search, setSearch] = React.useState<{ field: string; keyword: string } | null>(null)
+  const [search, setSearch] = React.useState<{
+    field: string
+    keyword: string
+  } | null>(null)
 
   const handleInquire = (accountNo: string) => {
     navigate(`/inquiry?account=${accountNo}`)
@@ -113,7 +133,8 @@ export function B01AllAccounts() {
   const filteredAccounts = React.useMemo(() => {
     if (!search || !search.keyword) return MOCK_OVERVIEW_ACCOUNTS
     return MOCK_OVERVIEW_ACCOUNTS.filter((a) => {
-      const value = search.field === "accountNo" ? formatAccountNo(a.accountNo) : a.alias
+      const value =
+        search.field === "accountNo" ? formatAccountNo(a.accountNo) : a.alias
       return value.includes(search.keyword)
     })
   }, [search])
@@ -121,7 +142,14 @@ export function B01AllAccounts() {
   const grandTotal = filteredAccounts.reduce((sum, a) => sum + a.balance, 0)
 
   /** REQ-INQR-015: CSV 저장 시에만 계좌번호를 마스킹한다(화면 표시는 마스킹하지 않음, REQ-CMN-017). */
-  const exportHeaders = ["상품군", "계좌명", "계좌번호", "신규일", "최근거래일/만기일", "잔액"]
+  const exportHeaders = [
+    "상품군",
+    "계좌명",
+    "계좌번호",
+    "신규일",
+    "최근거래일/만기일",
+    "잔액",
+  ]
   const exportRows = filteredAccounts.map((a) => [
     GROUP_LABELS[a.group],
     a.alias,
@@ -148,7 +176,9 @@ export function B01AllAccounts() {
         baseTimeLabel={formatDateTime(BASE_TIME)}
         onPrint={() => window.print()}
         onBrailleView={() => setBrailleOpen(true)}
-        onSaveFile={() => downloadCsv(`전체계좌조회_${TODAY}.csv`, exportHeaders, exportRows)}
+        onSaveFile={() =>
+          downloadCsv(`전체계좌조회_${TODAY}.csv`, exportHeaders, exportRows)
+        }
         onSearch={() => setSearchOpen(true)}
       />
 
@@ -166,7 +196,10 @@ export function B01AllAccounts() {
             <SummaryRow
               className="mt-3"
               items={[
-                { label: `${GROUP_LABELS[group]} 총잔액`, value: formatAmount(groupTotal) },
+                {
+                  label: `${GROUP_LABELS[group]} 총잔액`,
+                  value: formatAmount(groupTotal),
+                },
               ]}
             />
           </FormSection>
@@ -177,14 +210,23 @@ export function B01AllAccounts() {
         <SummaryRow
           items={[
             {
-              label: <span className="text-xs font-normal text-ink-faint">총자산</span>,
-              value: <span className="text-page font-bold">{formatAmount(grandTotal)}</span>,
+              label: (
+                <span className="text-xs font-normal text-ink-faint">
+                  총자산
+                </span>
+              ),
+              value: (
+                <span className="text-page font-bold">
+                  {formatAmount(grandTotal)}
+                </span>
+              ),
               valueColor: "var(--color-primary)",
             },
           ]}
         />
         <p className="mt-1.5 text-right text-2xs text-ink-faint">
-          대출 상품을 제공하지 않는 Phase 1 특성상 총자산은 수신 계좌 잔액 합계로 산출됩니다.
+          대출 상품을 제공하지 않는 Phase 1 특성상 총자산은 수신 계좌 잔액
+          합계로 산출됩니다.
         </p>
       </div>
 
@@ -209,7 +251,9 @@ export function B01AllAccounts() {
         open={searchOpen}
         onClose={() => setSearchOpen(false)}
         fields={SEARCH_FIELDS}
-        onApply={(field, keyword) => setSearch(keyword ? { field, keyword } : null)}
+        onApply={(field, keyword) =>
+          setSearch(keyword ? { field, keyword } : null)
+        }
       />
     </div>
   )

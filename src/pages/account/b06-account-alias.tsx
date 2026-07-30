@@ -21,8 +21,12 @@ export function B06AccountAlias() {
   const [editingId, setEditingId] = React.useState<string | null>(null)
   const [draft, setDraft] = React.useState("")
   const [draftError, setDraftError] = React.useState<string | null>(null)
-  const [deleteTarget, setDeleteTarget] = React.useState<AliasAccount | null>(null)
-  const [successMessage, setSuccessMessage] = React.useState<string | null>(null)
+  const [deleteTarget, setDeleteTarget] = React.useState<AliasAccount | null>(
+    null,
+  )
+  const [successMessage, setSuccessMessage] = React.useState<string | null>(
+    null,
+  )
 
   const startEdit = (row: AliasAccount) => {
     setSuccessMessage(null)
@@ -44,17 +48,25 @@ export function B06AccountAlias() {
       return
     }
     if (!isAliasLengthValid(value)) {
-      setDraftError(`별명은 한글 ${ALIAS_KOREAN_MAX}자 또는 영문·숫자 ${ALIAS_ALNUM_MAX}자 이내로 입력하세요.`)
+      setDraftError(
+        `별명은 한글 ${ALIAS_KOREAN_MAX}자 또는 영문·숫자 ${ALIAS_ALNUM_MAX}자 이내로 입력하세요.`,
+      )
       return
     }
-    setAccounts((prev) => prev.map((a) => (a.id === row.id ? { ...a, alias: value } : a)))
-    setSuccessMessage(`${row.productName}의 별명이 "${value}"(으)로 저장되었습니다.`)
+    setAccounts((prev) =>
+      prev.map((a) => (a.id === row.id ? { ...a, alias: value } : a)),
+    )
+    setSuccessMessage(
+      `${row.productName}의 별명이 "${value}"(으)로 저장되었습니다.`,
+    )
     cancelEdit()
   }
 
   const handleConfirmDelete = () => {
     if (!deleteTarget) return
-    setAccounts((prev) => prev.map((a) => (a.id === deleteTarget.id ? { ...a, alias: null } : a)))
+    setAccounts((prev) =>
+      prev.map((a) => (a.id === deleteTarget.id ? { ...a, alias: null } : a)),
+    )
     setSuccessMessage(`${deleteTarget.productName}의 별명이 삭제되었습니다.`)
     setDeleteTarget(null)
   }
@@ -65,7 +77,9 @@ export function B06AccountAlias() {
       key: "accountNo",
       header: "계좌번호",
       width: 180,
-      render: (r) => <span className="tabular-nums">{formatAccountNo(r.accountNo)}</span>,
+      render: (r) => (
+        <span className="tabular-nums">{formatAccountNo(r.accountNo)}</span>
+      ),
     },
     {
       key: "alias",
@@ -87,7 +101,10 @@ export function B06AccountAlias() {
               className="h-9"
             />
             {draftError && (
-              <p role="alert" className="text-xs font-bold text-[var(--color-danger)]">
+              <p
+                role="alert"
+                className="text-xs font-bold text-[var(--color-danger)]"
+              >
                 {draftError}
               </p>
             )}
@@ -118,7 +135,11 @@ export function B06AccountAlias() {
             <Button variant="secondary" size="sm" onClick={() => startEdit(r)}>
               수정
             </Button>
-            <Button variant="outline" size="sm" onClick={() => setDeleteTarget(r)}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setDeleteTarget(r)}
+            >
               삭제
             </Button>
           </div>
@@ -143,7 +164,12 @@ export function B06AccountAlias() {
       {successMessage && <Alert variant="success">{successMessage}</Alert>}
 
       <FormSection title="계좌별명 관리" className="mb-0">
-        <DataGrid columns={columns} rows={accounts} rowKey={(r) => r.id} emptyMessage="보유한 계좌가 없습니다." />
+        <DataGrid
+          columns={columns}
+          rows={accounts}
+          rowKey={(r) => r.id}
+          emptyMessage="보유한 계좌가 없습니다."
+        />
       </FormSection>
 
       <NoticeBoxFooter
@@ -159,12 +185,18 @@ export function B06AccountAlias() {
         onClose={() => setDeleteTarget(null)}
         onConfirm={handleConfirmDelete}
         title="계좌별명 삭제"
-        messages={["선택한 계좌의 별명을 삭제합니다.", "삭제 후에는 상품명으로 표시됩니다."]}
+        messages={[
+          "선택한 계좌의 별명을 삭제합니다.",
+          "삭제 후에는 상품명으로 표시됩니다.",
+        ]}
         confirmLabel="삭제하기"
         items={
           deleteTarget
             ? [
-                { label: deleteTarget.productName, value: formatAccountNo(deleteTarget.accountNo) },
+                {
+                  label: deleteTarget.productName,
+                  value: formatAccountNo(deleteTarget.accountNo),
+                },
                 { label: "현재 별명", value: deleteTarget.alias ?? "-" },
               ]
             : []

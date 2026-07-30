@@ -23,7 +23,11 @@ import {
   maskAccountNo,
   maskName,
 } from "@/shared/lib/format"
-import { MOCK_RESERVATIONS, type ReservationRow, type ReservationStatus } from "@/entities/transfer"
+import {
+  MOCK_RESERVATIONS,
+  type ReservationRow,
+  type ReservationStatus,
+} from "@/entities/transfer"
 
 const TODAY = "2026-07-23"
 const BASE_TIME = "2026-07-23T08:57:34"
@@ -36,7 +40,10 @@ const STATUS_OPTIONS = [
   { label: "취소", value: "취소" },
 ]
 
-const STATUS_BADGE: Record<ReservationStatus, "warning" | "success" | "danger" | "neutral"> = {
+const STATUS_BADGE: Record<
+  ReservationStatus,
+  "warning" | "success" | "danger" | "neutral"
+> = {
   대기: "warning",
   완료: "success",
   실패: "danger",
@@ -51,7 +58,10 @@ function isCancelable(row: ReservationRow): boolean {
 export function E04ReservationList() {
   const [rows, setRows] = React.useState(MOCK_RESERVATIONS)
   const [status, setStatus] = React.useState("all")
-  const [period, setPeriod] = React.useState({ start: "2026-06-23", end: "2026-08-23" })
+  const [period, setPeriod] = React.useState({
+    start: "2026-06-23",
+    end: "2026-08-23",
+  })
   const [pageSize, setPageSize] = React.useState<number | "all">(10)
   const [page, setPage] = React.useState(1)
   const [selectedIds, setSelectedIds] = React.useState<string[]>([])
@@ -65,11 +75,16 @@ export function E04ReservationList() {
   const filtered = React.useMemo(() => {
     const next = rows.filter((r) => {
       if (status !== "all" && r.status !== status) return false
-      if (r.scheduledDate < period.start || r.scheduledDate > period.end) return false
+      if (r.scheduledDate < period.start || r.scheduledDate > period.end)
+        return false
       return true
     })
-    const waiting = next.filter((r) => r.status === "대기").sort((a, b) => a.scheduledDate.localeCompare(b.scheduledDate))
-    const others = next.filter((r) => r.status !== "대기").sort((a, b) => b.scheduledDate.localeCompare(a.scheduledDate))
+    const waiting = next
+      .filter((r) => r.status === "대기")
+      .sort((a, b) => a.scheduledDate.localeCompare(b.scheduledDate))
+    const others = next
+      .filter((r) => r.status !== "대기")
+      .sort((a, b) => b.scheduledDate.localeCompare(a.scheduledDate))
     return [...waiting, ...others]
   }, [rows, status, period])
 
@@ -103,14 +118,25 @@ export function E04ReservationList() {
 
   const handleOtpConfirm = () => {
     setRows((prev) =>
-      prev.map((r) => (selectedIds.includes(r.id) ? { ...r, status: "취소" as const } : r)),
+      prev.map((r) =>
+        selectedIds.includes(r.id) ? { ...r, status: "취소" as const } : r,
+      ),
     )
     setOtpOpen(false)
     setSelectedIds([])
     setGridKey((k) => k + 1)
   }
 
-  const exportHeaders = ["상태", "이체예정일자", "출금계좌", "입금계좌", "예금주", "이체금액", "표시내용", "등록일시"]
+  const exportHeaders = [
+    "상태",
+    "이체예정일자",
+    "출금계좌",
+    "입금계좌",
+    "예금주",
+    "이체금액",
+    "표시내용",
+    "등록일시",
+  ]
   const exportRows = filtered.map((r) => [
     r.status,
     formatDate(r.scheduledDate),
@@ -137,7 +163,9 @@ export function E04ReservationList() {
       width: 120,
       sortable: true,
       sortValue: (r) => r.scheduledDate,
-      render: (r) => <span className="tabular-nums">{formatDate(r.scheduledDate)}</span>,
+      render: (r) => (
+        <span className="tabular-nums">{formatDate(r.scheduledDate)}</span>
+      ),
     },
     {
       key: "fromAccountNo",
@@ -146,7 +174,9 @@ export function E04ReservationList() {
       render: (r) => (
         <span>
           {r.fromAlias} <span className="text-ink-faint">/</span>{" "}
-          <span className="tabular-nums">{formatAccountNo(r.fromAccountNo)}</span>
+          <span className="tabular-nums">
+            {formatAccountNo(r.fromAccountNo)}
+          </span>
         </span>
       ),
     },
@@ -154,7 +184,9 @@ export function E04ReservationList() {
       key: "toAccountNo",
       header: "입금계좌",
       width: 150,
-      render: (r) => <span className="tabular-nums">{formatAccountNo(r.toAccountNo)}</span>,
+      render: (r) => (
+        <span className="tabular-nums">{formatAccountNo(r.toAccountNo)}</span>
+      ),
     },
     {
       key: "payeeName",
@@ -175,7 +207,9 @@ export function E04ReservationList() {
       key: "registeredAt",
       header: "등록일시",
       width: 150,
-      render: (r) => <span className="tabular-nums">{formatDateTime(r.registeredAt)}</span>,
+      render: (r) => (
+        <span className="tabular-nums">{formatDateTime(r.registeredAt)}</span>
+      ),
     },
   ]
 
@@ -243,7 +277,9 @@ export function E04ReservationList() {
           baseTimeLabel={formatDateTime(BASE_TIME)}
           onPrint={() => window.print()}
           onBrailleView={() => setBrailleOpen(true)}
-          onSaveFile={() => downloadCsv(`예약이체조회_${TODAY}.csv`, exportHeaders, exportRows)}
+          onSaveFile={() =>
+            downloadCsv(`예약이체조회_${TODAY}.csv`, exportHeaders, exportRows)
+          }
         />
 
         <DataGrid
@@ -256,7 +292,11 @@ export function E04ReservationList() {
           emptyMessage="조회된 예약이체가 없습니다."
         />
 
-        <Pagination page={safePage} totalPages={totalPages} onPageChange={setPage} />
+        <Pagination
+          page={safePage}
+          totalPages={totalPages}
+          onPageChange={setPage}
+        />
       </FormSection>
 
       <NoticeBoxFooter

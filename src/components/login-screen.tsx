@@ -1,4 +1,5 @@
 import * as React from "react"
+import { Link } from "react-router-dom"
 import { AlertCircle } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -94,21 +95,21 @@ export function LoginScreen() {
           </form>
 
           <div className="mt-5 flex items-center justify-center gap-3 text-sm text-ink-muted">
-            <a href="#" className="hover:text-primary hover:underline">
+            <Link to="/find-id" className="hover:text-primary hover:underline">
               아이디 찾기
-            </a>
+            </Link>
             <span className="text-[var(--color-border-strong)]" aria-hidden="true">
               |
             </span>
-            <a href="#" className="hover:text-primary hover:underline">
+            <Link to="/reset-password" className="hover:text-primary hover:underline">
               비밀번호 재설정
-            </a>
+            </Link>
             <span className="text-[var(--color-border-strong)]" aria-hidden="true">
               |
             </span>
-            <a href="#" className="hover:text-primary hover:underline">
+            <Link to="/signup" className="hover:text-primary hover:underline">
               회원가입
-            </a>
+            </Link>
           </div>
         </div>
 

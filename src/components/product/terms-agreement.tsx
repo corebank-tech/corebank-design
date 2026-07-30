@@ -3,6 +3,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Modal } from "@/components/ui/modal"
+import { AlertDialog } from "@/components/feedback/alert-dialog"
 
 export interface TermItem {
   id: string
@@ -24,16 +25,31 @@ export interface TermsAgreementProps {
   onAllRequiredAgreedChange?: (allRequiredAgreed: boolean) => void
 }
 
+export interface TermsAgreementHandle {
+  /**
+   * 다음 단계 진행 가능 여부를 검사한다. 필수 약관 중 미열람 항목이 있으면
+   * 안내 팝업을 띄운 뒤 확인 시 해당 약관 전문을 열어준다(REQ-AUTH-004).
+   * 열람은 했지만 미동의 상태면 별도 안내만 띄운다. 통과 시에만 true.
+   */
+  validateProceed: () => boolean
+}
+
 /**
  * 약관동의 블록. 회원가입 1단계(A-02)와 상품가입 1단계(C-03)가 공용한다.
  * 데이터는 props 로만 받고, 체크 상태만 내부에서 관리하는 프레젠테이션 컴포넌트.
+ * 전문을 열람하지 않은 약관은 체크할 수 없다(REQ-AUTH-003).
  */
-export function TermsAgreement({
-  terms,
-  onAllRequiredAgreedChange,
-}: TermsAgreementProps) {
+export const TermsAgreement = React.forwardRef<
+  TermsAgreementHandle,
+  TermsAgreementProps
+>(function TermsAgreement({ terms, onAllRequiredAgreedChange }, ref) {
   const [checked, setChecked] = React.useState<Record<string, boolean>>({})
+  const [viewed, setViewed] = React.useState<Record<string, boolean>>({})
   const [viewing, setViewing] = React.useState<TermItem | null>(null)
+  const [blocked, setBlocked] = React.useState<{
+    message: string
+    openTerm?: TermItem
+  } | null>(null)
 
   const allChecked = terms.length > 0 && terms.every((t) => checked[t.id])
   const allRequiredAgreed = terms
@@ -44,14 +60,20 @@ export function TermsAgreement({
     onAllRequiredAgreedChange?.(allRequiredAgreed)
   }, [allRequiredAgreed, onAllRequiredAgreedChange])
 
+  const openTerm = (term: TermItem) => {
+    setViewed((prev) => ({ ...prev, [term.id]: true }))
+    setViewing(term)
+  }
+
   const toggleAll = () => {
     const next = !allChecked
     const map: Record<string, boolean> = {}
-    for (const t of terms) map[t.id] = next
+    for (const t of terms) map[t.id] = next && !!viewed[t.id]
     setChecked(map)
   }
 
   const toggleOne = (id: string) => {
+    if (!viewed[id]) return
     setChecked((prev) => ({ ...prev, [id]: !prev[id] }))
   }
 
@@ -59,6 +81,22 @@ export function TermsAgreement({
     setChecked((prev) => ({ ...prev, [id]: true }))
     setViewing(null)
   }
+
+  React.useImperativeHandle(ref, () => ({
+    validateProceed: () => {
+      if (allRequiredAgreed) return true
+      const unviewed = terms.find((t) => t.required && !viewed[t.id])
+      if (unviewed) {
+        setBlocked({
+          message: "고객동의서를 확인 후 진행하여 주십시오.",
+          openTerm: unviewed,
+        })
+      } else {
+        setBlocked({ message: "필수 약관에 모두 동의해야 다음 단계로 진행할 수 있습니다." })
+      }
+      return false
+    },
+  }))
 
   return (
     <div className="overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-border)]">
@@ -95,7 +133,7 @@ export function TermsAgreement({
               <Button
                 size="sm"
                 variant="outline"
-                onClick={() => setViewing(term)}
+                onClick={() => openTerm(term)}
               >
                 보기
               </Button>
@@ -107,11 +145,14 @@ export function TermsAgreement({
                 htmlFor={`agree-${term.id}`}
                 className="text-sm text-ink-muted"
               >
-                {term.question}
+                {viewed[term.id]
+                  ? term.question
+                  : `${term.question} (전문을 먼저 확인하세요.)`}
               </label>
               <Checkbox
                 id={`agree-${term.id}`}
                 checked={!!checked[term.id]}
+                disabled={!viewed[term.id]}
                 onChange={() => toggleOne(term.id)}
                 aria-label={`${term.title} 동의`}
               />
@@ -140,6 +181,18 @@ export function TermsAgreement({
           {viewing?.body}
         </div>
       </Modal>
+
+      <AlertDialog
+        open={blocked !== null}
+        onClose={() => setBlocked(null)}
+        title="약관 동의 확인"
+        messages={blocked ? [blocked.message] : []}
+        onConfirm={() => {
+          const term = blocked?.openTerm
+          setBlocked(null)
+          if (term) openTerm(term)
+        }}
+      />
     </div>
   )
-}
+})

@@ -16,8 +16,8 @@ export interface ConfirmDialogProps {
   title?: React.ReactNode
   /** Up to two guidance lines shown under the icon. */
   messages?: React.ReactNode[]
-  /** label : value review rows, framed in a scrollable box. */
-  items: ConfirmDialogItem[]
+  /** label : value review rows, framed in a scrollable box. Omit to show messages only. */
+  items?: ConfirmDialogItem[]
   cancelLabel?: string
   confirmLabel?: string
 }
@@ -33,7 +33,7 @@ export function ConfirmDialog({
   onConfirm,
   title = "거래내용 확인",
   messages = ["아래 내용을 확인합니다.", "확인을 누르면 거래가 실행됩니다."],
-  items,
+  items = [],
   cancelLabel = "취소",
   confirmLabel = "확인",
 }: ConfirmDialogProps) {
@@ -80,18 +80,20 @@ export function ConfirmDialog({
         </div>
       </div>
 
-      <div className="max-h-[240px] overflow-y-auto rounded-[var(--radius)] border border-[var(--color-border)] bg-surface-2 px-5 py-4">
-        <dl className="flex flex-col gap-2">
-          {items.map((item, i) => (
-            <div key={i} className="flex gap-2 text-sm leading-relaxed">
-              <dt className="shrink-0 font-bold text-ink">{item.label}</dt>
-              <dd className="min-w-0 flex-1 tabular-nums text-ink">
-                : {item.value}
-              </dd>
-            </div>
-          ))}
-        </dl>
-      </div>
+      {items.length > 0 && (
+        <div className="max-h-[240px] overflow-y-auto rounded-[var(--radius)] border border-[var(--color-border)] bg-surface-2 px-5 py-4">
+          <dl className="flex flex-col gap-2">
+            {items.map((item, i) => (
+              <div key={i} className="flex gap-2 text-sm leading-relaxed">
+                <dt className="shrink-0 font-bold text-ink">{item.label}</dt>
+                <dd className="min-w-0 flex-1 tabular-nums text-ink">
+                  : {item.value}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      )}
     </Modal>
   )
 }

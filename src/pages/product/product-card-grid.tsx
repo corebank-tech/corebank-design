@@ -95,8 +95,10 @@ export function ProductCardGrid({
                 </Badge>
               </div>
 
-              <h3 className="text-lg font-bold text-ink">{p.name}</h3>
-              <p className="mt-1 text-sm leading-relaxed text-ink-muted">
+              <h3 className="line-clamp-2 h-14 text-lg leading-7 font-bold text-ink">
+                {p.name}
+              </h3>
+              <p className="mt-1 line-clamp-2 h-10 text-sm leading-5 text-ink-muted">
                 {p.summary}
               </p>
 
@@ -133,7 +135,7 @@ export function ProductCardGrid({
                 </div>
               </dl>
 
-              <div className="mt-5 flex gap-2">
+              <div className="mt-auto flex gap-2 pt-5">
                 <Button
                   variant="outline"
                   className="flex-1"

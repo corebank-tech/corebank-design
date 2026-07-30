@@ -1,8 +1,9 @@
 import * as React from "react"
-import { AlertCircle, ShieldCheck } from "lucide-react"
+import { AlertCircle } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Button } from "@/components/ui/button"
+import { NoticeBoxFooter } from "@/components/shell/notice-box"
 
 export function LoginScreen() {
   const [userId, setUserId] = React.useState("")
@@ -34,7 +35,7 @@ export function LoginScreen() {
           {error && (
             <div
               role="alert"
-              className="mb-4 flex items-start gap-2 rounded-[var(--radius)] border border-[var(--color-danger)]/25 bg-[var(--color-danger-tint)] p-3"
+              className="mb-4 flex items-start gap-2 rounded-[var(--radius)] border border-[var(--color-danger)] bg-[var(--color-danger-tint)] p-3"
             >
               <AlertCircle
                 className="mt-0.5 h-4 w-4 shrink-0 text-[var(--color-danger)]"
@@ -62,6 +63,9 @@ export function LoginScreen() {
                 autoComplete="username"
                 invalid={error}
               />
+              <p className="text-2xs text-ink-muted">
+                ※ 아이디·비밀번호 방식만 제공되며, 공동인증서·간편인증은 지원하지 않습니다.
+              </p>
             </div>
 
             <div className="flex flex-col gap-1.5">
@@ -77,6 +81,9 @@ export function LoginScreen() {
                 autoComplete="current-password"
                 invalid={error}
               />
+              <p className="text-2xs text-ink-muted">
+                ※ 비밀번호를 5회 연속 잘못 입력하면 계정이 잠깁니다(관리자 확인 후 해제 가능).
+              </p>
             </div>
 
             <Checkbox label="아이디 저장" />
@@ -105,23 +112,14 @@ export function LoginScreen() {
           </div>
         </div>
 
-        <div className="mt-4 rounded-[var(--radius)] border border-primary/15 bg-primary-tint p-4">
-          <div className="flex items-start gap-2">
-            <ShieldCheck
-              className="mt-0.5 h-4 w-4 shrink-0 text-primary"
-              aria-hidden="true"
-            />
-            <ul className="flex flex-col gap-1 text-xs leading-relaxed text-ink-muted">
-              <li>
-                보안을 위해 로그인 후 10분간 이용이 없으면 자동으로 로그아웃됩니다.
-              </li>
-              <li>
-                비밀번호를 5회 연속 잘못 입력하면 계정이 잠기며, 본인확인 후 이용
-                가능합니다.
-              </li>
-            </ul>
-          </div>
-        </div>
+        <NoticeBoxFooter
+          className="mt-8"
+          items={[
+            "보안을 위해 로그인 후 10분간 이용이 없으면 자동으로 로그아웃됩니다(헤더의 [연장]으로 세션을 갱신할 수 있습니다).",
+            "비밀번호를 5회 연속 잘못 입력하면 계정이 잠기며, 잠금 해제는 고객센터를 통한 관리자 확인 후에만 가능합니다.",
+            "인증서·간편인증·보안카드는 제공하지 않으며, 아이디·비밀번호 방식으로만 로그인할 수 있습니다.",
+          ]}
+        />
       </div>
     </div>
   )

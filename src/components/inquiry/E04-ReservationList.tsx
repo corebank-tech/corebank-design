@@ -1,5 +1,5 @@
 import * as React from "react"
-import { NoticeBox } from "@/components/shell/notice-box"
+import { NoticeBox, NoticeBoxFooter } from "@/components/shell/notice-box"
 import { FormSection } from "@/components/ui/form-section"
 import { FormRow } from "@/components/ui/form-row"
 import { Button } from "@/components/ui/button"
@@ -11,7 +11,7 @@ import { DataGrid, type DataGridColumn } from "@/components/query/data-grid"
 import { Pagination } from "@/components/query/pagination"
 import { ConfirmDialog } from "@/components/feedback/confirm-dialog"
 import { ErrorDialog } from "@/components/feedback/error-dialog"
-import { formatAccountNo, formatAmount, formatDate, formatDateTime } from "@/lib/format"
+import { formatAccountNo, formatAmount, formatDate, formatDateTime, maskName } from "@/lib/format"
 import { MOCK_RESERVATIONS, type ReservationRow, type ReservationStatus } from "@/lib/mock/e04-reservations"
 
 const TODAY = "2026-07-23"
@@ -124,7 +124,13 @@ export function E04ReservationList() {
       width: 150,
       render: (r) => <span className="tabular-nums">{formatAccountNo(r.toAccountNo)}</span>,
     },
-    { key: "payeeName", header: "예금주", align: "center", width: 90 },
+    {
+      key: "payeeName",
+      header: "예금주",
+      align: "center",
+      width: 90,
+      render: (r) => maskName(r.payeeName),
+    },
     {
       key: "amount",
       header: "이체금액",
@@ -144,7 +150,7 @@ export function E04ReservationList() {
   return (
     <div className="flex flex-col">
       <NoticeBox
-        className="mb-6"
+        className="mb-8"
         items={[
           "대기 상태이고 이체 예정일 전일 23:59:59까지인 건만 취소할 수 있습니다.",
           "이체 예정일 당일에는 취소할 수 없습니다.",
@@ -187,6 +193,10 @@ export function E04ReservationList() {
           </Button>
         }
       >
+        <p className="mb-2 text-2xs text-ink-faint">
+          ※ 대기 상태이고 이체 예정일 전일까지인 건만 선택할 수 있습니다.
+        </p>
+
         <GridToolbar
           totalCount={filtered.length}
           pageSize={pageSize}
@@ -210,17 +220,31 @@ export function E04ReservationList() {
         <Pagination page={safePage} totalPages={totalPages} onPageChange={setPage} />
       </FormSection>
 
+      <NoticeBoxFooter
+        className="mt-8"
+        items={[
+          "예약이체는 이체 예정일 전일 23:59:59까지 취소할 수 있으며, 이체 예정일 당일에는 취소할 수 없습니다(REQ-RSV-008).",
+          "예약이체는 매일 00:10에 실행되며 실행 실패 시 재시도되지 않습니다(POL-019·020).",
+        ]}
+      />
+
       <ConfirmDialog
         open={confirmOpen}
         onClose={() => setConfirmOpen(false)}
         onConfirm={handleConfirmCancel}
         title="예약이체 취소"
-        messages={["선택한 예약이체를 취소합니다.", "취소 후에는 되돌릴 수 없습니다."]}
+        messages={[
+          "선택한 예약이체를 취소합니다.",
+          <>
+            취소 후에는 되돌릴 수 없습니다.{" "}
+            <span className="text-2xs text-ink-faint">(OTP 인증 필요)</span>
+          </>,
+        ]}
         confirmLabel="취소하기"
         cancelLabel="닫기"
         items={selectedRows.map((r) => ({
           label: formatDate(r.scheduledDate),
-          value: `${r.fromAlias} → ${r.payeeName} / ${formatAmount(r.amount)}`,
+          value: `${r.fromAlias} → ${maskName(r.payeeName)} / ${formatAmount(r.amount)}`,
         }))}
       />
 

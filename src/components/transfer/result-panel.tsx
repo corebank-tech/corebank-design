@@ -20,12 +20,18 @@ export interface ResultPanelProps<Row> {
   message: React.ReactNode
   /** One-line secondary guidance under the headline. */
   description?: React.ReactNode
+  /** Label above the highlighted value, e.g. "이체금액". Defaults to "이체금액". */
+  highlightLabel?: React.ReactNode
+  /** Dominant value rendered at page-title weight, e.g. the transferred amount. */
+  highlightValue?: React.ReactNode
   /** Column definitions for the single-row summary grid. */
   columns: DataGridColumn<Row>[]
   /** The single summary row rendered in the grid. */
   row: Row
   /** Bottom action button slot, e.g. [이체결과조회] [추가이체]. */
   actions?: React.ReactNode
+  /** Small footnote under the summary grid, e.g. status-specific guidance. */
+  footnote?: React.ReactNode
 }
 
 /**
@@ -38,9 +44,12 @@ export function ResultPanel<Row>({
   variant,
   message,
   description,
+  highlightLabel = "이체금액",
+  highlightValue,
   columns,
   row,
   actions,
+  footnote,
 }: ResultPanelProps<Row>) {
   const { icon: Icon, ring, spin } = variantIcon[variant]
 
@@ -65,11 +74,23 @@ export function ResultPanel<Row>({
             {description}
           </p>
         )}
+        {highlightValue != null && (
+          <div className="mt-4 flex flex-col items-center gap-1">
+            <span className="text-2xs text-ink-faint">{highlightLabel}</span>
+            <span className="text-page font-bold tabular-nums text-primary">
+              {highlightValue}
+            </span>
+          </div>
+        )}
       </div>
 
       <div className="mt-4">
         <DataGrid columns={columns} rows={[row]} />
       </div>
+
+      {footnote != null && (
+        <p className="mt-3 text-center text-2xs text-ink-muted">{footnote}</p>
+      )}
 
       {actions != null && (
         <div className="mt-6 flex items-center justify-center gap-2">

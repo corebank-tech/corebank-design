@@ -75,6 +75,12 @@ export function InstantTransferStep2({
             { label: "받는통장 메모", value: payeeMemo },
           ]}
         />
+        <p className="mt-2 text-2xs text-ink-faint">
+          ※ 당행이체는 수수료가 발생하지 않습니다.
+        </p>
+        <p className="mt-1 text-2xs text-ink-faint">
+          ※ 이체예정일시는 인증 완료 후 실제 처리 시각으로 확정됩니다.
+        </p>
       </FormSection>
 
       <FormSection title="보안매체 정보입력">

@@ -234,12 +234,13 @@ export function AmountField({
           className="max-w-xs text-right tabular-nums"
         />
         <span className="shrink-0 text-sm text-ink-muted">원</span>
-        {value != null && value > 0 && (
-          <span className="text-sm font-bold text-primary">
-            {formatKoreanAmount(value)}
-          </span>
-        )}
       </div>
+
+      {value != null && value > 0 && (
+        <span className="text-page font-bold tabular-nums text-primary">
+          {formatKoreanAmount(value)}
+        </span>
+      )}
 
       <div className="flex flex-wrap items-center gap-1">
         {QUICK_AMOUNTS.map((chip) => (
@@ -270,7 +271,7 @@ export function AmountField({
         </button>
       </div>
 
-      <p className="text-xs text-ink-muted tabular-nums">
+      <p className="text-2xs text-ink-muted tabular-nums">
         1회 한도 {formatAmount(perTransferLimit)} · 1일 잔여한도{" "}
         {formatAmount(dailyRemaining)}
       </p>

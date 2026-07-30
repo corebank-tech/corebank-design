@@ -81,7 +81,9 @@ export function MainDashboard({
       align: "center",
       width: ACCOUNT_COLUMN_WIDTHS.openedDate,
       render: (r) => (
-        <span className="tabular-nums">{formatDate(r.openedDate)}</span>
+        <span className="text-2xs text-ink-faint tabular-nums">
+          {formatDate(r.openedDate)}
+        </span>
       ),
     },
     {
@@ -123,16 +125,13 @@ export function MainDashboard({
   return (
     <div className="flex flex-col gap-8">
       {/* [1] 인사 영역 + 접속현황 */}
-      <div className="flex items-stretch gap-6">
+      <div className="flex items-stretch gap-9">
         <div className="flex w-2/3 flex-col justify-center border border-[var(--color-border)] bg-white px-8 py-9">
-          <p className="text-page font-bold text-ink">
+          <p className="text-h2 font-bold text-ink">
             {customerName} 고객님, 안녕하세요.
           </p>
-          <p className="mt-3 text-base text-ink-muted text-pretty">
+          <p className="mt-2 text-base text-ink-muted text-pretty">
             오늘도 CoreBank를 이용해 주셔서 감사합니다. 자주 쓰는 업무는 아래 바로가기에서 바로 시작할 수 있습니다.
-          </p>
-          <p className="mt-1 text-base text-ink-muted text-pretty">
-            거래 전 접속현황을 확인하시고, 본인이 아닌 접속 기록이 있으면 비밀번호를 변경해 주세요.
           </p>
         </div>
         <div className="w-1/3">
@@ -157,6 +156,19 @@ export function MainDashboard({
             </div>
           ) : (
             <>
+              <div className="mb-4 flex items-end justify-between gap-4">
+                <div className="flex flex-col gap-1">
+                  <span className="text-xs text-ink-faint">
+                    기본 입출금계좌 · {accounts[0].alias}
+                  </span>
+                  <span className="text-xs text-ink-faint tabular-nums">
+                    {formatAccountNo(accounts[0].accountNo)}
+                  </span>
+                </div>
+                <span className="text-page tabular-nums text-ink [font-weight:var(--weight-value)]">
+                  {formatAmount(accounts[0].balance)}
+                </span>
+              </div>
               <DataGrid columns={columns} rows={accounts} rowKey={(r) => r.id} />
               <SummaryRow
                 className="mt-3"

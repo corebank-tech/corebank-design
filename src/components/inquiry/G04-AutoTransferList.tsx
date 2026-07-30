@@ -1,5 +1,5 @@
 import * as React from "react"
-import { NoticeBox } from "@/components/shell/notice-box"
+import { NoticeBox, NoticeBoxFooter } from "@/components/shell/notice-box"
 import { FormSection } from "@/components/ui/form-section"
 import { FormRow } from "@/components/ui/form-row"
 import { Select } from "@/components/ui/select"
@@ -14,7 +14,7 @@ import { DataGrid, type DataGridColumn } from "@/components/query/data-grid"
 import { Pagination } from "@/components/query/pagination"
 import { ConfirmDialog } from "@/components/feedback/confirm-dialog"
 import { ErrorDialog } from "@/components/feedback/error-dialog"
-import { formatAccountNo, formatAmount, formatDate, formatDateTime } from "@/lib/format"
+import { formatAccountNo, formatAmount, formatDate, formatDateTime, maskName } from "@/lib/format"
 import {
   MOCK_AUTO_TRANSFERS,
   type AutoTransferRow,
@@ -149,7 +149,13 @@ export function G04AutoTransferList() {
       width: 150,
       render: (r) => <span className="tabular-nums">{formatAccountNo(r.toAccountNo)}</span>,
     },
-    { key: "payeeName", header: "예금주", align: "center", width: 90 },
+    {
+      key: "payeeName",
+      header: "예금주",
+      align: "center",
+      width: 90,
+      render: (r) => maskName(r.payeeName),
+    },
     {
       key: "amount",
       header: "이체금액",
@@ -208,7 +214,7 @@ export function G04AutoTransferList() {
   return (
     <div className="flex flex-col">
       <NoticeBox
-        className="mb-6"
+        className="mb-8"
         items={[
           "정상 상태이고 다음 실행 예정일 전일까지인 건만 해지할 수 있습니다.",
           "출금계좌, 입금계좌, 이체지정일은 변경할 수 없으며 해지 후 재등록해야 합니다.",
@@ -281,6 +287,14 @@ export function G04AutoTransferList() {
         <Pagination page={safePage} totalPages={totalPages} onPageChange={setPage} />
       </FormSection>
 
+      <NoticeBoxFooter
+        className="mt-8"
+        items={[
+          "이체지정일이 해당 월에 없는 경우(29~31일) 그 달의 말일에 실행됩니다(POL-034).",
+          "해지는 다음 실행 예정일 전일까지만 가능합니다(REQ-AUTO-011).",
+        ]}
+      />
+
       <ConfirmDialog
         open={terminateConfirmOpen}
         onClose={() => setTerminateConfirmOpen(false)}
@@ -291,7 +305,7 @@ export function G04AutoTransferList() {
         cancelLabel="닫기"
         items={selectedRows.map((r) => ({
           label: `매월 ${r.dayOfMonth}일`,
-          value: `${r.fromAlias} → ${r.payeeName} / ${formatAmount(r.amount)}`,
+          value: `${r.fromAlias} → ${maskName(r.payeeName)} / ${formatAmount(r.amount)}`,
         }))}
       />
 
@@ -342,13 +356,13 @@ export function G04AutoTransferList() {
             <FormRow label="출금계좌" labelWidth={110}>
               <span className="text-ink-muted">
                 {editTarget.fromAlias} / {formatAccountNo(editTarget.fromAccountNo)}
-                <span className="ml-1 text-xs">(변경 불가)</span>
+                <span className="ml-1 text-2xs text-ink-faint">(변경 불가)</span>
               </span>
             </FormRow>
             <FormRow label="입금계좌" labelWidth={110}>
               <span className="text-ink-muted">
-                {formatAccountNo(editTarget.toAccountNo)} ({editTarget.payeeName})
-                <span className="ml-1 text-xs">(변경 불가)</span>
+                {formatAccountNo(editTarget.toAccountNo)} ({maskName(editTarget.payeeName)})
+                <span className="ml-1 text-2xs text-ink-faint">(변경 불가)</span>
               </span>
             </FormRow>
             <FormRow label="이체금액" htmlFor="g04-edit-amount" labelWidth={110}>

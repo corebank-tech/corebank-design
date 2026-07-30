@@ -10,8 +10,15 @@ import {
   AmountField,
   MemoField,
 } from "@/components/transfer/fields"
+import { NoticeBoxFooter } from "@/components/shell/notice-box"
+import { maskName } from "@/lib/format"
 import type { AccountOption } from "@/shared/types/account"
 import type { InstantTransferForm } from "../instant-transfer-screen"
+
+/** Muted, de-emphasized field label — reserves visual weight for 이체금액. */
+function FieldLabel({ children }: { children: React.ReactNode }) {
+  return <span className="text-xs text-ink-faint">{children}</span>
+}
 
 export interface InstantTransferStep1Props {
   steps: string[]
@@ -43,6 +50,7 @@ export function InstantTransferStep1({
   const selected = accounts.find((a) => a.accountNo === form.fromAccount)
 
   return (
+    <>
     <StepLayout
       steps={steps}
       currentStep={1}
@@ -66,7 +74,7 @@ export function InstantTransferStep1({
     >
       <FormSection title="출금정보">
         <div>
-          <FormRow label="출금계좌" required htmlFor="it-from">
+          <FormRow label={<FieldLabel>출금계좌</FieldLabel>} required htmlFor="it-from">
             <WithdrawAccountField
               id="it-from"
               options={accounts}
@@ -74,7 +82,7 @@ export function InstantTransferStep1({
               onChange={(v) => onChange("fromAccount", v)}
             />
           </FormRow>
-          <FormRow label="계좌비밀번호" required htmlFor="it-pw">
+          <FormRow label={<FieldLabel>계좌비밀번호</FieldLabel>} required htmlFor="it-pw">
             <AccountPasswordField
               id="it-pw"
               value={form.password}
@@ -86,7 +94,7 @@ export function InstantTransferStep1({
 
       <FormSection title="입금정보">
         <div>
-          <FormRow label="입금계좌번호" required htmlFor="it-to">
+          <FormRow label={<FieldLabel>입금계좌번호</FieldLabel>} required htmlFor="it-to">
             <AccountNumberField
               id="it-to"
               value={form.toAccount}
@@ -96,28 +104,38 @@ export function InstantTransferStep1({
               }}
               onConfirm={() => onChange("toConfirmed", form.toAccount.length >= 10)}
               confirmed={form.toConfirmed}
-              holderName={payeeName}
+              holderName={maskName(payeeName)}
             />
           </FormRow>
           <FormRow label="이체금액" required htmlFor="it-amount">
-            <AmountField
-              id="it-amount"
-              value={form.amount}
-              onChange={(v) => onChange("amount", v)}
-              perTransferLimit={perTransferLimit}
-              dailyRemaining={dailyRemaining}
-              fullAmount={selected?.withdrawable}
-            />
+            <div className="flex w-full flex-col gap-1">
+              <AmountField
+                id="it-amount"
+                value={form.amount}
+                onChange={(v) => onChange("amount", v)}
+                perTransferLimit={perTransferLimit}
+                dailyRemaining={dailyRemaining}
+                fullAmount={selected?.withdrawable}
+              />
+              <p className="text-2xs text-ink-muted">
+                ※ 1회 최대 이체한도 범위 내에서 1원 이상의 정수만 입력할 수 있으며, 0원과 소수는 입력할 수 없습니다.
+              </p>
+            </div>
           </FormRow>
-          <FormRow label="받는분 통장 표시내용" htmlFor="it-memo-payee">
-            <MemoField
-              id="it-memo-payee"
-              value={form.payeeMemo}
-              onChange={(v) => onChange("payeeMemo", v)}
-              placeholder="받는분 통장에 표시 (7자 이내)"
-            />
+          <FormRow label={<FieldLabel>받는분 통장 표시내용</FieldLabel>} htmlFor="it-memo-payee">
+            <div className="flex w-full flex-col gap-1">
+              <MemoField
+                id="it-memo-payee"
+                value={form.payeeMemo}
+                onChange={(v) => onChange("payeeMemo", v)}
+                placeholder="받는분 통장에 표시 (7자 이내)"
+              />
+              <p className="text-2xs text-ink-muted">
+                ※ 미입력 시 받는 분 표시내용은 본인 예금주명, 내 표시내용은 상대방 예금주명이 기본 적용됩니다.
+              </p>
+            </div>
           </FormRow>
-          <FormRow label="내 통장 표시내용" htmlFor="it-memo-mine">
+          <FormRow label={<FieldLabel>내 통장 표시내용</FieldLabel>} htmlFor="it-memo-mine">
             <MemoField
               id="it-memo-mine"
               value={form.myMemo}
@@ -128,5 +146,16 @@ export function InstantTransferStep1({
         </div>
       </FormSection>
     </StepLayout>
+
+    <NoticeBoxFooter
+      className="mt-8"
+      items={[
+        "이체는 당행 계좌 간 원화 이체만 제공하며, 타행이체는 제공하지 않습니다.",
+        "출금계좌와 입금계좌가 동일하면 이체할 수 없습니다.",
+        "당행이체는 수수료가 발생하지 않습니다.",
+        "이체 실행 전 계좌비밀번호와 OTP 인증이 필요합니다.",
+      ]}
+    />
+    </>
   )
 }

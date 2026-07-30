@@ -84,3 +84,34 @@ export function formatDateTime(input: Date | string): string {
     d.getSeconds(),
   )}`
 }
+
+/** "홍길동" -> "홍*동". Masks the middle character only. (REQ-CMN-018) */
+export function maskName(name: string): string {
+  if (name.length <= 1) return name
+  if (name.length === 2) return `${name[0]}*`
+  const mid = Math.floor(name.length / 2)
+  return `${name.slice(0, mid)}*${name.slice(mid + 1)}`
+}
+
+/**
+ * "110632892336" -> "110-632-89****". Masks the trailing digits of the last group.
+ * CSV export only (REQ-INQR-015) — on-screen account numbers are shown in full (REQ-CMN-017).
+ */
+export function maskAccountNo(raw: string): string {
+  const formatted = formatAccountNo(raw)
+  const groups = formatted.split("-")
+  const lastIndex = groups.length - 1
+  const last = groups[lastIndex]
+  groups[lastIndex] =
+    last.length <= 2 ? last : `${last.slice(0, 2)}${"*".repeat(last.length - 2)}`
+  return groups.join("-")
+}
+
+/** "abcdef@example.com" -> "abc****@example.com". Masks the local part from the 4th character on. (REQ-CMN-018) */
+export function maskEmail(email: string): string {
+  const [local, domain] = email.split("@")
+  if (!domain) return email
+  if (local.length <= 3) return email
+  const visible = local.slice(0, 3)
+  return `${visible}${"*".repeat(local.length - 3)}@${domain}`
+}

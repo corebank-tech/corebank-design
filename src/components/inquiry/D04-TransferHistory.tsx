@@ -1,6 +1,6 @@
 import * as React from "react"
 import { BarChart3 } from "lucide-react"
-import { NoticeBox } from "@/components/shell/notice-box"
+import { NoticeBox, NoticeBoxFooter } from "@/components/shell/notice-box"
 import { FormSection } from "@/components/ui/form-section"
 import { FormRow } from "@/components/ui/form-row"
 import { Select } from "@/components/ui/select"
@@ -13,7 +13,7 @@ import { SummaryRow } from "@/components/query/summary-row"
 import { GridToolbar } from "@/components/query/grid-toolbar"
 import { DataGrid, type DataGridColumn } from "@/components/query/data-grid"
 import { Pagination } from "@/components/query/pagination"
-import { formatAccountNo, formatAmount, formatDate, formatDateTime } from "@/lib/format"
+import { formatAccountNo, formatAmount, formatDate, formatDateTime, maskName } from "@/lib/format"
 import {
   MOCK_TRANSFER_HISTORY,
   MOCK_MONTHLY_TRANSFER_STATS,
@@ -107,7 +107,13 @@ export function D04TransferHistory() {
       width: 150,
       render: (r) => <span className="tabular-nums">{formatAccountNo(r.toAccountNo)}</span>,
     },
-    { key: "payeeName", header: "예금주", align: "center", width: 90 },
+    {
+      key: "payeeName",
+      header: "예금주",
+      align: "center",
+      width: 90,
+      render: (r) => maskName(r.payeeName),
+    },
     {
       key: "amount",
       header: "이체금액",
@@ -143,7 +149,7 @@ export function D04TransferHistory() {
   return (
     <div className="flex flex-col">
       <NoticeBox
-        className="mb-6"
+        className="mb-8"
         items={[
           "조회기간은 최대 1년까지 선택할 수 있으며 기본값은 최근 1개월입니다.",
           "처리중 상태는 서버 처리 지연 시에만 표시되며 이후 정상 또는 오류로 확정됩니다.",
@@ -202,9 +208,17 @@ export function D04TransferHistory() {
           items={[
             {
               label: "총 정상이체건수",
-              value: `${normalCount.toLocaleString("ko-KR")}건`,
+              value: (
+                <span className="text-xs font-normal text-ink-faint">
+                  {normalCount.toLocaleString("ko-KR")}건
+                </span>
+              ),
             },
-            { label: "총 이체금액", value: formatAmount(normalAmount), valueColor: "var(--color-deposit)" },
+            {
+              label: "총 이체금액",
+              value: <span className="text-page font-bold">{formatAmount(normalAmount)}</span>,
+              valueColor: "var(--color-deposit)",
+            },
             { label: "총 오류금액", value: formatAmount(errorAmount), valueColor: "var(--color-withdraw)" },
             { label: "총 수수료", value: formatAmount(totalFee) },
           ]}
@@ -231,6 +245,14 @@ export function D04TransferHistory() {
         <Pagination page={safePage} totalPages={totalPages} onPageChange={setPage} />
       </FormSection>
 
+      <NoticeBoxFooter
+        className="mt-8"
+        items={[
+          "이체 처리상태는 정상, 오류, 처리중 3종으로만 관리됩니다(POL-025).",
+          "당행이체는 수수료가 발생하지 않습니다(POL-028).",
+        ]}
+      />
+
       <Modal
         open={detail != null}
         onClose={() => setDetail(null)}
@@ -249,7 +271,7 @@ export function D04TransferHistory() {
               ["이체일시", formatDateTime(detail.datetime)],
               ["출금계좌", `${detail.fromAlias} / ${formatAccountNo(detail.fromAccountNo)}`],
               ["입금계좌", formatAccountNo(detail.toAccountNo)],
-              ["예금주", detail.payeeName],
+              ["예금주", maskName(detail.payeeName)],
               ["이체금액", formatAmount(detail.amount)],
               ["수수료", formatAmount(detail.fee)],
               ["표시내용", detail.memo],
@@ -263,6 +285,9 @@ export function D04TransferHistory() {
             ))}
           </dl>
         )}
+        <p className="mt-3 text-2xs leading-relaxed text-ink-faint">
+          ※ 예금주명은 개인정보 보호를 위해 가운데 1자를 마스킹하여 표시합니다.
+        </p>
       </Modal>
 
       <Modal
@@ -276,7 +301,7 @@ export function D04TransferHistory() {
           </Button>
         }
       >
-        <p className="mb-4 text-sm text-ink-muted">
+        <p className="mb-4 text-2xs text-ink-faint">
           전월 기준 최근 1년 이내 월별·출금계좌별 이체건수와 이체금액입니다.
         </p>
         <DataGrid

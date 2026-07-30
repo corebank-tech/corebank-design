@@ -164,6 +164,19 @@ export function ReservedTransferScreen() {
           onClose={() => setOtpOpen(false)}
           onConfirm={() => {
             setOtpOpen(false)
+            /** REQ-RSV-007: 등록한 예약이체가 즉시 예약이체 조회/취소(E-04) 목록에 반영된다. */
+            MOCK_RESERVATIONS.unshift({
+              id: `rsv-${crypto.randomUUID()}`,
+              status: "대기",
+              scheduledDate: form.scheduledDate,
+              registeredAt: NOW,
+              fromAccountNo: form.fromAccount,
+              fromAlias: selectedAccount?.alias ?? "",
+              toAccountNo: form.toAccount,
+              payeeName: MOCK_PAYEE_NAME,
+              amount: form.amount ?? 0,
+              memo: form.payeeMemo || "-",
+            })
             setStep(3)
           }}
           guide="예약이체 등록을 위해 OTP를 발급한 뒤 화면에 표시된 6자리 번호를 입력하세요."

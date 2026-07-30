@@ -15,12 +15,23 @@ import {
   MOCK_FREQUENT_TRANSFER_ACCOUNTS,
   MOCK_RECENT_TRANSFER_ACCOUNTS,
   MOCK_TRANSFER_ACCOUNTS,
+  MOCK_TRANSFER_HISTORY,
   MOCK_TRANSFER_LIMITS,
   generateTransactionId,
   lookupPayeeAccount,
   type FrequentTransferAccount,
   type TransferResultRow,
 } from "@/entities/transfer"
+import {
+  MOCK_OVERVIEW_ACCOUNTS,
+  MOCK_ORDER_ACCOUNTS,
+  MOCK_PASSWORD_ACCOUNTS,
+  MOCK_WITHDRAWAL_ACCOUNTS,
+} from "@/entities/account"
+import {
+  MOCK_ACCESS_STATUS,
+  MOCK_DASHBOARD_ACCOUNTS,
+} from "@/entities/dashboard"
 import {
   formatAccountNo,
   formatAmount,
@@ -56,7 +67,29 @@ type InstantTransferResultState = {
 }
 
 const STEPS = ["정보입력", "정보확인 및 인증", "완료"]
-const BASE_TIME = "2026-07-30T09:15:00"
+const BASE_TIME = "2026-07-23T08:57:34"
+
+type DebitableAccount = {
+  accountNo: string
+  balance: number
+  withdrawable?: number
+}
+
+/**
+ * 이체 실행 후 계좌를 표시하는 모든 화면(B-01·B-04·B-05·B-07·대시보드)의
+ * 잔액을 함께 갱신한다. 각 화면이 자체 mock 배열을 보유하고 있어 화면별로
+ * 반복 적용한다.
+ */
+const debitAccount = (
+  rows: DebitableAccount[],
+  accountNo: string,
+  amount: number,
+) => {
+  const row = rows.find((r) => r.accountNo === accountNo)
+  if (!row) return
+  row.balance -= amount
+  if (row.withdrawable != null) row.withdrawable -= amount
+}
 
 const INITIAL_FORM: InstantTransferForm = {
   fromAccount: MOCK_TRANSFER_ACCOUNTS[0].accountNo,
@@ -222,10 +255,11 @@ export function InstantTransferScreen() {
             "일시적인 시스템 오류로 이체가 처리되지 않았습니다. 잠시 후 다시 시도하세요.",
         })
       } else {
+        const transactionId = generateTransactionId(BASE_TIME)
         setResult({
           variant: "success",
           row: {
-            transactionId: generateTransactionId(BASE_TIME),
+            transactionId,
             processedAt: BASE_TIME,
             fromAccountNo: form.fromAccount,
             toAccountNo: form.toAccount,
@@ -236,6 +270,45 @@ export function InstantTransferScreen() {
             balanceAfter,
           },
         })
+
+        /**
+         * 이체 실행 결과를 원장에 반영한다 — REQ-TRSF-021·022·023(이체결과조회),
+         * REQ-TRSF-024(당일 사용금액 즉시 갱신), 계좌 잔액·최근거래일 갱신.
+         */
+        MOCK_TRANSFER_HISTORY.unshift({
+          id: transactionId,
+          datetime: BASE_TIME,
+          fromAccountNo: form.fromAccount,
+          fromAlias: selectedAccount?.alias ?? "",
+          toAccountNo: form.toAccount,
+          payeeName: form.payeeName,
+          amount,
+          fee: 0,
+          status: "정상",
+          txId: transactionId,
+          memo: form.payeeMemo || "-",
+        })
+        MOCK_TRANSFER_LIMITS.usedToday += amount
+        MOCK_ACCESS_STATUS.lastTransaction = BASE_TIME
+        for (const rows of [
+          MOCK_TRANSFER_ACCOUNTS,
+          MOCK_OVERVIEW_ACCOUNTS,
+          MOCK_PASSWORD_ACCOUNTS,
+          MOCK_WITHDRAWAL_ACCOUNTS,
+          MOCK_ORDER_ACCOUNTS,
+          MOCK_DASHBOARD_ACCOUNTS,
+        ]) {
+          debitAccount(rows, form.fromAccount, amount)
+        }
+        const transferDate = BASE_TIME.slice(0, 10)
+        const overviewRow = MOCK_OVERVIEW_ACCOUNTS.find(
+          (a) => a.accountNo === form.fromAccount,
+        )
+        if (overviewRow) overviewRow.lastActivityDate = transferDate
+        const dashboardRow = MOCK_DASHBOARD_ACCOUNTS.find(
+          (a) => a.accountNo === form.fromAccount,
+        )
+        if (dashboardRow) dashboardRow.lastTxDate = transferDate
       }
       setStep(3)
     }

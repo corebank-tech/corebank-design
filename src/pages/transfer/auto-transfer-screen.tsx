@@ -237,6 +237,22 @@ export function AutoTransferScreen() {
           onClose={() => setOtpOpen(false)}
           onConfirm={() => {
             setOtpOpen(false)
+            /** REQ-AUTO-009: 등록한 자동이체가 즉시 자동이체 조회/변경/해지(G-04) 목록에 반영된다. */
+            MOCK_AUTO_TRANSFERS.unshift({
+              id: `at-${crypto.randomUUID()}`,
+              fromAccountNo: form.fromAccount,
+              fromAlias: selectedAccount?.alias ?? "",
+              toAccountNo: form.toAccount,
+              payeeName: MOCK_PAYEE_NAME,
+              amount: form.amount ?? 0,
+              cycleMonths: form.cycleMonths,
+              dayOfMonth: form.dayOfMonth,
+              startDate: form.startDate,
+              endDate: form.endDate,
+              memo: form.payeeMemo || "-",
+              status: "정상",
+              nextExecDate,
+            })
             setStep(3)
           }}
           guide="자동이체 등록을 위해 OTP를 발급한 뒤 화면에 표시된 6자리 번호를 입력하세요."

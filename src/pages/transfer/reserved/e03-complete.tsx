@@ -15,7 +15,7 @@ export type ReservedCompleteRow = {
   myMemo: React.ReactNode
 }
 
-export type ReservedTransferStep3Props = {
+type ReservedTransferStep3Props = {
   steps: string[]
   row: ReservedCompleteRow
   highlightAmount: React.ReactNode

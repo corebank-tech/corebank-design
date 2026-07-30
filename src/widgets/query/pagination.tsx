@@ -2,7 +2,7 @@ import * as React from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { cn } from "@/shared/lib/utils"
 
-export type PaginationProps = {
+type PaginationProps = {
   /** 1-based current page. */
   page: number
   /** Total number of pages. */

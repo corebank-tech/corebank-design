@@ -5,7 +5,7 @@ import { formatAmount, formatKoreanAmount } from "@/shared/lib/format"
 /* TermMonthsField — 가입기간(개월)                                    */
 /* ================================================================== */
 
-export type TermMonthsFieldProps = {
+type TermMonthsFieldProps = {
   id?: string
   value: number | null
   onChange: (value: number | null) => void
@@ -50,7 +50,7 @@ export function TermMonthsField({ id, value, onChange, min, max }: TermMonthsFie
 /* JoinAmountField — 가입금액(일시납입 / 월납입금액)                    */
 /* ================================================================== */
 
-export type JoinAmountFieldProps = {
+type JoinAmountFieldProps = {
   id?: string
   value: number | null
   onChange: (value: number | null) => void

@@ -1,7 +1,7 @@
 import type { AccessStatus } from "@/entities/dashboard"
 import { formatDateTime } from "@/shared/lib/format"
 
-export type AccessStatusPanelProps = {
+type AccessStatusPanelProps = {
   status: AccessStatus
 }
 

@@ -6,7 +6,7 @@ import { FormRow } from "@/shared/ui/form-row"
 import { maskName, maskEmail, maskPhone } from "@/shared/lib/format"
 import { SIGNUP_STEPS, type SignupData } from "./signup-flow"
 
-export type A05ConfirmProps = {
+type A05ConfirmProps = {
   data: SignupData
   onEdit: () => void
   onComplete: () => void

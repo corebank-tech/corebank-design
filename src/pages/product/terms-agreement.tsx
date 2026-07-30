@@ -6,7 +6,7 @@ import { Modal } from "@/shared/ui/modal"
 import { AlertDialog } from "@/shared/ui/alert-dialog"
 import type { TermItem } from "@/entities/product"
 
-export type TermsAgreementProps = {
+type TermsAgreementProps = {
   terms: TermItem[]
   /**
    * 필수 항목이 모두 체크되면 true 로 올려준다.

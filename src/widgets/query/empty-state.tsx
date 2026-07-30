@@ -1,7 +1,7 @@
 import * as React from "react"
 import { cn } from "@/shared/lib/utils"
 
-export type EmptyStateProps = React.HTMLAttributes<HTMLDivElement> & {
+type EmptyStateProps = React.HTMLAttributes<HTMLDivElement> & {
   /** Primary guidance line. Vary per situation. */
   message: React.ReactNode
   /** Optional secondary detail line. */

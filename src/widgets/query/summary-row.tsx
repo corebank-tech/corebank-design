@@ -10,7 +10,7 @@ export type SummaryItem = {
   valueColor?: string
 }
 
-export type SummaryRowProps = React.HTMLAttributes<HTMLDivElement> & {
+type SummaryRowProps = React.HTMLAttributes<HTMLDivElement> & {
   items: SummaryItem[]
   /** Label cell width in px. */
   labelWidth?: number

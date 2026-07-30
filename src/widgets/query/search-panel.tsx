@@ -3,7 +3,7 @@ import { Bookmark } from "lucide-react"
 import { Button } from "@/shared/ui/button"
 import { cn } from "@/shared/lib/utils"
 
-export type SearchPanelProps = React.HTMLAttributes<HTMLDivElement> & {
+type SearchPanelProps = React.HTMLAttributes<HTMLDivElement> & {
   /** FormRow rows forming the condition table. */
   children: React.ReactNode
   onSearch?: () => void

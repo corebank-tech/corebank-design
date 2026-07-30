@@ -8,7 +8,7 @@ export type ConfirmDialogItem = {
   value: React.ReactNode
 }
 
-export type ConfirmDialogProps = {
+type ConfirmDialogProps = {
   open: boolean
   onClose: () => void
   onConfirm: () => void

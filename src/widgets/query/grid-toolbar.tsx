@@ -6,7 +6,7 @@ import { cn } from "@/shared/lib/utils"
 
 const PAGE_SIZE_OPTIONS = [5, 10, 20, 30, 50] as const
 
-export type GridToolbarProps = React.HTMLAttributes<HTMLDivElement> & {
+type GridToolbarProps = React.HTMLAttributes<HTMLDivElement> & {
   /** Period range label, e.g. "2026.06.23 ~ 2026.07.23". */
   periodLabel?: React.ReactNode
   /** Total result count. */

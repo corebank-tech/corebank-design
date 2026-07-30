@@ -2,7 +2,7 @@ import type * as React from "react"
 import { Modal } from "@/shared/ui/modal"
 import { Button } from "@/shared/ui/button"
 
-export type TextViewModalProps = {
+type TextViewModalProps = {
   open: boolean
   onClose: () => void
   title?: React.ReactNode

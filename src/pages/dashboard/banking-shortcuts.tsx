@@ -7,7 +7,7 @@ export type ShortcutLink = {
   href: string
 }
 
-export type BankingShortcutsProps = {
+type BankingShortcutsProps = {
   label?: string
   /** 표시할 바로가기 목록. 기본값은 호출 측(A09MainDashboard)에서 주입한다. */
   links: ShortcutLink[]

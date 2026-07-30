@@ -33,7 +33,7 @@ const iconColor: Record<AlertVariant, string> = {
   danger: "text-[var(--color-danger)]",
 }
 
-export type AlertProps = Omit<React.HTMLAttributes<HTMLDivElement>, "title"> & {
+type AlertProps = Omit<React.HTMLAttributes<HTMLDivElement>, "title"> & {
   variant?: AlertVariant
   title?: React.ReactNode
 }

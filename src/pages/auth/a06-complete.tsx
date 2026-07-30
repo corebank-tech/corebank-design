@@ -5,7 +5,7 @@ import { Button } from "@/shared/ui/button"
 import { StepLayout } from "@/widgets/transfer/step-layout"
 import { SIGNUP_STEPS } from "./signup-flow"
 
-export type A06CompleteProps = {
+type A06CompleteProps = {
   name: string
 }
 

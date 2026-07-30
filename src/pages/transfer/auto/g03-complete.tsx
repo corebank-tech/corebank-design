@@ -15,7 +15,7 @@ export type AutoCompleteRow = {
   nextExecDate: React.ReactNode
 }
 
-export type AutoTransferStep3Props = {
+type AutoTransferStep3Props = {
   steps: string[]
   row: AutoCompleteRow
   highlightAmount: React.ReactNode

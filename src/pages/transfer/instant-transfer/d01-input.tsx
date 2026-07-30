@@ -24,7 +24,7 @@ function FieldLabel({ children }: { children: React.ReactNode }) {
   return <span className="text-xs text-ink-faint">{children}</span>
 }
 
-export type InstantTransferStep1Props = {
+type InstantTransferStep1Props = {
   steps: string[]
   accounts: AccountOption[]
   form: InstantTransferForm

@@ -17,7 +17,7 @@ const toneBar: Record<ModalTone, string> = {
   danger: "bg-[var(--color-danger)] text-white",
 }
 
-export type ModalProps = {
+type ModalProps = {
   open: boolean
   onClose: () => void
   title: React.ReactNode

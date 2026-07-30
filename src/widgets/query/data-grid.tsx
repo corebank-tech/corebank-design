@@ -21,7 +21,7 @@ export type DataGridColumn<Row> = {
   className?: string
 }
 
-export type DataGridProps<Row> = {
+type DataGridProps<Row> = {
   columns: DataGridColumn<Row>[]
   rows: Row[]
   loading?: boolean

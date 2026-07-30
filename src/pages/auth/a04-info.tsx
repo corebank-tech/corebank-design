@@ -49,7 +49,7 @@ function RuleList({ rules }: { rules: RuleCheck[] }) {
   )
 }
 
-export type A04InfoProps = {
+type A04InfoProps = {
   data: SignupData
   onChange: (partial: Partial<SignupData>) => void
   onNext: () => void

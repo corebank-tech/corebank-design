@@ -14,7 +14,7 @@ const variantIcon: Record<
   pending: { icon: Loader2, ring: "bg-surface text-ink-muted", spin: true },
 }
 
-export type ResultPanelProps<Row> = {
+type ResultPanelProps<Row> = {
   variant: ResultVariant
   /** Bold headline, e.g. "이체가 완료되었습니다." */
   message: React.ReactNode

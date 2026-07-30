@@ -9,7 +9,7 @@ export type GridSearchField = {
   label: string
 }
 
-export type GridSearchModalProps = {
+type GridSearchModalProps = {
   open: boolean
   onClose: () => void
   /** 그리드가 보유한 컬럼 중 검색 대상으로 선택 가능한 항목. */

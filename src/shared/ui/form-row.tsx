@@ -1,7 +1,7 @@
 import * as React from "react"
 import { cn } from "@/shared/lib/utils"
 
-export type FormRowProps = React.HTMLAttributes<HTMLDivElement> & {
+type FormRowProps = React.HTMLAttributes<HTMLDivElement> & {
   label: React.ReactNode
   required?: boolean
   htmlFor?: string

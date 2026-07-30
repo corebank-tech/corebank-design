@@ -2,7 +2,7 @@ import { ChevronRight } from "lucide-react"
 import type { NotificationItem } from "@/entities/dashboard"
 import { formatDateTime } from "@/shared/lib/format"
 
-export type NotificationSummaryProps = {
+type NotificationSummaryProps = {
   items: NotificationItem[]
   /** 전체 미읽음 건수. 헤더 숫자에 사용, 미지정 시 items.length로 대체. */
   totalCount?: number

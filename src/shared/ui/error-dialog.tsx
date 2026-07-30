@@ -4,7 +4,7 @@ import { Modal } from "@/shared/ui/modal"
 import { Button } from "@/shared/ui/button"
 import { cn } from "@/shared/lib/utils"
 
-export type ErrorDialogProps = {
+type ErrorDialogProps = {
   open: boolean
   onClose: () => void
   /** Title bar text. */

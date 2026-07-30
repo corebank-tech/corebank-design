@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 import { X } from "lucide-react"
 import { NAV } from "@/shared/config/nav"
 
-export type FullMenuOverlayProps = {
+type FullMenuOverlayProps = {
   open: boolean
   onClose: () => void
 }

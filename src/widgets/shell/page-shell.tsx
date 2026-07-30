@@ -9,7 +9,7 @@ import { Footer } from "./footer"
 import { useSession } from "@/app/session-context"
 import { useNotifications } from "@/app/notifications-context"
 
-export type PageShellProps = {
+type PageShellProps = {
   activeId?: string
   breadcrumb?: string[]
   title?: React.ReactNode

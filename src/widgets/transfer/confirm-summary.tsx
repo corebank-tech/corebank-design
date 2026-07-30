@@ -10,7 +10,7 @@ export type ConfirmSummaryColumn = {
   emphasis?: boolean
 }
 
-export type ConfirmSummaryProps = React.HTMLAttributes<HTMLDivElement> & {
+type ConfirmSummaryProps = React.HTMLAttributes<HTMLDivElement> & {
   columns: ConfirmSummaryColumn[]
 }
 

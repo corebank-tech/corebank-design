@@ -34,6 +34,9 @@ export default tseslint.config(
       "test-results",
       "public/mockServiceWorker.js",
       "src/shared/api/generated",
+      // 저장소 루트에서 실행할 때 .claude/worktrees/ 아래 다른 세션의 워크트리
+      // 체크아웃(별도 .git 포함)까지 스캔하지 않도록 제외한다.
+      ".claude",
     ],
   },
   js.configs.recommended,

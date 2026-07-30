@@ -115,3 +115,18 @@ export function maskEmail(email: string): string {
   const visible = local.slice(0, 3)
   return `${visible}${"*".repeat(local.length - 3)}@${domain}`
 }
+
+/** "01098765432" -> "010-9876-5432" (3-4-4). Non-digits are stripped. */
+export function formatPhone(raw: string): string {
+  const digits = raw.replace(/\D/g, "")
+  if (digits.length !== 11) return digits
+  return `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7)}`
+}
+
+/** "01098765432" -> "010-****-5678". Masks the middle group. (REQ-CMN-018) */
+export function maskPhone(raw: string): string {
+  const formatted = formatPhone(raw)
+  const groups = formatted.split("-")
+  if (groups.length !== 3) return formatted
+  return `${groups[0]}-${"*".repeat(groups[1].length)}-${groups[2]}`
+}

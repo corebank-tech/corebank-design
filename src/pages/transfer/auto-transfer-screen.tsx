@@ -1,5 +1,5 @@
 import * as React from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useSearchParams } from "react-router-dom"
 import { ConfirmDialog } from "@/shared/ui/confirm-dialog"
 import { OtpModal } from "@/shared/ui/otp-modal"
 import {
@@ -53,6 +53,34 @@ const INITIAL_FORM: AutoTransferForm = {
   myMemo: "",
 }
 
+function toCycleMonths(raw: string | null): TransferCycleMonths {
+  if (raw === "3") return 3
+  if (raw === "6") return 6
+  return 1
+}
+
+/**
+ * REQ-PRDT-016: 상품가입 완료(C-06)에서 [자동이체 등록]으로 진입할 때
+ * querystring(toAccount/amount/cycleMonths/endDate)으로 넘어온 값을 초기 폼에 반영한다.
+ * 고객은 출금계좌와 이체지정일만 추가로 선택하면 되도록 나머지 값을 미리 채운다.
+ */
+function buildInitialForm(searchParams: URLSearchParams): AutoTransferForm {
+  const toAccount = searchParams.get("toAccount") ?? ""
+  const amountParam = searchParams.get("amount")
+  const endDate = searchParams.get("endDate") ?? ""
+
+  if (!toAccount) return INITIAL_FORM
+
+  return {
+    ...INITIAL_FORM,
+    toAccount,
+    toConfirmed: true,
+    amount: amountParam ? Number(amountParam) : null,
+    cycleMonths: toCycleMonths(searchParams.get("cycleMonths")),
+    endDate,
+  }
+}
+
 function isDuplicate(form: AutoTransferForm): boolean {
   if (!form.toConfirmed) return false
   return MOCK_AUTO_TRANSFERS.some(
@@ -91,8 +119,9 @@ function computeFirstExecDate(startISO: string, dayOfMonth: number): string {
  */
 export function AutoTransferScreen() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const [step, setStep] = React.useState(1)
-  const [form, setForm] = React.useState<AutoTransferForm>(INITIAL_FORM)
+  const [form, setForm] = React.useState<AutoTransferForm>(() => buildInitialForm(searchParams))
   const [confirmOpen, setConfirmOpen] = React.useState(false)
   const [otpOpen, setOtpOpen] = React.useState(false)
 

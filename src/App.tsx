@@ -1,10 +1,9 @@
 import * as React from "react"
-import { Routes, Route, Link, useLocation } from "react-router-dom"
+import { Routes, Route, Link, useLocation, useNavigate } from "react-router-dom"
 import { PageShell } from "@/widgets/shell/page-shell"
-import { EmptyState } from "@/widgets/query/empty-state"
-import { LoginScreen } from "@/pages/login-screen"
-import { MainDashboard } from "@/pages/dashboard/main-dashboard"
-import { TransactionInquiryScreen } from "@/pages/transaction-inquiry-screen"
+import { A01Login } from "@/pages/A01-Login"
+import { A09MainDashboard } from "@/pages/dashboard/A09-MainDashboard"
+import { B03TransactionInquiry } from "@/pages/B03-TransactionInquiry"
 import { InstantTransferScreen } from "@/pages/transfer/instant-transfer-screen"
 import { InstantTransferResultDemo } from "@/pages/transfer/instant-transfer/result-demo"
 import { ReservedTransferScreen } from "@/pages/transfer/reserved-transfer-screen"
@@ -22,6 +21,8 @@ import { B04AccountPassword } from "@/pages/account/B04-AccountPassword"
 import { B05WithdrawAccounts } from "@/pages/account/B05-WithdrawAccounts"
 import { B06AccountAlias } from "@/pages/account/B06-AccountAlias"
 import { B07AccountOrder } from "@/pages/account/B07-AccountOrder"
+import { C01ProductList } from "@/pages/product/C01-ProductList"
+import { C02ProductDetail } from "@/pages/product/C02-ProductDetail"
 import { C03Terms } from "@/pages/product/C03-Terms"
 import { C04InputInfo } from "@/pages/product/C04-InputInfo"
 import { C05ConfirmAuth } from "@/pages/product/C05-ConfirmAuth"
@@ -32,26 +33,10 @@ import { SignupFlow } from "@/pages/auth/SignupFlow"
 import { A07FindId } from "@/pages/auth/A07-FindId"
 import { A08ResetPassword } from "@/pages/auth/A08-ResetPassword"
 import { A10LogoutComplete } from "@/pages/auth/A10-LogoutComplete"
+import { RequireAuth } from "@/app/require-auth"
+import { useSession } from "@/app/session-context"
+import { SessionExpiredModal } from "@/shared/ui/session-expired-modal"
 import { cn } from "@/shared/lib/utils"
-
-/**
- * 아직 화면이 구현되지 않은 경로용 플레이스홀더 정의.
- * breadcrumb 은 docs/requirements.md §1 화면목록의 '경로(메뉴)' 열과 일치시킨다(REQ-CMN-004).
- */
-interface PlaceholderRoute {
-  path: string
-  screenId: string
-  title: string
-  breadcrumb: string[]
-  activeId?: string
-  loggedIn?: boolean
-}
-
-const PLACEHOLDER_ROUTES: PlaceholderRoute[] = [
-  // C — 수신(금융상품)
-  { path: "/products", screenId: "C-01", title: "상품몰 - 상품목록", breadcrumb: ["금융상품", "예금·적금", "상품목록"], activeId: "product" },
-  { path: "/products/:productId", screenId: "C-02", title: "상품 상세", breadcrumb: ["금융상품", "예금·적금", "상품상세"], activeId: "product" },
-]
 
 /** 개발용 라우트 목록 — 파트(A~G)별 화면ID 그룹. 디자인 시스템에 포함되지 않는다. */
 interface DevRoute {
@@ -76,8 +61,16 @@ const DEV_ROUTES: DevRoute[] = [
   { screenId: "B-01", label: "전체계좌조회", path: "/accounts" },
   { screenId: "B-02", label: "예금/적금 계좌조회", path: "/accounts/deposits" },
   { screenId: "B-03", label: "거래내역조회", path: "/inquiry" },
-  { screenId: "B-04", label: "계좌비밀번호 변경", path: "/user/accounts/password" },
-  { screenId: "B-05", label: "출금계좌관리", path: "/user/accounts/withdrawal" },
+  {
+    screenId: "B-04",
+    label: "계좌비밀번호 변경",
+    path: "/user/accounts/password",
+  },
+  {
+    screenId: "B-05",
+    label: "출금계좌관리",
+    path: "/user/accounts/withdrawal",
+  },
   { screenId: "B-06", label: "계좌별명 관리", path: "/user/accounts/alias" },
   { screenId: "B-07", label: "계좌순서 변경", path: "/user/accounts/order" },
 
@@ -91,19 +84,43 @@ const DEV_ROUTES: DevRoute[] = [
   { screenId: "D-01", label: "즉시이체", path: "/instant-transfer" },
   { screenId: "D-03", label: "즉시이체 결과(데모)", path: "/result" },
   { screenId: "D-04", label: "이체결과조회", path: "/transfer/history" },
-  { screenId: "D-05", label: "이체한도 조회/변경", path: "/user/transfer-limit" },
+  {
+    screenId: "D-05",
+    label: "이체한도 조회/변경",
+    path: "/user/transfer-limit",
+  },
 
-  { screenId: "E-01", label: "예약이체 등록", path: "/transfer/reservation/new" },
-  { screenId: "E-04", label: "예약이체 조회/취소", path: "/transfer/reservation" },
-  { screenId: "E-05", label: "예약이체 처리결과 조회", path: "/transfer/reservation/history" },
+  {
+    screenId: "E-01",
+    label: "예약이체 등록",
+    path: "/transfer/reservation/new",
+  },
+  {
+    screenId: "E-04",
+    label: "예약이체 조회/취소",
+    path: "/transfer/reservation",
+  },
+  {
+    screenId: "E-05",
+    label: "예약이체 처리결과 조회",
+    path: "/transfer/reservation/history",
+  },
 
   { screenId: "F-01", label: "고객정보 관리", path: "/user/profile" },
   { screenId: "F-01", label: "비밀번호 변경", path: "/user/password" },
   { screenId: "F-02", label: "알림함", path: "/notifications" },
 
   { screenId: "G-01", label: "자동이체 등록", path: "/transfer/auto/new" },
-  { screenId: "G-04", label: "자동이체 조회/변경/해지", path: "/transfer/auto" },
-  { screenId: "G-05", label: "자동이체 결과조회", path: "/transfer/auto/history" },
+  {
+    screenId: "G-04",
+    label: "자동이체 조회/변경/해지",
+    path: "/transfer/auto",
+  },
+  {
+    screenId: "G-05",
+    label: "자동이체 결과조회",
+    path: "/transfer/auto/history",
+  },
 ]
 
 const DEV_PARTS = ["A", "B", "C", "D", "E", "F", "G"] as const
@@ -113,12 +130,14 @@ function DevNav() {
   const [open, setOpen] = React.useState(false)
 
   return (
-    <div className="fixed bottom-4 right-4 z-[500]">
+    <div className="fixed right-4 bottom-4 z-[500]">
       {open && (
         <div className="mb-2 max-h-[70vh] w-[720px] overflow-y-auto rounded-lg border bg-white p-4 shadow-lg">
           <div className="grid grid-cols-4 gap-x-6 gap-y-4">
             {DEV_PARTS.map((part) => {
-              const routes = DEV_ROUTES.filter((r) => r.screenId.startsWith(part))
+              const routes = DEV_ROUTES.filter((r) =>
+                r.screenId.startsWith(part),
+              )
               if (routes.length === 0) return null
               return (
                 <div key={part}>
@@ -160,98 +179,129 @@ function DevNav() {
   )
 }
 
+/**
+ * A-11 세션 만료. SessionProvider의 10분 무조작 타이머가 만료되면 전 화면
+ * 위에 비해제형 모달을 띄운다(REQ-AUTH-031).
+ */
+function SessionExpiredGate() {
+  const { expired, acknowledgeExpired } = useSession()
+  const navigate = useNavigate()
+
+  if (!expired) return null
+
+  const goRelogin = () => {
+    acknowledgeExpired()
+    navigate("/", { replace: true })
+  }
+  const goMain = () => {
+    acknowledgeExpired()
+    navigate("/dashboard", { replace: true })
+  }
+
+  return (
+    <SessionExpiredModal open onRelogin={goRelogin} onMainScreen={goMain} />
+  )
+}
+
 export default function App() {
   return (
     <>
       {/* Dev-only route switcher (not part of the design system) */}
       <DevNav />
+      <SessionExpiredGate />
 
       <Routes>
         <Route
           path="/"
           element={
-            <PageShell activeId="user" bare loggedIn={false}>
-              <LoginScreen />
+            <PageShell activeId="user" bare>
+              <A01Login />
             </PageShell>
           }
         />
         <Route
           path="/dashboard"
           element={
-            <PageShell
-              activeId="user"
-              breadcrumb={["개인", "메인", "대시보드"]}
-              title="메인 대시보드"
-              customerName="홍길동"
-            >
-              <MainDashboard customerName="홍길동" />
-            </PageShell>
+            <RequireAuth>
+              <PageShell
+                activeId="user"
+                breadcrumb={["홈"]}
+                title="메인 대시보드"
+              >
+                <A09MainDashboard />
+              </PageShell>
+            </RequireAuth>
           }
         />
         <Route
           path="/inquiry"
           element={
-            <PageShell
-              activeId="inquiry"
-              breadcrumb={["개인", "조회", "예금", "거래내역조회"]}
-              title="거래내역조회"
-              customerName="홍길동"
-              notice={[
-                "거래내역은 최근 1년 이내의 범위에서 조회할 수 있습니다.",
-                "조회 기준일시 이후 발생한 거래는 다음 조회 시 반영됩니다.",
-                "실제 잔액은 미결제 거래 처리 상태에 따라 달라질 수 있습니다.",
-              ]}
-            >
-              <TransactionInquiryScreen />
-            </PageShell>
+            <RequireAuth>
+              <PageShell
+                activeId="inquiry"
+                breadcrumb={["조회", "계좌조회", "거래내역"]}
+                title="거래내역조회"
+                notice={[
+                  "거래내역은 최근 1년 이내의 범위에서 조회할 수 있습니다.",
+                  "조회 기준일시 이후 발생한 거래는 다음 조회 시 반영됩니다.",
+                  "실제 잔액은 미결제 거래 처리 상태에 따라 달라질 수 있습니다.",
+                ]}
+              >
+                <B03TransactionInquiry />
+              </PageShell>
+            </RequireAuth>
           }
         />
         <Route
           path="/instant-transfer"
           element={
-            <PageShell
-              activeId="transfer"
-              breadcrumb={["개인", "이체", "당행이체", "즉시이체"]}
-              customerName="홍길동"
-            >
-              <InstantTransferScreen />
-            </PageShell>
+            <RequireAuth>
+              <PageShell
+                activeId="transfer"
+                breadcrumb={["이체", "즉시이체", "당행이체"]}
+              >
+                <InstantTransferScreen />
+              </PageShell>
+            </RequireAuth>
           }
         />
         <Route
           path="/result"
           element={
-            <PageShell
-              activeId="transfer"
-              breadcrumb={["개인", "이체", "당행이체", "즉시이체"]}
-              customerName="홍길동"
-            >
-              <InstantTransferResultDemo />
-            </PageShell>
+            <RequireAuth>
+              <PageShell
+                activeId="transfer"
+                breadcrumb={["이체", "즉시이체", "당행이체"]}
+              >
+                <InstantTransferResultDemo />
+              </PageShell>
+            </RequireAuth>
           }
         />
         <Route
           path="/transfer/reservation/new"
           element={
-            <PageShell
-              activeId="transfer"
-              breadcrumb={["이체", "예약이체", "예약이체 등록"]}
-              customerName="홍길동"
-            >
-              <ReservedTransferScreen />
-            </PageShell>
+            <RequireAuth>
+              <PageShell
+                activeId="transfer"
+                breadcrumb={["이체", "예약이체", "예약이체 등록"]}
+              >
+                <ReservedTransferScreen />
+              </PageShell>
+            </RequireAuth>
           }
         />
         <Route
           path="/transfer/auto/new"
           element={
-            <PageShell
-              activeId="transfer"
-              breadcrumb={["이체", "자동이체", "자동이체 등록"]}
-              customerName="홍길동"
-            >
-              <AutoTransferScreen />
-            </PageShell>
+            <RequireAuth>
+              <PageShell
+                activeId="transfer"
+                breadcrumb={["이체", "자동이체", "자동이체 등록"]}
+              >
+                <AutoTransferScreen />
+              </PageShell>
+            </RequireAuth>
           }
         />
         <Route
@@ -261,7 +311,6 @@ export default function App() {
               activeId="user"
               breadcrumb={["개인", "공통", "안내 모달"]}
               title="공통 모달"
-              customerName="홍길동"
             >
               <FeedbackDemo />
             </PageShell>
@@ -271,192 +320,203 @@ export default function App() {
         <Route
           path="/accounts"
           element={
-            <PageShell
-              activeId="inquiry"
-              breadcrumb={["조회", "계좌조회", "전체계좌"]}
-              title="전체계좌조회"
-              customerName="홍길동"
-            >
-              <B01AllAccounts />
-            </PageShell>
+            <RequireAuth>
+              <PageShell
+                activeId="inquiry"
+                breadcrumb={["조회", "계좌조회", "전체계좌"]}
+                title="전체계좌조회"
+              >
+                <B01AllAccounts />
+              </PageShell>
+            </RequireAuth>
           }
         />
         <Route
           path="/accounts/deposits"
           element={
-            <PageShell
-              activeId="inquiry"
-              breadcrumb={["조회", "계좌조회", "예금·적금"]}
-              title="예금/적금 계좌조회"
-              customerName="홍길동"
-            >
-              <B02DepositAccounts />
-            </PageShell>
+            <RequireAuth>
+              <PageShell
+                activeId="inquiry"
+                breadcrumb={["조회", "계좌조회", "예금·적금"]}
+                title="예금/적금 계좌조회"
+              >
+                <B02DepositAccounts />
+              </PageShell>
+            </RequireAuth>
           }
         />
         <Route
           path="/transfer/history"
           element={
-            <PageShell
-              activeId="transfer"
-              breadcrumb={["이체", "즉시이체", "이체결과조회"]}
-              title="이체결과조회"
-              customerName="홍길동"
-            >
-              <D04TransferHistory />
-            </PageShell>
+            <RequireAuth>
+              <PageShell
+                activeId="transfer"
+                breadcrumb={["이체", "즉시이체", "이체결과조회"]}
+                title="이체결과조회"
+              >
+                <D04TransferHistory />
+              </PageShell>
+            </RequireAuth>
           }
         />
         <Route
           path="/transfer/reservation"
           element={
-            <PageShell
-              activeId="transfer"
-              breadcrumb={["이체", "예약이체", "예약이체등록 조회·취소"]}
-              title="예약이체 조회/취소"
-              customerName="홍길동"
-            >
-              <E04ReservationList />
-            </PageShell>
+            <RequireAuth>
+              <PageShell
+                activeId="transfer"
+                breadcrumb={["이체", "예약이체", "예약이체등록 조회·취소"]}
+                title="예약이체 조회/취소"
+              >
+                <E04ReservationList />
+              </PageShell>
+            </RequireAuth>
           }
         />
         <Route
           path="/transfer/reservation/history"
           element={
-            <PageShell
-              activeId="transfer"
-              breadcrumb={["이체", "예약이체", "예약이체 처리결과 조회"]}
-              title="예약이체 처리결과 조회"
-              customerName="홍길동"
-            >
-              <E05ReservationResults />
-            </PageShell>
+            <RequireAuth>
+              <PageShell
+                activeId="transfer"
+                breadcrumb={["이체", "예약이체", "예약이체 처리결과 조회"]}
+                title="예약이체 처리결과 조회"
+              >
+                <E05ReservationResults />
+              </PageShell>
+            </RequireAuth>
           }
         />
         <Route
           path="/transfer/auto"
           element={
-            <PageShell
-              activeId="transfer"
-              breadcrumb={["이체", "자동이체", "자동이체 조회·변경·해지"]}
-              title="자동이체 조회/변경/해지"
-              customerName="홍길동"
-            >
-              <G04AutoTransferList />
-            </PageShell>
+            <RequireAuth>
+              <PageShell
+                activeId="transfer"
+                breadcrumb={["이체", "자동이체", "자동이체 조회·변경·해지"]}
+                title="자동이체 조회/변경/해지"
+              >
+                <G04AutoTransferList />
+              </PageShell>
+            </RequireAuth>
           }
         />
         <Route
           path="/transfer/auto/history"
           element={
-            <PageShell
-              activeId="transfer"
-              breadcrumb={["이체", "자동이체", "자동이체결과 조회"]}
-              title="자동이체 결과조회"
-              customerName="홍길동"
-            >
-              <G05AutoTransferResults />
-            </PageShell>
+            <RequireAuth>
+              <PageShell
+                activeId="transfer"
+                breadcrumb={["이체", "자동이체", "자동이체결과 조회"]}
+                title="자동이체 결과조회"
+              >
+                <G05AutoTransferResults />
+              </PageShell>
+            </RequireAuth>
           }
         />
         <Route
           path="/user/accounts/password"
           element={
-            <PageShell
-              activeId="user"
-              breadcrumb={["사용자관리", "계좌관리", "계좌비밀번호"]}
-              title="계좌비밀번호 변경"
-              customerName="홍길동"
-            >
-              <B04AccountPassword />
-            </PageShell>
+            <RequireAuth>
+              <PageShell
+                activeId="user"
+                breadcrumb={["사용자관리", "계좌관리", "계좌비밀번호"]}
+                title="계좌비밀번호 변경"
+              >
+                <B04AccountPassword />
+              </PageShell>
+            </RequireAuth>
           }
         />
         <Route
           path="/user/accounts/withdrawal"
           element={
-            <PageShell
-              activeId="user"
-              breadcrumb={["사용자관리", "계좌관리", "출금계좌관리"]}
-              title="출금계좌관리"
-              customerName="홍길동"
-            >
-              <B05WithdrawAccounts />
-            </PageShell>
+            <RequireAuth>
+              <PageShell
+                activeId="user"
+                breadcrumb={["사용자관리", "계좌관리", "출금계좌관리"]}
+                title="출금계좌관리"
+              >
+                <B05WithdrawAccounts />
+              </PageShell>
+            </RequireAuth>
           }
         />
         <Route
           path="/user/accounts/alias"
           element={
-            <PageShell
-              activeId="user"
-              breadcrumb={["사용자관리", "계좌관리", "계좌별명관리"]}
-              title="계좌별명 관리"
-              customerName="홍길동"
-            >
-              <B06AccountAlias />
-            </PageShell>
+            <RequireAuth>
+              <PageShell
+                activeId="user"
+                breadcrumb={["사용자관리", "계좌관리", "계좌별명관리"]}
+                title="계좌별명 관리"
+              >
+                <B06AccountAlias />
+              </PageShell>
+            </RequireAuth>
           }
         />
         <Route
           path="/user/accounts/order"
           element={
-            <PageShell
-              activeId="user"
-              breadcrumb={["사용자관리", "계좌관리", "계좌순서변경"]}
-              title="계좌순서 변경"
-              customerName="홍길동"
-            >
-              <B07AccountOrder />
-            </PageShell>
+            <RequireAuth>
+              <PageShell
+                activeId="user"
+                breadcrumb={["사용자관리", "계좌관리", "계좌순서변경"]}
+                title="계좌순서 변경"
+              >
+                <B07AccountOrder />
+              </PageShell>
+            </RequireAuth>
           }
         />
         <Route
           path="/user/profile"
           element={
-            <PageShell
-              activeId="user"
-              breadcrumb={["사용자관리", "고객정보관리"]}
-              title="고객정보 조회/변경"
-              customerName="홍길동"
-            >
-              <F01Profile />
-            </PageShell>
+            <RequireAuth>
+              <PageShell
+                activeId="user"
+                breadcrumb={["사용자관리", "고객정보관리"]}
+                title="고객정보 조회/변경"
+              >
+                <F01Profile />
+              </PageShell>
+            </RequireAuth>
           }
         />
         <Route
           path="/user/password"
           element={
-            <PageShell
-              activeId="user"
-              breadcrumb={["사용자관리", "고객정보관리"]}
-              title="고객정보 조회/변경"
-              customerName="홍길동"
-            >
-              <F01Profile />
-            </PageShell>
+            <RequireAuth>
+              <PageShell
+                activeId="user"
+                breadcrumb={["사용자관리", "고객정보관리"]}
+                title="고객정보 조회/변경"
+              >
+                <F01Profile />
+              </PageShell>
+            </RequireAuth>
           }
         />
         <Route
           path="/user/transfer-limit"
           element={
-            <PageShell
-              activeId="user"
-              breadcrumb={["사용자관리", "이체한도관리"]}
-              title="이체한도 조회/변경"
-              customerName="홍길동"
-            >
-              <D05TransferLimit />
-            </PageShell>
+            <RequireAuth>
+              <PageShell
+                activeId="user"
+                breadcrumb={["사용자관리", "이체한도관리"]}
+                title="이체한도 조회/변경"
+              >
+                <D05TransferLimit />
+              </PageShell>
+            </RequireAuth>
           }
         />
         <Route
           path="/signup"
           element={
-            <PageShell
-              breadcrumb={["홈", "로그인", "회원가입"]}
-              loggedIn={false}
-            >
+            <PageShell breadcrumb={["홈", "로그인", "회원가입"]}>
               <SignupFlow />
             </PageShell>
           }
@@ -467,7 +527,6 @@ export default function App() {
             <PageShell
               breadcrumb={["홈", "로그인", "아이디 찾기"]}
               title="아이디 찾기"
-              loggedIn={false}
             >
               <A07FindId />
             </PageShell>
@@ -479,7 +538,6 @@ export default function App() {
             <PageShell
               breadcrumb={["홈", "로그인", "비밀번호 재설정"]}
               title="비밀번호 재설정"
-              loggedIn={false}
             >
               <A08ResetPassword />
             </PageShell>
@@ -488,7 +546,7 @@ export default function App() {
         <Route
           path="/logout"
           element={
-            <PageShell breadcrumb={["홈", "로그아웃"]} title="로그아웃 완료" loggedIn={false}>
+            <PageShell breadcrumb={["홈", "로그아웃"]} title="로그아웃 완료">
               <A10LogoutComplete />
             </PageShell>
           }
@@ -496,69 +554,83 @@ export default function App() {
         <Route
           path="/notifications"
           element={
-            <PageShell
-              breadcrumb={["헤더", "알림"]}
-              title="알림함"
-              customerName="홍길동"
-            >
-              <F02NotificationInbox />
-            </PageShell>
+            <RequireAuth>
+              <PageShell breadcrumb={["헤더", "알림"]} title="알림함">
+                <F02NotificationInbox />
+              </PageShell>
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          path="/products"
+          element={
+            <RequireAuth>
+              <PageShell
+                activeId="product"
+                breadcrumb={["금융상품", "예금·적금", "상품목록"]}
+                title="상품몰 - 상품목록"
+              >
+                <C01ProductList />
+              </PageShell>
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/products/:productId"
+          element={
+            <RequireAuth>
+              <PageShell
+                activeId="product"
+                breadcrumb={["금융상품", "예금·적금", "상품상세"]}
+                title="상품 상세"
+              >
+                <C02ProductDetail />
+              </PageShell>
+            </RequireAuth>
           }
         />
 
         <Route
           path="/product/:productId/join/1"
           element={
-            <PageShell activeId="product" breadcrumb={["금융상품", "가입"]} customerName="홍길동">
-              <C03Terms />
-            </PageShell>
+            <RequireAuth>
+              <PageShell activeId="product" breadcrumb={["금융상품", "가입"]}>
+                <C03Terms />
+              </PageShell>
+            </RequireAuth>
           }
         />
         <Route
           path="/product/:productId/join/2"
           element={
-            <PageShell activeId="product" breadcrumb={["금융상품", "가입"]} customerName="홍길동">
-              <C04InputInfo />
-            </PageShell>
+            <RequireAuth>
+              <PageShell activeId="product" breadcrumb={["금융상품", "가입"]}>
+                <C04InputInfo />
+              </PageShell>
+            </RequireAuth>
           }
         />
         <Route
           path="/product/:productId/join/3"
           element={
-            <PageShell activeId="product" breadcrumb={["금융상품", "가입"]} customerName="홍길동">
-              <C05ConfirmAuth />
-            </PageShell>
+            <RequireAuth>
+              <PageShell activeId="product" breadcrumb={["금융상품", "가입"]}>
+                <C05ConfirmAuth />
+              </PageShell>
+            </RequireAuth>
           }
         />
         <Route
           path="/product/:productId/join/4"
           element={
-            <PageShell activeId="product" breadcrumb={["금융상품", "가입"]} customerName="홍길동">
-              <C06Complete />
-            </PageShell>
+            <RequireAuth>
+              <PageShell activeId="product" breadcrumb={["금융상품", "가입"]}>
+                <C06Complete />
+              </PageShell>
+            </RequireAuth>
           }
         />
-
-        {PLACEHOLDER_ROUTES.map((r) => (
-          <Route
-            key={`${r.screenId}-${r.path}`}
-            path={r.path}
-            element={
-              <PageShell
-                activeId={r.activeId}
-                breadcrumb={r.breadcrumb}
-                title={r.title}
-                customerName="홍길동"
-                loggedIn={r.loggedIn ?? true}
-              >
-                <EmptyState
-                  message="준비 중인 화면입니다."
-                  description={`화면ID: ${r.screenId}`}
-                />
-              </PageShell>
-            }
-          />
-        ))}
       </Routes>
     </>
   )

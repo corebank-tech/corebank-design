@@ -5,30 +5,36 @@ import { Badge } from "@/shared/ui/badge"
 import { GridToolbar } from "@/widgets/query/grid-toolbar"
 import { DataGrid, type DataGridColumn } from "@/widgets/query/data-grid"
 import { Pagination } from "@/widgets/query/pagination"
+import { TextViewModal } from "@/widgets/query/text-view-modal"
+import { downloadCsv } from "@/shared/lib/csv"
 import { formatDateTime } from "@/shared/lib/format"
-import { MOCK_NOTIFICATION_INBOX, type NotificationInboxRow } from "@/lib/mock/f02-notifications"
+import type { NotificationInboxRow } from "@/lib/mock/f02-notifications"
+import { useNotifications } from "@/app/notifications-context"
 import { cn } from "@/shared/lib/utils"
 
 const BASE_TIME = "2026-07-23T08:57:34"
+const TODAY = "2026-07-23"
 
 /** F-02 알림함. REQ-MYPG-004·005. */
 export function F02NotificationInbox() {
-  const [rows, setRows] = React.useState(
-    [...MOCK_NOTIFICATION_INBOX].sort((a, b) => b.occurredAt.localeCompare(a.occurredAt)),
-  )
+  const { notifications: rows, unreadCount, markRead } = useNotifications()
   const [pageSize, setPageSize] = React.useState<number | "all">(10)
   const [page, setPage] = React.useState(1)
-
-  const unreadCount = rows.filter((r) => !r.read).length
+  const [brailleOpen, setBrailleOpen] = React.useState(false)
 
   const size = pageSize === "all" ? rows.length || 1 : pageSize
   const totalPages = Math.max(1, Math.ceil(rows.length / size))
   const safePage = Math.min(page, totalPages)
   const pageRows = rows.slice((safePage - 1) * size, safePage * size)
 
-  const markRead = (id: string) => {
-    setRows((prev) => prev.map((r) => (r.id === id ? { ...r, read: true } : r)))
-  }
+  const exportHeaders = ["상태", "발생일시", "구분", "제목", "내용"]
+  const exportRows = rows.map((r) => [
+    r.read ? "읽음" : "안읽음",
+    formatDateTime(r.occurredAt),
+    r.category,
+    r.title,
+    r.content,
+  ])
 
   const columns: DataGridColumn<NotificationInboxRow>[] = [
     {
@@ -105,6 +111,9 @@ export function F02NotificationInbox() {
             setPage(1)
           }}
           baseTimeLabel={formatDateTime(BASE_TIME)}
+          onPrint={() => window.print()}
+          onBrailleView={() => setBrailleOpen(true)}
+          onSaveFile={() => downloadCsv(`알림함_${TODAY}.csv`, exportHeaders, exportRows)}
         />
 
         <DataGrid
@@ -123,6 +132,14 @@ export function F02NotificationInbox() {
           "알림은 이체, 예약이체, 자동이체, 상품가입 처리 결과에 대해 생성되며 최신순으로 표시됩니다(REQ-MYPG-004).",
           "알림을 클릭하면 읽음 상태로 전환되며, 헤더의 미읽음 건수 배지에 즉시 반영됩니다(REQ-MYPG-005).",
         ]}
+      />
+
+      <TextViewModal
+        open={brailleOpen}
+        onClose={() => setBrailleOpen(false)}
+        title="알림함 점자보기"
+        headers={exportHeaders}
+        rows={exportRows}
       />
     </div>
   )

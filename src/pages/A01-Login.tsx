@@ -1,25 +1,36 @@
 import * as React from "react"
-import { Link } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { AlertCircle } from "lucide-react"
 import { Input } from "@/shared/ui/input"
 import { Checkbox } from "@/shared/ui/checkbox"
 import { Button } from "@/shared/ui/button"
 import { NoticeBoxFooter } from "@/widgets/shell/notice-box"
+import { useSession } from "@/app/session-context"
 
-export function LoginScreen() {
+const MAX_ATTEMPTS = 5
+
+interface LoginFailure {
+  locked: boolean
+  attempts: number
+}
+
+export function A01Login() {
   const [userId, setUserId] = React.useState("")
   const [password, setPassword] = React.useState("")
-  const [attempts, setAttempts] = React.useState(0)
-  const [error, setError] = React.useState(false)
-
-  const MAX = 5
+  const [failure, setFailure] = React.useState<LoginFailure | null>(null)
+  const { login } = useSession()
+  const navigate = useNavigate()
+  const location = useLocation()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // Demo: always fail to showcase the inline error + attempt counter.
-    const next = Math.min(attempts + 1, MAX)
-    setAttempts(next)
-    setError(true)
+    const result = login(userId, password)
+    if (result.ok) {
+      const from = (location.state as { from?: string } | null)?.from
+      navigate(from && from !== "/" ? from : "/dashboard", { replace: true })
+      return
+    }
+    setFailure({ locked: result.locked, attempts: result.attempts })
   }
 
   return (
@@ -33,7 +44,7 @@ export function LoginScreen() {
             </p>
           </div>
 
-          {error && (
+          {failure && (
             <div
               role="alert"
               className="mb-4 flex items-start gap-2 rounded-[var(--radius)] border border-[var(--color-danger)] bg-[var(--color-danger-tint)] p-3"
@@ -42,12 +53,19 @@ export function LoginScreen() {
                 className="mt-0.5 h-4 w-4 shrink-0 text-[var(--color-danger)]"
                 aria-hidden="true"
               />
-              <p className="text-sm text-ink">
-                아이디 또는 비밀번호가 올바르지 않습니다.{" "}
-                <span className="font-bold text-[var(--color-danger)]">
-                  ({attempts}/{MAX}회)
-                </span>
-              </p>
+              {failure.locked ? (
+                <p className="text-sm text-ink">
+                  비밀번호를 5회 연속 잘못 입력해 계정이 잠겼습니다. 잠금 해제는
+                  고객센터를 통한 관리자 확인 후에만 가능합니다.
+                </p>
+              ) : (
+                <p className="text-sm text-ink">
+                  아이디 또는 비밀번호가 올바르지 않습니다.{" "}
+                  <span className="font-bold text-[var(--color-danger)]">
+                    ({failure.attempts}/{MAX_ATTEMPTS}회)
+                  </span>
+                </p>
+              )}
             </div>
           )}
 
@@ -62,7 +80,7 @@ export function LoginScreen() {
                 onChange={(e) => setUserId(e.target.value)}
                 placeholder="아이디를 입력하세요"
                 autoComplete="username"
-                invalid={error}
+                invalid={!!failure}
               />
               <p className="text-2xs text-ink-muted">
                 ※ 아이디·비밀번호 방식만 제공되며, 공동인증서·간편인증은 지원하지 않습니다.
@@ -80,7 +98,7 @@ export function LoginScreen() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="비밀번호를 입력하세요"
                 autoComplete="current-password"
-                invalid={error}
+                invalid={!!failure}
               />
               <p className="text-2xs text-ink-muted">
                 ※ 비밀번호를 5회 연속 잘못 입력하면 계정이 잠깁니다(관리자 확인 후 해제 가능).
@@ -116,6 +134,7 @@ export function LoginScreen() {
         <NoticeBoxFooter
           className="mt-8"
           items={[
+            "체험용 계정: 아이디 honggildong / 비밀번호 Passw0rd! (Mock 데이터, 실제 인증서버 연동 없음).",
             "보안을 위해 로그인 후 10분간 이용이 없으면 자동으로 로그아웃됩니다(헤더의 [연장]으로 세션을 갱신할 수 있습니다).",
             "비밀번호를 5회 연속 잘못 입력하면 계정이 잠기며, 잠금 해제는 고객센터를 통한 관리자 확인 후에만 가능합니다.",
             "인증서·간편인증·보안카드는 제공하지 않으며, 아이디·비밀번호 방식으로만 로그인할 수 있습니다.",

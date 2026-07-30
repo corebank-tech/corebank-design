@@ -17,10 +17,14 @@ export interface ProductCard {
   summary: string
   /** 최고 금리 (연, 세전, %). */
   maxRate: number
+  /** 기본 금리 (연, 세전, %). */
+  baseRate: number
   /** 가입기간 표기 문자열. */
   period: string
   /** 최소 가입금액 (원). */
   minAmount: number
+  /** 가입금액 상한 (원). */
+  maxAmount: number
   /** 최신순 정렬 기준일 (YYYY-MM-DD). */
   updatedAt: string
 }
@@ -120,7 +124,9 @@ export function ProductCardGrid({
                 <span className="text-lg font-bold text-primary">%</span>
                 <span className="ml-1 text-xs text-ink-faint">(연, 세전)</span>
               </div>
-              <p className="mt-1 text-xs text-ink-faint">최고 금리</p>
+              <p className="mt-1 text-xs text-ink-faint">
+                최고 금리 <span className="tabular-nums">(기본금리 {p.baseRate.toFixed(2)}%)</span>
+              </p>
 
               <dl className="mt-5 flex flex-col gap-2 border-t border-[var(--color-border)] pt-4 text-sm">
                 <div className="flex items-center justify-between">
@@ -131,6 +137,12 @@ export function ProductCardGrid({
                   <dt className="text-ink-muted">최소금액</dt>
                   <dd className="font-bold tabular-nums text-ink">
                     {formatAmount(p.minAmount)}
+                  </dd>
+                </div>
+                <div className="flex items-center justify-between">
+                  <dt className="text-ink-muted">최대금액</dt>
+                  <dd className="font-bold tabular-nums text-ink">
+                    {formatAmount(p.maxAmount)}
                   </dd>
                 </div>
               </dl>

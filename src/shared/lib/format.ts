@@ -85,6 +85,18 @@ export function formatDateTime(input: Date | string): string {
   )}`
 }
 
+/**
+ * "1999-01-15" -> "1999.**.**". Masks the month and day, keeps the birth year.
+ * REQ-MYPG-001. 생년월일 단독 필드의 마스킹 자리수는 개인정보보호위원회·금융위
+ * 가이드라인에 명시되어 있지 않다 — 주민등록번호 마스킹 관행(뒷 7자리 마스킹,
+ * 앞 6자리 생년월일은 노출)과 달리 이 화면은 생년월일 자체를 마스킹 대상으로
+ * 요구하므로, 개인 특정에 더 크게 기여하는 월·일을 마스킹하고 출생연도만 남긴다.
+ */
+export function maskBirthDate(input: Date | string): string {
+  const d = toDate(input)
+  return `${d.getFullYear()}.**.**`
+}
+
 /** "홍길동" -> "홍*동". Masks the middle character only. (REQ-CMN-018) */
 export function maskName(name: string): string {
   if (name.length <= 1) return name
@@ -103,7 +115,9 @@ export function maskAccountNo(raw: string): string {
   const lastIndex = groups.length - 1
   const last = groups[lastIndex]
   groups[lastIndex] =
-    last.length <= 2 ? last : `${last.slice(0, 2)}${"*".repeat(last.length - 2)}`
+    last.length <= 2
+      ? last
+      : `${last.slice(0, 2)}${"*".repeat(last.length - 2)}`
   return groups.join("-")
 }
 

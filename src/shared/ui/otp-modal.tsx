@@ -69,6 +69,11 @@ export function OtpModal({
     return () => window.clearInterval(id)
   }, [open, issued, remaining])
 
+  /** REQ-OTP-005: 유효시간 경과 시 즉시(확인 클릭 전에도) 만료 안내를 노출한다. */
+  React.useEffect(() => {
+    if (expired) setError("입력 시간이 초과되었습니다. OTP를 재발급해 주세요.")
+  }, [expired])
+
   const issue = () => {
     setIssued(generateOtp())
     setRemaining(OTP_TTL_SECONDS)
@@ -82,7 +87,7 @@ export function OtpModal({
       return
     }
     if (expired) {
-      setError("OTP 유효시간이 지났습니다. 재발급 후 다시 입력하세요.")
+      setError("입력 시간이 초과되었습니다. OTP를 재발급해 주세요.")
       return
     }
     if (value.length !== 6) {
@@ -145,7 +150,7 @@ export function OtpModal({
           <>
             <span
               className={cn(
-                "text-3xl font-bold tabular-nums tracking-[0.2em]",
+                "text-3xl font-bold tracking-[0.2em] tabular-nums",
                 expired ? "text-ink-faint line-through" : "text-primary",
               )}
               aria-label="발급된 OTP 번호"

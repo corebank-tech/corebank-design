@@ -145,6 +145,8 @@ export interface AccountNumberFieldProps {
   /** Resolved payee name once the number is confirmed. */
   holderName?: string
   confirmed?: boolean
+  /** REQ-TRSF-004·007·030: 미존재·해지·거래정지·유형제한·동일계좌 등 조회 오류 안내. */
+  error?: string | null
 }
 
 export function AccountNumberField({
@@ -154,6 +156,7 @@ export function AccountNumberField({
   onConfirm,
   holderName,
   confirmed,
+  error,
 }: AccountNumberFieldProps) {
   return (
     <div className="flex w-full flex-col gap-2">
@@ -162,6 +165,7 @@ export function AccountNumberField({
           id={id}
           inputMode="numeric"
           placeholder="- 없이 숫자만 입력"
+          invalid={!!error}
           value={value}
           onChange={(e) => onChange(e.target.value.replace(/\D/g, ""))}
           className="max-w-xs"
@@ -174,6 +178,11 @@ export function AccountNumberField({
         <p className="text-sm text-ink-muted">
           예금주명{" "}
           <span className="font-bold text-ink">{holderName}</span>
+        </p>
+      )}
+      {error && (
+        <p role="alert" className="text-xs font-bold text-[var(--color-danger)]">
+          {error}
         </p>
       )}
     </div>
@@ -314,7 +323,7 @@ export function MemoField({
   value,
   onChange,
   placeholder,
-  maxLength = 7,
+  maxLength = 10,
 }: MemoFieldProps) {
   return (
     <div className="flex w-full items-center gap-2">

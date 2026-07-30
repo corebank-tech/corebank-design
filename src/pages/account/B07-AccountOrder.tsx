@@ -1,6 +1,6 @@
 import * as React from "react"
 import { ArrowUp, ArrowDown } from "lucide-react"
-import { NoticeBox } from "@/widgets/shell/notice-box"
+import { NoticeBox, NoticeBoxFooter } from "@/widgets/shell/notice-box"
 import { FormSection } from "@/shared/ui/form-section"
 import { Button } from "@/shared/ui/button"
 import { Alert } from "@/shared/ui/alert"
@@ -116,6 +116,14 @@ export function B07AccountOrder() {
           </Button>
         </div>
       </FormSection>
+
+      <NoticeBoxFooter
+        items={[
+          "[확인]을 눌러야 변경한 표시순서가 저장되며, 저장 전에는 계좌조회 화면에 반영되지 않습니다(REQ-ACCT-014).",
+          "[초기화]를 누르면 기본 순서인 개설일 오름차순으로 되돌아갑니다(REQ-ACCT-014).",
+          "저장된 표시순서는 전체계좌조회 등 계좌 목록 화면의 계좌 나열 순서에 그대로 반영됩니다.",
+        ]}
+      />
     </div>
   )
 }

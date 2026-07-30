@@ -1,4 +1,5 @@
 import * as React from "react"
+import { useNavigate } from "react-router-dom"
 import { FormSection } from "@/shared/ui/form-section"
 import { Button } from "@/shared/ui/button"
 import { DataGrid, type DataGridColumn } from "@/widgets/query/data-grid"
@@ -34,7 +35,7 @@ const SUMMARY_LABEL_WIDTH =
   ACCOUNT_COLUMN_WIDTHS.lastTxDate +
   ACCOUNT_COLUMN_WIDTHS.balance
 
-export interface MainDashboardProps {
+export interface A09MainDashboardProps {
   customerName?: string
   accounts?: DashboardAccount[]
   accessStatus?: AccessStatus
@@ -47,7 +48,7 @@ export interface MainDashboardProps {
   onOpenInbox?: () => void
 }
 
-export function MainDashboard({
+export function A09MainDashboard({
   customerName = "홍길동",
   accounts = MOCK_DASHBOARD_ACCOUNTS,
   accessStatus = MOCK_ACCESS_STATUS,
@@ -58,11 +59,28 @@ export function MainDashboard({
   onBrowseProducts,
   onSelectShortcut,
   onOpenInbox,
-}: MainDashboardProps) {
+}: A09MainDashboardProps) {
+  const navigate = useNavigate()
+
   const totalBalance = React.useMemo(
     () => accounts.reduce((sum, a) => sum + a.balance, 0),
     [accounts],
   )
+
+  const handleInquiry =
+    onInquiry ??
+    ((accountId: string) => {
+      const account = accounts.find((a) => a.id === accountId)
+      navigate(account ? `/inquiry?account=${account.accountNo}` : "/inquiry")
+    })
+  const handleTransfer =
+    onTransfer ??
+    ((accountId: string) => {
+      const account = accounts.find((a) => a.id === accountId)
+      navigate(account ? `/instant-transfer?from=${account.accountNo}` : "/instant-transfer")
+    })
+  const handleBrowseProducts = onBrowseProducts ?? (() => navigate("/products"))
+  const handleOpenInbox = onOpenInbox ?? (() => navigate("/notifications"))
 
   const columns: DataGridColumn<DashboardAccount>[] = [
     { key: "alias", header: "계좌명", align: "left", width: ACCOUNT_COLUMN_WIDTHS.alias },
@@ -111,10 +129,10 @@ export function MainDashboard({
       width: ACCOUNT_COLUMN_WIDTHS.actions,
       render: (r) => (
         <div className="flex items-center justify-center gap-1.5">
-          <Button size="sm" variant="outline" onClick={() => onInquiry?.(r.id)}>
+          <Button size="sm" variant="outline" onClick={() => handleInquiry(r.id)}>
             조회
           </Button>
-          <Button size="sm" variant="primary" onClick={() => onTransfer?.(r.id)}>
+          <Button size="sm" variant="primary" onClick={() => handleTransfer(r.id)}>
             이체
           </Button>
         </div>
@@ -148,7 +166,7 @@ export function MainDashboard({
                 message="등록된 계좌가 없습니다."
                 description="상품을 둘러보고 첫 계좌를 개설해 보세요."
                 action={
-                  <Button variant="primary" onClick={onBrowseProducts}>
+                  <Button variant="primary" onClick={handleBrowseProducts}>
                     상품 둘러보기
                   </Button>
                 }
@@ -184,14 +202,15 @@ export function MainDashboard({
       <BankingShortcuts links={shortcuts ?? DEFAULT_SHORTCUTS} onSelect={onSelectShortcut} />
 
       {/* [4] 미읽음 알림 */}
-      <NotificationSummary items={notifications} onOpenInbox={onOpenInbox} />
+      <NotificationSummary items={notifications} onOpenInbox={handleOpenInbox} />
     </div>
   )
 }
 
+/** REQ-CMN-024: 주요 업무 바로가기는 전체계좌조회·즉시이체·상품몰·이체결과조회 4개로 고정한다. */
 const DEFAULT_SHORTCUTS: ShortcutLink[] = [
-  { id: "products", label: "상품현황", href: "#" },
-  { id: "limit", label: "이체한도", href: "#" },
-  { id: "reservation", label: "예약이체", href: "#" },
-  { id: "auto", label: "자동이체", href: "#" },
+  { id: "accounts", label: "전체계좌조회", href: "/accounts" },
+  { id: "transfer", label: "즉시이체", href: "/instant-transfer" },
+  { id: "products", label: "상품몰", href: "/products" },
+  { id: "transfer-history", label: "이체결과조회", href: "/transfer/history" },
 ]

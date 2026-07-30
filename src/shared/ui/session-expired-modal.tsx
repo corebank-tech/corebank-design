@@ -7,6 +7,8 @@ export interface SessionExpiredModalProps {
   open: boolean
   /** Sends the user back to the login screen. */
   onRelogin: () => void
+  /** REQ-AUTH-031: [메인화면으로 이동] 버튼. 생략 시 [다시 로그인] 1개만 표시한다. */
+  onMainScreen?: () => void
   title?: React.ReactNode
   message?: React.ReactNode
 }
@@ -19,6 +21,7 @@ export interface SessionExpiredModalProps {
 export function SessionExpiredModal({
   open,
   onRelogin,
+  onMainScreen,
   title = "세션 만료",
   message = "장시간 조작이 없어 자동 로그아웃되었습니다.",
 }: SessionExpiredModalProps) {
@@ -32,14 +35,26 @@ export function SessionExpiredModal({
       closeOnEsc={false}
       hideCloseButton
       footer={
-        <Button
-          variant="primary"
-          size="lg"
-          className="min-w-[140px]"
-          onClick={onRelogin}
-        >
-          다시 로그인
-        </Button>
+        <>
+          {onMainScreen && (
+            <Button
+              variant="secondary"
+              size="lg"
+              className="min-w-[140px]"
+              onClick={onMainScreen}
+            >
+              메인화면으로 이동
+            </Button>
+          )}
+          <Button
+            variant="primary"
+            size="lg"
+            className="min-w-[140px]"
+            onClick={onRelogin}
+          >
+            다시 로그인
+          </Button>
+        </>
       }
     >
       <div className="flex flex-col items-center text-center">

@@ -44,12 +44,14 @@ export function AccountSelectField({
 /* PeriodField                                                         */
 /* ------------------------------------------------------------------ */
 
+/** REQ-INQR-009: 조회기간 프리셋(오늘·1주일·1개월·3개월·6개월·1년). */
 const PERIOD_CHIPS = [
   { id: "today", label: "오늘", days: 0 },
   { id: "1w", label: "1주일", days: 7 },
-  { id: "15d", label: "15일", days: 15 },
   { id: "1m", label: "1개월", days: 30 },
   { id: "3m", label: "3개월", days: 90 },
+  { id: "6m", label: "6개월", days: 182 },
+  { id: "1y", label: "1년", days: 365 },
 ] as const
 
 const MAX_RANGE_DAYS = 365

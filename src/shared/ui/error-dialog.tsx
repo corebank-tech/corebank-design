@@ -1,7 +1,8 @@
 import * as React from "react"
-import { AlertTriangle } from "lucide-react"
+import { AlertTriangle, ChevronDown } from "lucide-react"
 import { Modal } from "@/shared/ui/modal"
 import { Button } from "@/shared/ui/button"
+import { cn } from "@/shared/lib/utils"
 
 export interface ErrorDialogProps {
   open: boolean
@@ -19,7 +20,8 @@ export interface ErrorDialogProps {
 /**
  * A-92 오류 다이얼로그. Danger-toned modal with a warning icon, a plain-language
  * error message, and a reference error code. Never surfaces stack traces,
- * internal paths, or SQL.
+ * internal paths, or SQL. REQ-CMN-009: 오류코드는 접기/펼치기 영역에, 고객센터
+ * 안내를 함께 표시한다.
  */
 export function ErrorDialog({
   open,
@@ -30,6 +32,12 @@ export function ErrorDialog({
   confirmLabel = "확인",
   onConfirm,
 }: ErrorDialogProps) {
+  const [codeOpen, setCodeOpen] = React.useState(false)
+
+  React.useEffect(() => {
+    if (!open) setCodeOpen(false)
+  }, [open])
+
   return (
     <Modal
       open={open}
@@ -62,10 +70,34 @@ export function ErrorDialog({
             </p>
           ))}
         </div>
+
+        <p className="mt-4 text-sm text-ink-muted">
+          문제가 반복되면 고객센터 1599-0000(평일 09:00~18:00)으로 문의하세요.
+        </p>
+
         {code && (
-          <p className="mt-4 text-sm tabular-nums text-ink-muted">
-            오류코드 : {code}
-          </p>
+          <div className="mt-3 w-full">
+            <button
+              type="button"
+              onClick={() => setCodeOpen((v) => !v)}
+              aria-expanded={codeOpen}
+              className="mx-auto flex items-center gap-1 text-xs text-ink-faint hover:text-ink-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+            >
+              오류코드 보기
+              <ChevronDown
+                className={cn(
+                  "h-3.5 w-3.5 transition-transform",
+                  codeOpen && "rotate-180",
+                )}
+                aria-hidden="true"
+              />
+            </button>
+            {codeOpen && (
+              <p className="mt-1.5 text-center text-sm text-ink-muted tabular-nums">
+                오류코드 : {code}
+              </p>
+            )}
+          </div>
         )}
       </div>
     </Modal>

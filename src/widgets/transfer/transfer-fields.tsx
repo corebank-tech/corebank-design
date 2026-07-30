@@ -120,6 +120,7 @@ export function AccountPasswordField({
             }}
             type="password"
             inputMode="numeric"
+            autoComplete="off"
             maxLength={1}
             aria-label={`계좌비밀번호 ${i + 1}번째 자리`}
             value={digits[i]?.trim() ?? ""}
@@ -167,6 +168,7 @@ export function AccountNumberField({
         <Input
           id={id}
           inputMode="numeric"
+          autoComplete="off"
           placeholder="- 없이 숫자만 입력"
           invalid={!!error}
           value={value}

@@ -204,6 +204,12 @@ export interface AmountFieldProps {
   dailyRemaining: number
   /** Amount applied by the 전액 chip (e.g. withdrawable balance). */
   fullAmount?: number
+  /**
+   * 1일 잔여한도를 함께 검증·표시할지 여부. 예약이체·자동이체는 등록 시점에
+   * 1회 한도만 검증하고 1일 한도는 실행 시점에 검증하므로 false로 끈다
+   * (REQ-RSV-006, REQ-AUTO-006). 기본값 true(즉시이체).
+   */
+  showDailyLimit?: boolean
 }
 
 export function AmountField({
@@ -213,8 +219,11 @@ export function AmountField({
   perTransferLimit,
   dailyRemaining,
   fullAmount,
+  showDailyLimit = true,
 }: AmountFieldProps) {
-  const limit = Math.min(perTransferLimit, dailyRemaining)
+  const limit = showDailyLimit
+    ? Math.min(perTransferLimit, dailyRemaining)
+    : perTransferLimit
   const overLimit = value != null && value > limit
   const overPer = value != null && value > perTransferLimit
 
@@ -272,13 +281,14 @@ export function AmountField({
       </div>
 
       <p className="text-2xs text-ink-muted tabular-nums">
-        1회 한도 {formatAmount(perTransferLimit)} · 1일 잔여한도{" "}
-        {formatAmount(dailyRemaining)}
+        {showDailyLimit
+          ? `1회 한도 ${formatAmount(perTransferLimit)} · 1일 잔여한도 ${formatAmount(dailyRemaining)}`
+          : `1회 한도 ${formatAmount(perTransferLimit)}`}
       </p>
 
       {overLimit && (
         <p className="text-xs font-bold text-[var(--color-danger)]">
-          {overPer
+          {!showDailyLimit || overPer
             ? `1회 이체한도 ${formatAmount(perTransferLimit)}를 초과했습니다. 금액을 낮춰 다시 입력하세요.`
             : `1일 잔여한도 ${formatAmount(dailyRemaining)}를 초과했습니다. 금액을 낮춰 다시 입력하세요.`}
         </p>
@@ -327,27 +337,38 @@ export function MemoField({
 /* TransferDateField — 예약일 (D+1 ~ D+365)                            */
 /* ================================================================== */
 
-function parseISO(value: string): Date {
+export function parseISO(value: string): Date {
   const [y, m, d] = value.split("-").map(Number)
   return new Date(y, (m ?? 1) - 1, d ?? 1)
 }
 
-function toISO(date: Date): string {
+export function toISO(date: Date): string {
   const y = date.getFullYear()
   const m = String(date.getMonth() + 1).padStart(2, "0")
   const d = String(date.getDate()).padStart(2, "0")
   return `${y}-${m}-${d}`
 }
 
-function addDays(iso: string, days: number): string {
+export function addDays(iso: string, days: number): string {
   const d = parseISO(iso)
   d.setDate(d.getDate() + days)
   return toISO(d)
 }
 
-function daysBetween(startISO: string, endISO: string): number {
+export function daysBetween(startISO: string, endISO: string): number {
   const ms = parseISO(endISO).getTime() - parseISO(startISO).getTime()
   return Math.round(ms / 86_400_000)
+}
+
+/** iso 일자에 months개월을 더한다. 대상 월에 없는 일자는 그 달의 말일로 보정한다 (POL-034와 동일한 보정 규칙). */
+export function addMonths(iso: string, months: number): string {
+  const d = parseISO(iso)
+  const day = d.getDate()
+  const total = d.getMonth() + months
+  const year = d.getFullYear() + Math.floor(total / 12)
+  const month = ((total % 12) + 12) % 12
+  const lastDay = new Date(year, month + 1, 0).getDate()
+  return toISO(new Date(year, month, Math.min(day, lastDay)))
 }
 
 export interface TransferDateFieldProps {
@@ -358,6 +379,8 @@ export interface TransferDateFieldProps {
   today: string
   minDays?: number
   maxDays?: number
+  /** Range-error message noun, e.g. "예약일" / "이체 시작일". */
+  rangeLabel?: string
 }
 
 export function TransferDateField({
@@ -367,6 +390,7 @@ export function TransferDateField({
   today,
   minDays = 1,
   maxDays = 365,
+  rangeLabel = "예약일",
 }: TransferDateFieldProps) {
   const min = addDays(today, minDays)
   const max = addDays(today, maxDays)
@@ -387,7 +411,127 @@ export function TransferDateField({
       />
       {outOfRange && (
         <p className="text-xs font-bold text-[var(--color-danger)]">
-          예약일은 내일부터 1년 이내({min.replace(/-/g, ".")} ~{" "}
+          {rangeLabel}은 내일부터 1년 이내({min.replace(/-/g, ".")} ~{" "}
+          {max.replace(/-/g, ".")})에서 선택하세요.
+        </p>
+      )}
+    </div>
+  )
+}
+
+/* ================================================================== */
+/* TransferCycleField — 이체주기 (1/3/6개월, POL-033)                   */
+/* ================================================================== */
+
+export type TransferCycleMonths = 1 | 3 | 6
+
+export interface TransferCycleFieldProps {
+  id?: string
+  value: TransferCycleMonths
+  onChange: (value: TransferCycleMonths) => void
+}
+
+export function TransferCycleField({
+  id,
+  value,
+  onChange,
+}: TransferCycleFieldProps) {
+  return (
+    <div className="flex w-full flex-col gap-2">
+      <Select
+        id={id}
+        value={value}
+        onChange={(e) => onChange(Number(e.target.value) as TransferCycleMonths)}
+        className="w-[160px]"
+      >
+        <option value={1}>1개월</option>
+        <option value={3}>3개월</option>
+        <option value={6}>6개월</option>
+      </Select>
+      <p className="text-2xs text-ink-muted">
+        ※ 이체주기는 1개월·3개월·6개월 중에서만 선택할 수 있습니다.
+      </p>
+    </div>
+  )
+}
+
+/* ================================================================== */
+/* DayOfMonthField — 이체지정일 (1~31, POL-034)                        */
+/* ================================================================== */
+
+export interface DayOfMonthFieldProps {
+  id?: string
+  value: number
+  onChange: (value: number) => void
+}
+
+export function DayOfMonthField({
+  id,
+  value,
+  onChange,
+}: DayOfMonthFieldProps) {
+  return (
+    <div className="flex w-full flex-col gap-2">
+      <Select
+        id={id}
+        value={value}
+        onChange={(e) => onChange(Number(e.target.value))}
+        className="w-[120px]"
+      >
+        {Array.from({ length: 31 }, (_, i) => i + 1).map((d) => (
+          <option key={d} value={d}>
+            {d}일
+          </option>
+        ))}
+      </Select>
+      <p className="text-2xs text-ink-muted">
+        ※ 지정일이 해당 월에 없으면(29·30·31일) 그 달의 말일에 실행됩니다.
+      </p>
+    </div>
+  )
+}
+
+/* ================================================================== */
+/* TransferEndDateField — 이체종료일 (시작일 이후 ~ 시작일+60개월, POL-035) */
+/* ================================================================== */
+
+export interface TransferEndDateFieldProps {
+  id?: string
+  value: string
+  onChange: (value: string) => void
+  /** 이체 시작일 ISO date — 종료일 선택 범위의 기준. */
+  startDate: string
+  maxMonths?: number
+}
+
+export function TransferEndDateField({
+  id,
+  value,
+  onChange,
+  startDate,
+  maxMonths = 60,
+}: TransferEndDateFieldProps) {
+  const min = addDays(startDate, 1)
+  const max = addMonths(startDate, maxMonths)
+  const afterStart = value ? daysBetween(startDate, value) > 0 : true
+  const withinMax = value ? daysBetween(startDate, value) <= daysBetween(startDate, max) : true
+  const outOfRange = value !== "" && (!afterStart || !withinMax)
+
+  return (
+    <div className="flex w-full flex-col gap-2">
+      <Input
+        id={id}
+        type="date"
+        value={value}
+        min={min}
+        max={max}
+        invalid={outOfRange}
+        onChange={(e) => onChange(e.target.value)}
+        className="w-[180px]"
+      />
+      {outOfRange && (
+        <p className="text-xs font-bold text-[var(--color-danger)]">
+          종료일은 시작일 이후 최대 60개월 이내({min.replace(/-/g, ".")} ~{" "}
           {max.replace(/-/g, ".")})에서 선택하세요.
         </p>
       )}

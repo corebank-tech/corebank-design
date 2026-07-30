@@ -7,6 +7,8 @@ import { MainDashboard } from "@/components/dashboard/main-dashboard"
 import { TransactionInquiryScreen } from "@/components/transaction-inquiry-screen"
 import { InstantTransferScreen } from "@/components/transfer/instant-transfer-screen"
 import { InstantTransferResultDemo } from "@/components/transfer/instant-transfer/result-demo"
+import { ReservedTransferScreen } from "@/components/transfer/reserved-transfer-screen"
+import { AutoTransferScreen } from "@/components/transfer/auto-transfer-screen"
 import { FeedbackDemo } from "@/components/feedback/feedback-demo"
 import { B01AllAccounts } from "@/components/inquiry/B01-AllAccounts"
 import { B02DepositAccounts } from "@/components/inquiry/B02-DepositAccounts"
@@ -57,15 +59,9 @@ const PLACEHOLDER_ROUTES: PlaceholderRoute[] = [
   // D — 이체(즉시이체)
   { path: "/user/transfer-limit", screenId: "D-05", title: "이체한도 조회/변경", breadcrumb: ["사용자관리", "이체한도관리"], activeId: "user" },
 
-  // E — 이체(예약이체)
-  { path: "/transfer/reservation/new", screenId: "E-01", title: "예약이체 등록 1단계 - 정보입력", breadcrumb: ["이체", "예약이체", "예약이체 등록"], activeId: "transfer" },
-
   // F — 공통(마이페이지)
   { path: "/user/profile", screenId: "F-01", title: "고객정보 조회/변경", breadcrumb: ["사용자관리", "고객정보관리"], activeId: "user" },
   { path: "/user/password", screenId: "F-01", title: "고객정보 조회/변경", breadcrumb: ["사용자관리", "고객정보관리"], activeId: "user" },
-
-  // G — 이체(자동이체)
-  { path: "/transfer/auto/new", screenId: "G-01", title: "자동이체 등록 1단계 - 정보입력", breadcrumb: ["이체", "자동이체", "자동이체 등록"], activeId: "transfer" },
 ]
 
 /** 개발용 라우트 목록 — 파트(A~G)별 화면ID 그룹. 디자인 시스템에 포함되지 않는다. */
@@ -242,6 +238,30 @@ export default function App() {
               customerName="홍길동"
             >
               <InstantTransferResultDemo />
+            </PageShell>
+          }
+        />
+        <Route
+          path="/transfer/reservation/new"
+          element={
+            <PageShell
+              activeId="transfer"
+              breadcrumb={["이체", "예약이체", "예약이체 등록"]}
+              customerName="홍길동"
+            >
+              <ReservedTransferScreen />
+            </PageShell>
+          }
+        />
+        <Route
+          path="/transfer/auto/new"
+          element={
+            <PageShell
+              activeId="transfer"
+              breadcrumb={["이체", "자동이체", "자동이체 등록"]}
+              customerName="홍길동"
+            >
+              <AutoTransferScreen />
             </PageShell>
           }
         />

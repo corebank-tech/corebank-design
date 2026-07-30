@@ -102,7 +102,7 @@ function InfoRow({ items, gridCols }: { items: InfoItem[]; gridCols: string }) {
   )
 }
 
-export function TransactionInquiryScreen() {
+export function B03TransactionInquiry() {
   const [searchParams] = useSearchParams()
   const [account, setAccount] = React.useState(() => {
     /** REQ-INQR-005: 계좌목록의 [조회] 진입 시 해당 계좌가 선택된 상태로 시작한다. */

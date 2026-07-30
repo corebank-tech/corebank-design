@@ -35,7 +35,7 @@ const SUMMARY_LABEL_WIDTH =
   ACCOUNT_COLUMN_WIDTHS.lastTxDate +
   ACCOUNT_COLUMN_WIDTHS.balance
 
-export interface MainDashboardProps {
+export interface A09MainDashboardProps {
   customerName?: string
   accounts?: DashboardAccount[]
   accessStatus?: AccessStatus
@@ -48,7 +48,7 @@ export interface MainDashboardProps {
   onOpenInbox?: () => void
 }
 
-export function MainDashboard({
+export function A09MainDashboard({
   customerName = "홍길동",
   accounts = MOCK_DASHBOARD_ACCOUNTS,
   accessStatus = MOCK_ACCESS_STATUS,
@@ -59,7 +59,7 @@ export function MainDashboard({
   onBrowseProducts,
   onSelectShortcut,
   onOpenInbox,
-}: MainDashboardProps) {
+}: A09MainDashboardProps) {
   const navigate = useNavigate()
 
   const totalBalance = React.useMemo(

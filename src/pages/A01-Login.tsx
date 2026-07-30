@@ -14,7 +14,7 @@ interface LoginFailure {
   attempts: number
 }
 
-export function LoginScreen() {
+export function A01Login() {
   const [userId, setUserId] = React.useState("")
   const [password, setPassword] = React.useState("")
   const [failure, setFailure] = React.useState<LoginFailure | null>(null)

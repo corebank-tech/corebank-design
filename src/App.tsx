@@ -1,9 +1,9 @@
 import * as React from "react"
 import { Routes, Route, Link, useLocation, useNavigate } from "react-router-dom"
 import { PageShell } from "@/widgets/shell/page-shell"
-import { LoginScreen } from "@/pages/login-screen"
-import { MainDashboard } from "@/pages/dashboard/main-dashboard"
-import { TransactionInquiryScreen } from "@/pages/transaction-inquiry-screen"
+import { A01Login } from "@/pages/A01-Login"
+import { A09MainDashboard } from "@/pages/dashboard/A09-MainDashboard"
+import { B03TransactionInquiry } from "@/pages/B03-TransactionInquiry"
 import { InstantTransferScreen } from "@/pages/transfer/instant-transfer-screen"
 import { InstantTransferResultDemo } from "@/pages/transfer/instant-transfer/result-demo"
 import { ReservedTransferScreen } from "@/pages/transfer/reserved-transfer-screen"
@@ -179,7 +179,7 @@ export default function App() {
           path="/"
           element={
             <PageShell activeId="user" bare>
-              <LoginScreen />
+              <A01Login />
             </PageShell>
           }
         />
@@ -188,7 +188,7 @@ export default function App() {
           element={
             <RequireAuth>
               <PageShell activeId="user" breadcrumb={["홈"]} title="메인 대시보드">
-                <MainDashboard />
+                <A09MainDashboard />
               </PageShell>
             </RequireAuth>
           }
@@ -207,7 +207,7 @@ export default function App() {
                   "실제 잔액은 미결제 거래 처리 상태에 따라 달라질 수 있습니다.",
                 ]}
               >
-                <TransactionInquiryScreen />
+                <B03TransactionInquiry />
               </PageShell>
             </RequireAuth>
           }

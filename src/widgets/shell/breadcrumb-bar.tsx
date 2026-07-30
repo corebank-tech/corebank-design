@@ -1,6 +1,6 @@
 import { ChevronRight } from "lucide-react"
 
-export interface BreadcrumbBarProps {
+export type BreadcrumbBarProps = {
   trail?: string[]
 }
 

@@ -4,7 +4,7 @@ import { FormSection } from "@/shared/ui/form-section"
 import { StepLayout } from "@/widgets/transfer/step-layout"
 import { ConfirmSummary } from "@/widgets/transfer/confirm-summary"
 
-export interface InstantTransferStep2Props {
+export type InstantTransferStep2Props = {
   steps: string[]
   scheduledAt: React.ReactNode
   fromAccount: React.ReactNode

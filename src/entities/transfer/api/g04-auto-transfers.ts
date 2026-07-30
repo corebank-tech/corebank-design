@@ -6,7 +6,7 @@
 export type AutoTransferStatus = "정상" | "종료" | "해지"
 export type TransferCycle = 1 | 3 | 6
 
-export interface AutoTransferRow {
+export type AutoTransferRow = {
   id: string
   fromAccountNo: string
   fromAlias: string

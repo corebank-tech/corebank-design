@@ -2,7 +2,7 @@ import * as React from "react"
 import { Star, Type, Printer } from "lucide-react"
 import { cn } from "@/shared/lib/utils"
 
-export interface PageHeaderProps {
+export type PageHeaderProps = {
   title: React.ReactNode
   /** [텍스트 크기 조절] 클릭 시 호출. 생략 시 버튼은 비활성 표시된다. */
   onCycleTextScale?: () => void

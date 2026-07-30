@@ -9,7 +9,7 @@
 import { MOCK_RESERVATIONS } from "@/entities/transfer/api/e04-reservations"
 import { MOCK_AUTO_TRANSFERS } from "@/entities/transfer/api/g04-auto-transfers"
 
-export interface WithdrawalAccount {
+export type WithdrawalAccount = {
   id: string
   accountNo: string
   alias: string

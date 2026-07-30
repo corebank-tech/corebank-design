@@ -2,7 +2,7 @@ import * as React from "react"
 import { Button } from "@/shared/ui/button"
 import { StepLayout } from "@/widgets/transfer/step-layout"
 
-export interface InstantTransferStep3Props {
+export type InstantTransferStep3Props = {
   steps: string[]
   /** ResultPanel slot (delivered by a later chunk). */
   resultSlot?: React.ReactNode

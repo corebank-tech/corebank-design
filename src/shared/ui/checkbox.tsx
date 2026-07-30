@@ -2,10 +2,10 @@ import * as React from "react"
 import { Check } from "lucide-react"
 import { cn } from "@/shared/lib/utils"
 
-export interface CheckboxProps extends Omit<
+export type CheckboxProps = Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
   "type"
-> {
+> & {
   label?: React.ReactNode
 }
 

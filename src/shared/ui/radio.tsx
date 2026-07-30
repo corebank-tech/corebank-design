@@ -1,10 +1,10 @@
 import * as React from "react"
 import { cn } from "@/shared/lib/utils"
 
-export interface RadioProps extends Omit<
+export type RadioProps = Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
   "type"
-> {
+> & {
   label?: React.ReactNode
 }
 

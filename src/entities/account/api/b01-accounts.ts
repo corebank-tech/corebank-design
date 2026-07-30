@@ -5,7 +5,7 @@
 
 export type AccountGroupId = "checking" | "deposit"
 
-export interface OverviewAccount {
+export type OverviewAccount = {
   id: string
   group: AccountGroupId
   /** 계좌명(별명 우선, REQ-INQR-004) */

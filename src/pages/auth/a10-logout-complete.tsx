@@ -5,7 +5,7 @@ import { ResultPanel } from "@/widgets/transfer/result-panel"
 import type { DataGridColumn } from "@/widgets/query/data-grid"
 import { formatDateTime } from "@/shared/lib/format"
 
-interface LogoutRow {
+type LogoutRow = {
   loggedOutAt: string
 }
 

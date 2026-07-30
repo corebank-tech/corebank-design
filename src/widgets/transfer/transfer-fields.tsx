@@ -14,7 +14,7 @@ import type { AccountOption } from "@/shared/types/account"
 /* WithdrawAccountField — 출금계좌 선택                                 */
 /* ================================================================== */
 
-export interface WithdrawAccountFieldProps {
+export type WithdrawAccountFieldProps = {
   id?: string
   options: AccountOption[]
   value?: string
@@ -71,7 +71,7 @@ export function WithdrawAccountField({
 /* AccountPasswordField — 계좌비밀번호 4자리                            */
 /* ================================================================== */
 
-export interface AccountPasswordFieldProps {
+export type AccountPasswordFieldProps = {
   id?: string
   value: string
   onChange: (value: string) => void
@@ -137,7 +137,7 @@ export function AccountPasswordField({
 /* AccountNumberField — 입금계좌번호 + 계좌확인                         */
 /* ================================================================== */
 
-export interface AccountNumberFieldProps {
+export type AccountNumberFieldProps = {
   id?: string
   value: string
   onChange: (value: string) => void
@@ -202,7 +202,7 @@ const QUICK_AMOUNTS = [
   { label: "1만", value: 10_000 },
 ] as const
 
-export interface AmountFieldProps {
+export type AmountFieldProps = {
   id?: string
   /** Amount in KRW, or null when empty. */
   value: number | null
@@ -310,7 +310,7 @@ export function AmountField({
 /* MemoField — 통장 표시내용 (받는분 / 나)                              */
 /* ================================================================== */
 
-export interface MemoFieldProps {
+export type MemoFieldProps = {
   id?: string
   value: string
   onChange: (value: string) => void
@@ -380,7 +380,7 @@ export function addMonths(iso: string, months: number): string {
   return toISO(new Date(year, month, Math.min(day, lastDay)))
 }
 
-export interface TransferDateFieldProps {
+export type TransferDateFieldProps = {
   id?: string
   value: string
   onChange: (value: string) => void
@@ -434,7 +434,7 @@ export function TransferDateField({
 
 export type TransferCycleMonths = 1 | 3 | 6
 
-export interface TransferCycleFieldProps {
+export type TransferCycleFieldProps = {
   id?: string
   value: TransferCycleMonths
   onChange: (value: TransferCycleMonths) => void
@@ -468,7 +468,7 @@ export function TransferCycleField({
 /* DayOfMonthField — 이체지정일 (1~31, POL-034)                        */
 /* ================================================================== */
 
-export interface DayOfMonthFieldProps {
+export type DayOfMonthFieldProps = {
   id?: string
   value: number
   onChange: (value: number) => void
@@ -504,7 +504,7 @@ export function DayOfMonthField({
 /* TransferEndDateField — 이체종료일 (시작일 이후 ~ 시작일+60개월, POL-035) */
 /* ================================================================== */
 
-export interface TransferEndDateFieldProps {
+export type TransferEndDateFieldProps = {
   id?: string
   value: string
   onChange: (value: string) => void

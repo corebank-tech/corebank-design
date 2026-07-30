@@ -4,12 +4,12 @@ import { Button } from "@/shared/ui/button"
 import { Input } from "@/shared/ui/input"
 import { Radio } from "@/shared/ui/radio"
 
-export interface GridSearchField {
+export type GridSearchField = {
   key: string
   label: string
 }
 
-export interface GridSearchModalProps {
+export type GridSearchModalProps = {
   open: boolean
   onClose: () => void
   /** 그리드가 보유한 컬럼 중 검색 대상으로 선택 가능한 항목. */

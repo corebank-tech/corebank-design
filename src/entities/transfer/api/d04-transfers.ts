@@ -5,7 +5,7 @@
 
 export type TransferStatus = "정상" | "오류" | "처리중"
 
-export interface TransferHistoryRow {
+export type TransferHistoryRow = {
   id: string
   /** ISO datetime. */
   datetime: string
@@ -211,7 +211,7 @@ export const MOCK_TRANSFER_HISTORY: TransferHistoryRow[] = [
 ]
 
 /** REQ-TRSF-033: 전월 기준 최근 1년 이내 월별·출금계좌별 통계(권장 기능). */
-export interface MonthlyTransferStat {
+export type MonthlyTransferStat = {
   month: string
   fromAlias: string
   count: number

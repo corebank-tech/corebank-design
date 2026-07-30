@@ -1,6 +1,6 @@
 /** F-01 고객정보 조회/변경 mock 데이터. */
 
-export interface CustomerProfile {
+export type CustomerProfile = {
   name: string
   userId: string
   /** ISO date (YYYY-MM-DD) */

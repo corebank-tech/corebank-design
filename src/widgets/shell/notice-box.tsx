@@ -2,7 +2,7 @@ import * as React from "react"
 import { CheckCircle2, ChevronDown, ChevronUp, Info } from "lucide-react"
 import { cn } from "@/shared/lib/utils"
 
-export interface NoticeBoxProps {
+export type NoticeBoxProps = {
   title?: React.ReactNode
   items: React.ReactNode[]
   className?: string
@@ -39,7 +39,7 @@ export function NoticeBox({
   )
 }
 
-export interface NoticeBoxFooterProps {
+export type NoticeBoxFooterProps = {
   title?: string
   items: React.ReactNode[]
   className?: string

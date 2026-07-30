@@ -3,7 +3,7 @@
  * A-04 정보입력과 A-08 비밀번호 재설정이 동일 규칙을 공유한다(REQ-AUTH-033 인수기준).
  */
 
-export interface RuleCheck {
+export type RuleCheck = {
   key: string
   label: string
   passed: boolean

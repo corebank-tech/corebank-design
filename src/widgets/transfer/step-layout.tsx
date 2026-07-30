@@ -2,7 +2,7 @@ import * as React from "react"
 import { NoticeBox } from "@/widgets/shell/notice-box"
 import { StepIndicator } from "./step-indicator"
 
-export interface StepLayoutProps {
+export type StepLayoutProps = {
   /** Ordered step labels shared across the whole flow. */
   steps: string[]
   /** 1-based index of the active step. */

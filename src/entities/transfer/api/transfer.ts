@@ -50,7 +50,7 @@ export type PayeeAccountStatus = "normal" | "closed" | "suspended"
 export type PayeeAccountType =
   "checking" | "savings_installment" | "time_deposit"
 
-export interface PayeeAccountRecord {
+export type PayeeAccountRecord = {
   accountNo: string
   payeeName: string
   status: PayeeAccountStatus
@@ -120,7 +120,7 @@ export const MOCK_PAYEE_ACCOUNTS: PayeeAccountRecord[] = [
   },
 ]
 
-export interface PayeeLookupResult {
+export type PayeeLookupResult = {
   ok: boolean
   payeeName?: string
   accountType?: PayeeAccountType
@@ -173,7 +173,7 @@ export function lookupPayeeAccount(accountNo: string): PayeeLookupResult {
 /* 최근 이체계좌 · 자주 쓰는 계좌 — REQ-TRSF-026 · REQ-TRSF-027           */
 /* ================================================================== */
 
-export interface RecentTransferAccount {
+export type RecentTransferAccount = {
   accountNo: string
   payeeName: string
   /** 최근 이체 사용 일시. 최신순 정렬 기준. */
@@ -209,7 +209,7 @@ export const MOCK_RECENT_TRANSFER_ACCOUNTS: RecentTransferAccount[] = [
   },
 ]
 
-export interface FrequentTransferAccount {
+export type FrequentTransferAccount = {
   accountNo: string
   payeeName: string
   nickname?: string
@@ -229,7 +229,7 @@ export const MOCK_FREQUENT_TRANSFER_ACCOUNTS: FrequentTransferAccount[] = [
 /* ================================================================== */
 
 /** One completed instant-transfer used to fill the result summary grid. */
-export interface TransferResultRow {
+export type TransferResultRow = {
   /** 'YYYYMMDD + 채널코드(2자리) + 일련번호(10자리)' 형식의 거래번호(REQ-TRSF-028). 실패 건은 "-". */
   transactionId: string
   processedAt: string

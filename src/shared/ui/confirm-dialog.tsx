@@ -3,12 +3,12 @@ import { Check } from "lucide-react"
 import { Modal } from "@/shared/ui/modal"
 import { Button } from "@/shared/ui/button"
 
-export interface ConfirmDialogItem {
+export type ConfirmDialogItem = {
   label: React.ReactNode
   value: React.ReactNode
 }
 
-export interface ConfirmDialogProps {
+export type ConfirmDialogProps = {
   open: boolean
   onClose: () => void
   onConfirm: () => void

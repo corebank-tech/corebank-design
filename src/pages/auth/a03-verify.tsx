@@ -16,7 +16,7 @@ function onlyDigits(value: string, maxLength: number): string {
   return value.replace(/\D/g, "").slice(0, maxLength)
 }
 
-export interface A03VerifyProps {
+export type A03VerifyProps = {
   onVerified: (name: string, birth: string) => void
 }
 

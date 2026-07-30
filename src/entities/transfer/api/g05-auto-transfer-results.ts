@@ -5,7 +5,7 @@
 
 export type AutoTransferResult = "정상" | "오류"
 
-export interface AutoTransferResultRow {
+export type AutoTransferResultRow = {
   id: string
   result: AutoTransferResult
   /** 처리일시 ISO datetime. */

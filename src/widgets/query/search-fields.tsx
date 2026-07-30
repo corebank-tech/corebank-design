@@ -11,7 +11,7 @@ import type { AccountOption } from "@/shared/types/account"
 /* AccountSelectField                                                  */
 /* ------------------------------------------------------------------ */
 
-export interface AccountSelectFieldProps {
+export type AccountSelectFieldProps = {
   id?: string
   options: AccountOption[]
   value?: string
@@ -73,7 +73,7 @@ function daysBetween(startISO: string, endISO: string): number {
   return Math.round(ms / 86_400_000)
 }
 
-export interface PeriodFieldProps {
+export type PeriodFieldProps = {
   start: string
   end: string
   onChange: (range: { start: string; end: string }) => void
@@ -220,12 +220,12 @@ export function PeriodField({ start, end, onChange, today }: PeriodFieldProps) {
 /* RadioRowField                                                       */
 /* ------------------------------------------------------------------ */
 
-export interface RadioRowOption {
+export type RadioRowOption = {
   label: string
   value: string
 }
 
-export interface RadioRowFieldProps {
+export type RadioRowFieldProps = {
   name: string
   options: RadioRowOption[]
   value: string
@@ -258,7 +258,7 @@ export function RadioRowField({
 /* KeywordField                                                        */
 /* ------------------------------------------------------------------ */
 
-export interface KeywordFieldProps {
+export type KeywordFieldProps = {
   id?: string
   value: string
   onChange: (value: string) => void

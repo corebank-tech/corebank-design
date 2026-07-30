@@ -4,7 +4,7 @@ import {
   type NotificationInboxRow,
 } from "@/entities/notification"
 
-export interface NotificationsContextValue {
+export type NotificationsContextValue = {
   notifications: NotificationInboxRow[]
   unreadCount: number
   markRead: (id: string) => void

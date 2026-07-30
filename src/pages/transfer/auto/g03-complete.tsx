@@ -4,7 +4,7 @@ import { StepLayout } from "@/widgets/transfer/step-layout"
 import { ResultPanel } from "@/widgets/transfer/result-panel"
 import type { DataGridColumn } from "@/widgets/query/data-grid"
 
-export interface AutoCompleteRow {
+export type AutoCompleteRow = {
   fromAccount: React.ReactNode
   toAccount: React.ReactNode
   payeeName: React.ReactNode
@@ -15,7 +15,7 @@ export interface AutoCompleteRow {
   nextExecDate: React.ReactNode
 }
 
-export interface AutoTransferStep3Props {
+export type AutoTransferStep3Props = {
   steps: string[]
   row: AutoCompleteRow
   highlightAmount: React.ReactNode

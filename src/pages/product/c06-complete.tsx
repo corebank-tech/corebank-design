@@ -6,7 +6,7 @@ import { type DataGridColumn } from "@/widgets/query/data-grid"
 import { formatAccountNo, formatAmount, formatDate } from "@/shared/lib/format"
 import { PRODUCT_JOIN_STEPS, type ProductJoinResult } from "./join-shared"
 
-interface JoinResultRow {
+type JoinResultRow = {
   newAccountNo: string
   productName: string
   amount: number

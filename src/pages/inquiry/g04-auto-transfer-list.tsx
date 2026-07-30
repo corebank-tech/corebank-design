@@ -92,7 +92,7 @@ function isEndDateValid(startDate: string, endDate: string, maxMonths = 60): boo
   return afterStart && withinMax
 }
 
-interface EditForm {
+type EditForm = {
   amount: string
   cycleMonths: TransferCycle
   endDate: string

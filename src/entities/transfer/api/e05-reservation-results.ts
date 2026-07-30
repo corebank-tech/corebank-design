@@ -4,7 +4,7 @@
 
 export type ReservationResult = "정상" | "오류" | "취소"
 
-export interface ReservationResultRow {
+export type ReservationResultRow = {
   id: string
   result: ReservationResult
   /** 이체일자 ISO date. */

@@ -39,7 +39,7 @@ import { SessionExpiredModal } from "@/shared/ui/session-expired-modal"
 import { cn } from "@/shared/lib/utils"
 
 /** 개발용 라우트 목록 — 파트(A~G)별 화면ID 그룹. 디자인 시스템에 포함되지 않는다. */
-interface DevRoute {
+type DevRoute = {
   screenId: string
   label: string
   path: string

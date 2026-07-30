@@ -7,7 +7,7 @@ import { cn } from "@/shared/lib/utils"
 
 type Align = "left" | "right" | "center"
 
-export interface DataGridColumn<Row> {
+export type DataGridColumn<Row> = {
   key: string
   header: React.ReactNode
   align?: Align
@@ -21,7 +21,7 @@ export interface DataGridColumn<Row> {
   className?: string
 }
 
-export interface DataGridProps<Row> {
+export type DataGridProps<Row> = {
   columns: DataGridColumn<Row>[]
   rows: Row[]
   loading?: boolean

@@ -5,7 +5,7 @@
 
 export type NotificationCategory = "이체" | "예약이체" | "자동이체" | "상품가입"
 
-export interface NotificationInboxRow {
+export type NotificationInboxRow = {
   id: string
   category: NotificationCategory
   title: string

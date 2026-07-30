@@ -3,7 +3,7 @@ import { Info } from "lucide-react"
 import { Modal } from "@/shared/ui/modal"
 import { Button } from "@/shared/ui/button"
 
-export interface AlertDialogProps {
+export type AlertDialogProps = {
   open: boolean
   onClose: () => void
   /** Title bar text. */

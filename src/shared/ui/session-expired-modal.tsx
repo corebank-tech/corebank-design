@@ -3,7 +3,7 @@ import { Clock } from "lucide-react"
 import { Modal } from "@/shared/ui/modal"
 import { Button } from "@/shared/ui/button"
 
-export interface SessionExpiredModalProps {
+export type SessionExpiredModalProps = {
   open: boolean
   /** Sends the user back to the login screen. */
   onRelogin: () => void

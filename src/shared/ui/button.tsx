@@ -21,7 +21,7 @@ const sizeStyles: Record<Size, string> = {
   lg: "h-12 px-6 text-lg gap-2",
 }
 
-export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: Variant
   size?: Size
   fullWidth?: boolean

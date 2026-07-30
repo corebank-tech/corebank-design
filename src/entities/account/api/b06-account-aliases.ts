@@ -5,7 +5,7 @@
 
 import type { AccountGroupId } from "./b01-accounts"
 
-export interface AliasAccount {
+export type AliasAccount = {
   id: string
   group: AccountGroupId
   accountNo: string

@@ -1,4 +1,4 @@
-export interface NavItem {
+export type NavItem = {
   label: string
   /** 요구사항정의서 화면목록 기준 화면ID (추적성 대조용) */
   screenId: string
@@ -6,12 +6,12 @@ export interface NavItem {
   path: string
 }
 
-export interface NavGroup {
+export type NavGroup = {
   title: string
   items: NavItem[]
 }
 
-export interface NavCategory {
+export type NavCategory = {
   id: string
   label: string
   groups: NavGroup[]

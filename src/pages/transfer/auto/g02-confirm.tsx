@@ -4,7 +4,7 @@ import { FormSection } from "@/shared/ui/form-section"
 import { StepLayout } from "@/widgets/transfer/step-layout"
 import { ConfirmSummary } from "@/widgets/transfer/confirm-summary"
 
-export interface AutoTransferStep2Props {
+export type AutoTransferStep2Props = {
   steps: string[]
   fromAccount: React.ReactNode
   toAccount: React.ReactNode

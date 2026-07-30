@@ -9,7 +9,7 @@ const MAX_ATTEMPTS = 5
 export type LoginResult =
   { ok: true } | { ok: false; locked: boolean; attempts: number }
 
-export interface SessionContextValue {
+export type SessionContextValue = {
   isAuthenticated: boolean
   customerName: string
   remainingSeconds: number

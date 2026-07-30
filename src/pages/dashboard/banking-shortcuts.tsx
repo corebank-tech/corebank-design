@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom"
 import { ChevronRight } from "lucide-react"
 
-export interface ShortcutLink {
+export type ShortcutLink = {
   id: string
   label: string
   href: string
 }
 
-export interface BankingShortcutsProps {
+export type BankingShortcutsProps = {
   label?: string
   /** 표시할 바로가기 목록. 기본값은 호출 측(A09MainDashboard)에서 주입한다. */
   links: ShortcutLink[]

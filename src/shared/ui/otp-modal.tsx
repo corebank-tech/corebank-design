@@ -7,7 +7,7 @@ import { cn } from "@/shared/lib/utils"
 const OTP_TTL_SECONDS = 180
 const MAX_ATTEMPTS = 5
 
-export interface OtpModalProps {
+export type OtpModalProps = {
   open: boolean
   onClose: () => void
   /** Called with the entered code when verification succeeds. */

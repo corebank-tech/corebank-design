@@ -1,6 +1,6 @@
 /** D-05 이체한도 조회/변경 mock 데이터. */
 
-export interface TransferLimitState {
+export type TransferLimitState = {
   /** 1회 이체한도(KRW) */
   perTransferLimit: number
   /** 1일 이체한도(KRW) */

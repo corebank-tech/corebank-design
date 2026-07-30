@@ -4,7 +4,7 @@ import { StepLayout } from "@/widgets/transfer/step-layout"
 import { ResultPanel } from "@/widgets/transfer/result-panel"
 import type { DataGridColumn } from "@/widgets/query/data-grid"
 
-export interface ReservedCompleteRow {
+export type ReservedCompleteRow = {
   scheduledDate: React.ReactNode
   fromAccount: React.ReactNode
   toAccount: React.ReactNode
@@ -15,7 +15,7 @@ export interface ReservedCompleteRow {
   myMemo: React.ReactNode
 }
 
-export interface ReservedTransferStep3Props {
+export type ReservedTransferStep3Props = {
   steps: string[]
   row: ReservedCompleteRow
   highlightAmount: React.ReactNode

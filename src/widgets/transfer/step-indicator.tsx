@@ -1,7 +1,7 @@
 import * as React from "react"
 import { cn } from "@/shared/lib/utils"
 
-export interface StepIndicatorProps {
+export type StepIndicatorProps = {
   /** Ordered step labels, e.g. ["정보입력", "정보확인 및 인증", "완료"]. */
   steps: string[]
   /** 1-based index of the active step. */

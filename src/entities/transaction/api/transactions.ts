@@ -7,7 +7,7 @@ export type AccountStatus = "정상" | "거래정지" | "해지"
  * B-03 거래내역조회 상단 계좌상세정보(REQ-INQR-007)에 필요한 필드를 더한 계좌 정보.
  * AccountOption을 확장하므로 AccountSelectField 등 기존 소비처에는 그대로 전달할 수 있다.
  */
-export interface TransactionAccount extends AccountOption {
+export type TransactionAccount = AccountOption & {
   /** 예금주명(REQ-INQR-007). 화면 표시 시 가운데 1자를 마스킹한다(REQ-CMN-018). */
   ownerName: string
   /** 신규일자 ISO date. */
@@ -15,7 +15,7 @@ export interface TransactionAccount extends AccountOption {
   status: AccountStatus
 }
 
-export interface Transaction {
+export type Transaction = {
   id: string
   /** 거래일자 ISO date (YYYY-MM-DD). */
   date: string

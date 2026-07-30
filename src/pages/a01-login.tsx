@@ -9,7 +9,7 @@ import { useSession } from "@/app/session-context"
 
 const MAX_ATTEMPTS = 5
 
-interface LoginFailure {
+type LoginFailure = {
   locked: boolean
   attempts: number
 }

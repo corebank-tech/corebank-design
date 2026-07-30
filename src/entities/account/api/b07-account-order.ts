@@ -6,7 +6,7 @@
 
 import type { AccountGroupId } from "./b01-accounts"
 
-export interface OrderAccount {
+export type OrderAccount = {
   id: string
   group: AccountGroupId
   accountNo: string

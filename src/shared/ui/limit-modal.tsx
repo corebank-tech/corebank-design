@@ -3,7 +3,7 @@ import { Modal } from "@/shared/ui/modal"
 import { Button } from "@/shared/ui/button"
 import { formatAmount } from "@/shared/lib/format"
 
-export interface LimitModalProps {
+export type LimitModalProps = {
   open: boolean
   onClose: () => void
   /** 1일 이체한도 (KRW). */

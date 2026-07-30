@@ -4,7 +4,7 @@ import { Bell, Menu } from "lucide-react"
 import { NAV } from "@/shared/config/nav"
 import { cn } from "@/shared/lib/utils"
 
-export interface AppHeaderProps {
+export type AppHeaderProps = {
   activeId?: string
   customerName?: string
   unreadCount?: number

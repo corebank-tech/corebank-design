@@ -20,7 +20,7 @@ import { ReservedTransferStep1 } from "./reserved/e01-input"
 import { ReservedTransferStep2 } from "./reserved/e02-confirm"
 import { ReservedTransferStep3 } from "./reserved/e03-complete"
 
-export interface ReservedTransferForm {
+export type ReservedTransferForm = {
   fromAccount: string
   password: string
   toAccount: string

@@ -6,7 +6,7 @@ import { Modal } from "@/shared/ui/modal"
 import { AlertDialog } from "@/shared/ui/alert-dialog"
 import type { TermItem } from "@/entities/product"
 
-export interface TermsAgreementProps {
+export type TermsAgreementProps = {
   terms: TermItem[]
   /**
    * 필수 항목이 모두 체크되면 true 로 올려준다.
@@ -15,7 +15,7 @@ export interface TermsAgreementProps {
   onAllRequiredAgreedChange?: (allRequiredAgreed: boolean) => void
 }
 
-export interface TermsAgreementHandle {
+export type TermsAgreementHandle = {
   /**
    * 다음 단계 진행 가능 여부를 검사한다. 필수 약관 중 미열람 항목이 있으면
    * 안내 팝업을 띄운 뒤 확인 시 해당 약관 전문을 열어준다(REQ-AUTH-004).

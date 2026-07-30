@@ -29,7 +29,7 @@ import { InstantTransferStep1 } from "./instant-transfer/d01-input"
 import { InstantTransferStep2 } from "./instant-transfer/d02-confirm"
 import { InstantTransferStep3 } from "./instant-transfer/d03-result"
 
-export interface InstantTransferForm {
+export type InstantTransferForm = {
   fromAccount: string
   password: string
   toAccount: string
@@ -45,7 +45,7 @@ export interface InstantTransferForm {
   myMemo: string
 }
 
-interface InstantTransferResultState {
+type InstantTransferResultState = {
   variant: ResultVariant
   row: TransferResultRow
   errorCode?: string

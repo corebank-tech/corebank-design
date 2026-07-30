@@ -35,7 +35,7 @@ const SUMMARY_LABEL_WIDTH =
   ACCOUNT_COLUMN_WIDTHS.lastTxDate +
   ACCOUNT_COLUMN_WIDTHS.balance
 
-export interface A09MainDashboardProps {
+export type A09MainDashboardProps = {
   customerName?: string
   accounts?: DashboardAccount[]
   accessStatus?: AccessStatus

@@ -1,6 +1,6 @@
 /** Dashboard presentation mock data. KRW single currency, Asia/Seoul. */
 
-export interface DashboardAccount {
+export type DashboardAccount = {
   id: string
   /** 계좌명 (별칭 + 상품명 구분용) */
   alias: string
@@ -13,7 +13,7 @@ export interface DashboardAccount {
   balance: number
 }
 
-export interface AccessStatus {
+export type AccessStatus = {
   /** 최근 접속일시 ISO datetime. */
   lastLogin: string
   /** 현재 접속 IP. */
@@ -24,7 +24,7 @@ export interface AccessStatus {
 
 export type NotificationCategory = "이체" | "출금" | "안내"
 
-export interface NotificationItem {
+export type NotificationItem = {
   id: string
   category: NotificationCategory
   title: string

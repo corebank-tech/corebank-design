@@ -14,7 +14,7 @@ const variants: Record<BadgeVariant, string> = {
     "bg-warning-tint text-[var(--color-warning)] border-warning-border-soft",
 }
 
-export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
+export type BadgeProps = React.HTMLAttributes<HTMLSpanElement> & {
   variant?: BadgeVariant
 }
 

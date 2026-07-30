@@ -6,7 +6,7 @@ import { NoticeBoxFooter } from "@/widgets/shell/notice-box"
 import { SIGNUP_TERMS } from "@/entities/auth"
 import { SIGNUP_STEPS } from "./signup-flow"
 
-export interface A02TermsProps {
+export type A02TermsProps = {
   onNext: () => void
 }
 

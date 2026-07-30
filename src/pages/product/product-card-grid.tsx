@@ -10,7 +10,7 @@ import type { ProductCard, ProductCategory } from "@/entities/product"
 type CategoryFilter = "전체" | ProductCategory
 type SortKey = "rate" | "latest"
 
-export interface ProductCardGridProps {
+export type ProductCardGridProps = {
   products: ProductCard[]
   onViewDetail?: (id: string) => void
   onJoin?: (id: string) => void

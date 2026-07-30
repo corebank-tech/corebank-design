@@ -1,4 +1,4 @@
-export interface AccountOption {
+export type AccountOption = {
   alias: string
   accountNo: string
   balance: number

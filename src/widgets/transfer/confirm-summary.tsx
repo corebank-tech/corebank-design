@@ -1,7 +1,7 @@
 import * as React from "react"
 import { cn } from "@/shared/lib/utils"
 
-export interface ConfirmSummaryColumn {
+export type ConfirmSummaryColumn = {
   /** Header cell label, e.g. "이체금액(원)". */
   label: React.ReactNode
   /** Value cell content. */
@@ -10,8 +10,7 @@ export interface ConfirmSummaryColumn {
   emphasis?: boolean
 }
 
-export interface ConfirmSummaryProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+export type ConfirmSummaryProps = React.HTMLAttributes<HTMLDivElement> & {
   columns: ConfirmSummaryColumn[]
 }
 

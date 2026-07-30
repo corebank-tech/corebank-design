@@ -6,7 +6,7 @@ import { formatAmount } from "@/shared/lib/format"
 import { cn } from "@/shared/lib/utils"
 import type { ProductDetailData, ProductRateRow } from "@/entities/product"
 
-export interface ProductDetailProps {
+export type ProductDetailProps = {
   product: ProductDetailData
   onJoin?: (id: string) => void
 }

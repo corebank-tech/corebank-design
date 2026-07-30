@@ -3,7 +3,7 @@
  * 계좌비밀번호는 입출금계좌만 보유하므로 예적금 계좌는 포함하지 않는다.
  */
 
-export interface PasswordAccount {
+export type PasswordAccount = {
   id: string
   accountNo: string
   alias: string

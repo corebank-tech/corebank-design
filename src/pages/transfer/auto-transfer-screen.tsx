@@ -21,7 +21,7 @@ import { AutoTransferStep1 } from "./auto/g01-input"
 import { AutoTransferStep2 } from "./auto/g02-confirm"
 import { AutoTransferStep3 } from "./auto/g03-complete"
 
-export interface AutoTransferForm {
+export type AutoTransferForm = {
   fromAccount: string
   password: string
   toAccount: string

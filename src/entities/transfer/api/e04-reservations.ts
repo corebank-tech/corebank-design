@@ -5,7 +5,7 @@
 
 export type ReservationStatus = "대기" | "완료" | "실패" | "취소"
 
-export interface ReservationRow {
+export type ReservationRow = {
   id: string
   status: ReservationStatus
   /** 이체 예정일자 ISO date. */

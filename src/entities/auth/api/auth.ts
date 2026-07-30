@@ -4,7 +4,7 @@
  */
 import type { TermItem } from "@/entities/product"
 
-export interface VerifyAccount {
+export type VerifyAccount = {
   accountNo: string
   ownerName: string
   /** YYMMDD 6자리 */
@@ -40,7 +40,7 @@ export const MOCK_EXISTING_USER_IDS = ["corebank1", "hello2024", "testuser01"]
 /** REQ-AUTH-016: 이메일 중복 가입 제한 대상. */
 export const MOCK_EXISTING_EMAILS = ["already@corebank.example.com"]
 
-export interface Member extends VerifyAccount {
+export type Member = VerifyAccount & {
   memberId: string
   email: string
   loginPassword: string

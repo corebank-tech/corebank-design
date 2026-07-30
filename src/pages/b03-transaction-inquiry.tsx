@@ -73,7 +73,7 @@ function daysBetween(startISO: string, endISO: string): number {
   return Math.round(ms / 86_400_000)
 }
 
-interface InfoItem {
+type InfoItem = {
   term: string
   desc: React.ReactNode
   numeric?: boolean

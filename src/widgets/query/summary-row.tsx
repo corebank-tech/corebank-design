@@ -1,7 +1,7 @@
 import * as React from "react"
 import { cn } from "@/shared/lib/utils"
 
-export interface SummaryItem {
+export type SummaryItem = {
   label: React.ReactNode
   value: React.ReactNode
   /** Right-align + tabular-nums for numeric values. Defaults to true. */
@@ -10,7 +10,7 @@ export interface SummaryItem {
   valueColor?: string
 }
 
-export interface SummaryRowProps extends React.HTMLAttributes<HTMLDivElement> {
+export type SummaryRowProps = React.HTMLAttributes<HTMLDivElement> & {
   items: SummaryItem[]
   /** Label cell width in px. */
   labelWidth?: number

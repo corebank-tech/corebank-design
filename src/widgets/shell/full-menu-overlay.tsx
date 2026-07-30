@@ -32,7 +32,7 @@ export function FullMenuOverlay({ open, onClose }: FullMenuOverlayProps) {
       aria-label="전체메뉴"
     >
       <div
-        className="absolute inset-0 bg-[var(--color-overlay)]"
+        className="absolute inset-0 bg-[var(--color-overlay-scrim)]"
         onClick={onClose}
         aria-hidden="true"
       />

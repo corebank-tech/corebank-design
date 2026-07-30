@@ -20,6 +20,10 @@ import { B04AccountPassword } from "@/components/account/B04-AccountPassword"
 import { B05WithdrawAccounts } from "@/components/account/B05-WithdrawAccounts"
 import { B06AccountAlias } from "@/components/account/B06-AccountAlias"
 import { B07AccountOrder } from "@/components/account/B07-AccountOrder"
+import { C03Terms } from "@/components/product/C03-Terms"
+import { C04InputInfo } from "@/components/product/C04-InputInfo"
+import { C05ConfirmAuth } from "@/components/product/C05-ConfirmAuth"
+import { C06Complete } from "@/components/product/C06-Complete"
 import { cn } from "@/lib/utils"
 
 /**
@@ -49,10 +53,6 @@ const PLACEHOLDER_ROUTES: PlaceholderRoute[] = [
   // C — 수신(금융상품)
   { path: "/products", screenId: "C-01", title: "상품몰 - 상품목록", breadcrumb: ["금융상품", "예금·적금", "상품목록"], activeId: "product" },
   { path: "/products/:productId", screenId: "C-02", title: "상품 상세", breadcrumb: ["금융상품", "예금·적금", "상품상세"], activeId: "product" },
-  { path: "/product/:productId/join/1", screenId: "C-03", title: "상품가입 1단계 - 약관동의", breadcrumb: ["금융상품", "가입"], activeId: "product" },
-  { path: "/product/:productId/join/2", screenId: "C-04", title: "상품가입 2단계 - 정보입력", breadcrumb: ["금융상품", "가입"], activeId: "product" },
-  { path: "/product/:productId/join/3", screenId: "C-05", title: "상품가입 3단계 - 확인/인증", breadcrumb: ["금융상품", "가입"], activeId: "product" },
-  { path: "/product/:productId/join/4", screenId: "C-06", title: "상품가입 4단계 - 완료", breadcrumb: ["금융상품", "가입"], activeId: "product" },
 
   // D — 이체(즉시이체)
   { path: "/user/transfer-limit", screenId: "D-05", title: "이체한도 조회/변경", breadcrumb: ["사용자관리", "이체한도관리"], activeId: "user" },
@@ -411,6 +411,39 @@ export default function App() {
               customerName="홍길동"
             >
               <F02NotificationInbox />
+            </PageShell>
+          }
+        />
+
+        <Route
+          path="/product/:productId/join/1"
+          element={
+            <PageShell activeId="product" breadcrumb={["금융상품", "가입"]} customerName="홍길동">
+              <C03Terms />
+            </PageShell>
+          }
+        />
+        <Route
+          path="/product/:productId/join/2"
+          element={
+            <PageShell activeId="product" breadcrumb={["금융상품", "가입"]} customerName="홍길동">
+              <C04InputInfo />
+            </PageShell>
+          }
+        />
+        <Route
+          path="/product/:productId/join/3"
+          element={
+            <PageShell activeId="product" breadcrumb={["금융상품", "가입"]} customerName="홍길동">
+              <C05ConfirmAuth />
+            </PageShell>
+          }
+        />
+        <Route
+          path="/product/:productId/join/4"
+          element={
+            <PageShell activeId="product" breadcrumb={["금융상품", "가입"]} customerName="홍길동">
+              <C06Complete />
             </PageShell>
           }
         />

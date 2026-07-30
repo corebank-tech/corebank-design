@@ -25,9 +25,9 @@ import {
   formatDateTime,
   maskName,
 } from "@/shared/lib/format"
-import { InstantTransferStep1 } from "./instant-transfer/D01-Input"
-import { InstantTransferStep2 } from "./instant-transfer/D02-Confirm"
-import { InstantTransferStep3 } from "./instant-transfer/D03-Result"
+import { InstantTransferStep1 } from "./instant-transfer/d01-input"
+import { InstantTransferStep2 } from "./instant-transfer/d02-confirm"
+import { InstantTransferStep3 } from "./instant-transfer/d03-result"
 
 export interface InstantTransferForm {
   fromAccount: string

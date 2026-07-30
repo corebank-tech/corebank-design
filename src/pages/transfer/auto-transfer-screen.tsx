@@ -17,9 +17,9 @@ import {
 } from "@/shared/lib/format"
 import { addMonths, daysBetween, parseISO, toISO } from "@/widgets/transfer/transfer-fields"
 import type { TransferCycleMonths } from "@/widgets/transfer/transfer-fields"
-import { AutoTransferStep1 } from "./auto/G01-Input"
-import { AutoTransferStep2 } from "./auto/G02-Confirm"
-import { AutoTransferStep3 } from "./auto/G03-Complete"
+import { AutoTransferStep1 } from "./auto/g01-input"
+import { AutoTransferStep2 } from "./auto/g02-confirm"
+import { AutoTransferStep3 } from "./auto/g03-complete"
 
 export interface AutoTransferForm {
   fromAccount: string

@@ -11,7 +11,7 @@ import { ConfirmDialog } from "@/shared/ui/confirm-dialog"
 import { evaluateIdRules, evaluatePasswordRules, isIdValid, isPasswordValid, type RuleCheck } from "@/lib/auth-rules"
 import { formatPhone } from "@/shared/lib/format"
 import { MOCK_EXISTING_USER_IDS, MOCK_EXISTING_EMAILS } from "@/lib/mock/auth"
-import { SIGNUP_STEPS, type SignupData } from "./SignupFlow"
+import { SIGNUP_STEPS, type SignupData } from "./signup-flow"
 
 const EMAIL_OTP_TTL = 180
 

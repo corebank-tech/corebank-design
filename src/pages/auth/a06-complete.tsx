@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { Check } from "lucide-react"
 import { Button } from "@/shared/ui/button"
 import { StepLayout } from "@/widgets/transfer/step-layout"
-import { SIGNUP_STEPS } from "./SignupFlow"
+import { SIGNUP_STEPS } from "./signup-flow"
 
 export interface A06CompleteProps {
   name: string

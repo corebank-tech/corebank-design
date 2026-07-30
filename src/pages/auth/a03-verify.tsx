@@ -8,7 +8,7 @@ import { NoticeBoxFooter } from "@/widgets/shell/notice-box"
 import { AlertDialog } from "@/shared/ui/alert-dialog"
 import { ErrorDialog } from "@/shared/ui/error-dialog"
 import { MOCK_SIGNUP_ACCOUNTS, type VerifyAccount } from "@/lib/mock/auth"
-import { SIGNUP_STEPS } from "./SignupFlow"
+import { SIGNUP_STEPS } from "./signup-flow"
 
 const ERROR_LIMIT = 5
 

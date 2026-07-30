@@ -4,7 +4,7 @@ import { StepLayout } from "@/widgets/transfer/step-layout"
 import { FormSection } from "@/shared/ui/form-section"
 import { FormRow } from "@/shared/ui/form-row"
 import { maskName, maskEmail, maskPhone } from "@/shared/lib/format"
-import { SIGNUP_STEPS, type SignupData } from "./SignupFlow"
+import { SIGNUP_STEPS, type SignupData } from "./signup-flow"
 
 export interface A05ConfirmProps {
   data: SignupData

@@ -1,10 +1,10 @@
 import * as React from "react"
 import { useSearchParams } from "react-router-dom"
-import { A02Terms } from "./A02-Terms"
-import { A03Verify } from "./A03-Verify"
-import { A04Info } from "./A04-Info"
-import { A05Confirm } from "./A05-Confirm"
-import { A06Complete } from "./A06-Complete"
+import { A02Terms } from "./a02-terms"
+import { A03Verify } from "./a03-verify"
+import { A04Info } from "./a04-info"
+import { A05Confirm } from "./a05-confirm"
+import { A06Complete } from "./a06-complete"
 
 export const SIGNUP_STEPS = ["약관동의", "본인확인", "정보입력", "입력확인", "가입완료"]
 

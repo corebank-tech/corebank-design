@@ -16,9 +16,9 @@ import {
   maskName,
 } from "@/shared/lib/format"
 import { daysBetween } from "@/widgets/transfer/transfer-fields"
-import { ReservedTransferStep1 } from "./reserved/E01-Input"
-import { ReservedTransferStep2 } from "./reserved/E02-Confirm"
-import { ReservedTransferStep3 } from "./reserved/E03-Complete"
+import { ReservedTransferStep1 } from "./reserved/e01-input"
+import { ReservedTransferStep2 } from "./reserved/e02-confirm"
+import { ReservedTransferStep3 } from "./reserved/e03-complete"
 
 export interface ReservedTransferForm {
   fromAccount: string

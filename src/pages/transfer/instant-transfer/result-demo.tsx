@@ -1,7 +1,7 @@
 import * as React from "react"
 import { Button } from "@/shared/ui/button"
 import { Badge } from "@/shared/ui/badge"
-import { InstantTransferStep3 } from "./D03-Result"
+import { InstantTransferStep3 } from "./d03-result"
 import { ResultPanel, type ResultVariant } from "@/widgets/transfer/result-panel"
 import type { DataGridColumn } from "@/widgets/query/data-grid"
 import {

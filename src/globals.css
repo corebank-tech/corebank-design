@@ -47,8 +47,18 @@
   --color-danger-border-soft: #f4d6d5;
 
   /* Overlay — 뒤 배경이 고정색이 아니어서 실제 반투명이 필요한 경우 전용 */
-  --color-overlay-scrim: rgba(23, 32, 46, 0.5); /* 모달 백드롭, 전체메뉴 레이어 */
-  --overlay-white-15: rgba(255, 255, 255, 0.15); /* 색상 바 위 아이콘버튼 hover */
+  --color-overlay-scrim: rgba(
+    23,
+    32,
+    46,
+    0.5
+  ); /* 모달 백드롭, 전체메뉴 레이어 */
+  --overlay-white-15: rgba(
+    255,
+    255,
+    255,
+    0.15
+  ); /* 색상 바 위 아이콘버튼 hover */
   --overlay-white-70: rgba(255, 255, 255, 0.7); /* 색상 바 위 포커스 링 */
 
   /* Grid / ledger */
@@ -78,13 +88,14 @@
   --space-12: 48px;
 
   /* Radius */
-  --radius-sm: 6px;     /* 뱃지, 스텝 숫자, 소형 표식 */
-  --radius: 10px;       /* 버튼, 인풋, 셀렉트, 체크박스 */
-  --radius-lg: 16px;    /* 카드, 패널, 모달, 검색조건 박스 */
+  --radius-sm: 6px; /* 뱃지, 스텝 숫자, 소형 표식 */
+  --radius: 10px; /* 버튼, 인풋, 셀렉트, 체크박스 */
+  --radius-lg: 16px; /* 카드, 패널, 모달, 검색조건 박스 */
   --radius-pill: 999px; /* 토글 칩 전용 */
 
   /* Elevation */
-  --shadow-card: 0 1px 2px rgba(25, 31, 40, 0.03), 0 4px 16px rgba(25, 31, 40, 0.06);
+  --shadow-card:
+    0 1px 2px rgba(25, 31, 40, 0.03), 0 4px 16px rgba(25, 31, 40, 0.06);
   --shadow-pop: 0 8px 32px rgba(25, 31, 40, 0.14);
 
   /* Weight — 색이 아니라 굵기로 위계를 만든다 */
@@ -215,5 +226,3 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
-
-

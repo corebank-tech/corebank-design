@@ -4,3 +4,12 @@ dist-ssr
 *.tsbuildinfo
 .DS_Store
 *.local
+
+.env
+.env.*
+!.env.example
+
+playwright-report/
+test-results/
+coverage/
+.eslintcache

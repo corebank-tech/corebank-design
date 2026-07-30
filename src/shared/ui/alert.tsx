@@ -33,8 +33,10 @@ const iconColor: Record<AlertVariant, string> = {
   danger: "text-[var(--color-danger)]",
 }
 
-export interface AlertProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> {
+export interface AlertProps extends Omit<
+  React.HTMLAttributes<HTMLDivElement>,
+  "title"
+> {
   variant?: AlertVariant
   title?: React.ReactNode
 }
@@ -57,7 +59,10 @@ export function Alert({
       )}
       {...props}
     >
-      <Icon className={cn("mt-0.5 h-4 w-4 shrink-0", iconColor[variant])} aria-hidden="true" />
+      <Icon
+        className={cn("mt-0.5 h-4 w-4 shrink-0", iconColor[variant])}
+        aria-hidden="true"
+      />
       <div className="min-w-0">
         {title != null && <p className="mb-0.5 font-bold">{title}</p>}
         {children != null && <div className="text-ink-muted">{children}</div>}

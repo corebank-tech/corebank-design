@@ -1,0 +1,15 @@
+pnpm-lock.yaml
+dist
+coverage
+playwright-report
+test-results
+public/mockServiceWorker.js
+src/shared/api/generated
+*.md
+
+# TODO(FSD 마이그레이션 커밋에서 제거): 레거시 디렉터리는 재포맷 시
+# worktree-cc-5 작업과 대규모 diff 충돌을 일으킨다. 마이그레이션 완료 후
+# 이 3줄을 지우고 pnpm format 을 전체에 1회 적용한다.
+src/pages
+src/widgets
+src/lib

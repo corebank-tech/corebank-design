@@ -6,20 +6,27 @@ type BadgeVariant = "primary" | "neutral" | "success" | "danger" | "warning"
 const variants: Record<BadgeVariant, string> = {
   primary: "bg-primary-tint text-primary border-primary-border-soft",
   neutral: "bg-surface text-ink-muted border-[var(--color-border)]",
-  success: "bg-success-tint text-[var(--color-success)] border-success-border-soft",
-  danger: "bg-[var(--color-danger-tint)] text-[var(--color-danger)] border-danger-border-soft",
-  warning: "bg-warning-tint text-[var(--color-warning)] border-warning-border-soft",
+  success:
+    "bg-success-tint text-[var(--color-success)] border-success-border-soft",
+  danger:
+    "bg-[var(--color-danger-tint)] text-[var(--color-danger)] border-danger-border-soft",
+  warning:
+    "bg-warning-tint text-[var(--color-warning)] border-warning-border-soft",
 }
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   variant?: BadgeVariant
 }
 
-export function Badge({ className, variant = "primary", ...props }: BadgeProps) {
+export function Badge({
+  className,
+  variant = "primary",
+  ...props
+}: BadgeProps) {
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-[var(--radius-sm)] border px-1.5 py-0.5 text-xs font-bold leading-none",
+        "inline-flex items-center rounded-[var(--radius-sm)] border px-1.5 py-0.5 text-xs leading-none font-bold",
         variants[variant],
         className,
       )}

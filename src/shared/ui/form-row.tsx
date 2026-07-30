@@ -24,7 +24,7 @@ export function FormRow({
   return (
     <div
       className={cn(
-        "flex border-b border-l border-r first:border-t",
+        "flex border-r border-b border-l first:border-t",
         className,
       )}
       {...props}

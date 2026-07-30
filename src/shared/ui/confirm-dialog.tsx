@@ -73,7 +73,7 @@ export function ConfirmDialog({
         </span>
         <div className="mb-5 text-center">
           {messages.map((line, i) => (
-            <p key={i} className="text-base font-bold leading-relaxed text-ink">
+            <p key={i} className="text-base leading-relaxed font-bold text-ink">
               {line}
             </p>
           ))}
@@ -86,7 +86,7 @@ export function ConfirmDialog({
             {items.map((item, i) => (
               <div key={i} className="flex gap-2 text-sm leading-relaxed">
                 <dt className="shrink-0 font-bold text-ink">{item.label}</dt>
-                <dd className="min-w-0 flex-1 tabular-nums text-ink">
+                <dd className="min-w-0 flex-1 text-ink tabular-nums">
                   : {item.value}
                 </dd>
               </div>

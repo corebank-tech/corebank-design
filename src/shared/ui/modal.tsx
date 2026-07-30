@@ -103,7 +103,7 @@ export function Modal({
               type="button"
               onClick={onClose}
               aria-label="닫기"
-              className="inline-flex h-7 w-7 items-center justify-center rounded-[var(--radius)] text-current transition-colors hover:bg-[var(--overlay-white-15)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--overlay-white-70)]"
+              className="inline-flex h-7 w-7 items-center justify-center rounded-[var(--radius)] text-current transition-colors hover:bg-[var(--overlay-white-15)] focus-visible:ring-2 focus-visible:ring-[var(--overlay-white-70)] focus-visible:outline-none"
             >
               <X className="h-5 w-5" aria-hidden="true" />
             </button>

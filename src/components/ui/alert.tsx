@@ -9,19 +9,19 @@ const config: Record<
   { wrap: string; icon: React.ComponentType<{ className?: string }> }
 > = {
   info: {
-    wrap: "bg-primary-tint border-primary/25 text-ink",
+    wrap: "bg-primary-tint border-primary-border-soft text-ink",
     icon: Info,
   },
   success: {
-    wrap: "bg-[#e7f4ee] border-[var(--color-success)]/25 text-ink",
+    wrap: "bg-success-tint border-success-border-soft text-ink",
     icon: CheckCircle2,
   },
   warning: {
-    wrap: "bg-[#fbf3e2] border-[var(--color-warning)]/30 text-ink",
+    wrap: "bg-warning-tint border-warning-border-soft text-ink",
     icon: AlertTriangle,
   },
   danger: {
-    wrap: "bg-[var(--color-danger-tint)] border-[var(--color-danger)]/25 text-ink",
+    wrap: "bg-[var(--color-danger-tint)] border-danger-border-soft text-ink",
     icon: XCircle,
   },
 }

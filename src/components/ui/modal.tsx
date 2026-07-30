@@ -77,7 +77,7 @@ export function Modal({
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[var(--z-modal)] flex items-center justify-center bg-black/50 p-6"
+      className="fixed inset-0 z-[var(--z-modal)] flex items-center justify-center bg-[var(--color-overlay-scrim)] p-6"
       onMouseDown={(e) => {
         if (closeOnOverlay && e.target === e.currentTarget) onClose()
       }}
@@ -103,7 +103,7 @@ export function Modal({
               type="button"
               onClick={onClose}
               aria-label="닫기"
-              className="inline-flex h-7 w-7 items-center justify-center rounded-[var(--radius)] text-current transition-colors hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
+              className="inline-flex h-7 w-7 items-center justify-center rounded-[var(--radius)] text-current transition-colors hover:bg-[var(--overlay-white-15)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--overlay-white-70)]"
             >
               <X className="h-5 w-5" aria-hidden="true" />
             </button>

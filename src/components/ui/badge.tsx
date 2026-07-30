@@ -4,11 +4,11 @@ import { cn } from "@/lib/utils"
 type BadgeVariant = "primary" | "neutral" | "success" | "danger" | "warning"
 
 const variants: Record<BadgeVariant, string> = {
-  primary: "bg-primary-tint text-primary border-primary/20",
+  primary: "bg-primary-tint text-primary border-primary-border-soft",
   neutral: "bg-surface text-ink-muted border-[var(--color-border)]",
-  success: "bg-[#e7f4ee] text-[var(--color-success)] border-[var(--color-success)]/20",
-  danger: "bg-[var(--color-danger-tint)] text-[var(--color-danger)] border-[var(--color-danger)]/20",
-  warning: "bg-[#fbf3e2] text-[var(--color-warning)] border-[var(--color-warning)]/20",
+  success: "bg-success-tint text-[var(--color-success)] border-success-border-soft",
+  danger: "bg-[var(--color-danger-tint)] text-[var(--color-danger)] border-danger-border-soft",
+  warning: "bg-warning-tint text-[var(--color-warning)] border-warning-border-soft",
 }
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {

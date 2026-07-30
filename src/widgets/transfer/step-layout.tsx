@@ -44,7 +44,7 @@ export function StepLayout({
         </div>
       )}
 
-      <div className="border border-[var(--color-border)] bg-white p-6">
+      <div className="border border-[var(--color-border)] bg-surface-elevated p-6">
         {children}
       </div>
 

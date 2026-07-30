@@ -82,7 +82,7 @@ export function G05AutoTransferResults() {
       header: "출금계좌",
       width: 170,
       render: (r) => (
-        <span>
+        <span className="whitespace-nowrap">
           {r.fromAlias} <span className="text-ink-faint">/</span>{" "}
           <span className="tabular-nums">{formatAccountNo(r.fromAccountNo)}</span>
         </span>
@@ -169,9 +169,9 @@ export function G05AutoTransferResults() {
             {
               label: "정상처리",
               value: (
-                <span className="text-page font-bold">
+                <span className="text-h2 font-bold">
                   {formatAmount(sum(normal))}{" "}
-                  <span className="text-xs font-normal text-ink-faint">({normal.length}건)</span>
+                  <span className="text-sm font-normal text-ink-faint">({normal.length}건)</span>
                 </span>
               ),
               valueColor: "var(--color-success)",
@@ -179,9 +179,9 @@ export function G05AutoTransferResults() {
             {
               label: "오류처리",
               value: (
-                <span>
+                <span className="text-h2 font-bold">
                   {formatAmount(sum(error))}{" "}
-                  <span className="text-xs font-normal text-ink-faint">({error.length}건)</span>
+                  <span className="text-sm font-normal text-ink-faint">({error.length}건)</span>
                 </span>
               ),
               valueColor: "var(--color-withdraw)",

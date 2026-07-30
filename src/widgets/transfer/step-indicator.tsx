@@ -29,7 +29,7 @@ export function StepIndicator({ steps, currentStep }: StepIndicatorProps) {
             key={label}
             aria-current={isCurrent ? "step" : undefined}
             className={cn(
-              "flex items-center gap-1.5 text-sm tabular-nums",
+              "flex items-center gap-1.5 whitespace-nowrap text-sm tabular-nums",
               active ? "text-primary" : "text-ink-faint",
             )}
           >
@@ -38,13 +38,13 @@ export function StepIndicator({ steps, currentStep }: StepIndicatorProps) {
                 "flex h-6 w-6 items-center justify-center rounded-full border text-xs font-bold",
                 active
                   ? "border-primary bg-primary text-primary-foreground"
-                  : "border-[var(--color-border-strong)] bg-white text-ink-faint",
+                  : "border-[var(--color-border-strong)] bg-surface-elevated text-ink-faint",
               )}
             >
               {stepNo}
             </span>
             {isCurrent && (
-              <span className="border-b-2 border-primary pb-0.5 font-bold">
+              <span className="whitespace-nowrap border-b-2 border-primary pb-0.5 font-bold">
                 {label}
               </span>
             )}

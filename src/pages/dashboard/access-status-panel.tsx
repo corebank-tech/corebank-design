@@ -15,7 +15,7 @@ export function AccessStatusPanel({ status }: AccessStatusPanelProps) {
 
   return (
     <section
-      className="overflow-hidden border border-[var(--color-border)] bg-white"
+      className="overflow-hidden border border-[var(--color-border)] bg-surface-elevated"
       aria-label="접속현황"
     >
       <h2 className="bg-surface-2 px-4 py-2.5 text-sm font-bold text-ink">
@@ -33,7 +33,7 @@ export function AccessStatusPanel({ status }: AccessStatusPanelProps) {
             <dt className="flex w-[120px] shrink-0 items-center bg-surface px-3 py-2.5 text-sm font-bold text-ink">
               {row.label}
             </dt>
-            <dd className="flex min-w-0 flex-1 items-center whitespace-nowrap border-l border-[var(--color-border)] px-3 py-2.5 text-xs text-ink-faint tabular-nums">
+            <dd className="flex min-w-0 flex-1 items-center whitespace-nowrap border-l border-[var(--color-border)] px-3 py-2.5 text-sm text-ink-muted tabular-nums">
               {row.value}
             </dd>
           </div>

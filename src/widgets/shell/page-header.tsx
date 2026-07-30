@@ -10,7 +10,7 @@ export function PageHeader({ title }: PageHeaderProps) {
   const [favorite, setFavorite] = React.useState(false)
 
   const iconBtn =
-    "inline-flex h-9 w-9 items-center justify-center rounded-[var(--radius)] border border-[var(--color-border)] bg-white text-ink-muted hover:bg-surface hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+    "inline-flex h-9 w-9 items-center justify-center rounded-[var(--radius)] border border-[var(--color-border)] bg-surface-elevated text-ink-muted hover:bg-surface hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
 
   return (
     <div className="mb-6 flex items-center justify-between gap-4">

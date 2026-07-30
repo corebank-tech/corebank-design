@@ -105,7 +105,7 @@ export function D05TransferLimit() {
           ]}
         />
         <div className="mt-4 flex flex-col items-end gap-1 border-t-2 border-t-[var(--color-navy)] pt-3">
-          <span className="text-xs font-normal text-ink-faint">당일 잔여 이체가능금액</span>
+          <span className="font-normal text-ink-muted">당일 잔여 이체가능금액</span>
           <span className="text-page font-bold tabular-nums text-primary">
             {formatAmount(dailyRemaining)}
           </span>

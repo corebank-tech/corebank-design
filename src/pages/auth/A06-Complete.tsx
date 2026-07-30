@@ -30,7 +30,7 @@ export function A06Complete({ name }: A06CompleteProps) {
         >
           <Check className="h-9 w-9" strokeWidth={2.5} />
         </span>
-        <p className="mt-4 text-xl font-bold text-ink text-balance">
+        <p className="mt-4 text-h2 font-bold text-ink text-balance">
           {name}님, 회원가입이 완료되었습니다.
         </p>
         <p className="mt-2 text-sm leading-relaxed text-ink-muted">

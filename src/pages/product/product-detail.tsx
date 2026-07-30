@@ -82,7 +82,7 @@ export function ProductDetail({ product, onJoin }: ProductDetailProps) {
     <div className="flex gap-6">
       {/* 좌측 요약 카드 */}
       <aside className="w-80 shrink-0">
-        <div className="sticky top-6 overflow-hidden rounded-[var(--radius-lg)] bg-white p-6 [box-shadow:var(--shadow-card)]">
+        <div className="sticky top-6 overflow-hidden rounded-[var(--radius-lg)] bg-surface-elevated p-6 [box-shadow:var(--shadow-card)]">
           <Badge variant={product.category === "정기예금" ? "primary" : "success"}>
             {product.category}
           </Badge>
@@ -146,7 +146,7 @@ export function ProductDetail({ product, onJoin }: ProductDetailProps) {
                 aria-selected={active}
                 onClick={() => setTab(t.key)}
                 className={cn(
-                  "relative -mb-px border-b-2 px-1 pb-3 pt-2 text-base font-bold transition-colors",
+                  "relative -mb-px whitespace-nowrap border-b-2 px-1 pb-3 pt-2 text-base font-bold transition-colors",
                   active
                     ? "border-primary text-primary"
                     : "border-transparent text-ink-muted hover:text-ink",
@@ -172,7 +172,7 @@ export function ProductDetail({ product, onJoin }: ProductDetailProps) {
                   <dt className="flex w-40 shrink-0 items-center bg-surface px-4 py-3 text-sm font-bold text-ink">
                     {item.label}
                   </dt>
-                  <dd className="flex-1 bg-white px-4 py-3 text-sm leading-relaxed text-ink">
+                  <dd className="flex-1 bg-surface-elevated px-4 py-3 text-sm leading-relaxed text-ink">
                     {item.value}
                   </dd>
                 </div>

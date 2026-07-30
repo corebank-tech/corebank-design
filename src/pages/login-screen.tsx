@@ -23,9 +23,9 @@ export function LoginScreen() {
   }
 
   return (
-    <div className="flex flex-col items-center py-6">
+    <div className="flex flex-col items-center py-10">
       <div className="w-full max-w-[480px]">
-        <div className="border border-[var(--color-border)] bg-white p-8">
+        <div className="border border-[var(--color-border-strong)] bg-surface-elevated p-8 [box-shadow:var(--shadow-card)]">
           <div className="mb-6 text-center">
             <h1 className="text-page font-bold text-ink">로그인</h1>
             <p className="mt-1 text-sm text-ink-muted">

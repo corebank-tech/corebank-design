@@ -67,10 +67,10 @@ export function ProductCardGrid({
                 onClick={() => setFilter(f)}
                 aria-pressed={active}
                 className={cn(
-                  "h-9 rounded-[var(--radius-pill)] border px-4 text-sm font-bold transition-colors",
+                  "h-9 whitespace-nowrap rounded-[var(--radius-pill)] border px-4 text-sm font-bold transition-colors",
                   active
                     ? "border-primary bg-primary text-primary-foreground"
-                    : "border-[var(--color-border-strong)] bg-white text-ink-muted hover:bg-surface",
+                    : "border-[var(--color-border-strong)] bg-surface-elevated text-ink-muted hover:bg-surface",
                 )}
               >
                 {f}
@@ -100,7 +100,7 @@ export function ProductCardGrid({
           {visible.map((p) => (
             <article
               key={p.id}
-              className="flex flex-col overflow-hidden rounded-[var(--radius-lg)] bg-white p-5 [box-shadow:var(--shadow-card)]"
+              className="flex flex-col overflow-hidden rounded-[var(--radius-lg)] bg-surface-elevated p-5 [box-shadow:var(--shadow-card)]"
             >
               <div className="mb-3">
                 <Badge variant={p.category === "정기예금" ? "primary" : "success"}>

@@ -131,7 +131,7 @@ export function TransactionInquiryScreen() {
   }
 
   return (
-    <div className="border border-[var(--color-border)] bg-white p-6">
+    <div className="border border-[var(--color-border)] bg-surface-elevated p-6">
       <FormSection title="조회조건">
         <SearchPanel onReset={handleReset} onSearch={() => setPage(1)}>
           <FormRow label="조회계좌번호" htmlFor="inq-account">
@@ -218,14 +218,15 @@ export function TransactionInquiryScreen() {
               <div key={item.term} className="flex flex-col gap-1 px-4 py-3">
                 <dt
                   className={cn(
-                    item.dominant ? "text-2xs text-ink-faint" : "text-xs text-ink-faint",
+                    "text-sm text-ink-muted",
+                    item.dominant && "text-xs text-ink-faint",
                   )}
                 >
                   {item.term}
                 </dt>
                 <dd
                   className={cn(
-                    item.dominant ? "text-page font-bold text-primary" : "text-sm font-bold text-ink",
+                    item.dominant ? "text-h2 font-bold text-primary" : "text-md font-bold text-ink",
                     item.numeric && "tabular-nums",
                   )}
                 >

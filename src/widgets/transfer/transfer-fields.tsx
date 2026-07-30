@@ -257,7 +257,7 @@ export function AmountField({
             key={chip.label}
             type="button"
             onClick={() => onChange(Math.min((value ?? 0) + chip.value, limit))}
-            className="h-8 rounded-[var(--radius-pill)] border border-[var(--color-border-strong)] bg-white px-3 text-sm text-ink transition-colors hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="h-8 whitespace-nowrap rounded-[var(--radius-pill)] border border-[var(--color-border-strong)] bg-surface-elevated px-3 text-sm text-ink transition-colors hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             {chip.label}
           </button>
@@ -266,7 +266,7 @@ export function AmountField({
           <button
             type="button"
             onClick={() => onChange(fullAmount)}
-            className="h-8 rounded-[var(--radius-pill)] border border-primary bg-primary-tint px-3 text-sm font-bold text-primary transition-colors hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="h-8 whitespace-nowrap rounded-[var(--radius-pill)] border border-primary bg-primary-tint px-3 text-sm font-bold text-primary transition-colors hover:bg-surface-elevated focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             전액
           </button>
@@ -274,7 +274,7 @@ export function AmountField({
         <button
           type="button"
           onClick={() => onChange(null)}
-          className="h-8 rounded-[var(--radius-pill)] border border-[var(--color-border-strong)] bg-surface px-3 text-sm text-ink-muted transition-colors hover:bg-[var(--color-border)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="h-8 whitespace-nowrap rounded-[var(--radius-pill)] border border-[var(--color-border-strong)] bg-surface px-3 text-sm text-ink-muted transition-colors hover:bg-[var(--color-border)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           정정
         </button>

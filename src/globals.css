@@ -8,34 +8,35 @@
      navy: 페이지를 바닥에 고정 — DataGrid 상단 룰, FormSection 하단 라인, 강조 헤더 배경 전용.
      primary: 버튼·탭·링크 등 상호작용 요소 전용. */
   --color-navy: #0a2e7d; /* H220 S85% L26% */
-  --color-primary: #0f5ae0; /* H218 S88% L47% */
-  --color-primary-hover: #0a45b0;
+  --color-primary: #0a60f5; /* H218 S92% L50% — POL-039 팀 피드백: 채도 상향(2026-07) */
+  --color-primary-hover: #0846ba;
   --color-primary-soft: #5a8cf0; /* breadcrumb bar */
   --color-primary-tint: #ecf2fe; /* notice box background */
-  --color-accent: #0f5ae0;
-  --color-accent-hover: #0a45b0;
-  --color-link: #0f5ae0; /* inline text links */
+  --color-accent: #0a60f5;
+  --color-accent-hover: #0846ba;
+  --color-link: #0a60f5; /* inline text links */
 
   /* Neutrals */
   --color-surface: #f3f5f8; /* form label cell background */
   --color-surface-2: #fafbfc;
+  --color-surface-elevated: #ffffff; /* 버튼·인풋·카드·모달 등 흰 표면 — 다크모드에서 반전 */
   --color-border: #e1e5ea;
   --color-border-strong: #c3c9d2;
   --color-footer-bg: #f9fafb; /* footer */
   --color-ink: #17202e; /* primary text */
   --color-ink-muted: #4b5563; /* secondary text */
-  --color-ink-faint: #8a93a0;
+  --color-ink-faint: #6b7280; /* 팀 피드백: 저대비 개선(2026-07). WCAG AA 4.5:1 이상 확보 */
   --color-white: #ffffff;
 
   /* Feedback — 기관 톤. 소비자 앱 채도를 피한다 */
-  --color-danger: #c8322e;
+  --color-danger: #d81e18; /* 팀 피드백: 채도 상향(2026-07) */
   --color-danger-tint: #fbf0ef;
   --color-danger-ring: color-mix(in srgb, var(--color-danger) 20%, white);
-  --color-success: #12703f;
+  --color-success: #107f46;
   --color-success-tint: #e7f4ee;
-  --color-warning: #a35c00;
+  --color-warning: #ad6200;
   --color-warning-tint: #fbf3e2;
-  --color-info: #17539e;
+  --color-info: #1359ae;
   --color-ring-soft: color-mix(in srgb, var(--color-primary) 30%, white);
   --color-skeleton: color-mix(in srgb, var(--color-border) 60%, white);
 
@@ -52,10 +53,13 @@
   --overlay-white-70: rgba(255, 255, 255, 0.7); /* 색상 바 위 포커스 링 */
 
   /* Grid / ledger */
-  --color-deposit: #17539e; /* 입금 amounts */
-  --color-withdraw: #c8322e; /* 출금 amounts */
+  --color-deposit: #0c5bbb; /* 입금 amounts — 팀 피드백: 채도 상향(2026-07) */
+  --color-withdraw: #d81e18; /* 출금 amounts */
 
-  /* Type scale — 9단 */
+  /* Type scale — 9단
+     팀 피드백(2026-07, 3차): 2차 확대가 과했다는 피드백("실제 은행 UI처럼 조밀해야
+     한다")에 따라 POL-041 원안 수치로 되돌린다. DataGrid는 --text-sm에 종속시키지
+     않고 data-grid.tsx에서 text-[13px]로 직접 고정해 향후 스케일 변경과 분리한다. */
   --text-page: 26px;
   --text-h2: 20px;
   --text-h3: 17px;
@@ -131,6 +135,67 @@
   --ring: var(--color-primary);
 }
 
+/* ============================================================
+   Dark theme — 팀 피드백(2026-07) POL-039 확장.
+   <html data-theme="dark"> 속성으로 전환한다 (src/shared/lib/theme.tsx).
+   컴포넌트는 변수만 참조하므로(POL-039) 이 블록만으로 대부분 자동 반영된다.
+   --color-white는 버튼 위 아이콘/텍스트 등 "항상 흰색이어야 하는" 고정값이라
+   재정의하지 않는다. 흰 표면(카드·버튼·인풋 등)은 --color-surface-elevated로
+   분리해 다크에서 반전시킨다.
+   ============================================================ */
+:root[data-theme="dark"] {
+  /* 팀 피드백(2026-07, 2차): outline 버튼 등 --color-surface-elevated 위 텍스트로 쓰일 때
+     AA(4.5:1) 미달이었던 primary/danger/info를 카드 표면 기준으로 재보정. */
+  --color-navy: #3c71dd;
+  --color-primary: #5a95f7;
+  --color-primary-hover: #7aa8ff;
+  --color-primary-soft: #6f9bf7;
+  --color-primary-tint: #14203a;
+  --color-accent: #5a95f7;
+  --color-accent-hover: #7aa8ff;
+  --color-link: #7aa8ff;
+
+  --color-surface: #171c27; /* 폼 라벨 셀 배경 */
+  --color-surface-2: #10141c; /* 페이지 배경 */
+  --color-surface-elevated: #232b3c; /* 버튼·인풋·카드·모달 표면 */
+  --color-overlay-scrim: rgba(0, 0, 0, 0.72); /* 모달·전체메뉴 배경. surface-elevated와 대비를 확보 */
+  /* 팀 피드백(2026-07, 2차): 다크모드에서 표 셀 구분선이 거의 안 보인다는 지적에 따라
+     테두리 대비를 크게 상향(기존 대비 약 2배, 페이지 배경 대비 ≥2.8:1). */
+  --color-border: #545e77;
+  --color-border-strong: #6b7590;
+  --color-footer-bg: #171c27;
+  --color-ink: #eceff4;
+  --color-ink-muted: #a7afbf;
+  --color-ink-faint: #8f97ab;
+
+  --color-danger: #f2645f;
+  --color-danger-tint: #2c1614;
+  --color-danger-ring: color-mix(in srgb, var(--color-danger) 30%, var(--color-surface-elevated));
+  --color-success: #2eb870;
+  --color-success-tint: #12281c;
+  --color-warning: #f28f0d;
+  --color-warning-tint: #2c2110;
+  --color-info: #5597e7;
+  --color-ring-soft: color-mix(in srgb, var(--color-primary) 35%, var(--color-surface-elevated));
+  --color-skeleton: color-mix(in srgb, var(--color-border) 60%, var(--color-surface-elevated));
+
+  --color-primary-border-soft: #294274;
+  --color-success-border-soft: #1c4331;
+  --color-warning-border-soft: #4a3315;
+  --color-danger-border-soft: #4a2321;
+
+  --color-deposit: #3e8bea;
+  --color-withdraw: #f2645f;
+
+  --color-footer-fg: var(--color-ink-muted);
+  --color-footer-fg-strong: var(--color-ink);
+  --color-footer-fg-faint: var(--color-ink-faint);
+  --color-footer-divider: var(--color-border);
+  --color-footer-hover-bg: var(--color-surface);
+
+  color-scheme: dark;
+}
+
 @theme inline {
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
@@ -162,6 +227,7 @@
   --color-ring: var(--ring);
   --color-surface: var(--color-surface);
   --color-surface-2: var(--color-surface-2);
+  --color-surface-elevated: var(--color-surface-elevated);
   --color-footer-bg: var(--color-footer-bg);
   --color-ink: var(--color-ink);
   --color-ink-muted: var(--color-ink-muted);

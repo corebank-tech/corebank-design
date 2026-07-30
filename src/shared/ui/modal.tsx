@@ -86,7 +86,7 @@ export function Modal({
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        className="flex max-h-[calc(100vh-48px)] w-full flex-col overflow-hidden rounded-[var(--radius-lg)] bg-white [box-shadow:var(--shadow-pop)]"
+        className="flex max-h-[calc(100vh-48px)] w-full flex-col overflow-hidden rounded-[var(--radius-lg)] bg-surface-elevated [box-shadow:var(--shadow-pop)]"
         style={{ maxWidth: sizeWidth[size] }}
       >
         <div
@@ -110,7 +110,7 @@ export function Modal({
           )}
         </div>
 
-        <div className="min-h-0 flex-1 overflow-y-auto bg-white px-6 py-6">
+        <div className="min-h-0 flex-1 overflow-y-auto bg-surface-elevated px-6 py-6">
           {children}
         </div>
 

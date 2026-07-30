@@ -81,7 +81,7 @@ export function MainDashboard({
       align: "center",
       width: ACCOUNT_COLUMN_WIDTHS.openedDate,
       render: (r) => (
-        <span className="text-2xs text-ink-faint tabular-nums">
+        <span className="tabular-nums">
           {formatDate(r.openedDate)}
         </span>
       ),
@@ -126,7 +126,7 @@ export function MainDashboard({
     <div className="flex flex-col gap-8">
       {/* [1] 인사 영역 + 접속현황 */}
       <div className="flex items-stretch gap-9">
-        <div className="flex w-2/3 flex-col justify-center border border-[var(--color-border)] bg-white px-8 py-9">
+        <div className="flex w-2/3 flex-col justify-center border border-[var(--color-border)] bg-surface-elevated px-8 py-9">
           <p className="text-h2 font-bold text-ink">
             {customerName} 고객님, 안녕하세요.
           </p>
@@ -140,7 +140,7 @@ export function MainDashboard({
       </div>
 
       {/* [2] 대표계좌 요약 */}
-      <div className="border border-[var(--color-border)] bg-white p-6">
+      <div className="border border-[var(--color-border)] bg-surface-elevated p-6">
         <FormSection title="대표계좌" className="mb-0">
           {accounts.length === 0 ? (
             <div className="border-t-2 border-t-[var(--color-navy)] border-b border-[var(--color-border)]">
@@ -158,14 +158,14 @@ export function MainDashboard({
             <>
               <div className="mb-4 flex items-end justify-between gap-4">
                 <div className="flex flex-col gap-1">
-                  <span className="text-xs text-ink-faint">
+                  <span className="text-md font-bold text-ink-muted">
                     기본 입출금계좌 · {accounts[0].alias}
                   </span>
-                  <span className="text-xs text-ink-faint tabular-nums">
+                  <span className="text-md font-bold text-ink-muted tabular-nums">
                     {formatAccountNo(accounts[0].accountNo)}
                   </span>
                 </div>
-                <span className="text-page tabular-nums text-ink [font-weight:var(--weight-value)]">
+                <span className="text-h2 tabular-nums text-ink [font-weight:var(--weight-value)]">
                   {formatAmount(accounts[0].balance)}
                 </span>
               </div>

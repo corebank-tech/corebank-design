@@ -131,10 +131,10 @@ export function InstantTransferResultDemo() {
               onClick={() => setVariant(v.id)}
               aria-pressed={variant === v.id}
               className={
-                "rounded-[var(--radius-pill)] px-3 py-1 text-sm font-bold transition-colors " +
+                "whitespace-nowrap rounded-[var(--radius-pill)] px-3 py-1 text-sm font-bold transition-colors " +
                 (variant === v.id
                   ? "bg-primary text-primary-foreground"
-                  : "text-ink-muted hover:bg-white")
+                  : "text-ink-muted hover:bg-surface-elevated")
               }
             >
               {v.label}

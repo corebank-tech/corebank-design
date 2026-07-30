@@ -95,7 +95,7 @@ export function D04TransferHistory() {
       header: "출금계좌",
       width: 170,
       render: (r) => (
-        <span>
+        <span className="whitespace-nowrap">
           {r.fromAlias} <span className="text-ink-faint">/</span>{" "}
           <span className="tabular-nums">{formatAccountNo(r.fromAccountNo)}</span>
         </span>
@@ -208,11 +208,7 @@ export function D04TransferHistory() {
           items={[
             {
               label: "총 정상이체건수",
-              value: (
-                <span className="text-xs font-normal text-ink-faint">
-                  {normalCount.toLocaleString("ko-KR")}건
-                </span>
-              ),
+              value: `${normalCount.toLocaleString("ko-KR")}건`,
             },
             {
               label: "총 이체금액",

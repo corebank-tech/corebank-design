@@ -106,7 +106,7 @@ export function PeriodField({ start, end, onChange, today }: PeriodFieldProps) {
   const stepperGroup =
     "inline-flex items-stretch overflow-hidden rounded-[var(--radius)] border border-[var(--color-border-strong)]"
   const stepper =
-    "inline-flex h-8 w-7 items-center justify-center bg-white text-ink-muted hover:bg-surface focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
+    "inline-flex h-8 w-7 items-center justify-center bg-surface-elevated text-ink-muted hover:bg-surface focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
 
   return (
     <div className="flex flex-col gap-2">
@@ -121,10 +121,10 @@ export function PeriodField({ start, end, onChange, today }: PeriodFieldProps) {
                 onClick={() => applyChip(chip.days)}
                 aria-pressed={active}
                 className={cn(
-                  "h-8 rounded-[var(--radius-pill)] border px-3 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                  "h-8 whitespace-nowrap rounded-[var(--radius-pill)] border px-3 text-[14px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                   active
-                    ? "border-ink bg-ink font-bold text-white"
-                    : "border-[var(--color-border-strong)] bg-white text-ink hover:bg-surface",
+                    ? "border-ink bg-ink font-bold text-surface-elevated"
+                    : "border-[var(--color-border-strong)] bg-surface-elevated text-ink hover:bg-surface",
                 )}
               >
                 {chip.label}
@@ -165,7 +165,7 @@ export function PeriodField({ start, end, onChange, today }: PeriodFieldProps) {
             >
               <ChevronLeft className="h-4 w-4" aria-hidden="true" />
             </button>
-            <span className="flex items-center border-x border-[var(--color-border-strong)] bg-surface px-2 text-xs font-bold text-ink">
+            <span className="flex items-center border-x border-[var(--color-border-strong)] bg-surface px-2 text-[13px] font-bold text-ink">
               년
             </span>
             <button
@@ -186,7 +186,7 @@ export function PeriodField({ start, end, onChange, today }: PeriodFieldProps) {
             >
               <ChevronLeft className="h-4 w-4" aria-hidden="true" />
             </button>
-            <span className="flex items-center border-x border-[var(--color-border-strong)] bg-surface px-2 text-xs font-bold text-ink">
+            <span className="flex items-center border-x border-[var(--color-border-strong)] bg-surface px-2 text-[13px] font-bold text-ink">
               월
             </span>
             <button

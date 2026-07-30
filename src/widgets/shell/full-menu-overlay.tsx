@@ -36,7 +36,7 @@ export function FullMenuOverlay({ open, onClose }: FullMenuOverlayProps) {
         onClick={onClose}
         aria-hidden="true"
       />
-      <div className="absolute inset-x-0 top-0 bg-white [box-shadow:var(--shadow-pop)]">
+      <div className="absolute inset-x-0 top-0 bg-surface-elevated [box-shadow:var(--shadow-pop)]">
         <div className="mx-auto w-[1280px] px-4">
           <div className="flex h-[72px] items-center justify-between border-b border-[var(--color-border)]">
             <span className="text-[20px] text-primary [font-weight:var(--weight-heading)]">
@@ -52,7 +52,7 @@ export function FullMenuOverlay({ open, onClose }: FullMenuOverlayProps) {
             </button>
           </div>
 
-          <div className="grid grid-cols-4 gap-8 py-8">
+          <div className="grid grid-cols-4 gap-8 pt-8 pb-12">
             {NAV.map((cat) => (
               <div key={cat.id}>
                 <h3 className="mb-3 text-[16px] text-primary [font-weight:var(--weight-heading)]">
@@ -61,7 +61,7 @@ export function FullMenuOverlay({ open, onClose }: FullMenuOverlayProps) {
                 <div className="flex flex-col gap-4">
                   {cat.groups.map((group) => (
                     <div key={group.title}>
-                      <p className="mb-1 text-[13px] text-ink-faint">
+                      <p className="mb-1 whitespace-nowrap text-[14px] text-ink-faint">
                         {group.title}
                       </p>
                       <ul className="flex flex-col gap-1">
@@ -71,7 +71,7 @@ export function FullMenuOverlay({ open, onClose }: FullMenuOverlayProps) {
                               to={item.path}
                               data-screen-id={item.screenId}
                               onClick={onClose}
-                              className="inline-block py-0.5 text-[15px] text-ink [font-weight:var(--weight-label)] hover:text-primary hover:underline"
+                              className="inline-block whitespace-nowrap py-0.5 text-[16px] text-ink [font-weight:var(--weight-label)] hover:text-primary hover:underline"
                             >
                               {item.label}
                             </Link>

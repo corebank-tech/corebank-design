@@ -59,11 +59,11 @@ export function LimitModal({
             <tr key={row.label}>
               <th
                 scope="row"
-                className="w-[45%] border-b border-r border-[var(--color-border)] bg-surface px-3 py-3 text-left font-bold text-ink"
+                className="w-[45%] whitespace-nowrap border-b border-r border-[var(--color-border)] bg-surface px-3 py-3 text-left font-bold text-ink"
               >
                 {row.label}
               </th>
-              <td className="border-b border-[var(--color-border)] bg-white px-3 py-3 text-right tabular-nums text-ink">
+              <td className="border-b border-[var(--color-border)] bg-surface-elevated px-3 py-3 text-right tabular-nums text-ink">
                 {formatAmount(row.value)}
               </td>
             </tr>

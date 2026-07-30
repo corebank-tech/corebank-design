@@ -26,7 +26,7 @@ export function EmptyState({
       {...props}
     >
       <span
-        className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-[var(--color-border-strong)] text-xl font-bold text-ink-muted"
+        className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-[var(--color-border-strong)] text-h2 font-bold text-ink-muted"
         aria-hidden="true"
       >
         !

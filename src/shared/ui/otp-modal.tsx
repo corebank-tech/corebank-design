@@ -145,7 +145,7 @@ export function OtpModal({
           <>
             <span
               className={cn(
-                "text-3xl font-bold tabular-nums tracking-[0.2em]",
+                "text-page font-bold tabular-nums tracking-[0.2em]",
                 expired ? "text-ink-faint line-through" : "text-primary",
               )}
               aria-label="발급된 OTP 번호"

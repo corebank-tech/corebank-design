@@ -129,7 +129,7 @@ export function B01AllAccounts() {
         <SummaryRow
           items={[
             {
-              label: <span className="text-xs font-normal text-ink-faint">총자산</span>,
+              label: <span className="font-normal text-ink-muted">총자산</span>,
               value: <span className="text-page font-bold">{formatAmount(grandTotal)}</span>,
               valueColor: "var(--color-primary)",
             },

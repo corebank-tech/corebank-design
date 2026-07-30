@@ -25,7 +25,7 @@ export function B02DepositAccounts() {
       key: "alias",
       header: "계좌명",
       width: 180,
-      render: (r) => <span className="text-xs text-ink-faint">{r.alias}</span>,
+      render: (r) => <span className="font-bold text-ink">{r.alias}</span>,
     },
     {
       key: "accountNo",
@@ -39,7 +39,7 @@ export function B02DepositAccounts() {
       align: "center",
       width: 120,
       render: (r) => (
-        <span className="text-xs tabular-nums text-ink-faint">{formatDate(r.openedDate)}</span>
+        <span className="tabular-nums text-ink-muted">{formatDate(r.openedDate)}</span>
       ),
     },
     {
@@ -48,7 +48,7 @@ export function B02DepositAccounts() {
       align: "center",
       width: 120,
       render: (r) => (
-        <span className="text-xs tabular-nums text-ink-faint">{formatDate(r.lastActivityDate)}</span>
+        <span className="tabular-nums text-ink-muted">{formatDate(r.lastActivityDate)}</span>
       ),
     },
     {
@@ -123,7 +123,7 @@ export function B02DepositAccounts() {
           className="mt-3"
           items={[
             {
-              label: <span className="text-xs font-normal text-ink-faint">예금·적금계좌 총잔액</span>,
+              label: <span className="font-normal text-ink-muted">예금·적금계좌 총잔액</span>,
               value: <span className="text-h2 font-bold">{formatAmount(groupTotal)}</span>,
               valueColor: "var(--color-primary)",
             },

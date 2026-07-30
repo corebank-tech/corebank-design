@@ -35,16 +35,16 @@ export function SummaryRow({
       {...props}
     >
       {items.map((item, i) => (
-        <div key={i} className="flex min-w-0 flex-1">
+        <div key={i} className="flex flex-1">
           <div
-            className="flex shrink-0 items-center border-b border-r bg-surface px-3 py-2.5 text-sm font-bold text-ink"
-            style={{ width: labelWidth }}
+            className="flex shrink-0 items-center whitespace-nowrap border-b border-r bg-surface px-3 py-2.5 text-[14px] font-bold text-ink"
+            style={{ minWidth: labelWidth }}
           >
             {item.label}
           </div>
           <div
             className={cn(
-              "flex min-w-0 flex-1 items-center border-b border-r bg-white px-3 py-2.5 text-sm text-ink",
+              "flex flex-1 items-center whitespace-nowrap border-b border-r bg-surface-elevated px-3 py-2.5 text-[14px] text-ink",
               (item.numeric ?? true) && "justify-end tabular-nums font-bold",
             )}
             style={item.valueColor ? { color: item.valueColor } : undefined}

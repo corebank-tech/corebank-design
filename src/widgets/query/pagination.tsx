@@ -33,7 +33,7 @@ export function Pagination({
   }
 
   const navBtn =
-    "inline-flex h-9 w-9 items-center justify-center rounded-[var(--radius)] border border-[var(--color-border-strong)] bg-white text-ink-muted hover:bg-surface disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+    "inline-flex h-9 w-9 items-center justify-center rounded-[var(--radius)] border border-[var(--color-border-strong)] bg-surface-elevated text-ink-muted hover:bg-surface disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
 
   return (
     <nav
@@ -59,10 +59,10 @@ export function Pagination({
             onClick={() => go(p)}
             aria-current={active ? "page" : undefined}
             className={cn(
-              "inline-flex h-9 min-w-9 items-center justify-center rounded-[var(--radius)] border px-2 text-sm tabular-nums focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+              "inline-flex h-9 min-w-9 items-center justify-center whitespace-nowrap rounded-[var(--radius)] border px-2 text-sm tabular-nums focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
               active
                 ? "border-primary bg-primary font-bold text-primary-foreground"
-                : "border-[var(--color-border)] bg-white text-ink hover:bg-surface",
+                : "border-[var(--color-border)] bg-surface-elevated text-ink hover:bg-surface",
             )}
           >
             {p}

@@ -170,7 +170,7 @@ export default function App() {
         <Route
           path="/"
           element={
-            <PageShell activeId="user" bare loggedIn={false}>
+            <PageShell bare loggedIn={false}>
               <LoginScreen />
             </PageShell>
           }
@@ -179,7 +179,6 @@ export default function App() {
           path="/dashboard"
           element={
             <PageShell
-              activeId="user"
               breadcrumb={["개인", "메인", "대시보드"]}
               title="메인 대시보드"
               customerName="홍길동"

@@ -1,8 +1,9 @@
 import * as React from "react"
 import { Link } from "react-router-dom"
-import { Bell, Menu } from "lucide-react"
+import { Bell, Menu, Moon, Sun } from "lucide-react"
 import { NAV } from "@/lib/nav"
 import { cn } from "@/shared/lib/utils"
+import { useTheme } from "@/shared/lib/theme"
 
 export interface AppHeaderProps {
   activeId?: string
@@ -40,6 +41,7 @@ export function AppHeader({
   const [hoverId, setHoverId] = React.useState<string | null>(null)
   const closeTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null)
   const [remaining, setRemaining] = React.useState(sessionSeconds)
+  const { theme, toggleTheme } = useTheme()
 
   React.useEffect(() => {
     if (!loggedIn) return
@@ -67,7 +69,7 @@ export function AppHeader({
 
   return (
     <header
-      className="sticky top-0 z-[var(--z-header)] border-b border-[var(--color-border)] bg-white"
+      className="sticky top-0 z-[var(--z-header)] border-b border-[var(--color-border)] bg-surface-elevated"
       onMouseLeave={scheduleClose}
     >
       <div className="mx-auto flex h-[72px] w-[1280px] items-stretch justify-between px-4">
@@ -78,7 +80,7 @@ export function AppHeader({
           >
             CoreBank
           </Link>
-          <ul className="flex items-stretch gap-[28px]">
+          <ul className={cn("flex items-stretch gap-[28px]", !loggedIn && "hidden")}>
             {NAV.map((cat) => {
               const isActive = cat.id === activeId
               return (
@@ -104,6 +106,20 @@ export function AppHeader({
         </div>
 
         <div className="flex shrink-0 items-center gap-4">
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full text-ink-muted transition-colors hover:bg-[var(--color-primary-tint)] hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            aria-label={theme === "dark" ? "라이트 모드로 전환" : "다크 모드로 전환"}
+            aria-pressed={theme === "dark"}
+          >
+            {theme === "dark" ? (
+              <Sun className="h-5 w-5" aria-hidden="true" />
+            ) : (
+              <Moon className="h-5 w-5" aria-hidden="true" />
+            )}
+          </button>
+
           {loggedIn ? (
             <>
               <button
@@ -169,7 +185,7 @@ export function AppHeader({
       {/* 2-depth hover dropdown */}
       {activeCategory && (
         <div
-          className="absolute inset-x-0 top-[72px] z-[var(--z-dropdown)] bg-white [box-shadow:var(--shadow-card)]"
+          className="absolute inset-x-0 top-[72px] z-[var(--z-dropdown)] bg-surface-elevated [box-shadow:var(--shadow-card)]"
           onMouseEnter={() => open(activeCategory.id)}
           onMouseLeave={scheduleClose}
         >
@@ -177,7 +193,7 @@ export function AppHeader({
             <div className="grid grid-cols-4 gap-x-8 gap-y-6">
               {activeCategory.groups.map((group) => (
                 <div key={group.title}>
-                  <p className="mb-2 text-[13px] text-ink-faint">{group.title}</p>
+                  <p className="mb-2 whitespace-nowrap text-[14px] text-ink-faint">{group.title}</p>
                   <ul className="flex flex-col gap-1.5">
                     {group.items.map((item) => (
                       <li key={`${item.screenId}-${item.path}`}>
@@ -185,7 +201,7 @@ export function AppHeader({
                           to={item.path}
                           data-screen-id={item.screenId}
                           onClick={() => setHoverId(null)}
-                          className="inline-block py-0.5 text-[15px] text-ink [font-weight:var(--weight-label)] hover:text-primary hover:underline"
+                          className="inline-block whitespace-nowrap py-0.5 text-[16px] text-ink [font-weight:var(--weight-label)] hover:text-primary hover:underline"
                         >
                           {item.label}
                         </Link>

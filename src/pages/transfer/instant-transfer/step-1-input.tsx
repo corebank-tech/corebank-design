@@ -15,11 +15,6 @@ import { maskName } from "@/shared/lib/format"
 import type { AccountOption } from "@/shared/types/account"
 import type { InstantTransferForm } from "../instant-transfer-screen"
 
-/** Muted, de-emphasized field label — reserves visual weight for 이체금액. */
-function FieldLabel({ children }: { children: React.ReactNode }) {
-  return <span className="text-xs text-ink-faint">{children}</span>
-}
-
 export interface InstantTransferStep1Props {
   steps: string[]
   accounts: AccountOption[]
@@ -74,7 +69,7 @@ export function InstantTransferStep1({
     >
       <FormSection title="출금정보">
         <div>
-          <FormRow label={<FieldLabel>출금계좌</FieldLabel>} required htmlFor="it-from">
+          <FormRow label="출금계좌" required htmlFor="it-from">
             <WithdrawAccountField
               id="it-from"
               options={accounts}
@@ -82,7 +77,7 @@ export function InstantTransferStep1({
               onChange={(v) => onChange("fromAccount", v)}
             />
           </FormRow>
-          <FormRow label={<FieldLabel>계좌비밀번호</FieldLabel>} required htmlFor="it-pw">
+          <FormRow label="계좌비밀번호" required htmlFor="it-pw">
             <AccountPasswordField
               id="it-pw"
               value={form.password}
@@ -94,7 +89,7 @@ export function InstantTransferStep1({
 
       <FormSection title="입금정보">
         <div>
-          <FormRow label={<FieldLabel>입금계좌번호</FieldLabel>} required htmlFor="it-to">
+          <FormRow label="입금계좌번호" required htmlFor="it-to">
             <AccountNumberField
               id="it-to"
               value={form.toAccount}
@@ -122,7 +117,7 @@ export function InstantTransferStep1({
               </p>
             </div>
           </FormRow>
-          <FormRow label={<FieldLabel>받는분 통장 표시내용</FieldLabel>} htmlFor="it-memo-payee">
+          <FormRow label="받는분 통장 표시내용" htmlFor="it-memo-payee">
             <div className="flex w-full flex-col gap-1">
               <MemoField
                 id="it-memo-payee"
@@ -135,7 +130,7 @@ export function InstantTransferStep1({
               </p>
             </div>
           </FormRow>
-          <FormRow label={<FieldLabel>내 통장 표시내용</FieldLabel>} htmlFor="it-memo-mine">
+          <FormRow label="내 통장 표시내용" htmlFor="it-memo-mine">
             <MemoField
               id="it-memo-mine"
               value={form.myMemo}

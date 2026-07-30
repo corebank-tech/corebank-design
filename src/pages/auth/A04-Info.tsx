@@ -203,7 +203,7 @@ export function A04Info({ data, onChange, onNext }: A04InfoProps) {
                     중복확인
                   </Button>
                   {idConfirmed && (
-                    <span className="text-xs font-bold text-primary">확인 완료</span>
+                    <span className="whitespace-nowrap text-xs font-bold text-primary">확인 완료</span>
                   )}
                 </div>
                 <RuleList rules={idRules} />
@@ -264,7 +264,7 @@ export function A04Info({ data, onChange, onNext }: A04InfoProps) {
                       {emailIssued == null ? "인증번호 발송" : "재발송"}
                     </Button>
                   )}
-                  {emailVerified && <span className="text-xs font-bold text-primary">인증 완료</span>}
+                  {emailVerified && <span className="whitespace-nowrap text-xs font-bold text-primary">인증 완료</span>}
                 </div>
 
                 {emailIssued != null && !emailVerified && (

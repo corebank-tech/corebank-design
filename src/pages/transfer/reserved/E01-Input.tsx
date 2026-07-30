@@ -16,11 +16,6 @@ import { maskName } from "@/shared/lib/format"
 import type { AccountOption } from "@/shared/types/account"
 import type { ReservedTransferForm } from "../reserved-transfer-screen"
 
-/** Muted, de-emphasized field label — reserves visual weight for 이체금액. */
-function FieldLabel({ children }: { children: React.ReactNode }) {
-  return <span className="text-xs text-ink-faint">{children}</span>
-}
-
 export interface ReservedTransferStep1Props {
   steps: string[]
   accounts: AccountOption[]
@@ -75,7 +70,7 @@ export function ReservedTransferStep1({
     >
       <FormSection title="출금정보">
         <div>
-          <FormRow label={<FieldLabel>출금계좌</FieldLabel>} required htmlFor="rt-from">
+          <FormRow label="출금계좌" required htmlFor="rt-from">
             <WithdrawAccountField
               id="rt-from"
               options={accounts}
@@ -83,7 +78,7 @@ export function ReservedTransferStep1({
               onChange={(v) => onChange("fromAccount", v)}
             />
           </FormRow>
-          <FormRow label={<FieldLabel>계좌비밀번호</FieldLabel>} required htmlFor="rt-pw">
+          <FormRow label="계좌비밀번호" required htmlFor="rt-pw">
             <AccountPasswordField
               id="rt-pw"
               value={form.password}
@@ -95,7 +90,7 @@ export function ReservedTransferStep1({
 
       <FormSection title="입금정보">
         <div>
-          <FormRow label={<FieldLabel>입금계좌번호</FieldLabel>} required htmlFor="rt-to">
+          <FormRow label="입금계좌번호" required htmlFor="rt-to">
             <AccountNumberField
               id="rt-to"
               value={form.toAccount}
@@ -123,7 +118,7 @@ export function ReservedTransferStep1({
               </p>
             </div>
           </FormRow>
-          <FormRow label={<FieldLabel>이체 예정일자</FieldLabel>} required htmlFor="rt-date">
+          <FormRow label="이체 예정일자" required htmlFor="rt-date">
             <TransferDateField
               id="rt-date"
               value={form.scheduledDate}
@@ -132,7 +127,7 @@ export function ReservedTransferStep1({
               rangeLabel="이체 예정일자"
             />
           </FormRow>
-          <FormRow label={<FieldLabel>받는분 통장 표시내용</FieldLabel>} htmlFor="rt-memo-payee">
+          <FormRow label="받는분 통장 표시내용" htmlFor="rt-memo-payee">
             <div className="flex w-full flex-col gap-1">
               <MemoField
                 id="rt-memo-payee"
@@ -145,7 +140,7 @@ export function ReservedTransferStep1({
               </p>
             </div>
           </FormRow>
-          <FormRow label={<FieldLabel>내 통장 표시내용</FieldLabel>} htmlFor="rt-memo-mine">
+          <FormRow label="내 통장 표시내용" htmlFor="rt-memo-mine">
             <MemoField
               id="rt-memo-mine"
               value={form.myMemo}

@@ -112,7 +112,7 @@ export function E04ReservationList() {
       header: "출금계좌",
       width: 170,
       render: (r) => (
-        <span>
+        <span className="whitespace-nowrap">
           {r.fromAlias} <span className="text-ink-faint">/</span>{" "}
           <span className="tabular-nums">{formatAccountNo(r.fromAccountNo)}</span>
         </span>

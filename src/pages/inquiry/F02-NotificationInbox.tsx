@@ -38,7 +38,7 @@ export function F02NotificationInbox() {
       width: 60,
       render: (r) =>
         r.read ? (
-          <span className="text-2xs text-ink-faint">읽음</span>
+          <span className="text-xs text-ink-faint">읽음</span>
         ) : (
           <span className="inline-flex items-center gap-1 text-xs font-bold text-primary">
             <span className="h-1.5 w-1.5 rounded-full bg-primary" aria-hidden="true" />
@@ -53,7 +53,7 @@ export function F02NotificationInbox() {
       sortable: true,
       sortValue: (r) => r.occurredAt,
       render: (r) => (
-        <span className="text-2xs tabular-nums text-ink-faint">{formatDateTime(r.occurredAt)}</span>
+        <span className="tabular-nums text-ink-muted">{formatDateTime(r.occurredAt)}</span>
       ),
     },
     {
@@ -76,7 +76,7 @@ export function F02NotificationInbox() {
           <span className={cn("text-sm", r.read ? "text-ink" : "font-bold text-ink")}>
             {r.title}
           </span>
-          <span className="text-xs text-ink-muted">{r.content}</span>
+          <span className="text-sm text-ink-muted">{r.content}</span>
         </button>
       ),
     },

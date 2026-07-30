@@ -104,8 +104,8 @@ export function DataGrid<Row>({
   const totalCols = columns.length + (selectable ? 1 : 0)
 
   return (
-    <div className="border-t-2 border-t-[var(--color-navy)] border-b border-[var(--color-border)]">
-      <table className="w-full border-collapse text-sm">
+    <div className="overflow-x-auto border-t-2 border-t-[var(--color-navy)] border-b border-[var(--color-border)]">
+      <table className="w-full border-collapse text-[14px]">
         <colgroup>
           {selectable && <col style={{ width: 44 }} />}
           {columns.map((c) => (
@@ -140,7 +140,7 @@ export function DataGrid<Row>({
                       : undefined
                   }
                   className={cn(
-                    "border-b border-r border-[var(--color-border)] px-3 py-2.5 text-sm font-bold text-ink last:border-r-0",
+                    "whitespace-nowrap border-b border-r border-[var(--color-border)] px-3 py-2.5 text-[14px] font-bold text-ink last:border-r-0",
                     alignClass[col.align ?? "left"],
                   )}
                 >
@@ -234,7 +234,7 @@ export function DataGrid<Row>({
                     <td
                       key={col.key}
                       className={cn(
-                        "border-b border-r border-[var(--color-border)] px-3 py-2.5 text-sm text-ink last:border-r-0",
+                        "whitespace-nowrap border-b border-r border-[var(--color-border)] px-3 py-2.5 text-[14px] text-ink last:border-r-0",
                         alignClass[col.align ?? "left"],
                         col.align === "right" && "tabular-nums",
                         col.className,

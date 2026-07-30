@@ -5,6 +5,8 @@ import { FullMenuOverlay } from "./full-menu-overlay"
 import { PageHeader } from "./page-header"
 import { NoticeBox } from "./notice-box"
 import { Footer } from "./footer"
+import { SideNav } from "./side-nav"
+import { cn } from "@/shared/lib/utils"
 
 export interface PageShellProps {
   activeId?: string
@@ -35,7 +37,7 @@ export function PageShell({
   const [menuOpen, setMenuOpen] = React.useState(false)
 
   return (
-    <div className="flex min-h-screen flex-col bg-white">
+    <div className="flex min-h-screen flex-col bg-surface-2">
       <AppHeader
         activeId={activeId}
         customerName={customerName}
@@ -48,13 +50,18 @@ export function PageShell({
       <main className="flex-1">
         <div className="mx-auto w-[1280px] px-4 py-10">
           {!bare && <BreadcrumbBar trail={breadcrumb} />}
-          {!bare && title != null && <PageHeader title={title} />}
-          {children}
-          {notice && notice.length > 0 && (
-            <div className="mt-8">
-              <NoticeBox title={noticeTitle} items={notice} />
+          <div className="flex">
+            {!bare && activeId && <SideNav activeId={activeId} />}
+            <div className={cn("min-w-0 flex-1", !bare && activeId && "pl-6")}>
+              {!bare && title != null && <PageHeader title={title} />}
+              {children}
+              {notice && notice.length > 0 && (
+                <div className="mt-8">
+                  <NoticeBox title={noticeTitle} items={notice} />
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
       </main>
 

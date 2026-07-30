@@ -43,8 +43,8 @@ export function ConfirmSummary({
                 className={cn(
                   "border-b border-[var(--color-danger)] bg-[var(--color-danger-tint)] px-3 py-2.5 text-center whitespace-nowrap [&:not(:first-child)]:border-l [&:not(:first-child)]:border-[var(--color-border)]",
                   col.emphasis
-                    ? "text-xs font-bold text-ink"
-                    : "text-xs text-ink-faint",
+                    ? "text-sm font-bold text-ink"
+                    : "text-sm text-ink-muted",
                 )}
               >
                 {col.label}
@@ -58,10 +58,10 @@ export function ConfirmSummary({
               <td
                 key={i}
                 className={cn(
-                  "bg-white px-3 py-3 text-center align-middle text-ink whitespace-nowrap [&:not(:first-child)]:border-l [&:not(:first-child)]:border-[var(--color-border)]",
+                  "bg-surface-elevated px-3 py-3 text-center align-middle text-ink whitespace-nowrap [&:not(:first-child)]:border-l [&:not(:first-child)]:border-[var(--color-border)]",
                   col.emphasis
-                    ? "text-page font-bold tabular-nums text-primary"
-                    : "text-sm",
+                    ? "text-h2 font-bold tabular-nums text-primary"
+                    : "text-md font-bold",
                 )}
               >
                 {col.value}

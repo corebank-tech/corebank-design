@@ -19,11 +19,6 @@ import { maskName } from "@/shared/lib/format"
 import type { AccountOption } from "@/shared/types/account"
 import type { AutoTransferForm } from "../auto-transfer-screen"
 
-/** Muted, de-emphasized field label — reserves visual weight for 이체금액. */
-function FieldLabel({ children }: { children: React.ReactNode }) {
-  return <span className="text-xs text-ink-faint">{children}</span>
-}
-
 export interface AutoTransferStep1Props {
   steps: string[]
   accounts: AccountOption[]
@@ -78,7 +73,7 @@ export function AutoTransferStep1({
     >
       <FormSection title="출금정보">
         <div>
-          <FormRow label={<FieldLabel>출금계좌</FieldLabel>} required htmlFor="at-from">
+          <FormRow label="출금계좌" required htmlFor="at-from">
             <WithdrawAccountField
               id="at-from"
               options={accounts}
@@ -86,7 +81,7 @@ export function AutoTransferStep1({
               onChange={(v) => onChange("fromAccount", v)}
             />
           </FormRow>
-          <FormRow label={<FieldLabel>계좌비밀번호</FieldLabel>} required htmlFor="at-pw">
+          <FormRow label="계좌비밀번호" required htmlFor="at-pw">
             <AccountPasswordField
               id="at-pw"
               value={form.password}
@@ -98,7 +93,7 @@ export function AutoTransferStep1({
 
       <FormSection title="입금정보">
         <div>
-          <FormRow label={<FieldLabel>입금계좌번호</FieldLabel>} required htmlFor="at-to">
+          <FormRow label="입금계좌번호" required htmlFor="at-to">
             <AccountNumberField
               id="at-to"
               value={form.toAccount}
@@ -126,7 +121,7 @@ export function AutoTransferStep1({
               </p>
             </div>
           </FormRow>
-          <FormRow label={<FieldLabel>받는분 통장 표시내용</FieldLabel>} htmlFor="at-memo-payee">
+          <FormRow label="받는분 통장 표시내용" htmlFor="at-memo-payee">
             <div className="flex w-full flex-col gap-1">
               <MemoField
                 id="at-memo-payee"
@@ -139,7 +134,7 @@ export function AutoTransferStep1({
               </p>
             </div>
           </FormRow>
-          <FormRow label={<FieldLabel>내 통장 표시내용</FieldLabel>} htmlFor="at-memo-mine">
+          <FormRow label="내 통장 표시내용" htmlFor="at-memo-mine">
             <MemoField
               id="at-memo-mine"
               value={form.myMemo}
@@ -152,21 +147,21 @@ export function AutoTransferStep1({
 
       <FormSection title="이체주기">
         <div>
-          <FormRow label={<FieldLabel>이체주기</FieldLabel>} required htmlFor="at-cycle">
+          <FormRow label="이체주기" required htmlFor="at-cycle">
             <TransferCycleField
               id="at-cycle"
               value={form.cycleMonths}
               onChange={(v) => onChange("cycleMonths", v)}
             />
           </FormRow>
-          <FormRow label={<FieldLabel>이체지정일</FieldLabel>} required htmlFor="at-day">
+          <FormRow label="이체지정일" required htmlFor="at-day">
             <DayOfMonthField
               id="at-day"
               value={form.dayOfMonth}
               onChange={(v) => onChange("dayOfMonth", v)}
             />
           </FormRow>
-          <FormRow label={<FieldLabel>이체 시작일</FieldLabel>} required htmlFor="at-start">
+          <FormRow label="이체 시작일" required htmlFor="at-start">
             <TransferDateField
               id="at-start"
               value={form.startDate}
@@ -175,7 +170,7 @@ export function AutoTransferStep1({
               rangeLabel="이체 시작일"
             />
           </FormRow>
-          <FormRow label={<FieldLabel>이체 종료일</FieldLabel>} required htmlFor="at-end">
+          <FormRow label="이체 종료일" required htmlFor="at-end">
             {form.startDate ? (
               <TransferEndDateField
                 id="at-end"

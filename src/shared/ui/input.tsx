@@ -13,7 +13,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         ref={ref}
         aria-invalid={invalid || undefined}
         className={cn(
-          "h-10 w-full rounded-[var(--radius)] border bg-white px-3 text-base",
+          "h-10 w-full rounded-[var(--radius)] border bg-surface-elevated px-3 text-base",
           "placeholder:text-ink-faint",
           "focus-visible:outline-none focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-[var(--color-ring-soft)]",
           "disabled:cursor-not-allowed disabled:bg-surface disabled:text-ink-muted",

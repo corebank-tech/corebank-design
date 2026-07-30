@@ -23,7 +23,7 @@ export function NotificationSummary({
   return (
     <section
       aria-label="미읽음 알림"
-      className="overflow-hidden border border-[var(--color-border)] bg-white"
+      className="overflow-hidden border border-[var(--color-border)] bg-surface-elevated"
     >
       <div className="flex items-center justify-between border-b border-[var(--color-border)] bg-surface px-4 py-2.5">
         <h2 className="text-sm font-bold text-ink">
@@ -47,7 +47,7 @@ export function NotificationSummary({
               (i > 0 ? " border-t border-[var(--color-border)]" : "")
             }
           >
-            <span className="inline-flex w-12 shrink-0 items-center justify-center border border-[var(--color-border-strong)] bg-white px-1 py-0.5 text-xs font-bold text-ink-muted">
+            <span className="inline-flex w-12 shrink-0 items-center justify-center border border-[var(--color-border-strong)] bg-surface-elevated px-1 py-0.5 text-xs font-bold text-ink-muted">
               {item.category}
             </span>
             <span className="min-w-0 flex-1 truncate text-sm text-ink">

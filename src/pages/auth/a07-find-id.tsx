@@ -103,6 +103,7 @@ export function A07FindId() {
           <FormRow label="성명" required htmlFor="findid-name">
             <Input
               id="findid-name"
+              autoComplete="off"
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="max-w-xs"
@@ -112,6 +113,7 @@ export function A07FindId() {
             <Input
               id="findid-birth"
               inputMode="numeric"
+              autoComplete="off"
               maxLength={6}
               value={birth}
               onChange={(e) => setBirth(onlyDigits(e.target.value, 6))}
@@ -123,6 +125,7 @@ export function A07FindId() {
             <Input
               id="findid-account"
               inputMode="numeric"
+              autoComplete="off"
               maxLength={12}
               value={accountNo}
               onChange={(e) => setAccountNo(onlyDigits(e.target.value, 12))}
@@ -135,6 +138,7 @@ export function A07FindId() {
               id="findid-pw"
               type="password"
               inputMode="numeric"
+              autoComplete="new-password"
               maxLength={4}
               value={password}
               onChange={(e) => setPassword(onlyDigits(e.target.value, 4))}

@@ -166,6 +166,7 @@ export function B04AccountPassword() {
               id="b04-current"
               type="password"
               inputMode="numeric"
+              autoComplete="off"
               maxLength={PASSWORD_LIMIT}
               value={currentPw}
               disabled={blocked}
@@ -192,6 +193,7 @@ export function B04AccountPassword() {
               id="b04-new"
               type="password"
               inputMode="numeric"
+              autoComplete="off"
               maxLength={PASSWORD_LIMIT}
               value={newPw}
               disabled={blocked}
@@ -211,6 +213,7 @@ export function B04AccountPassword() {
               id="b04-confirm"
               type="password"
               inputMode="numeric"
+              autoComplete="off"
               maxLength={PASSWORD_LIMIT}
               value={confirmPw}
               disabled={blocked}

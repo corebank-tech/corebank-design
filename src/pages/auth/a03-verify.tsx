@@ -134,6 +134,7 @@ export function A03Verify({ onVerified }: A03VerifyProps) {
               <Input
                 id="signup-name"
                 ref={nameRef}
+                autoComplete="off"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="예금주 성명"
@@ -146,6 +147,7 @@ export function A03Verify({ onVerified }: A03VerifyProps) {
                   id="signup-birth"
                   ref={birthRef}
                   inputMode="numeric"
+                  autoComplete="off"
                   maxLength={6}
                   value={birth}
                   onChange={(e) => setBirth(onlyDigits(e.target.value, 6))}
@@ -162,6 +164,7 @@ export function A03Verify({ onVerified }: A03VerifyProps) {
                 id="signup-account"
                 ref={accountRef}
                 inputMode="numeric"
+                autoComplete="off"
                 maxLength={12}
                 value={accountNo}
                 onChange={(e) => setAccountNo(onlyDigits(e.target.value, 12))}
@@ -176,6 +179,7 @@ export function A03Verify({ onVerified }: A03VerifyProps) {
                   ref={passwordRef}
                   type="password"
                   inputMode="numeric"
+                  autoComplete="off"
                   maxLength={4}
                   value={password}
                   onChange={(e) => setPassword(onlyDigits(e.target.value, 4))}

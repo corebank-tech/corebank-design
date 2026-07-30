@@ -13,7 +13,7 @@ import { MOCK_TRANSFER_LIMIT } from "@/entities/transfer"
 
 const PER_TRANSFER_MAX = 50_000_000 // POL-015
 const PER_DAY_MAX = 100_000_000 // POL-016
-const BASE_TIME = "2026-07-30T09:15:00"
+const BASE_TIME = "2026-07-23T08:57:34"
 
 function onlyDigits(value: string): string {
   return value.replace(/\D/g, "")

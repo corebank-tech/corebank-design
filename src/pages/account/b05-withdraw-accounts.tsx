@@ -292,6 +292,7 @@ export function B05WithdrawAccounts() {
             <Input
               type="password"
               inputMode="numeric"
+              autoComplete="off"
               maxLength={PASSWORD_LIMIT}
               value={pwValue}
               invalid={pwError != null}

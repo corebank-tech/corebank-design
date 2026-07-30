@@ -117,7 +117,7 @@ export function maskEmail(email: string): string {
 }
 
 /** "01012345678" -> "010-1234-5678" (3-4-4). Non-digits are stripped. */
-export function formatPhoneNo(raw: string): string {
+export function formatPhone(raw: string): string {
   const digits = raw.replace(/\D/g, "").slice(0, 11)
   const p1 = digits.slice(0, 3)
   const p2 = digits.slice(3, 7)
@@ -127,7 +127,7 @@ export function formatPhoneNo(raw: string): string {
 
 /** "010-1234-5678" -> "010-****-5678". Masks the middle group. (REQ-CMN-018) */
 export function maskPhone(raw: string): string {
-  const formatted = formatPhoneNo(raw)
+  const formatted = formatPhone(raw)
   const groups = formatted.split("-")
   if (groups.length !== 3) return formatted
   return `${groups[0]}-${"*".repeat(groups[1].length)}-${groups[2]}`

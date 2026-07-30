@@ -9,7 +9,7 @@ import { NoticeBoxFooter } from "@/components/shell/notice-box"
 import { AlertDialog } from "@/components/feedback/alert-dialog"
 import { ConfirmDialog } from "@/components/feedback/confirm-dialog"
 import { evaluateIdRules, evaluatePasswordRules, isIdValid, isPasswordValid, type RuleCheck } from "@/lib/auth-rules"
-import { formatPhoneNo } from "@/lib/format"
+import { formatPhone } from "@/lib/format"
 import { MOCK_EXISTING_USER_IDS, MOCK_EXISTING_EMAILS } from "@/lib/mock/auth"
 import { SIGNUP_STEPS, type SignupData } from "./SignupFlow"
 
@@ -311,7 +311,7 @@ export function A04Info({ data, onChange, onNext }: A04InfoProps) {
                   id="signup-phone"
                   ref={phoneRef}
                   inputMode="numeric"
-                  value={formatPhoneNo(data.phone)}
+                  value={formatPhone(data.phone)}
                   onChange={(e) => onChange({ phone: onlyDigits(e.target.value, 11) })}
                   placeholder="010-0000-0000"
                   className="max-w-xs"

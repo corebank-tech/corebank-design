@@ -99,7 +99,7 @@ export const TermsAgreement = React.forwardRef<
   }))
 
   return (
-    <div className="overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-border)]">
+    <div className="overflow-hidden border border-[var(--color-border)]">
       {/* 전체 동의 */}
       <div className="flex items-center justify-between bg-surface px-5 py-4">
         <Checkbox

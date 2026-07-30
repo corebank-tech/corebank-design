@@ -5,6 +5,8 @@ dist-ssr
 .DS_Store
 *.local
 
+.claude/
+
 .env
 .env.*
 !.env.example

@@ -31,7 +31,7 @@ export function TextViewModal({
         <Button
           variant="primary"
           size="lg"
-          className="min-w-[120px]"
+          className="min-w-30"
           onClick={onClose}
         >
           확인
@@ -49,7 +49,7 @@ export function TextViewModal({
           {rows.map((row, i) => (
             <li
               key={i}
-              className="border-b border-[var(--color-border)] pb-3 text-sm last:border-0"
+              className="border-b border-border pb-3 text-sm last:border-0"
             >
               <p className="mb-1 font-bold text-ink">{i + 1}번째 항목</p>
               <dl className="flex flex-col gap-0.5">

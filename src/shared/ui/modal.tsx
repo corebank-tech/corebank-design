@@ -1,21 +1,39 @@
 import * as React from "react"
 import { createPortal } from "react-dom"
 import { X } from "lucide-react"
+import { cva, type VariantProps } from "class-variance-authority"
+import { IconButton } from "@/shared/ui/icon-button"
 import { cn } from "@/shared/lib/utils"
 
-type ModalSize = "sm" | "md" | "lg"
-type ModalTone = "primary" | "danger"
+const dialogVariants = cva(
+  "flex max-h-[calc(100vh-48px)] w-full flex-col overflow-hidden rounded-lg bg-surface-elevated shadow-pop",
+  {
+    variants: {
+      size: {
+        sm: "max-w-120",
+        md: "max-w-160",
+        lg: "max-w-220",
+      },
+    },
+    defaultVariants: { size: "md" },
+  },
+)
 
-const sizeWidth: Record<ModalSize, number> = {
-  sm: 480,
-  md: 640,
-  lg: 880,
-}
+const titleBarVariants = cva(
+  "flex shrink-0 items-center justify-between gap-4 px-6 py-3.5",
+  {
+    variants: {
+      tone: {
+        primary: "bg-primary text-primary-foreground",
+        danger: "bg-danger text-white",
+      },
+    },
+    defaultVariants: { tone: "primary" },
+  },
+)
 
-const toneBar: Record<ModalTone, string> = {
-  primary: "bg-primary text-primary-foreground",
-  danger: "bg-[var(--color-danger)] text-white",
-}
+type ModalSize = NonNullable<VariantProps<typeof dialogVariants>["size"]>
+type ModalTone = NonNullable<VariantProps<typeof titleBarVariants>["tone"]>
 
 type ModalProps = {
   open: boolean
@@ -77,7 +95,7 @@ export function Modal({
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[var(--z-modal)] flex items-center justify-center bg-[var(--color-overlay-scrim)] p-6"
+      className="fixed inset-0 z-modal flex items-center justify-center bg-overlay-scrim p-6"
       onMouseDown={(e) => {
         if (closeOnOverlay && e.target === e.currentTarget) onClose()
       }}
@@ -86,27 +104,21 @@ export function Modal({
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        className="flex max-h-[calc(100vh-48px)] w-full flex-col overflow-hidden rounded-[var(--radius-lg)] bg-surface-elevated [box-shadow:var(--shadow-pop)]"
-        style={{ maxWidth: sizeWidth[size] }}
+        className={dialogVariants({ size })}
       >
-        <div
-          className={cn(
-            "flex shrink-0 items-center justify-between gap-4 px-6 py-3.5",
-            toneBar[tone],
-          )}
-        >
+        <div className={cn(titleBarVariants({ tone }))}>
           <h2 id={titleId} className="text-lg font-bold">
             {title}
           </h2>
           {!hideCloseButton && (
-            <button
-              type="button"
+            <IconButton
+              size="sm"
               onClick={onClose}
               aria-label="닫기"
-              className="inline-flex h-7 w-7 items-center justify-center rounded-[var(--radius)] text-current transition-colors hover:bg-[var(--overlay-white-15)] focus-visible:ring-2 focus-visible:ring-[var(--overlay-white-70)] focus-visible:outline-none"
+              className="text-current hover:bg-overlay-white-15 focus-visible:ring-overlay-white-70"
             >
               <X className="h-5 w-5" aria-hidden="true" />
-            </button>
+            </IconButton>
           )}
         </div>
 
@@ -115,7 +127,7 @@ export function Modal({
         </div>
 
         {footer != null && (
-          <div className="flex shrink-0 items-center justify-center gap-2 border-t border-[var(--color-border)] px-6 py-4">
+          <div className="flex shrink-0 items-center justify-center gap-2 border-t border-border px-6 py-4">
             {footer}
           </div>
         )}

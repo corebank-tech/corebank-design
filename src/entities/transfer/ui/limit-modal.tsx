@@ -2,6 +2,10 @@ import * as React from "react"
 import { Modal } from "@/shared/ui/modal"
 import { Button } from "@/shared/ui/button"
 import { formatAmount } from "@/shared/lib/format"
+import {
+  TRANSFER_LIMIT_PER_DAY_MAX,
+  TRANSFER_LIMIT_PER_TRANSFER_MAX,
+} from "@/shared/config/policy"
 
 type LimitModalProps = {
   open: boolean
@@ -46,24 +50,24 @@ export function LimitModal({
         <Button
           variant="primary"
           size="lg"
-          className="min-w-[140px]"
+          className="min-w-35"
           onClick={onChangeLimit}
         >
           이체한도 변경
         </Button>
       }
     >
-      <table className="w-full border-collapse border-t-2 border-t-[var(--color-navy)] text-sm">
+      <table className="w-full border-collapse border-t-2 border-t-navy text-sm">
         <tbody>
           {rows.map((row) => (
             <tr key={row.label}>
               <th
                 scope="row"
-                className="w-[45%] border-r border-b border-[var(--color-border)] bg-surface px-3 py-3 text-left font-bold whitespace-nowrap text-ink"
+                className="w-[45%] border-r border-b border-border bg-surface px-3 py-3 text-left font-bold whitespace-nowrap text-ink"
               >
                 {row.label}
               </th>
-              <td className="border-b border-[var(--color-border)] bg-surface-elevated px-3 py-3 text-right text-ink tabular-nums">
+              <td className="border-b border-border bg-surface-elevated px-3 py-3 text-right text-ink tabular-nums">
                 {formatAmount(row.value)}
               </td>
             </tr>
@@ -72,8 +76,9 @@ export function LimitModal({
       </table>
 
       <p className="mt-3 text-sm leading-relaxed text-ink-muted">
-        1회 최대 50,000,000원, 1일 최대 100,000,000원까지 변경할 수 있습니다.
-        변경 후에는 다음 이체부터 적용됩니다.
+        1회 최대 {formatAmount(TRANSFER_LIMIT_PER_TRANSFER_MAX)}, 1일 최대{" "}
+        {formatAmount(TRANSFER_LIMIT_PER_DAY_MAX)}까지 변경할 수 있습니다. 변경
+        후에는 다음 이체부터 적용됩니다.
       </p>
     </Modal>
   )

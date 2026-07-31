@@ -1,8 +1,8 @@
 import * as React from "react"
 import { Button } from "@/shared/ui/button"
 import { FormSection } from "@/shared/ui/form-section"
-import { StepLayout } from "@/widgets/transfer/step-layout"
-import { ConfirmSummary } from "@/widgets/transfer/confirm-summary"
+import { StepLayout } from "@/shared/ui/step-layout"
+import { ConfirmSummary } from "@/shared/ui/confirm-summary"
 
 type InstantTransferStep2Props = {
   steps: string[]
@@ -56,7 +56,7 @@ export function InstantTransferStep2({
           <Button
             variant="secondary"
             size="lg"
-            className="min-w-[120px]"
+            className="min-w-30"
             onClick={onPrev}
           >
             이전
@@ -64,7 +64,7 @@ export function InstantTransferStep2({
           <Button
             variant="primary"
             size="lg"
-            className="min-w-[160px]"
+            className="min-w-40"
             onClick={onSubmit}
           >
             이체하기
@@ -109,10 +109,7 @@ export function InstantTransferStep2({
           실행됩니다.
         </p>
         {authError && (
-          <p
-            role="alert"
-            className="mt-2 text-sm font-bold text-[var(--color-danger)]"
-          >
+          <p role="alert" className="mt-2 text-sm font-bold text-danger">
             {authError}
           </p>
         )}

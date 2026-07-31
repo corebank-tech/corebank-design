@@ -1,10 +1,10 @@
 import * as React from "react"
 import { Button } from "@/shared/ui/button"
-import { StepLayout } from "@/widgets/transfer/step-layout"
+import { StepLayout } from "@/shared/ui/step-layout"
 import { FormSection } from "@/shared/ui/form-section"
 import { FormRow } from "@/shared/ui/form-row"
 import { maskName, maskEmail, maskPhone } from "@/shared/lib/format"
-import { SIGNUP_STEPS, type SignupData } from "./signup-flow"
+import { SIGNUP_STEPS, type SignupData } from "@/pages/auth/signup-shared"
 
 type A05ConfirmProps = {
   data: SignupData
@@ -30,7 +30,7 @@ export function A05Confirm({ data, onEdit, onComplete }: A05ConfirmProps) {
           <Button
             variant="secondary"
             size="lg"
-            className="min-w-[160px]"
+            className="min-w-40"
             onClick={onEdit}
           >
             정보수정
@@ -38,7 +38,7 @@ export function A05Confirm({ data, onEdit, onComplete }: A05ConfirmProps) {
           <Button
             variant="primary"
             size="lg"
-            className="min-w-[160px]"
+            className="min-w-40"
             onClick={onComplete}
           >
             가입완료

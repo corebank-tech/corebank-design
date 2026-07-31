@@ -1,13 +1,13 @@
 import * as React from "react"
 import { Button } from "@/shared/ui/button"
-import { StepLayout } from "@/widgets/transfer/step-layout"
+import { StepLayout } from "@/shared/ui/step-layout"
 import {
   TermsAgreement,
   type TermsAgreementHandle,
 } from "@/widgets/terms-agreement"
 import { NoticeBoxFooter } from "@/shared/ui/notice-box"
 import { SIGNUP_TERMS } from "@/entities/auth"
-import { SIGNUP_STEPS } from "./signup-flow"
+import { SIGNUP_STEPS } from "@/pages/auth/signup-shared"
 
 type A02TermsProps = {
   onNext: () => void
@@ -31,7 +31,7 @@ export function A02Terms({ onNext }: A02TermsProps) {
           <Button
             variant="primary"
             size="lg"
-            className="min-w-[160px]"
+            className="min-w-40"
             onClick={() => {
               if (termsRef.current?.validateProceed()) onNext()
             }}

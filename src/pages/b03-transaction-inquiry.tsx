@@ -11,18 +11,18 @@ import {
   PeriodField,
   RadioRowField,
 } from "@/widgets/query/search-fields"
-import { SummaryRow } from "@/widgets/query/summary-row"
+import { SummaryRow } from "@/shared/ui/summary-row"
 import { GridToolbar } from "@/widgets/query/grid-toolbar"
 import { DataGrid, type DataGridColumn } from "@/shared/ui/data-grid"
-import { Pagination } from "@/widgets/query/pagination"
+import { Pagination } from "@/shared/ui/pagination"
 import { NoticeBoxFooter } from "@/shared/ui/notice-box"
 import { AlertDialog } from "@/shared/ui/alert-dialog"
-import { TextViewModal } from "@/widgets/query/text-view-modal"
+import { TextViewModal } from "@/shared/ui/text-view-modal"
 import { downloadCsv } from "@/shared/lib/csv"
 import {
   MOCK_ACCOUNTS,
   MOCK_TRANSACTIONS,
-  type AccountStatus,
+  getAccountStatusBadgeVariant,
   type Transaction,
 } from "@/entities/transaction"
 import {
@@ -34,11 +34,14 @@ import {
   maskName,
 } from "@/shared/lib/format"
 import { cn } from "@/shared/lib/utils"
+import { daysBetween } from "@/shared/lib/date"
+import {
+  MOCK_NOW as BASE_TIME,
+  MOCK_TODAY as TODAY,
+} from "@/shared/config/mock-clock"
+import { QUERY_MAX_RANGE_DAYS as MAX_RANGE_DAYS } from "@/shared/config/policy"
 
-const TODAY = "2026-07-23"
-const BASE_TIME = "2026-07-23T08:57:34"
 const DEFAULT_PERIOD = { start: "2026-06-23", end: TODAY }
-const MAX_RANGE_DAYS = 365
 
 const CONTENT_OPTIONS = [
   { label: "전체", value: "all" },
@@ -51,26 +54,9 @@ const ORDER_OPTIONS = [
   { label: "과거거래순", value: "past" },
 ]
 
-const STATUS_BADGE: Record<AccountStatus, "success" | "warning" | "danger"> = {
-  정상: "success",
-  거래정지: "warning",
-  해지: "danger",
-}
-
 function amountCell(value: number, color: string) {
   if (value === 0) return <span className="text-ink-faint">-</span>
   return <span style={{ color }}>{formatAmount(value, { suffix: false })}</span>
-}
-
-/** yyyy-mm-dd -> local Date, avoiding UTC off-by-one when diffing dates. */
-function parseISODate(value: string): Date {
-  const [y, m, d] = value.split("-").map(Number)
-  return new Date(y, (m ?? 1) - 1, d ?? 1)
-}
-
-function daysBetween(startISO: string, endISO: string): number {
-  const ms = parseISODate(endISO).getTime() - parseISODate(startISO).getTime()
-  return Math.round(ms / 86_400_000)
 }
 
 type InfoItem = {
@@ -82,7 +68,7 @@ type InfoItem = {
 
 function InfoRow({ items, gridCols }: { items: InfoItem[]; gridCols: string }) {
   return (
-    <dl className={cn("grid divide-x divide-[var(--color-border)]", gridCols)}>
+    <dl className={cn("grid divide-x divide-border", gridCols)}>
       {items.map((item) => (
         <div key={item.term} className="flex flex-col gap-1 px-4 py-3">
           <dt
@@ -269,7 +255,7 @@ export function B03TransactionInquiry() {
   }
 
   return (
-    <div className="border border-[var(--color-border)] bg-surface-elevated p-6">
+    <div className="border border-border bg-surface-elevated p-6">
       <FormSection title="조회조건">
         <SearchPanel
           onReset={handleReset}
@@ -323,7 +309,7 @@ export function B03TransactionInquiry() {
       </FormSection>
 
       {/* Collapsible account info panel */}
-      <div className="mb-6 overflow-hidden border border-[var(--color-border)]">
+      <div className="mb-6 overflow-hidden border border-border">
         <button
           type="button"
           onClick={() => setAccountOpen((v) => !v)}
@@ -340,7 +326,7 @@ export function B03TransactionInquiry() {
           />
         </button>
         {accountOpen && (
-          <div className="border-t border-[var(--color-border)]">
+          <div className="border-t border-border">
             <InfoRow
               gridCols="grid-cols-4"
               items={[
@@ -354,14 +340,18 @@ export function B03TransactionInquiry() {
                 {
                   term: "계좌상태",
                   desc: (
-                    <Badge variant={STATUS_BADGE[selectedAccount.status]}>
+                    <Badge
+                      variant={getAccountStatusBadgeVariant(
+                        selectedAccount.status,
+                      )}
+                    >
                       {selectedAccount.status}
                     </Badge>
                   ),
                 },
               ]}
             />
-            <div className="border-t border-[var(--color-border)]">
+            <div className="border-t border-border">
               <InfoRow
                 gridCols="grid-cols-3"
                 items={[

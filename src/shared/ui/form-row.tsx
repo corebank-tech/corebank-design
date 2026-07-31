@@ -35,10 +35,10 @@ export function FormRow({
       >
         <label
           htmlFor={htmlFor}
-          className="flex items-center gap-1 text-[14px] font-bold text-ink"
+          className="flex items-center gap-1 text-base leading-[1.5] font-bold text-ink"
         >
           {required && (
-            <span className="text-[13px] font-bold whitespace-nowrap text-[var(--color-danger)]">
+            <span className="text-sm leading-[1.5] font-bold whitespace-nowrap text-danger">
               [필수]
             </span>
           )}

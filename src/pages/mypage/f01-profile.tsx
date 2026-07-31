@@ -17,26 +17,18 @@ import {
   formatPhone,
 } from "@/shared/lib/format"
 import { cn } from "@/shared/lib/utils"
+import { onlyDigits } from "@/shared/lib/input-filter"
+import { MOCK_NOW as BASE_TIME } from "@/shared/config/mock-clock"
+import { EMAIL_CODE_TTL_SECONDS } from "@/shared/config/policy"
+import { formatClock, useCountdown } from "@/shared/lib/hooks/use-countdown"
 import { MOCK_PROFILE, MOCK_REGISTERED_EMAILS } from "@/entities/customer"
 
-const BASE_TIME = "2026-07-30T09:15:00"
-const EMAIL_CODE_TTL_SECONDS = 180
 const PASSWORD_MIN = 8
 const PASSWORD_MAX = 15
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-function onlyDigits(value: string, maxLength: number): string {
-  return value.replace(/\D/g, "").slice(0, maxLength)
-}
-
 function generateCode(): string {
   return String(Math.floor(100000 + Math.random() * 900000))
-}
-
-function formatClock(total: number): string {
-  const m = Math.floor(total / 60)
-  const s = total % 60
-  return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`
 }
 
 /** POL-010·011: 8~15자 / 4종 중 3종 이상, 아이디 포함 금지, 동일문자·연속증감 4자리 금지. */
@@ -88,8 +80,9 @@ export function F01Profile() {
     profile.email,
   )
   const [issuedCode, setIssuedCode] = React.useState<string | null>(null)
-  const [codeRemaining, setCodeRemaining] = React.useState(
+  const { remaining: codeRemaining, reset: resetCodeCountdown } = useCountdown(
     EMAIL_CODE_TTL_SECONDS,
+    issuedCode != null,
   )
   const [codeInput, setCodeInput] = React.useState("")
   const [codeError, setCodeError] = React.useState<string | null>(null)
@@ -101,17 +94,9 @@ export function F01Profile() {
     verifiedEmail !== null && verifiedEmail === emailDraft.trim()
   const codeExpired = issuedCode != null && codeRemaining <= 0
 
-  React.useEffect(() => {
-    if (issuedCode == null || codeRemaining <= 0) return
-    const id = window.setInterval(() => {
-      setCodeRemaining((prev) => (prev <= 1 ? 0 : prev - 1))
-    }, 1000)
-    return () => window.clearInterval(id)
-  }, [issuedCode, codeRemaining])
-
   const resetEmailCode = () => {
     setIssuedCode(null)
-    setCodeRemaining(EMAIL_CODE_TTL_SECONDS)
+    resetCodeCountdown()
     setCodeInput("")
     setCodeError(null)
   }
@@ -138,7 +123,7 @@ export function F01Profile() {
     }
     setInfoError(null)
     setIssuedCode(generateCode())
-    setCodeRemaining(EMAIL_CODE_TTL_SECONDS)
+    resetCodeCountdown()
     setCodeInput("")
     setCodeError(null)
   }
@@ -339,7 +324,7 @@ export function F01Profile() {
                 <div className="flex items-center gap-2">
                   <span
                     className={cn(
-                      "text-lg font-bold tracking-[0.15em] tabular-nums",
+                      "text-lg font-bold tracking-15 tabular-nums",
                       codeExpired
                         ? "text-ink-faint line-through"
                         : "text-primary",
@@ -362,7 +347,7 @@ export function F01Profile() {
                       )
                       if (codeError) setCodeError(null)
                     }}
-                    className="w-32 text-center tracking-[0.3em]"
+                    className="w-32 text-center tracking-3"
                   />
                   {!emailVerifiedForDraft && (
                     <Button
@@ -386,15 +371,12 @@ export function F01Profile() {
               )}
 
               {emailChanged && emailVerifiedForDraft && (
-                <p className="text-xs font-bold text-[var(--color-success)]">
+                <p className="text-xs font-bold text-success">
                   이메일 인증이 완료되었습니다.
                 </p>
               )}
               {codeError && (
-                <p
-                  role="alert"
-                  className="text-xs font-bold text-[var(--color-danger)]"
-                >
+                <p role="alert" className="text-xs font-bold text-danger">
                   {codeError}
                 </p>
               )}
@@ -407,10 +389,7 @@ export function F01Profile() {
         </p>
 
         {infoError && (
-          <p
-            role="alert"
-            className="mt-2 text-sm font-bold text-[var(--color-danger)]"
-          >
+          <p role="alert" className="mt-2 text-sm font-bold text-danger">
             {infoError}
           </p>
         )}
@@ -419,7 +398,7 @@ export function F01Profile() {
           <Button
             variant="secondary"
             size="lg"
-            className="min-w-[120px]"
+            className="min-w-30"
             onClick={resetInfoDraft}
           >
             초기화
@@ -427,7 +406,7 @@ export function F01Profile() {
           <Button
             variant="primary"
             size="lg"
-            className="min-w-[120px]"
+            className="min-w-30"
             onClick={handleInfoSubmit}
           >
             변경하기
@@ -489,10 +468,7 @@ export function F01Profile() {
         </p>
 
         {pwError && (
-          <p
-            role="alert"
-            className="mt-2 text-sm font-bold text-[var(--color-danger)]"
-          >
+          <p role="alert" className="mt-2 text-sm font-bold text-danger">
             {pwError}
           </p>
         )}
@@ -501,7 +477,7 @@ export function F01Profile() {
           <Button
             variant="secondary"
             size="lg"
-            className="min-w-[120px]"
+            className="min-w-30"
             onClick={resetPwDraft}
           >
             초기화
@@ -509,7 +485,7 @@ export function F01Profile() {
           <Button
             variant="primary"
             size="lg"
-            className="min-w-[120px]"
+            className="min-w-30"
             onClick={handlePwSubmitClick}
           >
             변경하기

@@ -6,12 +6,12 @@ import { Select } from "@/shared/ui/select"
 import { Badge } from "@/shared/ui/badge"
 import { SearchPanel } from "@/widgets/query/search-panel"
 import { PeriodField } from "@/widgets/query/search-fields"
-import { SummaryRow } from "@/widgets/query/summary-row"
+import { SummaryRow } from "@/shared/ui/summary-row"
 import { GridToolbar } from "@/widgets/query/grid-toolbar"
 import { DataGrid, type DataGridColumn } from "@/shared/ui/data-grid"
-import { Pagination } from "@/widgets/query/pagination"
+import { Pagination } from "@/shared/ui/pagination"
 import { AlertDialog } from "@/shared/ui/alert-dialog"
-import { TextViewModal } from "@/widgets/query/text-view-modal"
+import { TextViewModal } from "@/shared/ui/text-view-modal"
 import { downloadCsv } from "@/shared/lib/csv"
 import {
   formatAccountNo,
@@ -23,23 +23,14 @@ import {
 } from "@/shared/lib/format"
 import {
   MOCK_AUTO_TRANSFER_RESULTS,
+  getAutoTransferResultBadgeVariant,
+  AUTO_TRANSFER_CYCLE_LABEL as CYCLE_LABEL,
   type AutoTransferResultRow,
-  type AutoTransferResult,
 } from "@/entities/transfer"
-
-const TODAY = "2026-07-23"
-const BASE_TIME = "2026-07-23T08:57:34"
-
-const CYCLE_LABEL: Record<number, string> = {
-  1: "1개월",
-  3: "3개월",
-  6: "6개월",
-}
-
-const RESULT_BADGE: Record<AutoTransferResult, "success" | "danger"> = {
-  정상: "success",
-  오류: "danger",
-}
+import {
+  MOCK_NOW as BASE_TIME,
+  MOCK_TODAY as TODAY,
+} from "@/shared/config/mock-clock"
 
 const FROM_ACCOUNTS = Array.from(
   new Map(
@@ -112,7 +103,11 @@ export function G05AutoTransferResults() {
       header: "처리결과",
       align: "center",
       width: 90,
-      render: (r) => <Badge variant={RESULT_BADGE[r.result]}>{r.result}</Badge>,
+      render: (r) => (
+        <Badge variant={getAutoTransferResultBadgeVariant(r.result)}>
+          {r.result}
+        </Badge>
+      ),
     },
     {
       key: "processedAt",

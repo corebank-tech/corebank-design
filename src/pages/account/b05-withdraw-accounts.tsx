@@ -8,19 +8,16 @@ import { Modal } from "@/shared/ui/modal"
 import { DataGrid, type DataGridColumn } from "@/shared/ui/data-grid"
 import { ConfirmDialog } from "@/shared/ui/confirm-dialog"
 import { ErrorDialog } from "@/shared/ui/error-dialog"
-import { OtpModal } from "@/shared/ui/otp-modal"
+import { OtpModal } from "@/entities/auth"
 import { formatAccountNo, formatAmount } from "@/shared/lib/format"
 import {
   MOCK_WITHDRAWAL_ACCOUNTS,
   getWithdrawalDeleteBlockReason,
   type WithdrawalAccount,
 } from "@/entities/account"
+import { onlyDigits } from "@/shared/lib/input-filter"
 
 const PASSWORD_LIMIT = 4
-
-function onlyDigits(value: string, maxLength: number): string {
-  return value.replace(/\D/g, "").slice(0, maxLength)
-}
 
 /** REQ-ACCT-010·011·012: 출금계좌관리. 등록/미등록 목록을 상하로 구분해 표시한다. */
 export function B05WithdrawAccounts() {
@@ -261,7 +258,7 @@ export function B05WithdrawAccounts() {
             <Button
               variant="secondary"
               size="lg"
-              className="min-w-[120px]"
+              className="min-w-30"
               onClick={closeRegisterFlow}
             >
               취소
@@ -269,7 +266,7 @@ export function B05WithdrawAccounts() {
             <Button
               variant="primary"
               size="lg"
-              className="min-w-[120px]"
+              className="min-w-30"
               onClick={handlePasswordConfirm}
             >
               {registerQueue && queueIndex + 1 < registerQueue.length
@@ -301,14 +298,11 @@ export function B05WithdrawAccounts() {
                 if (pwError) setPwError(null)
               }}
               placeholder="계좌비밀번호 4자리"
-              className="text-center tracking-[0.4em]"
+              className="text-center tracking-4"
               autoFocus
             />
             {pwError && (
-              <p
-                role="alert"
-                className="text-sm font-bold text-[var(--color-danger)]"
-              >
+              <p role="alert" className="text-sm font-bold text-danger">
                 {pwError}
               </p>
             )}

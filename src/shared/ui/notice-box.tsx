@@ -16,7 +16,7 @@ export function NoticeBox({
   return (
     <section
       className={cn(
-        "rounded-[var(--radius)] border border-border bg-primary-tint p-4",
+        "rounded-md border border-border bg-primary-tint p-4",
         className,
       )}
       aria-label={typeof title === "string" ? title : "안내"}

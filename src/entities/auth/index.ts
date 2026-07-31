@@ -14,3 +14,6 @@ export {
   evaluatePasswordRules,
   isPasswordValid,
 } from "@/entities/auth/lib/auth-rules"
+
+export { OtpModal } from "@/entities/auth/ui/otp-modal"
+export { SessionExpiredModal } from "@/entities/auth/ui/session-expired-modal"

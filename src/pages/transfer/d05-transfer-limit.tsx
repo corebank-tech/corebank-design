@@ -5,18 +5,22 @@ import { FormRow } from "@/shared/ui/form-row"
 import { Button } from "@/shared/ui/button"
 import { Input } from "@/shared/ui/input"
 import { Alert } from "@/shared/ui/alert"
-import { SummaryRow } from "@/widgets/query/summary-row"
+import { SummaryRow } from "@/shared/ui/summary-row"
 import { ConfirmDialog } from "@/shared/ui/confirm-dialog"
-import { OtpModal } from "@/shared/ui/otp-modal"
+import { OtpModal } from "@/entities/auth"
 import { formatAmount, formatDateTime } from "@/shared/lib/format"
+import { onlyDigits as onlyDigitsBase } from "@/shared/lib/input-filter"
 import { MOCK_TRANSFER_LIMIT } from "@/entities/transfer"
+import {
+  TRANSFER_LIMIT_PER_DAY_MAX as PER_DAY_MAX,
+  TRANSFER_LIMIT_PER_TRANSFER_MAX as PER_TRANSFER_MAX,
+} from "@/shared/config/policy"
+import { MOCK_NOW } from "@/shared/config/mock-clock"
 
-const PER_TRANSFER_MAX = 50_000_000 // POL-015
-const PER_DAY_MAX = 100_000_000 // POL-016
-const BASE_TIME = "2026-07-23T08:57:34"
+const BASE_TIME = MOCK_NOW
 
 function onlyDigits(value: string): string {
-  return value.replace(/\D/g, "")
+  return onlyDigitsBase(value, 15)
 }
 
 function formatDraft(value: string): string {
@@ -123,7 +127,7 @@ export function D05TransferLimit() {
             { label: "당일 사용금액", value: formatAmount(limit.usedToday) },
           ]}
         />
-        <div className="mt-4 flex flex-col items-end gap-1 border-t-2 border-t-[var(--color-navy)] pt-3">
+        <div className="mt-4 flex flex-col items-end gap-1 border-t-2 border-t-navy pt-3">
           <span className="font-normal text-ink-muted">
             당일 잔여 이체가능금액
           </span>
@@ -176,10 +180,7 @@ export function D05TransferLimit() {
         </p>
 
         {fieldError && (
-          <p
-            role="alert"
-            className="mt-2 text-sm font-bold text-[var(--color-danger)]"
-          >
+          <p role="alert" className="mt-2 text-sm font-bold text-danger">
             {fieldError}
           </p>
         )}
@@ -188,7 +189,7 @@ export function D05TransferLimit() {
           <Button
             variant="secondary"
             size="lg"
-            className="min-w-[120px]"
+            className="min-w-30"
             onClick={resetDraft}
           >
             초기화
@@ -196,7 +197,7 @@ export function D05TransferLimit() {
           <Button
             variant="primary"
             size="lg"
-            className="min-w-[120px]"
+            className="min-w-30"
             onClick={handleSubmitClick}
           >
             변경하기

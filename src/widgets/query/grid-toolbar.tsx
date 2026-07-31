@@ -2,6 +2,7 @@ import * as React from "react"
 import { Accessibility, Download, Printer, Search } from "lucide-react"
 import { Button } from "@/shared/ui/button"
 import { Select } from "@/shared/ui/select"
+import { Divider } from "@/shared/ui/divider"
 import { cn } from "@/shared/lib/utils"
 
 const PAGE_SIZE_OPTIONS = [5, 10, 20, 30, 50] as const
@@ -42,9 +43,7 @@ export function GridToolbar({
           <span className="font-bold text-ink">조회결과</span>
           {periodLabel != null && (
             <>
-              <span className="text-ink-faint" aria-hidden="true">
-                |
-              </span>
+              <Divider tone="ink-faint" />
               <span className="text-ink-muted tabular-nums">{periodLabel}</span>
             </>
           )}

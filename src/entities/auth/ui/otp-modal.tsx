@@ -3,9 +3,11 @@ import { Modal } from "@/shared/ui/modal"
 import { Button } from "@/shared/ui/button"
 import { Input } from "@/shared/ui/input"
 import { cn } from "@/shared/lib/utils"
-
-const OTP_TTL_SECONDS = 180
-const MAX_ATTEMPTS = 5
+import { formatClock, useCountdown } from "@/shared/lib/hooks/use-countdown"
+import {
+  OTP_MAX_ATTEMPTS as MAX_ATTEMPTS,
+  OTP_TTL_SECONDS,
+} from "@/shared/config/policy"
 
 type OtpModalProps = {
   open: boolean
@@ -21,12 +23,6 @@ function generateOtp(): string {
   return String(Math.floor(100000 + Math.random() * 900000))
 }
 
-function formatClock(total: number): string {
-  const m = Math.floor(total / 60)
-  const s = total % 60
-  return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`
-}
-
 /**
  * A-93 OTP 인증 모달 (Mock). Issues a 6-digit code that is displayed on screen
  * (unlike a real token) with a 180-second countdown. The user re-enters the
@@ -40,7 +36,10 @@ export function OtpModal({
   guide = "OTP를 발급한 뒤 화면에 표시된 6자리 번호를 입력하세요.",
 }: OtpModalProps) {
   const [issued, setIssued] = React.useState<string | null>(null)
-  const [remaining, setRemaining] = React.useState(OTP_TTL_SECONDS)
+  const { remaining, reset: resetCountdown } = useCountdown(
+    OTP_TTL_SECONDS,
+    open && issued != null,
+  )
   const [value, setValue] = React.useState("")
   const [attempts, setAttempts] = React.useState(0)
   const [error, setError] = React.useState<string | null>(null)
@@ -49,34 +48,30 @@ export function OtpModal({
 
   const reset = React.useCallback(() => {
     setIssued(null)
-    setRemaining(OTP_TTL_SECONDS)
+    resetCountdown()
     setValue("")
     setAttempts(0)
     setError(null)
-  }, [])
+  }, [resetCountdown])
 
-  // Reset internal state whenever the modal is closed.
-  React.useEffect(() => {
+  // 닫힐 때 내부 상태를 지우고, 만료 순간(확인 클릭 전에도, REQ-OTP-005) 즉시
+  // 안내를 띄운다. effect 대신 렌더 중 상태 조정 패턴(React 공식 가이드
+  // "Adjusting state when a prop changes")을 쓴다.
+  const [prevOpen, setPrevOpen] = React.useState(open)
+  if (open !== prevOpen) {
+    setPrevOpen(open)
     if (!open) reset()
-  }, [open, reset])
+  }
 
-  // Countdown tick while a live code is displayed.
-  React.useEffect(() => {
-    if (!open || issued == null || remaining <= 0) return
-    const id = window.setInterval(() => {
-      setRemaining((prev) => (prev <= 1 ? 0 : prev - 1))
-    }, 1000)
-    return () => window.clearInterval(id)
-  }, [open, issued, remaining])
-
-  /** REQ-OTP-005: 유효시간 경과 시 즉시(확인 클릭 전에도) 만료 안내를 노출한다. */
-  React.useEffect(() => {
+  const [prevExpired, setPrevExpired] = React.useState(expired)
+  if (expired !== prevExpired) {
+    setPrevExpired(expired)
     if (expired) setError("입력 시간이 초과되었습니다. OTP를 재발급해 주세요.")
-  }, [expired])
+  }
 
   const issue = () => {
     setIssued(generateOtp())
-    setRemaining(OTP_TTL_SECONDS)
+    resetCountdown()
     setValue("")
     setError(null)
   }
@@ -117,7 +112,7 @@ export function OtpModal({
           <Button
             variant="secondary"
             size="lg"
-            className="min-w-[120px]"
+            className="min-w-30"
             onClick={onClose}
           >
             취소
@@ -125,7 +120,7 @@ export function OtpModal({
           <Button
             variant="primary"
             size="lg"
-            className="min-w-[120px]"
+            className="min-w-30"
             onClick={attemptsExhausted ? onClose : confirm}
             disabled={attemptsExhausted ? false : issued == null || expired}
           >
@@ -136,7 +131,7 @@ export function OtpModal({
     >
       <p className="mb-4 text-sm leading-relaxed text-ink-muted">{guide}</p>
 
-      <div className="mb-4 flex items-center justify-between gap-3 rounded-[var(--radius)] border border-[var(--color-border)] bg-surface px-4 py-3">
+      <div className="mb-4 flex items-center justify-between gap-3 rounded-md border border-border bg-surface px-4 py-3">
         {issued == null ? (
           <>
             <span className="text-sm text-ink-muted">
@@ -150,7 +145,7 @@ export function OtpModal({
           <>
             <span
               className={cn(
-                "text-page font-bold tracking-[0.2em] tabular-nums",
+                "text-page font-bold tracking-2 tabular-nums",
                 expired ? "text-ink-faint line-through" : "text-primary",
               )}
               aria-label="발급된 OTP 번호"
@@ -187,15 +182,12 @@ export function OtpModal({
           setValue(e.target.value.replace(/\D/g, "").slice(0, 6))
           if (error) setError(null)
         }}
-        className="text-center text-lg tracking-[0.4em] tabular-nums"
+        className="text-center text-lg tracking-4 tabular-nums"
         aria-label="OTP 입력"
       />
 
       {error && (
-        <p
-          role="alert"
-          className="mt-2 text-sm font-bold text-[var(--color-danger)]"
-        >
+        <p role="alert" className="mt-2 text-sm font-bold text-danger">
           {error}
         </p>
       )}

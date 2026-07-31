@@ -2,7 +2,7 @@ import * as React from "react"
 import { Button } from "@/shared/ui/button"
 import { FormSection } from "@/shared/ui/form-section"
 import { FormRow } from "@/shared/ui/form-row"
-import { StepLayout } from "@/widgets/transfer/step-layout"
+import { StepLayout } from "@/shared/ui/step-layout"
 import {
   WithdrawAccountField,
   AccountPasswordField,
@@ -14,7 +14,7 @@ import {
 import { NoticeBoxFooter } from "@/shared/ui/notice-box"
 import { maskName } from "@/shared/lib/format"
 import type { AccountOption } from "@/shared/types/account"
-import type { ReservedTransferForm } from "../reserved-transfer-screen"
+import type { ReservedTransferForm } from "@/pages/transfer/reserved-transfer-screen"
 
 type ReservedTransferStep1Props = {
   steps: string[]
@@ -60,7 +60,7 @@ export function ReservedTransferStep1({
           <Button
             variant="primary"
             size="lg"
-            className="min-w-[160px]"
+            className="min-w-40"
             disabled={!canSubmit}
             onClick={onNext}
           >
@@ -157,10 +157,7 @@ export function ReservedTransferStep1({
         </FormSection>
 
         {duplicate && (
-          <p
-            role="alert"
-            className="text-sm font-bold text-[var(--color-danger)]"
-          >
+          <p role="alert" className="text-sm font-bold text-danger">
             출금계좌·입금계좌·이체금액·이체예정일자가 모두 같은 예약이체가 이미
             대기 중입니다. 내용을 변경한 뒤 다시 등록하세요.
           </p>

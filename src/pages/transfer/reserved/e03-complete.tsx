@@ -1,6 +1,6 @@
 import * as React from "react"
 import { Button } from "@/shared/ui/button"
-import { StepLayout } from "@/widgets/transfer/step-layout"
+import { StepLayout } from "@/shared/ui/step-layout"
 import { ResultPanel } from "@/widgets/transfer/result-panel"
 import type { DataGridColumn } from "@/shared/ui/data-grid"
 

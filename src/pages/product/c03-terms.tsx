@@ -1,11 +1,11 @@
 import * as React from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { Button } from "@/shared/ui/button"
-import { StepLayout } from "@/widgets/transfer/step-layout"
+import { StepLayout } from "@/shared/ui/step-layout"
 import { TermsAgreement } from "@/widgets/terms-agreement"
 import { NoticeBoxFooter } from "@/shared/ui/notice-box"
 import { MOCK_JOIN_PRODUCTS, MOCK_JOIN_TERMS } from "@/entities/product"
-import { PRODUCT_JOIN_STEPS } from "./join-shared"
+import { PRODUCT_JOIN_STEPS } from "@/pages/product/join-shared"
 
 /** C-03 상품가입 1단계 · 약관동의 (REQ-PRDT-005) */
 export function C03Terms() {
@@ -28,7 +28,7 @@ export function C03Terms() {
           <Button
             variant="primary"
             size="lg"
-            className="min-w-[160px]"
+            className="min-w-40"
             disabled={!allRequiredAgreed}
             onClick={() => navigate(`/product/${product.id}/join/2`)}
           >

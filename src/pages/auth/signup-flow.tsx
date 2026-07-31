@@ -1,27 +1,11 @@
 import * as React from "react"
 import { useSearchParams } from "react-router-dom"
-import { A02Terms } from "./a02-terms"
-import { A03Verify } from "./a03-verify"
-import { A04Info } from "./a04-info"
-import { A05Confirm } from "./a05-confirm"
-import { A06Complete } from "./a06-complete"
-
-export const SIGNUP_STEPS = [
-  "약관동의",
-  "본인확인",
-  "정보입력",
-  "입력확인",
-  "가입완료",
-]
-
-export type SignupData = {
-  name: string
-  birth: string
-  phone: string
-  email: string
-  userId: string
-  password: string
-}
+import { A02Terms } from "@/pages/auth/a02-terms"
+import { A03Verify } from "@/pages/auth/a03-verify"
+import { A04Info } from "@/pages/auth/a04-info"
+import { A05Confirm } from "@/pages/auth/a05-confirm"
+import { A06Complete } from "@/pages/auth/a06-complete"
+import type { SignupData } from "@/pages/auth/signup-shared"
 
 const EMPTY_DATA: SignupData = {
   name: "",

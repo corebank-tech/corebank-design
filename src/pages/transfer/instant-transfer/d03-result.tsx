@@ -1,6 +1,6 @@
 import * as React from "react"
 import { Button } from "@/shared/ui/button"
-import { StepLayout } from "@/widgets/transfer/step-layout"
+import { StepLayout } from "@/shared/ui/step-layout"
 
 type InstantTransferStep3Props = {
   steps: string[]
@@ -24,7 +24,7 @@ export function InstantTransferStep3({
         <Button
           variant="primary"
           size="lg"
-          className="min-w-[160px]"
+          className="min-w-40"
           onClick={onNewTransfer}
         >
           새 이체하기
@@ -32,7 +32,7 @@ export function InstantTransferStep3({
       }
     >
       {resultSlot ?? (
-        <div className="flex min-h-[160px] items-center justify-center border border-dashed border-[var(--color-border-strong)] bg-surface px-4 py-10 text-sm text-ink-muted">
+        <div className="flex min-h-[160px] items-center justify-center border border-dashed border-border-strong bg-surface px-4 py-10 text-sm text-ink-muted">
           이체 결과 영역
         </div>
       )}

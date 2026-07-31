@@ -38,7 +38,7 @@ export function AlertDialog({
         <Button
           variant="primary"
           size="lg"
-          className="min-w-[120px]"
+          className="min-w-30"
           onClick={onConfirm ?? onClose}
         >
           {confirmLabel}

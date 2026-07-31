@@ -1,7 +1,7 @@
 import * as React from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import { ConfirmDialog } from "@/shared/ui/confirm-dialog"
-import { OtpModal } from "@/shared/ui/otp-modal"
+import { OtpModal } from "@/entities/auth"
 import {
   MOCK_TRANSFER_ACCOUNTS,
   MOCK_TRANSFER_LIMITS,
@@ -15,16 +15,17 @@ import {
   formatDateTime,
   maskName,
 } from "@/shared/lib/format"
+import { addMonths, daysBetween, parseISO, toISO } from "@/shared/lib/date"
 import {
-  addMonths,
-  daysBetween,
-  parseISO,
-  toISO,
-} from "@/widgets/transfer/transfer-fields"
+  MOCK_NOW as NOW,
+  MOCK_TODAY as TODAY,
+} from "@/shared/config/mock-clock"
+import { AUTO_TRANSFER_START_MAX_RANGE_DAYS } from "@/shared/config/policy"
 import type { TransferCycleMonths } from "@/widgets/transfer/transfer-fields"
-import { AutoTransferStep1 } from "./auto/g01-input"
-import { AutoTransferStep2 } from "./auto/g02-confirm"
-import { AutoTransferStep3 } from "./auto/g03-complete"
+import { TRANSFER_STEPS as STEPS } from "@/pages/transfer/transfer-steps"
+import { AutoTransferStep1 } from "@/pages/transfer/auto/g01-input"
+import { AutoTransferStep2 } from "@/pages/transfer/auto/g02-confirm"
+import { AutoTransferStep3 } from "@/pages/transfer/auto/g03-complete"
 
 export type AutoTransferForm = {
   fromAccount: string
@@ -39,10 +40,6 @@ export type AutoTransferForm = {
   payeeMemo: string
   myMemo: string
 }
-
-const STEPS = ["정보입력", "정보확인 및 인증", "완료"]
-const TODAY = "2026-07-23"
-const NOW = "2026-07-23T08:57:34"
 
 const INITIAL_FORM: AutoTransferForm = {
   fromAccount: MOCK_TRANSFER_ACCOUNTS[0].accountNo,
@@ -148,7 +145,10 @@ export function AutoTransferScreen() {
   )
 
   const startSpan = form.startDate ? daysBetween(TODAY, form.startDate) : null
-  const startValid = startSpan != null && startSpan >= 1 && startSpan <= 365
+  const startValid =
+    startSpan != null &&
+    startSpan >= 1 &&
+    startSpan <= AUTO_TRANSFER_START_MAX_RANGE_DAYS
   const endSpan =
     form.startDate && form.endDate
       ? daysBetween(form.startDate, form.endDate)

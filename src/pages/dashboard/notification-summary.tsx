@@ -23,9 +23,9 @@ export function NotificationSummary({
   return (
     <section
       aria-label="미읽음 알림"
-      className="overflow-hidden border border-[var(--color-border)] bg-surface-elevated"
+      className="overflow-hidden border border-border bg-surface-elevated"
     >
-      <div className="flex items-center justify-between border-b border-[var(--color-border)] bg-surface px-4 py-2.5">
+      <div className="flex items-center justify-between border-b border-border bg-surface px-4 py-2.5">
         <h2 className="text-sm font-bold text-ink">
           미읽음 알림{" "}
           <span className="text-primary tabular-nums">
@@ -48,10 +48,10 @@ export function NotificationSummary({
             key={item.id}
             className={
               "flex items-center gap-3 px-4 py-3" +
-              (i > 0 ? " border-t border-[var(--color-border)]" : "")
+              (i > 0 ? " border-t border-border" : "")
             }
           >
-            <span className="inline-flex w-12 shrink-0 items-center justify-center border border-[var(--color-border-strong)] bg-surface-elevated px-1 py-0.5 text-xs font-bold text-ink-muted">
+            <span className="inline-flex w-12 shrink-0 items-center justify-center border border-border-strong bg-surface-elevated px-1 py-0.5 text-xs font-bold text-ink-muted">
               {item.category}
             </span>
             <span className="min-w-0 flex-1 truncate text-sm text-ink">

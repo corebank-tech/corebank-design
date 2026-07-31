@@ -1,14 +1,13 @@
 import * as React from "react"
 import { Routes, Route, Link, useLocation, useNavigate } from "react-router-dom"
-import { PageShell } from "@/widgets/shell/page-shell"
+import { PageShell } from "@/app/page-shell"
 import { A01Login } from "@/pages/a01-login"
 import { A09MainDashboard } from "@/pages/dashboard/a09-main-dashboard"
 import { B03TransactionInquiry } from "@/pages/b03-transaction-inquiry"
 import { InstantTransferScreen } from "@/pages/transfer/instant-transfer-screen"
-import { InstantTransferResultDemo } from "@/pages/transfer/instant-transfer/result-demo"
 import { ReservedTransferScreen } from "@/pages/transfer/reserved-transfer-screen"
 import { AutoTransferScreen } from "@/pages/transfer/auto-transfer-screen"
-import { FeedbackDemo } from "@/pages/feedback-demo"
+import { DesignSystemPage } from "@/pages/design-system/design-system-page"
 import { B01AllAccounts } from "@/pages/inquiry/b01-all-accounts"
 import { B02DepositAccounts } from "@/pages/inquiry/b02-deposit-accounts"
 import { D04TransferHistory } from "@/pages/inquiry/d04-transfer-history"
@@ -34,8 +33,8 @@ import { A07FindId } from "@/pages/auth/a07-find-id"
 import { A08ResetPassword } from "@/pages/auth/a08-reset-password"
 import { A10LogoutComplete } from "@/pages/auth/a10-logout-complete"
 import { RequireAuth } from "@/app/require-auth"
-import { useSession } from "@/app/session-context"
-import { SessionExpiredModal } from "@/shared/ui/session-expired-modal"
+import { useSession } from "@/app/use-session"
+import { SessionExpiredModal } from "@/entities/auth"
 import { cn } from "@/shared/lib/utils"
 
 /** 개발용 라우트 목록 — 파트(A~G)별 화면ID 그룹. 디자인 시스템에 포함되지 않는다. */
@@ -56,7 +55,6 @@ const DEV_ROUTES: DevRoute[] = [
   { screenId: "A-08", label: "비밀번호 재설정", path: "/reset-password" },
   { screenId: "A-09", label: "메인 대시보드", path: "/dashboard" },
   { screenId: "A-10", label: "로그아웃 완료", path: "/logout" },
-  { screenId: "A-91~93", label: "공통 모달", path: "/dialogs" },
 
   { screenId: "B-01", label: "전체계좌조회", path: "/accounts" },
   { screenId: "B-02", label: "예금/적금 계좌조회", path: "/accounts/deposits" },
@@ -82,7 +80,6 @@ const DEV_ROUTES: DevRoute[] = [
   { screenId: "C-06", label: "상품가입 4단계", path: "/product/P001/join/4" },
 
   { screenId: "D-01", label: "즉시이체", path: "/instant-transfer" },
-  { screenId: "D-03", label: "즉시이체 결과(데모)", path: "/result" },
   { screenId: "D-04", label: "이체결과조회", path: "/transfer/history" },
   {
     screenId: "D-05",
@@ -121,22 +118,24 @@ const DEV_ROUTES: DevRoute[] = [
     label: "자동이체 결과조회",
     path: "/transfer/auto/history",
   },
+
+  { screenId: "DS", label: "디자인 시스템", path: "/design-system" },
 ]
 
-const DEV_PARTS = ["A", "B", "C", "D", "E", "F", "G"] as const
+const DEV_PARTS = ["A", "B", "C", "D", "E", "F", "G", "DS"] as const
 
 function DevNav() {
   const location = useLocation()
   const [open, setOpen] = React.useState(false)
 
   return (
-    <div className="fixed right-4 bottom-4 z-[500]">
+    <div className="fixed right-4 bottom-4 z-toast">
       {open && (
         <div className="mb-2 max-h-[70vh] w-[720px] overflow-y-auto rounded-lg border bg-white p-4 shadow-lg">
           <div className="grid grid-cols-4 gap-x-6 gap-y-4">
             {DEV_PARTS.map((part) => {
-              const routes = DEV_ROUTES.filter((r) =>
-                r.screenId.startsWith(part),
+              const routes = DEV_ROUTES.filter(
+                (r) => r.screenId.split("-")[0] === part,
               )
               if (routes.length === 0) return null
               return (
@@ -265,19 +264,6 @@ export default function App() {
           }
         />
         <Route
-          path="/result"
-          element={
-            <RequireAuth>
-              <PageShell
-                activeId="transfer"
-                breadcrumb={["이체", "즉시이체", "당행이체"]}
-              >
-                <InstantTransferResultDemo />
-              </PageShell>
-            </RequireAuth>
-          }
-        />
-        <Route
           path="/transfer/reservation/new"
           element={
             <RequireAuth>
@@ -304,14 +290,14 @@ export default function App() {
           }
         />
         <Route
-          path="/dialogs"
+          path="/design-system"
           element={
             <PageShell
               activeId="user"
-              breadcrumb={["개인", "공통", "안내 모달"]}
-              title="공통 모달"
+              breadcrumb={["개인", "공통", "디자인 시스템"]}
+              title="디자인 시스템"
             >
-              <FeedbackDemo />
+              <DesignSystemPage />
             </PageShell>
           }
         />

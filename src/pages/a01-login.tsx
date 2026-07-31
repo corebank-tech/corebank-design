@@ -5,9 +5,8 @@ import { Input } from "@/shared/ui/input"
 import { Checkbox } from "@/shared/ui/checkbox"
 import { Button } from "@/shared/ui/button"
 import { NoticeBoxFooter } from "@/shared/ui/notice-box"
-import { useSession } from "@/app/session-context"
-
-const MAX_ATTEMPTS = 5
+import { useSession } from "@/app/use-session"
+import { LOGIN_MAX_ATTEMPTS as MAX_ATTEMPTS } from "@/shared/config/policy"
 
 type LoginFailure = {
   locked: boolean
@@ -36,7 +35,7 @@ export function A01Login() {
   return (
     <div className="flex flex-col items-center py-10">
       <div className="w-full max-w-[480px]">
-        <div className="border border-[var(--color-border-strong)] bg-surface-elevated p-8 [box-shadow:var(--shadow-card)]">
+        <div className="border border-border-strong bg-surface-elevated p-8 shadow-card">
           <div className="mb-6 text-center">
             <h1 className="text-page font-bold text-ink">로그인</h1>
             <p className="mt-1 text-sm text-ink-muted">
@@ -47,10 +46,10 @@ export function A01Login() {
           {failure && (
             <div
               role="alert"
-              className="mb-4 flex items-start gap-2 rounded-[var(--radius)] border border-[var(--color-danger)] bg-[var(--color-danger-tint)] p-3"
+              className="mb-4 flex items-start gap-2 rounded-md border border-danger bg-danger-tint p-3"
             >
               <AlertCircle
-                className="mt-0.5 h-4 w-4 shrink-0 text-[var(--color-danger)]"
+                className="mt-0.5 h-4 w-4 shrink-0 text-danger"
                 aria-hidden="true"
               />
               {failure.locked ? (
@@ -61,7 +60,7 @@ export function A01Login() {
               ) : (
                 <p className="text-sm text-ink">
                   아이디 또는 비밀번호가 올바르지 않습니다.{" "}
-                  <span className="font-bold text-[var(--color-danger)]">
+                  <span className="font-bold text-danger">
                     ({failure.attempts}/{MAX_ATTEMPTS}회)
                   </span>
                 </p>
@@ -118,10 +117,7 @@ export function A01Login() {
             <Link to="/find-id" className="hover:text-primary hover:underline">
               아이디 찾기
             </Link>
-            <span
-              className="text-[var(--color-border-strong)]"
-              aria-hidden="true"
-            >
+            <span className="text-border-strong" aria-hidden="true">
               |
             </span>
             <Link
@@ -130,10 +126,7 @@ export function A01Login() {
             >
               비밀번호 재설정
             </Link>
-            <span
-              className="text-[var(--color-border-strong)]"
-              aria-hidden="true"
-            >
+            <span className="text-border-strong" aria-hidden="true">
               |
             </span>
             <Link to="/signup" className="hover:text-primary hover:underline">

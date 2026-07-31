@@ -1,15 +1,15 @@
 import * as React from "react"
 import { useNavigate } from "react-router-dom"
-import { AppHeader } from "./app-header"
-import { BreadcrumbBar } from "./breadcrumb-bar"
-import { FullMenuOverlay } from "./full-menu-overlay"
-import { PageHeader } from "./page-header"
+import { AppHeader } from "@/widgets/shell/app-header"
+import { BreadcrumbBar } from "@/widgets/shell/breadcrumb-bar"
+import { FullMenuOverlay } from "@/widgets/shell/full-menu-overlay"
+import { PageHeader } from "@/widgets/shell/page-header"
 import { NoticeBox } from "@/shared/ui/notice-box"
-import { Footer } from "./footer"
-import { SideNav } from "./side-nav"
+import { Footer } from "@/widgets/shell/footer"
+import { SideNav } from "@/widgets/shell/side-nav"
 import { cn } from "@/shared/lib/utils"
-import { useSession } from "@/app/session-context"
-import { useNotifications } from "@/app/notifications-context"
+import { useSession } from "@/app/use-session"
+import { useNotifications } from "@/app/use-notifications"
 
 type PageShellProps = {
   activeId?: string
@@ -65,7 +65,7 @@ export function PageShell({
 
       <main className="flex-1">
         <div
-          className="mx-auto w-[1280px] px-4 py-10"
+          className="mx-auto w-320 px-4 py-10"
           style={{ zoom: TEXT_SCALES[textScaleIndex] }}
         >
           {!bare && <BreadcrumbBar trail={breadcrumb} />}

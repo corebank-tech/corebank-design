@@ -29,7 +29,7 @@ export function SummaryRow({
   return (
     <div
       className={cn(
-        "flex flex-wrap border-t border-l border-[var(--color-border)]",
+        "flex flex-wrap border-t border-l border-border",
         className,
       )}
       {...props}

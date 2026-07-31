@@ -1,6 +1,6 @@
 import * as React from "react"
 import { NoticeBox } from "@/shared/ui/notice-box"
-import { StepIndicator } from "./step-indicator"
+import { StepIndicator } from "@/shared/ui/step-indicator"
 
 type StepLayoutProps = {
   /** Ordered step labels shared across the whole flow. */
@@ -44,7 +44,7 @@ export function StepLayout({
         </div>
       )}
 
-      <div className="border border-[var(--color-border)] bg-surface-elevated p-6">
+      <div className="border border-border bg-surface-elevated p-6">
         {children}
       </div>
 

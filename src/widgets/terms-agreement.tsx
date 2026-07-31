@@ -91,7 +91,7 @@ export const TermsAgreement = React.forwardRef<
   }))
 
   return (
-    <div className="overflow-hidden border border-[var(--color-border)]">
+    <div className="overflow-hidden border border-border">
       {/* 전체 동의 */}
       <div className="flex items-center justify-between bg-surface px-5 py-4">
         <Checkbox
@@ -108,7 +108,7 @@ export const TermsAgreement = React.forwardRef<
 
       <ul>
         {terms.map((term) => (
-          <li key={term.id} className="border-t border-[var(--color-border)]">
+          <li key={term.id} className="border-t border-border">
             {/* 윗줄: 뱃지 + 약관명 + 보기 */}
             <div className="flex items-center justify-between gap-3 px-5 pt-4">
               <div className="flex items-center gap-2">
@@ -129,7 +129,7 @@ export const TermsAgreement = React.forwardRef<
             </div>
 
             {/* 아랫줄: 동의 질문 + 체크박스 */}
-            <div className="mx-5 my-3 flex items-center justify-between gap-3 rounded-[var(--radius)] bg-surface-2 px-4 py-3">
+            <div className="mx-5 my-3 flex items-center justify-between gap-3 rounded-md bg-surface-2 px-4 py-3">
               <label
                 htmlFor={`agree-${term.id}`}
                 className="text-sm text-ink-muted"

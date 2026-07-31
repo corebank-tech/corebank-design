@@ -1,24 +1,34 @@
 import * as React from "react"
-import { Check, X, Loader2 } from "lucide-react"
+import { Check, X } from "lucide-react"
+import { cva, type VariantProps } from "class-variance-authority"
 import { DataGrid, type DataGridColumn } from "@/shared/ui/data-grid"
-import { cn } from "@/shared/lib/utils"
+import { Spinner } from "@/shared/ui/spinner"
 
-export type ResultVariant = "success" | "fail" | "pending"
-
-const variantIcon: Record<
-  ResultVariant,
+const resultIconRingVariants = cva(
+  "inline-flex h-18 w-18 items-center justify-center rounded-full",
   {
-    icon: React.ComponentType<{ className?: string; strokeWidth?: number }>
-    ring: string
-    spin?: boolean
-  }
-> = {
-  success: { icon: Check, ring: "bg-primary-tint text-primary" },
-  fail: {
-    icon: X,
-    ring: "bg-[var(--color-danger-tint)] text-[var(--color-danger)]",
+    variants: {
+      variant: {
+        success: "bg-primary-tint text-primary",
+        fail: "bg-danger-tint text-danger",
+        pending: "bg-surface text-ink-muted",
+      },
+    },
   },
-  pending: { icon: Loader2, ring: "bg-surface text-ink-muted", spin: true },
+)
+
+export type ResultVariant = NonNullable<
+  VariantProps<typeof resultIconRingVariants>["variant"]
+>
+
+const VARIANT_ICON: Partial<
+  Record<
+    ResultVariant,
+    React.ComponentType<{ className?: string; strokeWidth?: number }>
+  >
+> = {
+  success: Check,
+  fail: X,
 }
 
 type ResultPanelProps<Row> = {
@@ -58,22 +68,20 @@ export function ResultPanel<Row>({
   actions,
   footnote,
 }: ResultPanelProps<Row>) {
-  const { icon: Icon, ring, spin } = variantIcon[variant]
+  const Icon = VARIANT_ICON[variant]
 
   return (
     <div>
       <div className="flex flex-col items-center py-4 text-center">
         <span
-          className={cn(
-            "inline-flex h-[72px] w-[72px] items-center justify-center rounded-full",
-            ring,
-          )}
+          className={resultIconRingVariants({ variant })}
           aria-hidden="true"
         >
-          <Icon
-            className={cn("h-9 w-9", spin && "animate-spin")}
-            strokeWidth={2.5}
-          />
+          {Icon ? (
+            <Icon className="h-9 w-9" strokeWidth={2.5} />
+          ) : (
+            <Spinner size="lg" />
+          )}
         </span>
         <p className="mt-4 text-h2 font-bold text-balance text-ink">
           {message}

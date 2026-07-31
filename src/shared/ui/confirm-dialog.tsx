@@ -48,7 +48,7 @@ export function ConfirmDialog({
           <Button
             variant="secondary"
             size="lg"
-            className="min-w-[120px]"
+            className="min-w-30"
             onClick={onClose}
           >
             {cancelLabel}
@@ -56,7 +56,7 @@ export function ConfirmDialog({
           <Button
             variant="primary"
             size="lg"
-            className="min-w-[120px]"
+            className="min-w-30"
             onClick={onConfirm}
           >
             {confirmLabel}
@@ -81,7 +81,7 @@ export function ConfirmDialog({
       </div>
 
       {items.length > 0 && (
-        <div className="max-h-[240px] overflow-y-auto rounded-[var(--radius)] border border-[var(--color-border)] bg-surface-2 px-5 py-4">
+        <div className="max-h-[240px] overflow-y-auto rounded-md border border-border bg-surface-2 px-5 py-4">
           <dl className="flex flex-col gap-2">
             {items.map((item, i) => (
               <div key={i} className="flex gap-2 text-sm leading-relaxed">

@@ -31,11 +31,16 @@ export function GridSearchModal({
   const [fieldKey, setFieldKey] = React.useState(fields[0]?.key ?? "")
   const [keyword, setKeyword] = React.useState("")
 
-  React.useEffect(() => {
-    if (!open) return
-    setFieldKey(fields[0]?.key ?? "")
-    setKeyword("")
-  }, [open, fields])
+  // 다시 열릴 때마다 이전 검색조건을 지운다. effect 대신 렌더 중 상태 조정
+  // 패턴(React 공식 가이드 "Adjusting state when a prop changes")을 쓴다.
+  const [prevOpen, setPrevOpen] = React.useState(open)
+  if (open !== prevOpen) {
+    setPrevOpen(open)
+    if (open) {
+      setFieldKey(fields[0]?.key ?? "")
+      setKeyword("")
+    }
+  }
 
   const apply = () => {
     onApply(fieldKey, keyword.trim())
@@ -53,7 +58,7 @@ export function GridSearchModal({
           <Button
             variant="secondary"
             size="lg"
-            className="min-w-[120px]"
+            className="min-w-30"
             onClick={onClose}
           >
             취소
@@ -61,7 +66,7 @@ export function GridSearchModal({
           <Button
             variant="primary"
             size="lg"
-            className="min-w-[120px]"
+            className="min-w-30"
             onClick={apply}
             disabled={!fieldKey}
           >

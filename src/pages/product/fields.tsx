@@ -44,7 +44,7 @@ export function TermMonthsField({
         ※ 가입 가능 기간 {min}개월 ~ {max}개월
       </p>
       {outOfRange && (
-        <p className="text-xs font-bold text-[var(--color-danger)]">
+        <p className="text-xs font-bold text-danger">
           가입기간은 {min}개월 이상 {max}개월 이하로 입력하세요.
         </p>
       )}
@@ -109,13 +109,13 @@ export function JoinAmountField({
       </p>
 
       {(belowMin || aboveMax) && (
-        <p className="text-xs font-bold text-[var(--color-danger)]">
+        <p className="text-xs font-bold text-danger">
           가입금액은 {formatAmount(min)} 이상 {formatAmount(max)} 이하로
           입력하세요.
         </p>
       )}
       {insufficientBalance && (
-        <p className="text-xs font-bold text-[var(--color-danger)]">
+        <p className="text-xs font-bold text-danger">
           출금계좌의 출금가능금액({formatAmount(withdrawable ?? 0)})이
           부족합니다. 금액을 낮추거나 출금계좌를 변경하세요.
         </p>

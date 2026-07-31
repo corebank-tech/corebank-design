@@ -2,10 +2,10 @@ import * as React from "react"
 import { useLocation, useNavigate, useParams } from "react-router-dom"
 import { Button } from "@/shared/ui/button"
 import { FormSection } from "@/shared/ui/form-section"
-import { StepLayout } from "@/widgets/transfer/step-layout"
-import { ConfirmSummary } from "@/widgets/transfer/confirm-summary"
+import { StepLayout } from "@/shared/ui/step-layout"
+import { ConfirmSummary } from "@/shared/ui/confirm-summary"
 import { AccountPasswordField } from "@/widgets/transfer/transfer-fields"
-import { OtpModal } from "@/shared/ui/otp-modal"
+import { OtpModal } from "@/entities/auth"
 import { ErrorDialog } from "@/shared/ui/error-dialog"
 import {
   formatAccountNo,
@@ -26,10 +26,10 @@ import {
   PRODUCT_JOIN_STEPS,
   type ProductJoinFormState,
   type ProductJoinResult,
-} from "./join-shared"
+} from "@/pages/product/join-shared"
+import { ACCOUNT_PASSWORD_ERROR_LIMIT as ERROR_LIMIT } from "@/shared/config/policy"
 
 const PASSWORD_LIMIT = 4
-const ERROR_LIMIT = 5
 
 /** C-05 상품가입 3단계 · 확인 및 인증 (REQ-PRDT-010, REQ-ACCT-007) */
 export function C05ConfirmAuth() {
@@ -118,7 +118,7 @@ export function C05ConfirmAuth() {
             <Button
               variant="secondary"
               size="lg"
-              className="min-w-[120px]"
+              className="min-w-30"
               onClick={() => navigate(-1)}
             >
               이전
@@ -126,7 +126,7 @@ export function C05ConfirmAuth() {
             <Button
               variant="primary"
               size="lg"
-              className="min-w-[160px]"
+              className="min-w-40"
               disabled={blocked}
               onClick={handleAuthenticate}
             >
@@ -174,15 +174,12 @@ export function C05ConfirmAuth() {
               }}
             />
             {passwordError && (
-              <p
-                role="alert"
-                className="text-xs font-bold text-[var(--color-danger)]"
-              >
+              <p role="alert" className="text-xs font-bold text-danger">
                 {passwordError}
               </p>
             )}
             {blocked && (
-              <p className="text-xs font-bold text-[var(--color-danger)]">
+              <p className="text-xs font-bold text-danger">
                 오류 횟수를 초과해 이 계좌가 거래정지되었습니다. 영업점 또는
                 고객센터에서 해제 후 다시 시도하세요.
               </p>

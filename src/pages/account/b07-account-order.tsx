@@ -126,7 +126,7 @@ export function B07AccountOrder() {
           <Button
             variant="secondary"
             size="lg"
-            className="min-w-[120px]"
+            className="min-w-30"
             onClick={handleReset}
           >
             초기화
@@ -134,7 +134,7 @@ export function B07AccountOrder() {
           <Button
             variant="primary"
             size="lg"
-            className="min-w-[120px]"
+            className="min-w-30"
             onClick={handleSave}
           >
             확인

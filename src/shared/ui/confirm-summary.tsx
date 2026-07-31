@@ -26,10 +26,7 @@ export function ConfirmSummary({
 }: ConfirmSummaryProps) {
   return (
     <div
-      className={cn(
-        "overflow-hidden border border-[var(--color-danger)]",
-        className,
-      )}
+      className={cn("overflow-hidden border border-danger", className)}
       {...props}
     >
       <table className="w-full border-collapse text-sm">
@@ -40,7 +37,7 @@ export function ConfirmSummary({
                 key={i}
                 scope="col"
                 className={cn(
-                  "border-b border-[var(--color-danger)] bg-[var(--color-danger-tint)] px-3 py-2.5 text-center whitespace-nowrap [&:not(:first-child)]:border-l [&:not(:first-child)]:border-[var(--color-border)]",
+                  "border-b border-danger bg-danger-tint px-3 py-2.5 text-center whitespace-nowrap [&:not(:first-child)]:border-l [&:not(:first-child)]:border-border",
                   col.emphasis
                     ? "text-sm font-bold text-ink"
                     : "text-sm text-ink-muted",
@@ -57,7 +54,7 @@ export function ConfirmSummary({
               <td
                 key={i}
                 className={cn(
-                  "bg-surface-elevated px-3 py-3 text-center align-middle whitespace-nowrap text-ink [&:not(:first-child)]:border-l [&:not(:first-child)]:border-[var(--color-border)]",
+                  "bg-surface-elevated px-3 py-3 text-center align-middle whitespace-nowrap text-ink [&:not(:first-child)]:border-l [&:not(:first-child)]:border-border",
                   col.emphasis
                     ? "text-h2 font-bold text-primary tabular-nums"
                     : "text-md font-bold",

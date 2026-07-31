@@ -8,12 +8,12 @@ import { SearchPanel } from "@/widgets/query/search-panel"
 import { PeriodField, RadioRowField } from "@/widgets/query/search-fields"
 import { GridToolbar } from "@/widgets/query/grid-toolbar"
 import { DataGrid, type DataGridColumn } from "@/shared/ui/data-grid"
-import { Pagination } from "@/widgets/query/pagination"
+import { Pagination } from "@/shared/ui/pagination"
 import { ConfirmDialog } from "@/shared/ui/confirm-dialog"
-import { OtpModal } from "@/shared/ui/otp-modal"
+import { OtpModal } from "@/entities/auth"
 import { ErrorDialog } from "@/shared/ui/error-dialog"
 import { AlertDialog } from "@/shared/ui/alert-dialog"
-import { TextViewModal } from "@/widgets/query/text-view-modal"
+import { TextViewModal } from "@/shared/ui/text-view-modal"
 import { downloadCsv } from "@/shared/lib/csv"
 import {
   formatAccountNo,
@@ -25,12 +25,13 @@ import {
 } from "@/shared/lib/format"
 import {
   MOCK_RESERVATIONS,
+  getReservationStatusBadgeVariant,
   type ReservationRow,
-  type ReservationStatus,
 } from "@/entities/transfer"
-
-const TODAY = "2026-07-23"
-const BASE_TIME = "2026-07-23T08:57:34"
+import {
+  MOCK_NOW as BASE_TIME,
+  MOCK_TODAY as TODAY,
+} from "@/shared/config/mock-clock"
 
 const STATUS_OPTIONS = [
   { label: "전체", value: "all" },
@@ -39,16 +40,6 @@ const STATUS_OPTIONS = [
   { label: "실패", value: "실패" },
   { label: "취소", value: "취소" },
 ]
-
-const STATUS_BADGE: Record<
-  ReservationStatus,
-  "warning" | "success" | "danger" | "neutral"
-> = {
-  대기: "warning",
-  완료: "success",
-  실패: "danger",
-  취소: "neutral",
-}
 
 /** REQ-RSV-008: 이체 예정일 전일 23:59:59까지 취소 가능, 당일은 취소 불가. */
 function isCancelable(row: ReservationRow): boolean {
@@ -154,7 +145,11 @@ export function E04ReservationList() {
       header: "상태",
       align: "center",
       width: 80,
-      render: (r) => <Badge variant={STATUS_BADGE[r.status]}>{r.status}</Badge>,
+      render: (r) => (
+        <Badge variant={getReservationStatusBadgeVariant(r.status)}>
+          {r.status}
+        </Badge>
+      ),
     },
     {
       key: "scheduledDate",

@@ -3,8 +3,10 @@ import { ChevronLeft, ChevronRight } from "lucide-react"
 import { Input } from "@/shared/ui/input"
 import { Select } from "@/shared/ui/select"
 import { Radio } from "@/shared/ui/radio"
+import { Chip } from "@/shared/ui/chip"
 import { formatAccountNo, formatAmount } from "@/shared/lib/format"
-import { cn } from "@/shared/lib/utils"
+import { daysBetween, parseISO, toISO } from "@/shared/lib/date"
+import { QUERY_MAX_RANGE_DAYS as MAX_RANGE_DAYS } from "@/shared/config/policy"
 import type { AccountOption } from "@/shared/types/account"
 
 /* ------------------------------------------------------------------ */
@@ -51,27 +53,8 @@ const PERIOD_CHIPS = [
   { id: "1m", label: "1개월", days: 30 },
   { id: "3m", label: "3개월", days: 90 },
   { id: "6m", label: "6개월", days: 182 },
-  { id: "1y", label: "1년", days: 365 },
+  { id: "1y", label: "1년", days: MAX_RANGE_DAYS },
 ] as const
-
-const MAX_RANGE_DAYS = 365
-
-function parseISO(value: string): Date {
-  const [y, m, d] = value.split("-").map(Number)
-  return new Date(y, (m ?? 1) - 1, d ?? 1)
-}
-
-function toISO(date: Date): string {
-  const y = date.getFullYear()
-  const m = String(date.getMonth() + 1).padStart(2, "0")
-  const d = String(date.getDate()).padStart(2, "0")
-  return `${y}-${m}-${d}`
-}
-
-function daysBetween(startISO: string, endISO: string): number {
-  const ms = parseISO(endISO).getTime() - parseISO(startISO).getTime()
-  return Math.round(ms / 86_400_000)
-}
 
 type PeriodFieldProps = {
   start: string
@@ -106,7 +89,7 @@ export function PeriodField({ start, end, onChange, today }: PeriodFieldProps) {
   const reversed = daysBetween(start, end) < 0
 
   const stepperGroup =
-    "inline-flex items-stretch overflow-hidden rounded-[var(--radius)] border border-[var(--color-border-strong)]"
+    "inline-flex items-stretch overflow-hidden rounded-md border border-border-strong"
   const stepper =
     "inline-flex h-8 w-7 items-center justify-center bg-surface-elevated text-ink-muted hover:bg-surface focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
 
@@ -117,20 +100,15 @@ export function PeriodField({ start, end, onChange, today }: PeriodFieldProps) {
           {PERIOD_CHIPS.map((chip) => {
             const active = activeChip === chip.id
             return (
-              <button
+              <Chip
                 key={chip.id}
-                type="button"
+                tone={active ? "active" : "default"}
                 onClick={() => applyChip(chip.days)}
                 aria-pressed={active}
-                className={cn(
-                  "h-8 rounded-[var(--radius-pill)] border px-3 text-[14px] whitespace-nowrap transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
-                  active
-                    ? "border-ink bg-ink font-bold text-surface-elevated"
-                    : "border-[var(--color-border-strong)] bg-surface-elevated text-ink hover:bg-surface",
-                )}
+                className="text-base leading-[1.5]"
               >
                 {chip.label}
-              </button>
+              </Chip>
             )
           })}
         </div>
@@ -167,7 +145,7 @@ export function PeriodField({ start, end, onChange, today }: PeriodFieldProps) {
             >
               <ChevronLeft className="h-4 w-4" aria-hidden="true" />
             </button>
-            <span className="flex items-center border-x border-[var(--color-border-strong)] bg-surface px-2 text-[13px] font-bold text-ink">
+            <span className="flex items-center border-x border-border-strong bg-surface px-2 text-sm leading-[1.5] font-bold text-ink">
               년
             </span>
             <button
@@ -188,7 +166,7 @@ export function PeriodField({ start, end, onChange, today }: PeriodFieldProps) {
             >
               <ChevronLeft className="h-4 w-4" aria-hidden="true" />
             </button>
-            <span className="flex items-center border-x border-[var(--color-border-strong)] bg-surface px-2 text-[13px] font-bold text-ink">
+            <span className="flex items-center border-x border-border-strong bg-surface px-2 text-sm leading-[1.5] font-bold text-ink">
               월
             </span>
             <button
@@ -204,11 +182,11 @@ export function PeriodField({ start, end, onChange, today }: PeriodFieldProps) {
       </div>
 
       {reversed ? (
-        <p className="text-xs font-bold text-[var(--color-danger)]">
+        <p className="text-xs font-bold text-danger">
           종료일이 시작일보다 빠릅니다. 시작일과 종료일을 다시 선택하세요.
         </p>
       ) : overLimit ? (
-        <p className="text-xs font-bold text-[var(--color-danger)]">
+        <p className="text-xs font-bold text-danger">
           조회 기간은 최대 1년까지 선택할 수 있습니다. 기간을 다시 선택하세요.
         </p>
       ) : null}

@@ -1,5 +1,6 @@
 import * as React from "react"
 import { ChevronsUpDown, ChevronUp, ChevronDown } from "lucide-react"
+import { cva } from "class-variance-authority"
 import { Checkbox } from "@/shared/ui/checkbox"
 import { Skeleton } from "@/shared/ui/skeleton"
 import { EmptyState } from "@/shared/ui/empty-state"
@@ -34,11 +35,18 @@ type DataGridProps<Row> = {
   skeletonRows?: number
 }
 
-const alignClass: Record<Align, string> = {
-  left: "text-left justify-start",
-  right: "text-right justify-end",
-  center: "text-center justify-center",
-}
+const SELECT_COLUMN_WIDTH_PX = 44
+
+const alignVariants = cva("", {
+  variants: {
+    align: {
+      left: "justify-start text-left",
+      right: "justify-end text-right",
+      center: "justify-center text-center",
+    },
+  },
+  defaultVariants: { align: "left" },
+})
 
 export function DataGrid<Row>({
   columns,
@@ -105,10 +113,10 @@ export function DataGrid<Row>({
   const totalCols = columns.length + (selectable ? 1 : 0)
 
   return (
-    <div className="overflow-x-auto border-t-2 border-b border-[var(--color-border)] border-t-[var(--color-navy)]">
+    <div className="overflow-x-auto border-t-2 border-b border-border border-t-navy">
       <table className="w-full border-collapse text-[14px]">
         <colgroup>
-          {selectable && <col style={{ width: 44 }} />}
+          {selectable && <col style={{ width: SELECT_COLUMN_WIDTH_PX }} />}
           {columns.map((c) => (
             <col key={c.key} style={c.width ? { width: c.width } : undefined} />
           ))}
@@ -117,7 +125,7 @@ export function DataGrid<Row>({
         <thead>
           <tr className="bg-surface">
             {selectable && (
-              <th className="border-b border-[var(--color-border)] px-3 py-2.5">
+              <th className="border-b border-border px-3 py-2.5">
                 <div className="flex items-center justify-center">
                   <Checkbox
                     aria-label="전체 선택"
@@ -141,8 +149,8 @@ export function DataGrid<Row>({
                       : undefined
                   }
                   className={cn(
-                    "border-r border-b border-[var(--color-border)] px-3 py-2.5 text-[14px] font-bold whitespace-nowrap text-ink last:border-r-0",
-                    alignClass[col.align ?? "left"],
+                    "border-r border-b border-border px-3 py-2.5 text-[14px] font-bold whitespace-nowrap text-ink last:border-r-0",
+                    alignVariants({ align: col.align }),
                   )}
                 >
                   {col.sortable ? (
@@ -188,14 +196,14 @@ export function DataGrid<Row>({
             Array.from({ length: skeletonRows }).map((_, i) => (
               <tr key={`sk-${i}`}>
                 {selectable && (
-                  <td className="border-b border-[var(--color-border)] px-3 py-2.5">
-                    <Skeleton className="mx-auto h-[18px] w-[18px]" />
+                  <td className="border-b border-border px-3 py-2.5">
+                    <Skeleton className="mx-auto h-4.5 w-4.5" />
                   </td>
                 )}
                 {columns.map((col) => (
                   <td
                     key={col.key}
-                    className="border-r border-b border-[var(--color-border)] px-3 py-2.5 last:border-r-0"
+                    className="border-r border-b border-border px-3 py-2.5 last:border-r-0"
                   >
                     <Skeleton className="h-4 w-full" />
                   </td>
@@ -221,7 +229,7 @@ export function DataGrid<Row>({
                   )}
                 >
                   {selectable && (
-                    <td className="border-b border-[var(--color-border)] px-3 py-2.5">
+                    <td className="border-b border-border px-3 py-2.5">
                       <div className="flex items-center justify-center">
                         <Checkbox
                           aria-label={`${i + 1}행 선택`}
@@ -235,8 +243,8 @@ export function DataGrid<Row>({
                     <td
                       key={col.key}
                       className={cn(
-                        "border-r border-b border-[var(--color-border)] px-3 py-2.5 text-[14px] whitespace-nowrap text-ink last:border-r-0",
-                        alignClass[col.align ?? "left"],
+                        "border-r border-b border-border px-3 py-2.5 text-[14px] whitespace-nowrap text-ink last:border-r-0",
+                        alignVariants({ align: col.align }),
                         col.align === "right" && "tabular-nums",
                         col.className,
                       )}

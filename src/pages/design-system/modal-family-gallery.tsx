@@ -3,15 +3,15 @@ import { Button } from "@/shared/ui/button"
 import { FormSection } from "@/shared/ui/form-section"
 import { ConfirmDialog } from "@/shared/ui/confirm-dialog"
 import { ErrorDialog } from "@/shared/ui/error-dialog"
-import { OtpModal } from "@/shared/ui/otp-modal"
-import { LimitModal } from "@/shared/ui/limit-modal"
-import { SessionExpiredModal } from "@/shared/ui/session-expired-modal"
+import { OtpModal } from "@/entities/auth"
+import { LimitModal } from "@/entities/transfer"
+import { SessionExpiredModal } from "@/entities/auth"
 import { MOCK_TRANSFER_LIMITS } from "@/entities/transfer"
 
 type OpenModal = "confirm" | "error" | "otp" | "limit" | "session" | null
 
 /** Trigger board for the shared modal family (A-91 ~ A-93, D-05, A-11). */
-export function FeedbackDemo() {
+export function ModalFamilyGallery() {
   const [open, setOpen] = React.useState<OpenModal>(null)
   const [otpDone, setOtpDone] = React.useState<string | null>(null)
   const close = () => setOpen(null)
@@ -40,7 +40,7 @@ export function FeedbackDemo() {
           </Button>
         </div>
         {otpDone && (
-          <p className="mt-3 text-sm font-bold text-[var(--color-success)]">
+          <p className="mt-3 text-sm font-bold text-success">
             OTP 인증이 완료되었습니다. (입력값 {otpDone})
           </p>
         )}

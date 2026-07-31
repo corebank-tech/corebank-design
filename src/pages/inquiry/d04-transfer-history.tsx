@@ -10,15 +10,15 @@ import { Modal } from "@/shared/ui/modal"
 import { AlertDialog } from "@/shared/ui/alert-dialog"
 import { SearchPanel } from "@/widgets/query/search-panel"
 import { PeriodField, RadioRowField } from "@/widgets/query/search-fields"
-import { SummaryRow } from "@/widgets/query/summary-row"
+import { SummaryRow } from "@/shared/ui/summary-row"
 import { GridToolbar } from "@/widgets/query/grid-toolbar"
 import { DataGrid, type DataGridColumn } from "@/shared/ui/data-grid"
-import { Pagination } from "@/widgets/query/pagination"
-import { TextViewModal } from "@/widgets/query/text-view-modal"
+import { Pagination } from "@/shared/ui/pagination"
+import { TextViewModal } from "@/shared/ui/text-view-modal"
 import {
   GridSearchModal,
   type GridSearchField,
-} from "@/widgets/query/grid-search-modal"
+} from "@/shared/ui/grid-search-modal"
 import { downloadCsv } from "@/shared/lib/csv"
 import {
   formatAccountNo,
@@ -31,12 +31,13 @@ import {
 import {
   MOCK_TRANSFER_HISTORY,
   MOCK_MONTHLY_TRANSFER_STATS,
+  getTransferStatusBadgeVariant,
   type TransferHistoryRow,
-  type TransferStatus,
 } from "@/entities/transfer"
-
-const TODAY = "2026-07-23"
-const BASE_TIME = "2026-07-23T08:57:34"
+import {
+  MOCK_NOW as BASE_TIME,
+  MOCK_TODAY as TODAY,
+} from "@/shared/config/mock-clock"
 
 const STATUS_OPTIONS = [
   { label: "전체", value: "all" },
@@ -44,12 +45,6 @@ const STATUS_OPTIONS = [
   { label: "오류", value: "오류" },
   { label: "처리중", value: "처리중" },
 ]
-
-const STATUS_BADGE: Record<TransferStatus, "success" | "danger" | "warning"> = {
-  정상: "success",
-  오류: "danger",
-  처리중: "warning",
-}
 
 const FROM_ACCOUNTS = Array.from(
   new Map(
@@ -196,7 +191,11 @@ export function D04TransferHistory() {
       header: "처리상태",
       align: "center",
       width: 90,
-      render: (r) => <Badge variant={STATUS_BADGE[r.status]}>{r.status}</Badge>,
+      render: (r) => (
+        <Badge variant={getTransferStatusBadgeVariant(r.status)}>
+          {r.status}
+        </Badge>
+      ),
     },
     {
       key: "txId",
@@ -206,7 +205,7 @@ export function D04TransferHistory() {
         <button
           type="button"
           onClick={() => setDetail(r)}
-          className="text-sm text-[var(--color-link)] tabular-nums hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+          className="text-sm text-link tabular-nums hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
         >
           {r.txId}
         </button>
@@ -356,7 +355,7 @@ export function D04TransferHistory() {
           <Button
             variant="primary"
             size="lg"
-            className="min-w-[120px]"
+            className="min-w-30"
             onClick={() => setDetail(null)}
           >
             확인
@@ -388,7 +387,9 @@ export function D04TransferHistory() {
                 {
                   label: "처리상태",
                   value: (
-                    <Badge variant={STATUS_BADGE[detail.status]}>
+                    <Badge
+                      variant={getTransferStatusBadgeVariant(detail.status)}
+                    >
                       {detail.status}
                     </Badge>
                   ),
@@ -439,7 +440,7 @@ export function D04TransferHistory() {
           <Button
             variant="primary"
             size="lg"
-            className="min-w-[120px]"
+            className="min-w-30"
             onClick={() => setStatsOpen(false)}
           >
             확인

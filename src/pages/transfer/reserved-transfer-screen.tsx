@@ -1,7 +1,7 @@
 import * as React from "react"
 import { useNavigate } from "react-router-dom"
 import { ConfirmDialog } from "@/shared/ui/confirm-dialog"
-import { OtpModal } from "@/shared/ui/otp-modal"
+import { OtpModal } from "@/entities/auth"
 import {
   MOCK_TRANSFER_ACCOUNTS,
   MOCK_TRANSFER_LIMITS,
@@ -15,10 +15,16 @@ import {
   formatDateTime,
   maskName,
 } from "@/shared/lib/format"
-import { daysBetween } from "@/widgets/transfer/transfer-fields"
-import { ReservedTransferStep1 } from "./reserved/e01-input"
-import { ReservedTransferStep2 } from "./reserved/e02-confirm"
-import { ReservedTransferStep3 } from "./reserved/e03-complete"
+import { daysBetween } from "@/shared/lib/date"
+import {
+  MOCK_NOW as NOW,
+  MOCK_TODAY as TODAY,
+} from "@/shared/config/mock-clock"
+import { RESERVATION_MAX_RANGE_DAYS } from "@/shared/config/policy"
+import { TRANSFER_STEPS as STEPS } from "@/pages/transfer/transfer-steps"
+import { ReservedTransferStep1 } from "@/pages/transfer/reserved/e01-input"
+import { ReservedTransferStep2 } from "@/pages/transfer/reserved/e02-confirm"
+import { ReservedTransferStep3 } from "@/pages/transfer/reserved/e03-complete"
 
 export type ReservedTransferForm = {
   fromAccount: string
@@ -30,10 +36,6 @@ export type ReservedTransferForm = {
   payeeMemo: string
   myMemo: string
 }
-
-const STEPS = ["정보입력", "정보확인 및 인증", "완료"]
-const TODAY = "2026-07-23"
-const NOW = "2026-07-23T08:57:34"
 
 const INITIAL_FORM: ReservedTransferForm = {
   fromAccount: MOCK_TRANSFER_ACCOUNTS[0].accountNo,
@@ -86,7 +88,8 @@ export function ReservedTransferScreen() {
   const dateSpan = form.scheduledDate
     ? daysBetween(TODAY, form.scheduledDate)
     : null
-  const dateValid = dateSpan != null && dateSpan >= 1 && dateSpan <= 365
+  const dateValid =
+    dateSpan != null && dateSpan >= 1 && dateSpan <= RESERVATION_MAX_RANGE_DAYS
   const duplicate = isDuplicate(form)
 
   const canSubmit =

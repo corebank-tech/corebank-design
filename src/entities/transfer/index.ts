@@ -58,3 +58,14 @@ export {
   MOCK_TRANSFER_RESULT,
   generateTransactionId,
 } from "@/entities/transfer/api/transfer"
+
+export {
+  getTransferStatusBadgeVariant,
+  getReservationStatusBadgeVariant,
+  getReservationResultBadgeVariant,
+  getAutoTransferStatusBadgeVariant,
+  getAutoTransferResultBadgeVariant,
+  AUTO_TRANSFER_CYCLE_LABEL,
+} from "@/entities/transfer/lib/status-badge"
+
+export { LimitModal } from "@/entities/transfer/ui/limit-modal"

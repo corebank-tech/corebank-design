@@ -3,11 +3,14 @@ import { useNavigate } from "react-router-dom"
 import { FormSection } from "@/shared/ui/form-section"
 import { Button } from "@/shared/ui/button"
 import { DataGrid, type DataGridColumn } from "@/shared/ui/data-grid"
-import { SummaryRow } from "@/widgets/query/summary-row"
+import { SummaryRow } from "@/shared/ui/summary-row"
 import { EmptyState } from "@/shared/ui/empty-state"
-import { AccessStatusPanel } from "./access-status-panel"
-import { BankingShortcuts, type ShortcutLink } from "./banking-shortcuts"
-import { NotificationSummary } from "./notification-summary"
+import { AccessStatusPanel } from "@/pages/dashboard/access-status-panel"
+import {
+  BankingShortcuts,
+  type ShortcutLink,
+} from "@/pages/dashboard/banking-shortcuts"
+import { NotificationSummary } from "@/pages/dashboard/notification-summary"
 import {
   MOCK_ACCESS_STATUS,
   MOCK_DASHBOARD_ACCOUNTS,
@@ -159,7 +162,7 @@ export function A09MainDashboard({
     <div className="flex flex-col gap-8">
       {/* [1] 인사 영역 + 접속현황 */}
       <div className="flex items-stretch gap-9">
-        <div className="flex w-2/3 flex-col justify-center border border-[var(--color-border)] bg-surface-elevated px-8 py-9">
+        <div className="flex w-2/3 flex-col justify-center border border-border bg-surface-elevated px-8 py-9">
           <p className="text-h2 font-bold text-ink">
             {customerName} 고객님, 안녕하세요.
           </p>
@@ -174,10 +177,10 @@ export function A09MainDashboard({
       </div>
 
       {/* [2] 대표계좌 요약 */}
-      <div className="border border-[var(--color-border)] bg-surface-elevated p-6">
+      <div className="border border-border bg-surface-elevated p-6">
         <FormSection title="대표계좌" className="mb-0">
           {accounts.length === 0 ? (
-            <div className="border-t-2 border-b border-[var(--color-border)] border-t-[var(--color-navy)]">
+            <div className="border-t-2 border-b border-border border-t-navy">
               <EmptyState
                 message="등록된 계좌가 없습니다."
                 description="상품을 둘러보고 첫 계좌를 개설해 보세요."
@@ -199,7 +202,7 @@ export function A09MainDashboard({
                     {formatAccountNo(accounts[0].accountNo)}
                   </span>
                 </div>
-                <span className="text-h2 [font-weight:var(--weight-value)] text-ink tabular-nums">
+                <span className="text-h2 font-value text-ink tabular-nums">
                   {formatAmount(accounts[0].balance)}
                 </span>
               </div>

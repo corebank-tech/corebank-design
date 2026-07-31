@@ -20,7 +20,7 @@ export function SideNav({ activeId }: SideNavProps) {
 
   return (
     <nav
-      className="sticky top-[88px] flex w-[200px] shrink-0 flex-col gap-5 self-start border-r border-[var(--color-border)] pr-6"
+      className="sticky top-22 flex w-50 shrink-0 flex-col gap-5 self-start border-r border-border pr-6"
       aria-label={`${category.label} 메뉴`}
     >
       <h2 className="text-h3 font-bold text-ink">{category.label}</h2>

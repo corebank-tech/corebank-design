@@ -1,8 +1,8 @@
 import * as React from "react"
 import { Button } from "@/shared/ui/button"
 import { FormSection } from "@/shared/ui/form-section"
-import { StepLayout } from "@/widgets/transfer/step-layout"
-import { ConfirmSummary } from "@/widgets/transfer/confirm-summary"
+import { StepLayout } from "@/shared/ui/step-layout"
+import { ConfirmSummary } from "@/shared/ui/confirm-summary"
 
 type AutoTransferStep2Props = {
   steps: string[]
@@ -47,7 +47,7 @@ export function AutoTransferStep2({
           <Button
             variant="secondary"
             size="lg"
-            className="min-w-[120px]"
+            className="min-w-30"
             onClick={onPrev}
           >
             이전
@@ -55,7 +55,7 @@ export function AutoTransferStep2({
           <Button
             variant="primary"
             size="lg"
-            className="min-w-[160px]"
+            className="min-w-40"
             onClick={onSubmit}
           >
             등록하기

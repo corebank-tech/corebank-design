@@ -2,7 +2,7 @@ import * as React from "react"
 import { Check, X } from "lucide-react"
 import { Button } from "@/shared/ui/button"
 import { Input } from "@/shared/ui/input"
-import { StepLayout } from "@/widgets/transfer/step-layout"
+import { StepLayout } from "@/shared/ui/step-layout"
 import { FormSection } from "@/shared/ui/form-section"
 import { FormRow } from "@/shared/ui/form-row"
 import { NoticeBoxFooter } from "@/shared/ui/notice-box"
@@ -16,23 +16,14 @@ import {
   type RuleCheck,
 } from "@/entities/auth"
 import { formatPhone } from "@/shared/lib/format"
+import { onlyDigits } from "@/shared/lib/input-filter"
+import { EMAIL_CODE_TTL_SECONDS as EMAIL_OTP_TTL } from "@/shared/config/policy"
+import { formatClock, useCountdown } from "@/shared/lib/hooks/use-countdown"
 import { MOCK_EXISTING_USER_IDS, MOCK_EXISTING_EMAILS } from "@/entities/auth"
-import { SIGNUP_STEPS, type SignupData } from "./signup-flow"
-
-const EMAIL_OTP_TTL = 180
-
-function onlyDigits(value: string, maxLength: number): string {
-  return value.replace(/\D/g, "").slice(0, maxLength)
-}
+import { SIGNUP_STEPS, type SignupData } from "@/pages/auth/signup-shared"
 
 function generateCode(): string {
   return String(Math.floor(100000 + Math.random() * 900000))
-}
-
-function formatClock(total: number): string {
-  const m = Math.floor(total / 60)
-  const s = total % 60
-  return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`
 }
 
 function RuleList({ rules }: { rules: RuleCheck[] }) {
@@ -77,7 +68,8 @@ export function A04Info({ data, onChange, onNext }: A04InfoProps) {
   const [dupConfirmOpen, setDupConfirmOpen] = React.useState(false)
 
   const [emailIssued, setEmailIssued] = React.useState<string | null>(null)
-  const [emailRemaining, setEmailRemaining] = React.useState(EMAIL_OTP_TTL)
+  const { remaining: emailRemaining, reset: resetEmailCountdown } =
+    useCountdown(EMAIL_OTP_TTL, emailIssued != null)
   const [emailCode, setEmailCode] = React.useState("")
   const [emailError, setEmailError] = React.useState<string | null>(null)
   const [verifiedEmail, setVerifiedEmail] = React.useState<string | null>(null)
@@ -97,15 +89,6 @@ export function A04Info({ data, onChange, onNext }: A04InfoProps) {
   const emailExpired = emailIssued != null && emailRemaining <= 0
   const passwordMismatch =
     passwordConfirm.length > 0 && passwordConfirm !== data.password
-
-  // 이메일 인증번호 카운트다운
-  React.useEffect(() => {
-    if (emailIssued == null || emailRemaining <= 0) return
-    const id = window.setInterval(() => {
-      setEmailRemaining((prev) => (prev <= 1 ? 0 : prev - 1))
-    }, 1000)
-    return () => window.clearInterval(id)
-  }, [emailIssued, emailRemaining])
 
   const handleDupCheck = () => {
     if (!isIdValid(data.userId)) {
@@ -135,7 +118,7 @@ export function A04Info({ data, onChange, onNext }: A04InfoProps) {
       return
     }
     setEmailIssued(generateCode())
-    setEmailRemaining(EMAIL_OTP_TTL)
+    resetEmailCountdown()
     setEmailCode("")
     setEmailError(null)
     setVerifiedEmail(null)
@@ -197,7 +180,7 @@ export function A04Info({ data, onChange, onNext }: A04InfoProps) {
           <Button
             variant="primary"
             size="lg"
-            className="min-w-[160px]"
+            className="min-w-40"
             onClick={handleNext}
           >
             다음
@@ -265,7 +248,7 @@ export function A04Info({ data, onChange, onNext }: A04InfoProps) {
                   className="max-w-xs"
                 />
                 {passwordMismatch && (
-                  <p className="text-2xs font-bold text-[var(--color-danger)]">
+                  <p className="text-2xs font-bold text-danger">
                     비밀번호가 일치하지 않습니다.
                   </p>
                 )}
@@ -302,9 +285,9 @@ export function A04Info({ data, onChange, onNext }: A04InfoProps) {
                 </div>
 
                 {emailIssued != null && !emailVerified && (
-                  <div className="flex items-center gap-2 rounded-[var(--radius)] border border-[var(--color-border)] bg-surface px-3 py-2">
+                  <div className="flex items-center gap-2 rounded-md border border-border bg-surface px-3 py-2">
                     <span
-                      className={`text-lg font-bold tracking-[0.2em] tabular-nums ${emailExpired ? "text-ink-faint line-through" : "text-primary"}`}
+                      className={`text-lg font-bold tracking-2 tabular-nums ${emailExpired ? "text-ink-faint line-through" : "text-primary"}`}
                       aria-label="발송된 이메일 인증번호"
                     >
                       {emailIssued}
@@ -325,7 +308,7 @@ export function A04Info({ data, onChange, onNext }: A04InfoProps) {
                         if (emailError) setEmailError(null)
                       }}
                       placeholder="인증번호 6자리"
-                      className="w-32 text-center tracking-[0.3em]"
+                      className="w-32 text-center tracking-3"
                       aria-label="이메일 인증번호 입력"
                     />
                     <Button
@@ -338,9 +321,7 @@ export function A04Info({ data, onChange, onNext }: A04InfoProps) {
                   </div>
                 )}
                 {emailError && (
-                  <p className="text-2xs font-bold text-[var(--color-danger)]">
-                    {emailError}
-                  </p>
+                  <p className="text-2xs font-bold text-danger">{emailError}</p>
                 )}
                 <p className="text-2xs text-ink-muted">
                   ※ 이메일 인증은 공동인증서를 대체하는 Mock 인증입니다. 이미

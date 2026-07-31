@@ -4,7 +4,11 @@ import { Button } from "@/shared/ui/button"
 import { DataGrid, type DataGridColumn } from "@/shared/ui/data-grid"
 import { formatAmount } from "@/shared/lib/format"
 import { cn } from "@/shared/lib/utils"
-import type { ProductDetailData, ProductRateRow } from "@/entities/product"
+import {
+  getProductCategoryBadgeVariant,
+  type ProductDetailData,
+  type ProductRateRow,
+} from "@/entities/product"
 
 type ProductDetailProps = {
   product: ProductDetailData
@@ -51,10 +55,8 @@ export function ProductDetail({ product, onJoin }: ProductDetailProps) {
     <div className="flex gap-6">
       {/* 좌측 요약 카드 */}
       <aside className="w-80 shrink-0">
-        <div className="sticky top-6 overflow-hidden rounded-[var(--radius-lg)] bg-surface-elevated p-6 [box-shadow:var(--shadow-card)]">
-          <Badge
-            variant={product.category === "정기예금" ? "primary" : "success"}
-          >
+        <div className="sticky top-6 overflow-hidden rounded-lg bg-surface-elevated p-6 shadow-card">
+          <Badge variant={getProductCategoryBadgeVariant(product.category)}>
             {product.category}
           </Badge>
           <h2 className="mt-3 text-h2 font-bold text-ink">{product.name}</h2>
@@ -62,7 +64,7 @@ export function ProductDetail({ product, onJoin }: ProductDetailProps) {
             {product.summary}
           </p>
 
-          <div className="mt-5 flex items-baseline gap-1 border-t border-[var(--color-border)] pt-5">
+          <div className="mt-5 flex items-baseline gap-1 border-t border-border pt-5">
             <span className="text-[32px] leading-none font-bold text-primary tabular-nums">
               {product.maxRate.toFixed(2)}
             </span>
@@ -103,10 +105,7 @@ export function ProductDetail({ product, onJoin }: ProductDetailProps) {
       {/* 우측 본문 */}
       <div className="min-w-0 flex-1">
         {/* 밑줄형 탭 */}
-        <div
-          role="tablist"
-          className="flex gap-6 border-b border-[var(--color-border)]"
-        >
+        <div role="tablist" className="flex gap-6 border-b border-border">
           {TABS.map((t) => {
             const active = tab === t.key
             return (
@@ -131,14 +130,11 @@ export function ProductDetail({ product, onJoin }: ProductDetailProps) {
 
         <div className="pt-6">
           {tab === "guide" && (
-            <dl className="overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-border)]">
+            <dl className="overflow-hidden rounded-lg border border-border">
               {product.guide.map((item, i) => (
                 <div
                   key={item.label}
-                  className={cn(
-                    "flex",
-                    i > 0 && "border-t border-[var(--color-border)]",
-                  )}
+                  className={cn("flex", i > 0 && "border-t border-border")}
                 >
                   <dt className="flex w-40 shrink-0 items-center bg-surface px-4 py-3 text-sm font-bold text-ink">
                     {item.label}
@@ -181,7 +177,7 @@ export function ProductDetail({ product, onJoin }: ProductDetailProps) {
                   </li>
                 ))}
               </ul>
-              <div className="mt-5 rounded-[var(--radius)] bg-primary-tint px-4 py-3 text-sm leading-relaxed text-ink">
+              <div className="mt-5 rounded-md bg-primary-tint px-4 py-3 text-sm leading-relaxed text-ink">
                 이 예금은 예금자보호법에 따라 원금과 소정의 이자를 합하여 1인당
                 최고 5천만원까지 보호됩니다. 보호 한도는 CoreBank의 다른
                 보호대상 예금과 합산하여 적용됩니다.

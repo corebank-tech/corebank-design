@@ -1,10 +1,13 @@
 import { useLocation, useNavigate } from "react-router-dom"
 import { Button } from "@/shared/ui/button"
-import { StepLayout } from "@/widgets/transfer/step-layout"
+import { StepLayout } from "@/shared/ui/step-layout"
 import { ResultPanel } from "@/widgets/transfer/result-panel"
 import { type DataGridColumn } from "@/shared/ui/data-grid"
 import { formatAccountNo, formatAmount, formatDate } from "@/shared/lib/format"
-import { PRODUCT_JOIN_STEPS, type ProductJoinResult } from "./join-shared"
+import {
+  PRODUCT_JOIN_STEPS,
+  type ProductJoinResult,
+} from "@/pages/product/join-shared"
 
 type JoinResultRow = {
   newAccountNo: string
@@ -108,7 +111,7 @@ export function C06Complete() {
             <Button
               variant="secondary"
               size="lg"
-              className="min-w-[160px]"
+              className="min-w-40"
               onClick={() => navigate("/accounts")}
             >
               계좌조회로 이동
@@ -117,7 +120,7 @@ export function C06Complete() {
               <Button
                 variant="primary"
                 size="lg"
-                className="min-w-[160px]"
+                className="min-w-40"
                 onClick={() =>
                   navigate(`/transfer/auto/new?${autoTransferSearch}`)
                 }

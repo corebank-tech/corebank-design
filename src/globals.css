@@ -10,10 +10,7 @@
   --color-navy: #0a2e7d; /* H220 S85% L26% */
   --color-primary: #0a60f5; /* H218 S92% L50% — POL-039 팀 피드백: 채도 상향(2026-07) */
   --color-primary-hover: #0846ba;
-  --color-primary-soft: #5a8cf0; /* breadcrumb bar */
   --color-primary-tint: #ecf2fe; /* notice box background */
-  --color-accent: #0a60f5;
-  --color-accent-hover: #0846ba;
   --color-link: #0a60f5; /* inline text links */
 
   /* Neutrals */
@@ -32,11 +29,20 @@
   --color-danger: #d81e18; /* 팀 피드백: 채도 상향(2026-07) */
   --color-danger-tint: #fbf0ef;
   --color-danger-ring: color-mix(in srgb, var(--color-danger) 20%, white);
+  /* danger 상태 컨트롤(예: Button variant="danger")의 hover — primary-hover와
+     같은 방식(20% 검정 혼합)으로 어둡게 한다. */
+  --color-danger-hover: color-mix(in srgb, var(--color-danger) 82%, black);
   --color-success: #107f46;
   --color-success-tint: #e7f4ee;
+  --color-success-ring: color-mix(in srgb, var(--color-success) 20%, white);
   --color-warning: #ad6200;
   --color-warning-tint: #fbf3e2;
+  --color-warning-ring: color-mix(in srgb, var(--color-warning) 20%, white);
   --color-info: #1359ae;
+  /* success·warning-tint와 같은 비율(약 10% 혼합)로 맞춘 info 배경/보더 —
+     danger/success/warning과 달리 이 둘이 없어서 info 톤을 실제로 쓸 수 없었다. */
+  --color-info-tint: color-mix(in srgb, var(--color-info) 10%, white);
+  --color-info-border-soft: color-mix(in srgb, var(--color-info) 20%, white);
   --color-ring-soft: color-mix(in srgb, var(--color-primary) 30%, white);
   --color-skeleton: color-mix(in srgb, var(--color-border) 60%, white);
 
@@ -68,8 +74,9 @@
 
   /* Type scale — 9단
      팀 피드백(2026-07, 3차): 2차 확대가 과했다는 피드백("실제 은행 UI처럼 조밀해야
-     한다")에 따라 POL-041 원안 수치로 되돌린다. DataGrid는 --text-sm에 종속시키지
-     않고 data-grid.tsx에서 text-[13px]로 직접 고정해 향후 스케일 변경과 분리한다. */
+     한다")에 따라 POL-041 원안 수치로 되돌린다. DataGrid·SummaryRow는 --text-sm에
+     종속시키지 않고 text-[14px]로 직접 고정해 향후 스케일 변경과 분리한다
+     (POL-041 3차 피드백: 표만 13→14px로 소폭 상향). */
   --text-page: 26px;
   --text-h2: 20px;
   --text-h3: 17px;
@@ -80,16 +87,10 @@
   --text-xs: 12px;
   --text-2xs: 11px;
 
-  /* Spacing scale (multiples of 4) */
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-5: 20px;
-  --space-6: 24px;
-  --space-8: 32px;
-  --space-10: 40px;
-  --space-12: 48px;
+  /* 간격은 Tailwind 기본 spacing 스케일(--spacing: 0.25rem 배수인 gap, p, m 계열
+     유틸리티)을 쓴다. 그룹 내부 gap-1~gap-2(4~8px) / 블록 사이 gap-3~gap-4(12~16px) /
+     섹션 사이 mb-8~mt-10(32~40px). 과거 여기 있던 --space-1~12 리터럴은 @theme에
+     등록되지 않아 참조 0건이었으므로 제거했다 — 다시 만들지 않는다. */
 
   /* Radius */
   --radius-sm: 6px; /* 뱃지, 스텝 숫자, 소형 표식 */
@@ -124,31 +125,21 @@
   --z-modal: 400;
   --z-toast: 500;
 
-  /* shadcn-style semantic mapping */
-  --background: var(--color-white);
-  --foreground: var(--color-ink);
-  --card: var(--color-white);
-  --card-foreground: var(--color-ink);
-  --popover: var(--color-white);
-  --popover-foreground: var(--color-ink);
+  /* shadcn 스타일 시맨틱 매핑 — 실제로 유틸리티가 쓰는 4개(primary·primary-foreground·
+     border·ring)만 남긴다. background/foreground/card/card-foreground/popover/
+     popover-foreground/secondary/secondary-foreground/muted/muted-foreground/
+     accent/accent-foreground/destructive/destructive-foreground/input 15개는
+     정의만 있고 사용처가 0건이라 제거했다(신규 shadcn 프리미티브 도입 시 필요한
+     만큼만 다시 추가한다). */
   --primary: var(--color-primary);
   --primary-foreground: var(--color-white);
-  --secondary: var(--color-primary-tint);
-  --secondary-foreground: var(--color-primary);
-  --muted: var(--color-surface);
-  --muted-foreground: var(--color-ink-muted);
-  --accent: var(--color-accent);
-  --accent-foreground: var(--color-white);
-  --destructive: var(--color-danger);
-  --destructive-foreground: var(--color-white);
   --border: var(--color-border);
-  --input: var(--color-border);
   --ring: var(--color-primary);
 }
 
 /* ============================================================
    Dark theme — 팀 피드백(2026-07) POL-039 확장.
-   <html data-theme="dark"> 속성으로 전환한다 (src/shared/lib/theme.tsx).
+   <html data-theme="dark"> 속성으로 전환한다 (src/shared/lib/theme.ts).
    컴포넌트는 변수만 참조하므로(POL-039) 이 블록만으로 대부분 자동 반영된다.
    --color-white는 버튼 위 아이콘/텍스트 등 "항상 흰색이어야 하는" 고정값이라
    재정의하지 않는다. 흰 표면(카드·버튼·인풋 등)은 --color-surface-elevated로
@@ -160,10 +151,7 @@
   --color-navy: #3c71dd;
   --color-primary: #5a95f7;
   --color-primary-hover: #7aa8ff;
-  --color-primary-soft: #6f9bf7;
   --color-primary-tint: #14203a;
-  --color-accent: #5a95f7;
-  --color-accent-hover: #7aa8ff;
   --color-link: #7aa8ff;
 
   --color-surface: #171c27; /* 폼 라벨 셀 배경 */
@@ -191,11 +179,32 @@
     var(--color-danger) 30%,
     var(--color-surface-elevated)
   );
+  --color-danger-hover: color-mix(in srgb, var(--color-danger) 85%, white);
   --color-success: #2eb870;
   --color-success-tint: #12281c;
+  --color-success-ring: color-mix(
+    in srgb,
+    var(--color-success) 30%,
+    var(--color-surface-elevated)
+  );
   --color-warning: #f28f0d;
   --color-warning-tint: #2c2110;
+  --color-warning-ring: color-mix(
+    in srgb,
+    var(--color-warning) 30%,
+    var(--color-surface-elevated)
+  );
   --color-info: #5597e7;
+  --color-info-tint: color-mix(
+    in srgb,
+    var(--color-info) 16%,
+    var(--color-surface-elevated)
+  );
+  --color-info-border-soft: color-mix(
+    in srgb,
+    var(--color-info) 30%,
+    var(--color-surface-elevated)
+  );
   --color-ring-soft: color-mix(
     in srgb,
     var(--color-primary) 35%,
@@ -221,37 +230,24 @@
   --color-footer-divider: var(--color-border);
   --color-footer-hover-bg: var(--color-surface);
 
+  /* 라이트 값(거의 검정 위 낮은 알파)을 어두운 배경 위에 그대로 쓰면 사실상 안 보인다.
+     순검정 기반으로 알파를 크게 올려 카드·모달이 배경에서 실제로 떠 보이게 한다. */
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.24), 0 4px 16px rgba(0, 0, 0, 0.32);
+  --shadow-pop: 0 8px 32px rgba(0, 0, 0, 0.48);
+
   color-scheme: dark;
 }
 
 @theme inline {
   --font-sans: var(--font-sans);
-  --font-mono: var(--font-mono);
 
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
-  --color-primary-soft: var(--color-primary-soft);
   --color-primary-tint: var(--color-primary-tint);
   --color-primary-hover: var(--color-primary-hover);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent-hover: var(--color-accent-hover);
   --color-link: var(--color-link);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
   --color-border-strong: var(--color-border-strong);
-  --color-input: var(--input);
   --color-ring: var(--ring);
   --color-surface: var(--color-surface);
   --color-surface-2: var(--color-surface-2);
@@ -262,11 +258,16 @@
   --color-ink-faint: var(--color-ink-faint);
   --color-danger: var(--color-danger);
   --color-danger-tint: var(--color-danger-tint);
+  --color-danger-hover: var(--color-danger-hover);
   --color-success: var(--color-success);
   --color-success-tint: var(--color-success-tint);
+  --color-success-ring: var(--color-success-ring);
   --color-warning: var(--color-warning);
   --color-warning-tint: var(--color-warning-tint);
+  --color-warning-ring: var(--color-warning-ring);
   --color-info: var(--color-info);
+  --color-info-tint: var(--color-info-tint);
+  --color-info-border-soft: var(--color-info-border-soft);
   --color-primary-border-soft: var(--color-primary-border-soft);
   --color-success-border-soft: var(--color-success-border-soft);
   --color-warning-border-soft: var(--color-warning-border-soft);
@@ -274,27 +275,77 @@
   --color-navy: var(--color-navy);
   --color-deposit: var(--color-deposit);
   --color-withdraw: var(--color-withdraw);
+  --color-danger-ring: var(--color-danger-ring);
+  --color-ring-soft: var(--color-ring-soft);
+  --color-skeleton: var(--color-skeleton);
+  --color-overlay-scrim: var(--color-overlay-scrim);
+  --color-overlay-white-15: var(--overlay-white-15);
+  --color-overlay-white-70: var(--overlay-white-70);
+  --color-footer-fg: var(--color-footer-fg);
+  --color-footer-fg-strong: var(--color-footer-fg-strong);
+  --color-footer-fg-faint: var(--color-footer-fg-faint);
+  --color-footer-divider: var(--color-footer-divider);
+  --color-footer-hover-bg: var(--color-footer-hover-bg);
 
+  /* 9단 스케일을 봉인한다 — text-xl 같은 Tailwind 기본 스케일 클래스가 컴파일되지
+     않게 해 리뷰가 아니라 컴파일러가 스케일을 지킨다. line-height는 Tailwind
+     기본값과 동일하게 재선언해 봉인 전후 렌더 결과가 바뀌지 않도록 한다. */
+  --text-*: initial;
   --text-page: var(--text-page);
   --text-page--line-height: 1.3;
   --text-h2: var(--text-h2);
   --text-h2--line-height: 1.4;
   --text-h3: var(--text-h3);
   --text-lg: var(--text-lg);
+  --text-lg--line-height: calc(1.75 / 1.125);
   --text-md: var(--text-md);
   --text-base: var(--text-base);
+  --text-base--line-height: calc(1.5 / 1);
   --text-sm: var(--text-sm);
+  --text-sm--line-height: calc(1.25 / 0.875);
   --text-xs: var(--text-xs);
+  --text-xs--line-height: calc(1 / 0.75);
   --text-2xs: var(--text-2xs);
 
+  /* radius 4단 스케일을 봉인한다 — rounded-xl 같은 Tailwind 기본 반경 클래스가
+     컴파일되지 않게 한다. rounded-none/rounded-full은 정적 유틸리티라 영향받지 않는다. */
+  --radius-*: initial;
   --radius-sm: var(--radius-sm);
   --radius: var(--radius);
+  --radius-md: var(--radius);
   --radius-lg: var(--radius-lg);
   --radius-pill: var(--radius-pill);
+
+  --shadow-card: var(--shadow-card);
+  --shadow-pop: var(--shadow-pop);
+
+  --font-weight-label: var(--weight-label);
+  --font-weight-value: var(--weight-value);
+  --font-weight-heading: var(--weight-heading);
+
+  --z-index-header: var(--z-header);
+  --z-index-dropdown: var(--z-dropdown);
+  --z-index-overlay: var(--z-overlay);
+  --z-index-modal: var(--z-modal);
+  --z-index-toast: var(--z-toast);
+
+  /* 인증코드·계좌번호 등 숫자 입력 필드의 letter-spacing. 이름은 em 값을 그대로 딴 것이다. */
+  --tracking-1: 0.1em;
+  --tracking-15: 0.15em;
+  --tracking-2: 0.2em;
+  --tracking-3: 0.3em;
+  --tracking-4: 0.4em;
 }
 
-* {
-  border-color: var(--color-border);
+/* 이 reset은 @layer base 안에 있어야 한다. 레이어 없이 두면(과거 상태) 캐스케이드
+   레이어 규칙상 이 선언이 border-strong/danger/navy/footer-divider 등 다른 모든
+   border-color 유틸리티(@layer utilities)를 무조건 이긴다 — 즉 border-[var(--color-navy)]
+   같은 명시적 지정이 전부 무시되고 항상 회색(--color-border)으로만 보인다.
+   DataGrid 상단 룰·FormSection 하단 라인(POL-040 navy)이 이 버그로 안 보이고 있었다. */
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
 }
 
 html {

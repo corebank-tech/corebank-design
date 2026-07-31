@@ -1,11 +1,15 @@
 import * as React from "react"
 import { Badge } from "@/shared/ui/badge"
 import { Button } from "@/shared/ui/button"
+import { Chip } from "@/shared/ui/chip"
 import { Select } from "@/shared/ui/select"
 import { EmptyState } from "@/shared/ui/empty-state"
 import { formatAmount } from "@/shared/lib/format"
-import { cn } from "@/shared/lib/utils"
-import type { ProductCard, ProductCategory } from "@/entities/product"
+import {
+  getProductCategoryBadgeVariant,
+  type ProductCard,
+  type ProductCategory,
+} from "@/entities/product"
 
 type CategoryFilter = "전체" | ProductCategory
 type SortKey = "rate" | "latest"
@@ -46,20 +50,16 @@ export function ProductCardGrid({
           {FILTERS.map((f) => {
             const active = filter === f
             return (
-              <button
+              <Chip
                 key={f}
-                type="button"
+                size="lg"
+                tone={active ? "primary" : "default"}
                 onClick={() => setFilter(f)}
                 aria-pressed={active}
-                className={cn(
-                  "h-9 rounded-[var(--radius-pill)] border px-4 text-sm font-bold whitespace-nowrap transition-colors",
-                  active
-                    ? "border-primary bg-primary text-primary-foreground"
-                    : "border-[var(--color-border-strong)] bg-surface-elevated text-ink-muted hover:bg-surface",
-                )}
+                className={active ? undefined : "text-ink-muted"}
               >
                 {f}
-              </button>
+              </Chip>
             )
           })}
         </div>
@@ -85,12 +85,10 @@ export function ProductCardGrid({
           {visible.map((p) => (
             <article
               key={p.id}
-              className="flex flex-col overflow-hidden rounded-[var(--radius-lg)] bg-surface-elevated p-5 [box-shadow:var(--shadow-card)]"
+              className="flex flex-col overflow-hidden rounded-lg bg-surface-elevated p-5 shadow-card"
             >
               <div className="mb-3">
-                <Badge
-                  variant={p.category === "정기예금" ? "primary" : "success"}
-                >
+                <Badge variant={getProductCategoryBadgeVariant(p.category)}>
                   {p.category}
                 </Badge>
               </div>
@@ -116,7 +114,7 @@ export function ProductCardGrid({
                 </span>
               </p>
 
-              <dl className="mt-5 flex flex-col gap-2 border-t border-[var(--color-border)] pt-4 text-sm">
+              <dl className="mt-5 flex flex-col gap-2 border-t border-border pt-4 text-sm">
                 <div className="flex items-center justify-between">
                   <dt className="text-ink-muted">가입기간</dt>
                   <dd className="font-bold text-ink">{p.period}</dd>

@@ -1,36 +1,34 @@
 import * as React from "react"
+import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/shared/lib/utils"
 
-type BadgeVariant = "primary" | "neutral" | "success" | "danger" | "warning"
+const badgeVariants = cva(
+  "inline-flex items-center rounded-sm border px-1.5 py-0.5 text-xs leading-none font-bold whitespace-nowrap",
+  {
+    variants: {
+      variant: {
+        primary: "border-primary-border-soft bg-primary-tint text-primary",
+        neutral: "border-border bg-surface text-ink-muted",
+        success: "border-success-border-soft bg-success-tint text-success",
+        danger: "border-danger-border-soft bg-danger-tint text-danger",
+        warning: "border-warning-border-soft bg-warning-tint text-warning",
+      },
+    },
+    defaultVariants: {
+      variant: "primary",
+    },
+  },
+)
 
-const variants: Record<BadgeVariant, string> = {
-  primary: "bg-primary-tint text-primary border-primary-border-soft",
-  neutral: "bg-surface text-ink-muted border-[var(--color-border)]",
-  success:
-    "bg-success-tint text-[var(--color-success)] border-success-border-soft",
-  danger:
-    "bg-[var(--color-danger-tint)] text-[var(--color-danger)] border-danger-border-soft",
-  warning:
-    "bg-warning-tint text-[var(--color-warning)] border-warning-border-soft",
-}
+export type BadgeVariant = NonNullable<
+  VariantProps<typeof badgeVariants>["variant"]
+>
 
-type BadgeProps = React.HTMLAttributes<HTMLSpanElement> & {
-  variant?: BadgeVariant
-}
+type BadgeProps = React.HTMLAttributes<HTMLSpanElement> &
+  VariantProps<typeof badgeVariants>
 
-export function Badge({
-  className,
-  variant = "primary",
-  ...props
-}: BadgeProps) {
+export function Badge({ className, variant, ...props }: BadgeProps) {
   return (
-    <span
-      className={cn(
-        "inline-flex items-center rounded-[var(--radius-sm)] border px-1.5 py-0.5 text-xs leading-none font-bold whitespace-nowrap",
-        variants[variant],
-        className,
-      )}
-      {...props}
-    />
+    <span className={cn(badgeVariants({ variant }), className)} {...props} />
   )
 }

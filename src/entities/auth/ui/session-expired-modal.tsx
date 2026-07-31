@@ -40,7 +40,7 @@ export function SessionExpiredModal({
             <Button
               variant="secondary"
               size="lg"
-              className="min-w-[140px]"
+              className="min-w-35"
               onClick={onMainScreen}
             >
               메인화면으로 이동
@@ -49,7 +49,7 @@ export function SessionExpiredModal({
           <Button
             variant="primary"
             size="lg"
-            className="min-w-[140px]"
+            className="min-w-35"
             onClick={onRelogin}
           >
             다시 로그인

@@ -4,7 +4,7 @@
  * [초기화] 동작(개설일 오름차순 복원)을 확인할 수 있게 한다.
  */
 
-import type { AccountGroupId } from "./b01-accounts"
+import type { AccountGroupId } from "@/entities/account/api/b01-accounts"
 
 export type OrderAccount = {
   id: string

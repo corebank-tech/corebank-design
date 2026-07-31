@@ -1,28 +1,14 @@
 import * as React from "react"
 import { MOCK_MEMBERS } from "@/entities/auth"
-
-/** POL-001: 세션 타임아웃 10분(600초). */
-const SESSION_SECONDS = 600
-/** POL-003: 연속 5회 실패 시 계정 잠금. */
-const MAX_ATTEMPTS = 5
-
-export type LoginResult =
-  { ok: true } | { ok: false; locked: boolean; attempts: number }
-
-export type SessionContextValue = {
-  isAuthenticated: boolean
-  customerName: string
-  remainingSeconds: number
-  /** 무조작 10분 경과로 세션이 만료되어 A-11 안내가 표시되어야 하는 상태. */
-  expired: boolean
-  login: (userId: string, password: string) => LoginResult
-  logout: () => void
-  extend: () => void
-  /** A-11 안내 확인 후 세션 상태를 완전히 정리한다. */
-  acknowledgeExpired: () => void
-}
-
-const SessionContext = React.createContext<SessionContextValue | null>(null)
+import {
+  LOGIN_MAX_ATTEMPTS as MAX_ATTEMPTS,
+  SESSION_TIMEOUT_SECONDS as SESSION_SECONDS,
+} from "@/shared/config/policy"
+import {
+  SessionContext,
+  type LoginResult,
+  type SessionContextValue,
+} from "@/app/session-context-value"
 
 export function SessionProvider({ children }: { children: React.ReactNode }) {
   const [customerName, setCustomerName] = React.useState<string | null>(null)
@@ -113,10 +99,4 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
   return (
     <SessionContext.Provider value={value}>{children}</SessionContext.Provider>
   )
-}
-
-export function useSession(): SessionContextValue {
-  const ctx = React.useContext(SessionContext)
-  if (!ctx) throw new Error("useSession must be used within SessionProvider")
-  return ctx
 }

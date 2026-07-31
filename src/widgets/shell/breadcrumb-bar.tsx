@@ -10,14 +10,14 @@ export function BreadcrumbBar({
 }: BreadcrumbBarProps) {
   return (
     <nav aria-label="현재 위치" className="mb-4">
-      <ol className="flex items-center gap-1 text-[14px] text-ink-faint">
+      <ol className="flex items-center gap-1 text-base leading-[1.5] text-ink-faint">
         {trail.map((crumb, i) => {
           const last = i === trail.length - 1
           return (
             <li key={`${crumb}-${i}`} className="flex items-center gap-1">
               {i > 0 && (
                 <ChevronRight
-                  className="h-3.5 w-3.5 text-[var(--color-border-strong)]"
+                  className="h-3.5 w-3.5 text-border-strong"
                   aria-hidden="true"
                 />
               )}

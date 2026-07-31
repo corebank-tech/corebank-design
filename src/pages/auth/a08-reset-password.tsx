@@ -14,17 +14,11 @@ import {
   type RuleCheck,
 } from "@/entities/auth"
 import { MOCK_MEMBERS, type Member } from "@/entities/auth"
-
-const OTP_TTL = 180
+import { EMAIL_CODE_TTL_SECONDS as OTP_TTL } from "@/shared/config/policy"
+import { formatClock, useCountdown } from "@/shared/lib/hooks/use-countdown"
 
 function generateCode(): string {
   return String(Math.floor(100000 + Math.random() * 900000))
-}
-
-function formatClock(total: number): string {
-  const m = Math.floor(total / 60)
-  const s = total % 60
-  return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`
 }
 
 function RuleList({ rules }: { rules: RuleCheck[] }) {
@@ -64,7 +58,10 @@ export function A08ResetPassword() {
   const [identityAlert, setIdentityAlert] = React.useState<string | null>(null)
 
   const [issued, setIssued] = React.useState<string | null>(null)
-  const [remaining, setRemaining] = React.useState(OTP_TTL)
+  const { remaining, reset: resetCountdown } = useCountdown(
+    OTP_TTL,
+    issued != null,
+  )
   const [code, setCode] = React.useState("")
   const [codeError, setCodeError] = React.useState<string | null>(null)
   const [emailVerified, setEmailVerified] = React.useState(false)
@@ -78,15 +75,6 @@ export function A08ResetPassword() {
   const rules = member
     ? evaluatePasswordRules(newPassword, member.memberId)
     : []
-
-  React.useEffect(() => {
-    if (issued == null || remaining <= 0) return
-    const id = window.setInterval(
-      () => setRemaining((prev) => (prev <= 1 ? 0 : prev - 1)),
-      1000,
-    )
-    return () => window.clearInterval(id)
-  }, [issued, remaining])
 
   const verifyIdentity = () => {
     if (
@@ -109,7 +97,7 @@ export function A08ResetPassword() {
     }
     setMember(found)
     setIssued(generateCode())
-    setRemaining(OTP_TTL)
+    resetCountdown()
   }
 
   const confirmCode = () => {
@@ -128,7 +116,7 @@ export function A08ResetPassword() {
 
   const resendCode = () => {
     setIssued(generateCode())
-    setRemaining(OTP_TTL)
+    resetCountdown()
     setCode("")
     setCodeError(null)
   }
@@ -194,7 +182,7 @@ export function A08ResetPassword() {
             <Button
               variant="primary"
               size="lg"
-              className="min-w-[160px]"
+              className="min-w-40"
               onClick={verifyIdentity}
             >
               본인확인
@@ -205,9 +193,9 @@ export function A08ResetPassword() {
 
       {member && !emailVerified && (
         <FormSection title="이메일 인증">
-          <div className="flex items-center gap-2 rounded-[var(--radius)] border border-[var(--color-border)] bg-surface px-3 py-2">
+          <div className="flex items-center gap-2 rounded-md border border-border bg-surface px-3 py-2">
             <span
-              className={`text-lg font-bold tracking-[0.2em] tabular-nums ${expired ? "text-ink-faint line-through" : "text-primary"}`}
+              className={`text-lg font-bold tracking-2 tabular-nums ${expired ? "text-ink-faint line-through" : "text-primary"}`}
               aria-label="발송된 이메일 인증번호"
             >
               {issued}
@@ -226,7 +214,7 @@ export function A08ResetPassword() {
                 if (codeError) setCodeError(null)
               }}
               placeholder="인증번호 6자리"
-              className="w-32 text-center tracking-[0.3em]"
+              className="w-32 text-center tracking-3"
             />
             <Button variant="secondary" size="sm" onClick={confirmCode}>
               확인
@@ -238,9 +226,7 @@ export function A08ResetPassword() {
             )}
           </div>
           {codeError && (
-            <p className="mt-2 text-2xs font-bold text-[var(--color-danger)]">
-              {codeError}
-            </p>
+            <p className="mt-2 text-2xs font-bold text-danger">{codeError}</p>
           )}
           <p className="mt-2 text-2xs text-ink-muted">
             ※ 이메일로 발송된 인증번호는 180초간 유효합니다(Mock 표시형).
@@ -286,7 +272,7 @@ export function A08ResetPassword() {
             <Button
               variant="primary"
               size="lg"
-              className="min-w-[160px]"
+              className="min-w-40"
               onClick={submit}
             >
               비밀번호 재설정
@@ -299,7 +285,7 @@ export function A08ResetPassword() {
         <Link to="/find-id" className="hover:text-primary hover:underline">
           아이디 찾기
         </Link>
-        <span className="text-[var(--color-border-strong)]" aria-hidden="true">
+        <span className="text-border-strong" aria-hidden="true">
           |
         </span>
         <Link to="/" className="hover:text-primary hover:underline">

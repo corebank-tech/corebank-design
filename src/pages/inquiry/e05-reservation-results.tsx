@@ -5,12 +5,12 @@ import { FormRow } from "@/shared/ui/form-row"
 import { Badge } from "@/shared/ui/badge"
 import { SearchPanel } from "@/widgets/query/search-panel"
 import { PeriodField, RadioRowField } from "@/widgets/query/search-fields"
-import { SummaryRow } from "@/widgets/query/summary-row"
+import { SummaryRow } from "@/shared/ui/summary-row"
 import { GridToolbar } from "@/widgets/query/grid-toolbar"
 import { DataGrid, type DataGridColumn } from "@/shared/ui/data-grid"
-import { Pagination } from "@/widgets/query/pagination"
+import { Pagination } from "@/shared/ui/pagination"
 import { AlertDialog } from "@/shared/ui/alert-dialog"
-import { TextViewModal } from "@/widgets/query/text-view-modal"
+import { TextViewModal } from "@/shared/ui/text-view-modal"
 import { downloadCsv } from "@/shared/lib/csv"
 import {
   formatAccountNo,
@@ -22,26 +22,18 @@ import {
 } from "@/shared/lib/format"
 import {
   MOCK_RESERVATION_RESULTS,
+  getReservationResultBadgeVariant,
   type ReservationResultRow,
-  type ReservationResult,
 } from "@/entities/transfer"
-
-const TODAY = "2026-07-23"
-const BASE_TIME = "2026-07-23T08:57:34"
+import {
+  MOCK_NOW as BASE_TIME,
+  MOCK_TODAY as TODAY,
+} from "@/shared/config/mock-clock"
 
 const ORDER_OPTIONS = [
   { label: "최근거래순", value: "recent" },
   { label: "과거거래순", value: "past" },
 ]
-
-const RESULT_BADGE: Record<
-  ReservationResult,
-  "success" | "danger" | "neutral"
-> = {
-  정상: "success",
-  오류: "danger",
-  취소: "neutral",
-}
 
 export function E05ReservationResults() {
   const [period, setPeriod] = React.useState({
@@ -109,7 +101,11 @@ export function E05ReservationResults() {
       header: "처리결과",
       align: "center",
       width: 90,
-      render: (r) => <Badge variant={RESULT_BADGE[r.result]}>{r.result}</Badge>,
+      render: (r) => (
+        <Badge variant={getReservationResultBadgeVariant(r.result)}>
+          {r.result}
+        </Badge>
+      ),
     },
     {
       key: "transferDate",

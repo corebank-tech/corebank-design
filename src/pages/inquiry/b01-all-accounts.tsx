@@ -4,13 +4,13 @@ import { NoticeBox, NoticeBoxFooter } from "@/shared/ui/notice-box"
 import { FormSection } from "@/shared/ui/form-section"
 import { Button } from "@/shared/ui/button"
 import { DataGrid, type DataGridColumn } from "@/shared/ui/data-grid"
-import { SummaryRow } from "@/widgets/query/summary-row"
+import { SummaryRow } from "@/shared/ui/summary-row"
 import { GridToolbar } from "@/widgets/query/grid-toolbar"
-import { TextViewModal } from "@/widgets/query/text-view-modal"
+import { TextViewModal } from "@/shared/ui/text-view-modal"
 import {
   GridSearchModal,
   type GridSearchField,
-} from "@/widgets/query/grid-search-modal"
+} from "@/shared/ui/grid-search-modal"
 import { downloadCsv } from "@/shared/lib/csv"
 import {
   formatAccountNo,
@@ -24,9 +24,10 @@ import {
   type AccountGroupId,
   type OverviewAccount,
 } from "@/entities/account"
-
-const TODAY = "2026-07-23"
-const BASE_TIME = "2026-07-23T08:57:34"
+import {
+  MOCK_NOW as BASE_TIME,
+  MOCK_TODAY as TODAY,
+} from "@/shared/config/mock-clock"
 
 const GROUP_LABELS: Record<AccountGroupId, string> = {
   checking: "입출금계좌",

@@ -149,7 +149,7 @@ src/
   (단 `button.tsx` / `modal.tsx` 의 `sm`/`md`/`lg` **size 키는 예외**)
 - 콘텐츠 폭 **1280px 고정**. `w-[1280px] mx-auto`
 - 뷰포트가 1280px 미만이면 축소하지 않고 **가로 스크롤**을 제공한다
-- 표 행 높이 44px / 본문 14px / 표 13px (POL-041)
+- 표 행 높이 44px / 본문 14px / 표 14px (POL-041 — 2026-07 디자인 피드백 3차로 표만 13→14px 상향)
 
 ## 색상 — REQ-NFR-021 / POL-039
 
@@ -184,16 +184,25 @@ radius는 장식이 아니라 **포함 관계**를 나타낸다.
 
 | 영역 | 위치 |
 |---|---|
-| 앱 셸 (A-90) | `src/widgets/shell/` — app-header, page-shell, breadcrumb-bar, footer, full-menu-overlay, notice-box, page-header |
-| 기본 컴포넌트 | `src/shared/ui/` — button, input, select, checkbox, radio, badge, alert, skeleton, modal, form-row, form-section |
-| 조회 그리드 (A-94) | `src/widgets/query/` — search-panel, search-fields, grid-toolbar, pagination, summary-row / `src/shared/ui/` — data-grid, empty-state |
-| 스텝 레이아웃 (A-95) | `src/widgets/transfer/` — step-layout, step-indicator, confirm-summary, transfer-fields, result-panel |
-| 모달 (A-91·92·93) | `src/shared/ui/` — alert-dialog, confirm-dialog, error-dialog, otp-modal, limit-modal, session-expired-modal |
+| 앱 셸 (A-90) | `src/widgets/shell/` — app-header, breadcrumb-bar, footer, full-menu-overlay, page-header, side-nav / `src/app/page-shell.tsx` |
+| 기본 컴포넌트 | `src/shared/ui/` — button, input, select, checkbox, radio, badge, alert, skeleton, modal, form-row, form-section, chip, icon-button, divider, spinner |
+| 조회 그리드 (A-94) | `src/widgets/query/` — search-panel, search-fields, grid-toolbar / `src/shared/ui/` — data-grid, empty-state, pagination, summary-row, grid-search-modal, text-view-modal |
+| 스텝 레이아웃 (A-95) | `src/widgets/transfer/` — transfer-fields, result-panel / `src/shared/ui/` — step-layout, step-indicator, confirm-summary |
+| 모달 (A-91·92·93) | `src/shared/ui/` — alert-dialog, confirm-dialog, error-dialog / `src/entities/auth/ui/` — otp-modal, session-expired-modal / `src/entities/transfer/ui/` — limit-modal |
 | 안내 박스 | `src/shared/ui/notice-box.tsx` — NoticeBox, NoticeBoxFooter |
 | 약관동의 블록 | `src/widgets/terms-agreement.tsx` — 회원가입(A-02)·상품가입(C-03) 공용 |
-| 포맷 유틸 | `src/shared/lib/format.ts` — formatAmount, formatAccountNo, formatDate, formatDateTime, formatKoreanAmount, maskName, maskEmail, maskAccountNo, maskPhone, maskUserId |
+| 포맷 유틸 | `src/shared/lib/format.ts` — formatAmount, formatAccountNo, formatDate, formatDateTime, formatKoreanAmount, maskBirthDate, maskName, maskEmail, maskAccountNo, formatPhone, maskPhone, maskUserId |
+| 날짜 유틸 | `src/shared/lib/date.ts` — date-fns 래핑. 화면에서 date-fns를 직접 import하지 않는다 |
+| 숫자 입력 필터 | `src/shared/lib/input-filter.ts` — `onlyDigits` |
+| CSV 내보내기 | `src/shared/lib/csv.ts` — `downloadCsv` (REQ-INQR-015) |
+| 카운트다운 훅 | `src/shared/lib/hooks/use-countdown.ts` |
+| 테마 전환 | `src/shared/lib/theme.ts` |
 | 클래스 병합 | `src/shared/lib/utils.ts` — `cn()` |
 | 메뉴 정의 | `src/shared/config/nav.ts` — 화면ID·경로 포함 |
+| 정책 수치 단일 출처 | `src/shared/config/policy.ts` — `docs/requirements.md` §2 POL 상수. 화면에 숫자를 직접 다시 적지 않는다 |
+| mock 기준시각 | `src/shared/config/mock-clock.ts` — `MOCK_NOW`, `MOCK_TODAY` |
+| 고객센터 정보 | `src/shared/config/contact.ts` — `CUSTOMER_CENTER_PHONE`, `CUSTOMER_CENTER_HOURS` |
+| 상태 배지 매핑 | `src/entities/{transfer,transaction,product}/lib/status-badge.ts` — 상태값 → Badge variant |
 | 도메인 데이터 | `src/entities/{account,transfer,product,auth,customer,notification,transaction,dashboard}` — 각 슬라이스 `index.ts`가 공개 API |
 | HTTP·세션 | `src/shared/api/` — custom-fetch, query-client, api-error, session-events |
 | Mock 서버 | `src/mocks/` — MSW 핸들러 예시 1세트(`handlers/account.ts`). 나머지 도메인은 `entities/*/api`의 정적 mock을 그대로 쓴다 |
@@ -238,18 +247,14 @@ radius는 장식이 아니라 **포함 관계**를 나타낸다.
 ## 남은 마이그레이션
 
 FSD-lite 전환(`src/lib` 해체, 화면 파일 41개 kebab-case 리네임, `interface`→`type` 127건,
-컴포넌트 전용 Props export 해제 71건, 레이어 위반 8건 수정, lint/format 래칫)은 완료했다.
-남은 항목:
+컴포넌트 전용 Props export 해제 71건, 레이어 위반 8건 수정)과 하드코딩 정리(값의 단일 출처화,
+토큰 레이어 완성, `cva` 도입 및 공통 프리미티브 추출, 상대경로 import 전량 정리, `react-hooks`/
+`react-refresh` 경고 해소 후 lint 규칙 error 승격)는 완료했다. `pnpm check`는 error 0 /
+warning 2(아래 boundaries 예외 1건)를 유지한다. 남은 항목:
 
 - `entities/account`(`b05-withdrawal-accounts.ts`) → `entities/transfer` 참조 1건은 의도적으로
   남겨뒀다. 출금계좌 삭제 가능 여부가 예약이체·자동이체 등록 여부에 의존하는 도메인 규칙이라
   엔티티 간 참조가 불가피했다. `eslint.config.js`의 `boundaries/dependencies`가 warn으로
   가시화하고 있다 — 실제 문제가 되면(순환 참조 등) 그때 `features` 레이어로 재구성한다
-- 상대경로 import 약 40건이 남아 있다(`@typescript-eslint/no-restricted-imports`가 warn으로
-  표시). 화면당 몇 건씩 흩어져 있어 기계적으로 한 번에 처리하기보다 화면을 만질 때 그 김에
-  `@/` 절대경로로 바꾸는 편이 안전하다
-- `react-hooks` 컴파일러 계열 규칙(`set-state-in-effect` 등)과 `react-refresh/only-export-components`
-  경고가 일부 남아 있다(주로 `transfer-fields.tsx`가 필드 컴포넌트와 유틸 함수를 한 파일에 섞어 둔
-  탓). 파일 분리가 필요한 실제 리팩터링이라 화면 작업과 함께 처리한다
 - `openapi.yaml` 작성 및 Orval 코드젠 활성화 (REQ-NFR-013) — 백엔드 계약 확정 대기
 - REQ-NFR-020 docker-compose 배포 구성 (Dockerfile, nginx.conf, 런타임 환경변수 주입 방식 결정)

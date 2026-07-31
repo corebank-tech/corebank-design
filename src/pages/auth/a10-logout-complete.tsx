@@ -30,7 +30,7 @@ export function A10LogoutComplete() {
           <Button
             variant="secondary"
             size="lg"
-            className="min-w-[140px]"
+            className="min-w-35"
             onClick={() => navigate("/dashboard")}
           >
             메인으로
@@ -38,7 +38,7 @@ export function A10LogoutComplete() {
           <Button
             variant="primary"
             size="lg"
-            className="min-w-[140px]"
+            className="min-w-35"
             onClick={() => navigate("/")}
           >
             다시 로그인

@@ -1,5 +1,6 @@
 import * as React from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
+import { IconButton } from "@/shared/ui/icon-button"
 import { cn } from "@/shared/lib/utils"
 
 type PaginationProps = {
@@ -32,23 +33,22 @@ export function Pagination({
     if (clamped !== page) onPageChange(clamped)
   }
 
-  const navBtn =
-    "inline-flex h-9 w-9 items-center justify-center rounded-[var(--radius)] border border-[var(--color-border-strong)] bg-surface-elevated text-ink-muted hover:bg-surface disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+  const navBtnClass =
+    "border border-border-strong bg-surface-elevated text-ink-muted hover:bg-surface disabled:cursor-not-allowed disabled:opacity-40"
 
   return (
     <nav
       className="flex items-center justify-center gap-1 pt-5"
       aria-label="페이지 이동"
     >
-      <button
-        type="button"
-        className={navBtn}
+      <IconButton
+        className={navBtnClass}
         onClick={() => go(blockStart - 1)}
         disabled={blockStart <= 1}
         aria-label="이전 페이지 묶음"
       >
         <ChevronLeft className="h-4 w-4" aria-hidden="true" />
-      </button>
+      </IconButton>
 
       {pages.map((p) => {
         const active = p === page
@@ -59,10 +59,10 @@ export function Pagination({
             onClick={() => go(p)}
             aria-current={active ? "page" : undefined}
             className={cn(
-              "inline-flex h-9 min-w-9 items-center justify-center rounded-[var(--radius)] border px-2 text-sm whitespace-nowrap tabular-nums focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
+              "inline-flex h-9 min-w-9 items-center justify-center rounded-md border px-2 text-sm whitespace-nowrap tabular-nums focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
               active
                 ? "border-primary bg-primary font-bold text-primary-foreground"
-                : "border-[var(--color-border)] bg-surface-elevated text-ink hover:bg-surface",
+                : "border-border bg-surface-elevated text-ink hover:bg-surface",
             )}
           >
             {p}
@@ -70,15 +70,14 @@ export function Pagination({
         )
       })}
 
-      <button
-        type="button"
-        className={navBtn}
+      <IconButton
+        className={navBtnClass}
         onClick={() => go(blockEnd + 1)}
         disabled={blockEnd >= totalPages}
         aria-label="다음 페이지 묶음"
       >
         <ChevronRight className="h-4 w-4" aria-hidden="true" />
-      </button>
+      </IconButton>
     </nav>
   )
 }

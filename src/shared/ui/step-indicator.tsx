@@ -38,7 +38,7 @@ export function StepIndicator({ steps, currentStep }: StepIndicatorProps) {
                 "flex h-6 w-6 items-center justify-center rounded-full border text-xs font-bold",
                 active
                   ? "border-primary bg-primary text-primary-foreground"
-                  : "border-[var(--color-border-strong)] bg-surface-elevated text-ink-faint",
+                  : "border-border-strong bg-surface-elevated text-ink-faint",
               )}
             >
               {stepNo}

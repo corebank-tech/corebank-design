@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom"
-import { ProductDetail } from "./product-detail"
+import { ProductDetail } from "@/pages/product/product-detail"
 import { EmptyState } from "@/shared/ui/empty-state"
 import { MOCK_PRODUCT_DETAILS } from "@/entities/product"
 

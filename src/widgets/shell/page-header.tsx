@@ -1,5 +1,6 @@
 import * as React from "react"
 import { Star, Type, Printer } from "lucide-react"
+import { IconButton } from "@/shared/ui/icon-button"
 import { cn } from "@/shared/lib/utils"
 
 type PageHeaderProps = {
@@ -10,6 +11,9 @@ type PageHeaderProps = {
   textScaleActive?: boolean
 }
 
+const ICON_BTN_CLASS =
+  "border border-border bg-surface-elevated text-ink-muted hover:bg-surface hover:text-ink"
+
 export function PageHeader({
   title,
   onCycleTextScale,
@@ -17,46 +21,43 @@ export function PageHeader({
 }: PageHeaderProps) {
   const [favorite, setFavorite] = React.useState(false)
 
-  const iconBtn =
-    "inline-flex h-9 w-9 items-center justify-center rounded-[var(--radius)] border border-[var(--color-border)] bg-surface-elevated text-ink-muted hover:bg-surface hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-
   return (
     <div className="mb-6 flex items-center justify-between gap-4">
       <h1 className="text-page font-bold text-balance text-ink">{title}</h1>
       <div className="flex shrink-0 items-center gap-1.5">
-        <button
-          type="button"
+        <IconButton
           onClick={() => setFavorite((v) => !v)}
           aria-pressed={favorite}
-          className={cn(iconBtn, favorite && "border-primary text-primary")}
+          className={cn(
+            ICON_BTN_CLASS,
+            favorite && "border-primary text-primary",
+          )}
           aria-label={favorite ? "즐겨찾기 해제" : "즐겨찾기 추가"}
         >
           <Star
-            className="h-[18px] w-[18px]"
+            className="h-4.5 w-4.5"
             fill={favorite ? "currentColor" : "none"}
             aria-hidden="true"
           />
-        </button>
-        <button
-          type="button"
+        </IconButton>
+        <IconButton
           onClick={onCycleTextScale}
           aria-pressed={textScaleActive}
           className={cn(
-            iconBtn,
+            ICON_BTN_CLASS,
             textScaleActive && "border-primary text-primary",
           )}
           aria-label="텍스트 크기 조절"
         >
-          <Type className="h-[18px] w-[18px]" aria-hidden="true" />
-        </button>
-        <button
-          type="button"
+          <Type className="h-4.5 w-4.5" aria-hidden="true" />
+        </IconButton>
+        <IconButton
           onClick={() => window.print()}
-          className={iconBtn}
+          className={ICON_BTN_CLASS}
           aria-label="인쇄"
         >
-          <Printer className="h-[18px] w-[18px]" aria-hidden="true" />
-        </button>
+          <Printer className="h-4.5 w-4.5" aria-hidden="true" />
+        </IconButton>
       </div>
     </div>
   )

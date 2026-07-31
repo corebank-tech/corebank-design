@@ -2,7 +2,7 @@ import * as React from "react"
 import { Button } from "@/shared/ui/button"
 import { FormSection } from "@/shared/ui/form-section"
 import { FormRow } from "@/shared/ui/form-row"
-import { StepLayout } from "@/widgets/transfer/step-layout"
+import { StepLayout } from "@/shared/ui/step-layout"
 import {
   WithdrawAccountField,
   AccountPasswordField,
@@ -17,7 +17,7 @@ import {
 import { NoticeBoxFooter } from "@/shared/ui/notice-box"
 import { maskName } from "@/shared/lib/format"
 import type { AccountOption } from "@/shared/types/account"
-import type { AutoTransferForm } from "../auto-transfer-screen"
+import type { AutoTransferForm } from "@/pages/transfer/auto-transfer-screen"
 
 type AutoTransferStep1Props = {
   steps: string[]
@@ -63,7 +63,7 @@ export function AutoTransferStep1({
           <Button
             variant="primary"
             size="lg"
-            className="min-w-[160px]"
+            className="min-w-40"
             disabled={!canSubmit}
             onClick={onNext}
           >
@@ -193,10 +193,7 @@ export function AutoTransferStep1({
         </FormSection>
 
         {duplicate && (
-          <p
-            role="alert"
-            className="text-sm font-bold text-[var(--color-danger)]"
-          >
+          <p role="alert" className="text-sm font-bold text-danger">
             출금계좌·입금계좌·이체지정일이 모두 같은 자동이체가 이미 정상
             등록되어 있습니다. 자동이체 조회/변경/해지에서 기존 등록 건을
             확인하세요.

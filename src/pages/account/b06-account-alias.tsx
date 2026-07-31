@@ -101,10 +101,7 @@ export function B06AccountAlias() {
               className="h-9"
             />
             {draftError && (
-              <p
-                role="alert"
-                className="text-xs font-bold text-[var(--color-danger)]"
-              >
+              <p role="alert" className="text-xs font-bold text-danger">
                 {draftError}
               </p>
             )}

@@ -3,6 +3,10 @@ import { AlertTriangle, ChevronDown } from "lucide-react"
 import { Modal } from "@/shared/ui/modal"
 import { Button } from "@/shared/ui/button"
 import { cn } from "@/shared/lib/utils"
+import {
+  CUSTOMER_CENTER_PHONE,
+  CUSTOMER_CENTER_HOURS,
+} from "@/shared/config/contact"
 
 type ErrorDialogProps = {
   open: boolean
@@ -34,9 +38,13 @@ export function ErrorDialog({
 }: ErrorDialogProps) {
   const [codeOpen, setCodeOpen] = React.useState(false)
 
-  React.useEffect(() => {
+  // 닫힐 때 오류코드 펼침 상태를 지운다. effect 대신 렌더 중 상태 조정
+  // 패턴(React 공식 가이드 "Adjusting state when a prop changes")을 쓴다.
+  const [prevOpen, setPrevOpen] = React.useState(open)
+  if (open !== prevOpen) {
+    setPrevOpen(open)
     if (!open) setCodeOpen(false)
-  }, [open])
+  }
 
   return (
     <Modal
@@ -49,7 +57,7 @@ export function ErrorDialog({
         <Button
           variant="danger"
           size="lg"
-          className="min-w-[120px]"
+          className="min-w-30"
           onClick={onConfirm ?? onClose}
         >
           {confirmLabel}
@@ -58,7 +66,7 @@ export function ErrorDialog({
     >
       <div className="flex flex-col items-center">
         <span
-          className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-full bg-[var(--color-danger-tint)] text-[var(--color-danger)]"
+          className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-full bg-danger-tint text-danger"
           aria-hidden="true"
         >
           <AlertTriangle className="h-7 w-7" strokeWidth={2.25} />
@@ -72,7 +80,7 @@ export function ErrorDialog({
         </div>
 
         <p className="mt-4 text-sm text-ink-muted">
-          문제가 반복되면 고객센터 1599-0000(평일 09:00~18:00)으로 문의하세요.
+          {`문제가 반복되면 고객센터 ${CUSTOMER_CENTER_PHONE}(${CUSTOMER_CENTER_HOURS})으로 문의하세요.`}
         </p>
 
         {code && (

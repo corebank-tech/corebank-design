@@ -1,36 +1,42 @@
 import * as React from "react"
 import { Info, CheckCircle2, AlertTriangle, XCircle } from "lucide-react"
+import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/shared/lib/utils"
 
-type AlertVariant = "info" | "success" | "warning" | "danger"
+const alertVariants = cva("flex gap-2 rounded-md border p-3 text-sm", {
+  variants: {
+    variant: {
+      info: "border-primary-border-soft bg-primary-tint text-ink",
+      success: "border-success-border-soft bg-success-tint text-ink",
+      warning: "border-warning-border-soft bg-warning-tint text-ink",
+      danger: "border-danger-border-soft bg-danger-tint text-ink",
+    },
+  },
+  defaultVariants: { variant: "info" },
+})
 
-const config: Record<
+const alertIconVariants = cva("mt-0.5 h-4 w-4 shrink-0", {
+  variants: {
+    variant: {
+      info: "text-primary",
+      success: "text-success",
+      warning: "text-warning",
+      danger: "text-danger",
+    },
+  },
+  defaultVariants: { variant: "info" },
+})
+
+type AlertVariant = NonNullable<VariantProps<typeof alertVariants>["variant"]>
+
+const ICONS: Record<
   AlertVariant,
-  { wrap: string; icon: React.ComponentType<{ className?: string }> }
+  React.ComponentType<{ className?: string }>
 > = {
-  info: {
-    wrap: "bg-primary-tint border-primary-border-soft text-ink",
-    icon: Info,
-  },
-  success: {
-    wrap: "bg-success-tint border-success-border-soft text-ink",
-    icon: CheckCircle2,
-  },
-  warning: {
-    wrap: "bg-warning-tint border-warning-border-soft text-ink",
-    icon: AlertTriangle,
-  },
-  danger: {
-    wrap: "bg-[var(--color-danger-tint)] border-danger-border-soft text-ink",
-    icon: XCircle,
-  },
-}
-
-const iconColor: Record<AlertVariant, string> = {
-  info: "text-primary",
-  success: "text-[var(--color-success)]",
-  warning: "text-[var(--color-warning)]",
-  danger: "text-[var(--color-danger)]",
+  info: Info,
+  success: CheckCircle2,
+  warning: AlertTriangle,
+  danger: XCircle,
 }
 
 type AlertProps = Omit<React.HTMLAttributes<HTMLDivElement>, "title"> & {
@@ -45,21 +51,14 @@ export function Alert({
   children,
   ...props
 }: AlertProps) {
-  const { wrap, icon: Icon } = config[variant]
+  const Icon = ICONS[variant]
   return (
     <div
       role="alert"
-      className={cn(
-        "flex gap-2 rounded-[var(--radius)] border p-3 text-sm",
-        wrap,
-        className,
-      )}
+      className={cn(alertVariants({ variant }), className)}
       {...props}
     >
-      <Icon
-        className={cn("mt-0.5 h-4 w-4 shrink-0", iconColor[variant])}
-        aria-hidden="true"
-      />
+      <Icon className={alertIconVariants({ variant })} aria-hidden="true" />
       <div className="min-w-0">
         {title != null && <p className="mb-0.5 font-bold">{title}</p>}
         {children != null && <div className="text-ink">{children}</div>}

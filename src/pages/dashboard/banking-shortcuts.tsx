@@ -23,7 +23,7 @@ export function BankingShortcuts({
   return (
     <section
       aria-label="업무 바로가기"
-      className="flex items-center gap-6 border border-[var(--color-border)] bg-primary-tint px-6 py-5"
+      className="flex items-center gap-6 border border-border bg-primary-tint px-6 py-5"
     >
       <h2 className="shrink-0 text-base font-bold text-primary">{label}</h2>
       <ul className="grid flex-1 grid-cols-4 gap-3">
@@ -37,7 +37,7 @@ export function BankingShortcuts({
                   onSelect(link.id)
                 }
               }}
-              className="flex items-center justify-between rounded-[var(--radius)] border border-[var(--color-border)] bg-surface-elevated px-4 py-3 text-sm font-bold whitespace-nowrap text-ink transition-colors hover:border-primary hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+              className="flex items-center justify-between rounded-md border border-border bg-surface-elevated px-4 py-3 text-sm font-bold whitespace-nowrap text-ink transition-colors hover:border-primary hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
             >
               {link.label}
               <ChevronRight

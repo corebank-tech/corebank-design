@@ -14,13 +14,10 @@ import {
   MOCK_PASSWORD_ACCOUNTS,
   type PasswordAccount,
 } from "@/entities/account"
+import { ACCOUNT_PASSWORD_ERROR_LIMIT as ERROR_LIMIT } from "@/shared/config/policy"
+import { onlyDigits } from "@/shared/lib/input-filter"
 
 const PASSWORD_LIMIT = 4
-const ERROR_LIMIT = 5
-
-function onlyDigits(value: string, maxLength: number): string {
-  return value.replace(/\D/g, "").slice(0, maxLength)
-}
 
 /** REQ-ACCT-006·007·008: 계좌비밀번호 변경. 대상은 입출금계좌만이며 예적금 계좌는 제외한다. */
 export function B04AccountPassword() {
@@ -173,7 +170,7 @@ export function B04AccountPassword() {
               onChange={(e) =>
                 setCurrentPw(onlyDigits(e.target.value, PASSWORD_LIMIT))
               }
-              className="w-32 text-center tracking-[0.4em]"
+              className="w-32 text-center tracking-4"
             />
             <Button
               variant="outline"
@@ -200,7 +197,7 @@ export function B04AccountPassword() {
               onChange={(e) =>
                 setNewPw(onlyDigits(e.target.value, PASSWORD_LIMIT))
               }
-              className="w-32 text-center tracking-[0.4em]"
+              className="w-32 text-center tracking-4"
             />
           </FormRow>
           <FormRow
@@ -220,16 +217,13 @@ export function B04AccountPassword() {
               onChange={(e) =>
                 setConfirmPw(onlyDigits(e.target.value, PASSWORD_LIMIT))
               }
-              className="w-32 text-center tracking-[0.4em]"
+              className="w-32 text-center tracking-4"
             />
           </FormRow>
         </div>
 
         {fieldError && (
-          <p
-            role="alert"
-            className="mt-2 text-sm font-bold text-[var(--color-danger)]"
-          >
+          <p role="alert" className="mt-2 text-sm font-bold text-danger">
             {fieldError}
           </p>
         )}
@@ -238,7 +232,7 @@ export function B04AccountPassword() {
           <Button
             variant="secondary"
             size="lg"
-            className="min-w-[120px]"
+            className="min-w-30"
             onClick={resetFields}
           >
             초기화
@@ -246,7 +240,7 @@ export function B04AccountPassword() {
           <Button
             variant="primary"
             size="lg"
-            className="min-w-[120px]"
+            className="min-w-30"
             disabled={blocked}
             onClick={handleSubmitClick}
           >
@@ -297,7 +291,7 @@ export function B04AccountPassword() {
           <Button
             variant="primary"
             size="lg"
-            className="min-w-[120px]"
+            className="min-w-30"
             onClick={() => setInfoOpen(false)}
           >
             확인

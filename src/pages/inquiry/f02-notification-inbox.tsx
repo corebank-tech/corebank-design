@@ -4,16 +4,17 @@ import { FormSection } from "@/shared/ui/form-section"
 import { Badge } from "@/shared/ui/badge"
 import { GridToolbar } from "@/widgets/query/grid-toolbar"
 import { DataGrid, type DataGridColumn } from "@/shared/ui/data-grid"
-import { Pagination } from "@/widgets/query/pagination"
-import { TextViewModal } from "@/widgets/query/text-view-modal"
+import { Pagination } from "@/shared/ui/pagination"
+import { TextViewModal } from "@/shared/ui/text-view-modal"
 import { downloadCsv } from "@/shared/lib/csv"
 import { formatDateTime } from "@/shared/lib/format"
 import type { NotificationInboxRow } from "@/entities/notification"
-import { useNotifications } from "@/app/notifications-context"
+import { useNotifications } from "@/app/use-notifications"
 import { cn } from "@/shared/lib/utils"
-
-const BASE_TIME = "2026-07-23T08:57:34"
-const TODAY = "2026-07-23"
+import {
+  MOCK_NOW as BASE_TIME,
+  MOCK_TODAY as TODAY,
+} from "@/shared/config/mock-clock"
 
 /** F-02 알림함. REQ-MYPG-004·005. */
 export function F02NotificationInbox() {

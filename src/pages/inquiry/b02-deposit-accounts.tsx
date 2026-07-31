@@ -5,7 +5,7 @@ import { NoticeBox, NoticeBoxFooter } from "@/shared/ui/notice-box"
 import { FormSection } from "@/shared/ui/form-section"
 import { Button } from "@/shared/ui/button"
 import { DataGrid, type DataGridColumn } from "@/shared/ui/data-grid"
-import { SummaryRow } from "@/widgets/query/summary-row"
+import { SummaryRow } from "@/shared/ui/summary-row"
 import {
   formatAccountNo,
   formatAmount,
@@ -17,8 +17,7 @@ import {
   type OverviewAccount,
 } from "@/entities/account"
 import { cn } from "@/shared/lib/utils"
-
-const BASE_TIME = "2026-07-23T08:57:34"
+import { MOCK_NOW as BASE_TIME } from "@/shared/config/mock-clock"
 
 /** REQ-INQR-001·004: 예금/적금 계좌만 대상으로 한 전체계좌조회(B-01)의 부분 화면. */
 export function B02DepositAccounts() {

@@ -1,20 +1,16 @@
 import * as React from "react"
 import { Button } from "@/shared/ui/button"
 import { Input } from "@/shared/ui/input"
-import { StepLayout } from "@/widgets/transfer/step-layout"
+import { StepLayout } from "@/shared/ui/step-layout"
 import { FormSection } from "@/shared/ui/form-section"
 import { FormRow } from "@/shared/ui/form-row"
 import { NoticeBoxFooter } from "@/shared/ui/notice-box"
 import { AlertDialog } from "@/shared/ui/alert-dialog"
 import { ErrorDialog } from "@/shared/ui/error-dialog"
 import { MOCK_SIGNUP_ACCOUNTS, type VerifyAccount } from "@/entities/auth"
-import { SIGNUP_STEPS } from "./signup-flow"
-
-const ERROR_LIMIT = 5
-
-function onlyDigits(value: string, maxLength: number): string {
-  return value.replace(/\D/g, "").slice(0, maxLength)
-}
+import { onlyDigits } from "@/shared/lib/input-filter"
+import { ACCOUNT_PASSWORD_ERROR_LIMIT as ERROR_LIMIT } from "@/shared/config/policy"
+import { SIGNUP_STEPS } from "@/pages/auth/signup-shared"
 
 type A03VerifyProps = {
   onVerified: (name: string, birth: string) => void
@@ -121,7 +117,7 @@ export function A03Verify({ onVerified }: A03VerifyProps) {
           <Button
             variant="primary"
             size="lg"
-            className="min-w-[160px]"
+            className="min-w-40"
             onClick={handleVerify}
           >
             다음
@@ -152,7 +148,7 @@ export function A03Verify({ onVerified }: A03VerifyProps) {
                   value={birth}
                   onChange={(e) => setBirth(onlyDigits(e.target.value, 6))}
                   placeholder="YYMMDD"
-                  className="w-40 tracking-[0.2em]"
+                  className="w-40 tracking-2"
                 />
                 <p className="text-2xs text-ink-muted">
                   ※ 주민등록번호 뒷자리는 수집하지 않습니다.
@@ -169,7 +165,7 @@ export function A03Verify({ onVerified }: A03VerifyProps) {
                 value={accountNo}
                 onChange={(e) => setAccountNo(onlyDigits(e.target.value, 12))}
                 placeholder="하이픈 없이 12자리 숫자"
-                className="max-w-xs tracking-[0.1em]"
+                className="max-w-xs tracking-1"
               />
             </FormRow>
             <FormRow label="계좌비밀번호" required htmlFor="signup-account-pw">
@@ -183,7 +179,7 @@ export function A03Verify({ onVerified }: A03VerifyProps) {
                   maxLength={4}
                   value={password}
                   onChange={(e) => setPassword(onlyDigits(e.target.value, 4))}
-                  className="w-32 text-center tracking-[0.4em]"
+                  className="w-32 text-center tracking-4"
                 />
                 <p className="text-2xs text-ink-muted">
                   ※ 계좌비밀번호를 5회 연속 잘못 입력하면 해당 계좌가 거래정지

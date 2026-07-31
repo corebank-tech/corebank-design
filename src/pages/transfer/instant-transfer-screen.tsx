@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom"
 import { Button } from "@/shared/ui/button"
 import { Badge } from "@/shared/ui/badge"
 import { ConfirmDialog } from "@/shared/ui/confirm-dialog"
-import { OtpModal } from "@/shared/ui/otp-modal"
+import { OtpModal } from "@/entities/auth"
 import {
   ResultPanel,
   type ResultVariant,
@@ -39,9 +39,11 @@ import {
   formatDateTime,
   maskName,
 } from "@/shared/lib/format"
-import { InstantTransferStep1 } from "./instant-transfer/d01-input"
-import { InstantTransferStep2 } from "./instant-transfer/d02-confirm"
-import { InstantTransferStep3 } from "./instant-transfer/d03-result"
+import { MOCK_NOW as BASE_TIME } from "@/shared/config/mock-clock"
+import { TRANSFER_STEPS as STEPS } from "@/pages/transfer/transfer-steps"
+import { InstantTransferStep1 } from "@/pages/transfer/instant-transfer/d01-input"
+import { InstantTransferStep2 } from "@/pages/transfer/instant-transfer/d02-confirm"
+import { InstantTransferStep3 } from "@/pages/transfer/instant-transfer/d03-result"
 
 export type InstantTransferForm = {
   fromAccount: string
@@ -65,9 +67,6 @@ type InstantTransferResultState = {
   errorCode?: string
   failReason?: string
 }
-
-const STEPS = ["정보입력", "정보확인 및 인증", "완료"]
-const BASE_TIME = "2026-07-23T08:57:34"
 
 type DebitableAccount = {
   accountNo: string
@@ -508,7 +507,7 @@ export function InstantTransferScreen() {
                 <Button
                   variant="outline"
                   size="lg"
-                  className="min-w-[140px]"
+                  className="min-w-35"
                   onClick={() => navigate("/transfer/history")}
                 >
                   이체결과조회
@@ -519,7 +518,7 @@ export function InstantTransferScreen() {
                       alreadyFrequent || frequentFull ? "secondary" : "primary"
                     }
                     size="lg"
-                    className="min-w-[160px]"
+                    className="min-w-40"
                     disabled={alreadyFrequent || frequentFull}
                     onClick={handleRegisterFrequent}
                   >

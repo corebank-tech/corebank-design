@@ -4,6 +4,8 @@ import { Bell, Menu, Moon, Sun } from "lucide-react"
 import { NAV } from "@/shared/config/nav"
 import { cn } from "@/shared/lib/utils"
 import { useTheme } from "@/shared/lib/theme"
+import { IconButton } from "@/shared/ui/icon-button"
+import { Divider } from "@/shared/ui/divider"
 
 type AppHeaderProps = {
   activeId?: string
@@ -57,14 +59,14 @@ export function AppHeader({
 
   return (
     <header
-      className="sticky top-0 z-[var(--z-header)] border-b border-[var(--color-border)] bg-surface-elevated"
+      className="sticky top-0 z-header border-b border-border bg-surface-elevated"
       onMouseLeave={scheduleClose}
     >
-      <div className="mx-auto flex h-[72px] w-[1280px] items-stretch justify-between px-4">
+      <div className="mx-auto flex h-18 w-320 items-stretch justify-between px-4">
         <div className="flex items-stretch">
           <Link
             to="/"
-            className="flex shrink-0 items-center pr-8 text-[20px] [font-weight:var(--weight-heading)] text-primary"
+            className="flex shrink-0 items-center pr-8 text-h2 leading-[1.5] font-heading text-primary"
           >
             CoreBank
           </Link>
@@ -84,10 +86,10 @@ export function AppHeader({
                     onFocus={() => open(cat.id)}
                     aria-current={isActive ? "page" : undefined}
                     className={cn(
-                      "flex items-center text-[16px] transition-colors",
+                      "flex items-center text-lg leading-[1.5] transition-colors",
                       isActive
-                        ? "-mb-px border-b-2 border-primary [font-weight:var(--weight-heading)] text-primary"
-                        : "[font-weight:var(--weight-label)] text-ink-muted hover:text-primary",
+                        ? "-mb-px border-b-2 border-primary font-heading text-primary"
+                        : "font-label text-ink-muted hover:text-primary",
                     )}
                   >
                     {cat.label}
@@ -99,10 +101,10 @@ export function AppHeader({
         </div>
 
         <div className="flex shrink-0 items-center gap-4">
-          <button
-            type="button"
+          <IconButton
+            shape="circle"
             onClick={toggleTheme}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full text-ink-muted transition-colors hover:bg-[var(--color-primary-tint)] hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+            className="text-ink-muted hover:bg-primary-tint hover:text-primary"
             aria-label={
               theme === "dark" ? "라이트 모드로 전환" : "다크 모드로 전환"
             }
@@ -113,29 +115,26 @@ export function AppHeader({
             ) : (
               <Moon className="h-5 w-5" aria-hidden="true" />
             )}
-          </button>
+          </IconButton>
 
           {loggedIn ? (
             <>
-              <button
-                type="button"
+              <IconButton
+                shape="circle"
                 onClick={onOpenNotifications}
-                className="relative inline-flex h-9 w-9 items-center justify-center rounded-full text-ink-muted hover:bg-[var(--color-primary-tint)] hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+                className="relative text-ink-muted hover:bg-primary-tint hover:text-primary"
                 aria-label={`알림 ${unreadCount}건`}
               >
                 <Bell className="h-5 w-5" aria-hidden="true" />
                 {unreadCount > 0 && (
-                  <span className="absolute top-0.5 right-0.5 inline-flex min-w-[16px] items-center justify-center rounded-full bg-[var(--color-danger)] px-1 text-[10px] leading-4 font-bold text-white">
+                  <span className="absolute top-0.5 right-0.5 inline-flex min-w-[16px] items-center justify-center rounded-full bg-danger px-1 text-[10px] leading-4 font-bold text-white">
                     {unreadCount > 99 ? "99+" : unreadCount}
                   </span>
                 )}
-              </button>
+              </IconButton>
 
               <span className="text-sm text-ink">
-                <span className="[font-weight:var(--weight-value)]">
-                  {customerName}
-                </span>{" "}
-                님
+                <span className="font-value">{customerName}</span> 님
               </span>
 
               <span
@@ -152,12 +151,7 @@ export function AppHeader({
               >
                 연장
               </button>
-              <span
-                className="text-[var(--color-border-strong)]"
-                aria-hidden="true"
-              >
-                |
-              </span>
+              <Divider tone="border-strong" />
               <button
                 type="button"
                 onClick={onLogout}
@@ -166,20 +160,19 @@ export function AppHeader({
                 로그아웃
               </button>
 
-              <button
-                type="button"
+              <IconButton
                 onClick={onOpenFullMenu}
                 onMouseEnter={scheduleClose}
-                className="inline-flex h-9 w-9 items-center justify-center rounded-[var(--radius)] text-ink-muted transition-colors hover:bg-[var(--color-primary-tint)] hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+                className="text-ink-muted hover:bg-primary-tint hover:text-primary"
                 aria-label="전체메뉴 열기"
               >
                 <Menu className="h-5 w-5" aria-hidden="true" />
-              </button>
+              </IconButton>
             </>
           ) : (
             <Link
               to="/"
-              className="text-sm [font-weight:var(--weight-label)] text-ink-muted transition-colors hover:text-primary"
+              className="text-sm font-label text-ink-muted transition-colors hover:text-primary"
             >
               로그인
             </Link>
@@ -190,15 +183,15 @@ export function AppHeader({
       {/* 2-depth hover dropdown */}
       {activeCategory && (
         <div
-          className="absolute inset-x-0 top-[72px] z-[var(--z-dropdown)] bg-surface-elevated [box-shadow:var(--shadow-card)]"
+          className="absolute inset-x-0 top-18 z-dropdown bg-surface-elevated shadow-card"
           onMouseEnter={() => open(activeCategory.id)}
           onMouseLeave={scheduleClose}
         >
-          <div className="mx-auto w-[1280px] px-4 py-6">
+          <div className="mx-auto w-320 px-4 py-6">
             <div className="grid grid-cols-4 gap-x-8 gap-y-6">
               {activeCategory.groups.map((group) => (
                 <div key={group.title}>
-                  <p className="mb-2 text-[14px] whitespace-nowrap text-ink-faint">
+                  <p className="mb-2 text-base leading-[1.5] whitespace-nowrap text-ink-faint">
                     {group.title}
                   </p>
                   <ul className="flex flex-col gap-1.5">
@@ -208,7 +201,7 @@ export function AppHeader({
                           to={item.path}
                           data-screen-id={item.screenId}
                           onClick={() => setHoverId(null)}
-                          className="inline-block py-0.5 text-[16px] [font-weight:var(--weight-label)] whitespace-nowrap text-ink hover:text-primary hover:underline"
+                          className="inline-block py-0.5 text-lg leading-[1.5] font-label whitespace-nowrap text-ink hover:text-primary hover:underline"
                         >
                           {item.label}
                         </Link>

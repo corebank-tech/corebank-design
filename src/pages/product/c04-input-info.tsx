@@ -3,14 +3,17 @@ import { useLocation, useNavigate, useParams } from "react-router-dom"
 import { Button } from "@/shared/ui/button"
 import { FormSection } from "@/shared/ui/form-section"
 import { FormRow } from "@/shared/ui/form-row"
-import { StepLayout } from "@/widgets/transfer/step-layout"
+import { StepLayout } from "@/shared/ui/step-layout"
 import { WithdrawAccountField } from "@/widgets/transfer/transfer-fields"
 import { TermMonthsField, JoinAmountField } from "@/pages/product/fields"
 import { NoticeBoxFooter } from "@/shared/ui/notice-box"
 import { formatKoreanAmount } from "@/shared/lib/format"
 import { estimateMaturityAmount } from "@/entities/product"
 import { MOCK_JOIN_ACCOUNTS, MOCK_JOIN_PRODUCTS } from "@/entities/product"
-import { PRODUCT_JOIN_STEPS, type ProductJoinFormState } from "./join-shared"
+import {
+  PRODUCT_JOIN_STEPS,
+  type ProductJoinFormState,
+} from "@/pages/product/join-shared"
 
 /** C-04 상품가입 2단계 · 정보입력 (REQ-PRDT-006~009) */
 export function C04InputInfo() {
@@ -81,7 +84,7 @@ export function C04InputInfo() {
           <Button
             variant="primary"
             size="lg"
-            className="min-w-[160px]"
+            className="min-w-40"
             disabled={!canSubmit}
             onClick={handleNext}
           >
@@ -151,7 +154,7 @@ export function C04InputInfo() {
         </FormSection>
 
         <FormSection title="예상 만기금액(참고)">
-          <div className="border border-[var(--color-border)] bg-surface px-5 py-4">
+          <div className="border border-border bg-surface px-5 py-4">
             <p className="text-2xs text-ink-faint">세전 단리 기준 참고값</p>
             <p className="mt-1 text-page font-bold text-primary tabular-nums">
               {expectedMaturity != null

@@ -3,7 +3,7 @@
  * 별명이 없으면(alias=null) 목록·이체 등 전 화면에 productName(상품명)이 표시된다.
  */
 
-import type { AccountGroupId } from "./b01-accounts"
+import type { AccountGroupId } from "@/entities/account/api/b01-accounts"
 
 export type AliasAccount = {
   id: string

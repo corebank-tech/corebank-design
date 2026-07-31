@@ -62,6 +62,19 @@ export default tseslint.config(
     rules: {
       /* ---- error: 현재 위반 0건 ---- */
       "@typescript-eslint/no-explicit-any": "error",
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector: "Literal[value=/\\[var\\(--color-/]",
+          message:
+            "색상 토큰은 @theme에 매핑된 유틸리티 클래스를 쓴다. [var(--color-*)] 대괄호 탈출구를 다시 쓰지 않는다(POL-039).",
+        },
+        {
+          selector: "TemplateElement[value.raw=/\\[var\\(--color-/]",
+          message:
+            "색상 토큰은 @theme에 매핑된 유틸리티 클래스를 쓴다. [var(--color-*)] 대괄호 탈출구를 다시 쓰지 않는다(POL-039).",
+        },
+      ],
       "no-restricted-imports": [
         "error",
         {
@@ -105,16 +118,29 @@ export default tseslint.config(
         { "**/*.{ts,tsx}": "KEBAB_CASE" },
         { ignoreMiddleExtensions: true },
       ],
-
-      /* ---- warn: 아직 위반이 남아 있어 가시성만 확보. 해소되는 대로 error로 승격 ---- */
+      // 하드코딩 정리 작업으로 error 승격 (모두 위반 0건 확인됨)
       "@typescript-eslint/no-restricted-imports": [
-        "warn",
+        "error",
         {
           patterns: [
             { group: ["./*", "../*"], message: "@/ 절대경로만 사용한다." },
           ],
         },
       ],
+      "react-hooks/exhaustive-deps": "error",
+      "react-hooks/set-state-in-effect": "error",
+      "react-hooks/purity": "error",
+      "react-hooks/static-components": "error",
+      "react-hooks/immutability": "error",
+      "react-hooks/preserve-manual-memoization": "error",
+      "react-refresh/only-export-components": [
+        "error",
+        { allowConstantExport: true },
+      ],
+
+      /* ---- warn: entities/account → entities/transfer 참조 2건(의도적 예외,
+         CLAUDE.md "남은 마이그레이션" 참고 — 출금계좌 삭제 가능 여부가 예약이체·
+         자동이체 등록 여부에 의존하는 도메인 규칙이라 엔티티 간 참조가 불가피하다) ---- */
       "boundaries/dependencies": [
         "warn",
         {
@@ -139,16 +165,6 @@ export default tseslint.config(
             allowTo("mocks", ["mocks", "shared", "entities"]),
           ],
         },
-      ],
-      "react-hooks/exhaustive-deps": "warn",
-      "react-hooks/set-state-in-effect": "warn",
-      "react-hooks/purity": "warn",
-      "react-hooks/static-components": "warn",
-      "react-hooks/immutability": "warn",
-      "react-hooks/preserve-manual-memoization": "warn",
-      "react-refresh/only-export-components": [
-        "warn",
-        { allowConstantExport: true },
       ],
     },
   },

@@ -3,15 +3,10 @@ import {
   MOCK_NOTIFICATION_INBOX,
   type NotificationInboxRow,
 } from "@/entities/notification"
-
-export type NotificationsContextValue = {
-  notifications: NotificationInboxRow[]
-  unreadCount: number
-  markRead: (id: string) => void
-}
-
-const NotificationsContext =
-  React.createContext<NotificationsContextValue | null>(null)
+import {
+  NotificationsContext,
+  type NotificationsContextValue,
+} from "@/app/notifications-context-value"
 
 /**
  * F-02 알림함과 헤더 배지(A-90)가 공유하는 단일 상태(REQ-MYPG-005).
@@ -48,13 +43,4 @@ export function NotificationsProvider({
       {children}
     </NotificationsContext.Provider>
   )
-}
-
-export function useNotifications(): NotificationsContextValue {
-  const ctx = React.useContext(NotificationsContext)
-  if (!ctx)
-    throw new Error(
-      "useNotifications must be used within NotificationsProvider",
-    )
-  return ctx
 }

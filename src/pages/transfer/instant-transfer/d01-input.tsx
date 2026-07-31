@@ -1,8 +1,9 @@
 import * as React from "react"
 import { Button } from "@/shared/ui/button"
+import { Chip } from "@/shared/ui/chip"
 import { FormSection } from "@/shared/ui/form-section"
 import { FormRow } from "@/shared/ui/form-row"
-import { StepLayout } from "@/widgets/transfer/step-layout"
+import { StepLayout } from "@/shared/ui/step-layout"
 import {
   WithdrawAccountField,
   AccountPasswordField,
@@ -17,7 +18,7 @@ import type {
   FrequentTransferAccount,
   RecentTransferAccount,
 } from "@/entities/transfer"
-import type { InstantTransferForm } from "../instant-transfer-screen"
+import type { InstantTransferForm } from "@/pages/transfer/instant-transfer-screen"
 
 type InstantTransferStep1Props = {
   steps: string[]
@@ -71,7 +72,7 @@ export function InstantTransferStep1({
           <Button
             variant="primary"
             size="lg"
-            className="min-w-[160px]"
+            className="min-w-40"
             disabled={!canSubmit}
             onClick={onNext}
           >
@@ -128,15 +129,15 @@ export function InstantTransferStep1({
                           자주 쓰는 계좌
                         </span>
                         {frequentAccounts.map((a) => (
-                          <button
+                          <Chip
                             key={a.accountNo}
-                            type="button"
+                            size="sm"
                             onClick={() => onSelectQuickAccount(a.accountNo)}
-                            className="h-7 rounded-[var(--radius-pill)] border border-[var(--color-border-strong)] bg-white px-2.5 text-xs text-ink transition-colors hover:bg-surface focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+                            className="bg-white"
                           >
                             {a.nickname ?? maskName(a.payeeName)}{" "}
                             {formatAccountNo(a.accountNo)}
-                          </button>
+                          </Chip>
                         ))}
                       </div>
                     )}
@@ -146,15 +147,16 @@ export function InstantTransferStep1({
                           최근 이체계좌
                         </span>
                         {recentAccounts.slice(0, 5).map((a) => (
-                          <button
+                          <Chip
                             key={a.accountNo}
-                            type="button"
+                            size="sm"
+                            tone="muted"
                             onClick={() => onSelectQuickAccount(a.accountNo)}
-                            className="h-7 rounded-[var(--radius-pill)] border border-[var(--color-border)] bg-surface px-2.5 text-xs text-ink-muted transition-colors hover:bg-[var(--color-border)] focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+                            className="border-border"
                           >
                             {maskName(a.payeeName)}{" "}
                             {formatAccountNo(a.accountNo)}
-                          </button>
+                          </Chip>
                         ))}
                       </div>
                     )}

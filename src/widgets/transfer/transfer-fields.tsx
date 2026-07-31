@@ -2,11 +2,14 @@ import * as React from "react"
 import { Input } from "@/shared/ui/input"
 import { Select } from "@/shared/ui/select"
 import { Button } from "@/shared/ui/button"
+import { Chip } from "@/shared/ui/chip"
 import {
   formatAccountNo,
   formatAmount,
   formatKoreanAmount,
 } from "@/shared/lib/format"
+import { addDays, addMonths, daysBetween } from "@/shared/lib/date"
+import { RESERVATION_MAX_RANGE_DAYS } from "@/shared/config/policy"
 import type { AccountOption } from "@/shared/types/account"
 
 /* ================================================================== */
@@ -185,10 +188,7 @@ export function AccountNumberField({
         </p>
       )}
       {error && (
-        <p
-          role="alert"
-          className="text-xs font-bold text-[var(--color-danger)]"
-        >
+        <p role="alert" className="text-xs font-bold text-danger">
           {error}
         </p>
       )}
@@ -269,31 +269,21 @@ export function AmountField({
 
       <div className="flex flex-wrap items-center gap-1">
         {QUICK_AMOUNTS.map((chip) => (
-          <button
+          <Chip
             key={chip.label}
-            type="button"
             onClick={() => onChange(Math.min((value ?? 0) + chip.value, limit))}
-            className="h-8 rounded-[var(--radius-pill)] border border-[var(--color-border-strong)] bg-surface-elevated px-3 text-sm whitespace-nowrap text-ink transition-colors hover:bg-surface focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
           >
             {chip.label}
-          </button>
+          </Chip>
         ))}
         {fullAmount != null && (
-          <button
-            type="button"
-            onClick={() => onChange(fullAmount)}
-            className="h-8 rounded-[var(--radius-pill)] border border-primary bg-primary-tint px-3 text-sm font-bold whitespace-nowrap text-primary transition-colors hover:bg-surface-elevated focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-          >
+          <Chip tone="primary-tint" onClick={() => onChange(fullAmount)}>
             전액
-          </button>
+          </Chip>
         )}
-        <button
-          type="button"
-          onClick={() => onChange(null)}
-          className="h-8 rounded-[var(--radius-pill)] border border-[var(--color-border-strong)] bg-surface px-3 text-sm whitespace-nowrap text-ink-muted transition-colors hover:bg-[var(--color-border)] focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-        >
+        <Chip tone="muted" onClick={() => onChange(null)}>
           정정
-        </button>
+        </Chip>
       </div>
 
       <p className="text-2xs text-ink-muted tabular-nums">
@@ -303,7 +293,7 @@ export function AmountField({
       </p>
 
       {overLimit && (
-        <p className="text-xs font-bold text-[var(--color-danger)]">
+        <p className="text-xs font-bold text-danger">
           {!showDailyLimit || overPer
             ? `1회 이체한도 ${formatAmount(perTransferLimit)}를 초과했습니다. 금액을 낮춰 다시 입력하세요.`
             : `1일 잔여한도 ${formatAmount(dailyRemaining)}를 초과했습니다. 금액을 낮춰 다시 입력하세요.`}
@@ -353,40 +343,6 @@ export function MemoField({
 /* TransferDateField — 예약일 (D+1 ~ D+365)                            */
 /* ================================================================== */
 
-export function parseISO(value: string): Date {
-  const [y, m, d] = value.split("-").map(Number)
-  return new Date(y, (m ?? 1) - 1, d ?? 1)
-}
-
-export function toISO(date: Date): string {
-  const y = date.getFullYear()
-  const m = String(date.getMonth() + 1).padStart(2, "0")
-  const d = String(date.getDate()).padStart(2, "0")
-  return `${y}-${m}-${d}`
-}
-
-export function addDays(iso: string, days: number): string {
-  const d = parseISO(iso)
-  d.setDate(d.getDate() + days)
-  return toISO(d)
-}
-
-export function daysBetween(startISO: string, endISO: string): number {
-  const ms = parseISO(endISO).getTime() - parseISO(startISO).getTime()
-  return Math.round(ms / 86_400_000)
-}
-
-/** iso 일자에 months개월을 더한다. 대상 월에 없는 일자는 그 달의 말일로 보정한다 (POL-034와 동일한 보정 규칙). */
-export function addMonths(iso: string, months: number): string {
-  const d = parseISO(iso)
-  const day = d.getDate()
-  const total = d.getMonth() + months
-  const year = d.getFullYear() + Math.floor(total / 12)
-  const month = ((total % 12) + 12) % 12
-  const lastDay = new Date(year, month + 1, 0).getDate()
-  return toISO(new Date(year, month, Math.min(day, lastDay)))
-}
-
 type TransferDateFieldProps = {
   id?: string
   value: string
@@ -405,7 +361,8 @@ export function TransferDateField({
   onChange,
   today,
   minDays = 1,
-  maxDays = 365,
+  // POL-018(예약이체)·POL-035(자동이체 시작일) 모두 D+1~D+365로 동일한 값을 쓴다.
+  maxDays = RESERVATION_MAX_RANGE_DAYS,
   rangeLabel = "예약일",
 }: TransferDateFieldProps) {
   const min = addDays(today, minDays)
@@ -426,7 +383,7 @@ export function TransferDateField({
         className="w-[180px]"
       />
       {outOfRange && (
-        <p className="text-xs font-bold text-[var(--color-danger)]">
+        <p className="text-xs font-bold text-danger">
           {rangeLabel}은 내일부터 1년 이내({min.replace(/-/g, ".")} ~{" "}
           {max.replace(/-/g, ".")})에서 선택하세요.
         </p>
@@ -546,7 +503,7 @@ export function TransferEndDateField({
         className="w-[180px]"
       />
       {outOfRange && (
-        <p className="text-xs font-bold text-[var(--color-danger)]">
+        <p className="text-xs font-bold text-danger">
           종료일은 시작일 이후 최대 60개월 이내({min.replace(/-/g, ".")} ~{" "}
           {max.replace(/-/g, ".")})에서 선택하세요.
         </p>

@@ -11,20 +11,15 @@ import { SearchPanel } from "@/widgets/query/search-panel"
 import { RadioRowField } from "@/widgets/query/search-fields"
 import { GridToolbar } from "@/widgets/query/grid-toolbar"
 import { DataGrid, type DataGridColumn } from "@/shared/ui/data-grid"
-import { Pagination } from "@/widgets/query/pagination"
+import { Pagination } from "@/shared/ui/pagination"
 import { ConfirmDialog } from "@/shared/ui/confirm-dialog"
-import { OtpModal } from "@/shared/ui/otp-modal"
+import { OtpModal } from "@/entities/auth"
 import { ErrorDialog } from "@/shared/ui/error-dialog"
 import { AlertDialog } from "@/shared/ui/alert-dialog"
-import { TextViewModal } from "@/widgets/query/text-view-modal"
+import { TextViewModal } from "@/shared/ui/text-view-modal"
 import { downloadCsv } from "@/shared/lib/csv"
-import {
-  TransferEndDateField,
-  addMonths,
-  daysBetween,
-  parseISO,
-  toISO,
-} from "@/widgets/transfer/transfer-fields"
+import { TransferEndDateField } from "@/widgets/transfer/transfer-fields"
+import { addMonths, daysBetween, parseISO, toISO } from "@/shared/lib/date"
 import {
   formatAccountNo,
   formatAmount,
@@ -35,34 +30,21 @@ import {
 } from "@/shared/lib/format"
 import {
   MOCK_AUTO_TRANSFERS,
+  getAutoTransferStatusBadgeVariant,
+  AUTO_TRANSFER_CYCLE_LABEL as CYCLE_LABEL,
   type AutoTransferRow,
-  type AutoTransferStatus,
   type TransferCycle,
 } from "@/entities/transfer"
-
-const TODAY = "2026-07-23"
-const BASE_TIME = "2026-07-23T08:57:34"
+import {
+  MOCK_NOW as BASE_TIME,
+  MOCK_TODAY as TODAY,
+} from "@/shared/config/mock-clock"
 
 const STATUS_OPTIONS = [
   { label: "전체", value: "all" },
   { label: "정상", value: "정상" },
   { label: "해지", value: "해지" },
 ]
-
-const STATUS_BADGE: Record<
-  AutoTransferStatus,
-  "success" | "neutral" | "danger"
-> = {
-  정상: "success",
-  종료: "neutral",
-  해지: "danger",
-}
-
-const CYCLE_LABEL: Record<TransferCycle, string> = {
-  1: "1개월",
-  3: "3개월",
-  6: "6개월",
-}
 
 const FROM_ACCOUNTS = Array.from(
   new Map(
@@ -307,7 +289,11 @@ export function G04AutoTransferList() {
       header: "상태",
       align: "center",
       width: 80,
-      render: (r) => <Badge variant={STATUS_BADGE[r.status]}>{r.status}</Badge>,
+      render: (r) => (
+        <Badge variant={getAutoTransferStatusBadgeVariant(r.status)}>
+          {r.status}
+        </Badge>
+      ),
     },
     {
       key: "actions",
@@ -462,7 +448,7 @@ export function G04AutoTransferList() {
             <Button
               variant="secondary"
               size="lg"
-              className="min-w-[120px]"
+              className="min-w-30"
               onClick={() => {
                 setEditTarget(null)
                 setEditForm(null)
@@ -473,7 +459,7 @@ export function G04AutoTransferList() {
             <Button
               variant="primary"
               size="lg"
-              className="min-w-[120px]"
+              className="min-w-30"
               disabled={
                 !editForm ||
                 !editTarget ||

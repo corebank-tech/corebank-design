@@ -1,6 +1,6 @@
 import type * as React from "react"
 import { Navigate, useLocation } from "react-router-dom"
-import { useSession } from "./session-context"
+import { useSession } from "@/app/use-session"
 
 /**
  * REQ-CMN-006: 비로그인 상태에서 인증 필요 화면 접근 시 로그인으로 리다이렉트하고,

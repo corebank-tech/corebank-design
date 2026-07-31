@@ -207,6 +207,16 @@ radius는 장식이 아니라 **포함 관계**를 나타낸다.
 | HTTP·세션 | `src/shared/api/` — custom-fetch, query-client, api-error, session-events |
 | Mock 서버 | `src/mocks/` — MSW 핸들러 예시 1세트(`handlers/account.ts`). 나머지 도메인은 `entities/*/api`의 정적 mock을 그대로 쓴다 |
 
+`src/shared/ui`의 기본 컴포넌트 15종은 각각 옆에 `*.stories.tsx`가 있다. `pnpm storybook`으로
+확인한다. 기본 컴포넌트를 새로 추가하거나 variant를 바꾸면 스토리도 같이 갱신한다 — 나머지
+`shared/ui`(data-grid 등 도메인 데이터가 필요한 컴포넌트)의 스토리는 아직 없다.
+
+화면(`pages`) 단위 스토리는 `.storybook/decorators/page-providers.tsx`의
+`WithGuestPage`/`WithAuthenticatedPage`로 `src/main.tsx`와 동일한 프로바이더 조합
+(QueryClient·Router·Session·Notifications)을 재현한다 — `src/pages/a01-login.stories.tsx`,
+`src/pages/dashboard/a09-main-dashboard.stories.tsx`가 예시다. 아직 이 2개뿐이다
+(`docs/SESSION_HANDOFF.md` 참고).
+
 ## 마이크로카피
 
 - 버튼은 실행 결과를 그대로 쓴다. "확인"이 아니라 "이체하기"

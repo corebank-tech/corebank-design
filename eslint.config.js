@@ -1,3 +1,6 @@
+// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
+import storybook from "eslint-plugin-storybook"
+
 import js from "@eslint/js"
 import globals from "globals"
 import tseslint from "typescript-eslint"
@@ -139,8 +142,8 @@ export default tseslint.config(
       ],
 
       /* ---- warn: entities/account → entities/transfer 참조 2건(의도적 예외,
-         CLAUDE.md "남은 마이그레이션" 참고 — 출금계좌 삭제 가능 여부가 예약이체·
-         자동이체 등록 여부에 의존하는 도메인 규칙이라 엔티티 간 참조가 불가피하다) ---- */
+       CLAUDE.md "남은 마이그레이션" 참고 — 출금계좌 삭제 가능 여부가 예약이체·
+       자동이체 등록 여부에 의존하는 도메인 규칙이라 엔티티 간 참조가 불가피하다) ---- */
       "boundaries/dependencies": [
         "warn",
         {
@@ -170,7 +173,12 @@ export default tseslint.config(
   },
   {
     // 라이브러리가 default export를 요구하는 문서화된 예외
-    files: ["src/App.tsx", "*.config.{ts,js,mjs}", "eslint.config.js"],
+    files: [
+      "src/App.tsx",
+      "*.config.{ts,js,mjs}",
+      "eslint.config.js",
+      "src/**/*.stories.tsx",
+    ],
     rules: { "no-restricted-exports": "off" },
   },
   {
@@ -187,5 +195,22 @@ export default tseslint.config(
     ],
     languageOptions: { globals: globals.node },
   },
+  {
+    // Storybook 데코레이터는 앱의 Fast Refresh 경계와 무관하다
+    files: [".storybook/**/*.{ts,tsx}"],
+    rules: { "react-refresh/only-export-components": "off" },
+  },
+  {
+    // 화면 스토리는 실제 빌드(dist)에 포함되지 않는 dev 전용 도구다. src/ 밖의
+    // 공용 스토리 데코레이터(.storybook/decorators)를 상대경로로 불러오고,
+    // PageShell(app 레이어)을 직접 조립해 실제 라우트를 재현해야 하므로
+    // FSD 레이어 방향·절대경로 규칙의 대상에서 제외한다.
+    files: ["src/**/*.stories.tsx"],
+    rules: {
+      "@typescript-eslint/no-restricted-imports": "off",
+      "boundaries/dependencies": "off",
+    },
+  },
   prettier,
+  storybook.configs["flat/recommended"],
 )

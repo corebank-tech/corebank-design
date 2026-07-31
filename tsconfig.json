@@ -21,6 +21,7 @@
   "include": [
     "src",
     "e2e",
+    ".storybook",
     "vite.config.ts",
     "orval.config.ts",
     "playwright.config.ts"

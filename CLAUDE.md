@@ -207,15 +207,20 @@ radius는 장식이 아니라 **포함 관계**를 나타낸다.
 | HTTP·세션 | `src/shared/api/` — custom-fetch, query-client, api-error, session-events |
 | Mock 서버 | `src/mocks/` — MSW 핸들러 예시 1세트(`handlers/account.ts`). 나머지 도메인은 `entities/*/api`의 정적 mock을 그대로 쓴다 |
 
-`src/shared/ui`의 기본 컴포넌트 15종은 각각 옆에 `*.stories.tsx`가 있다. `pnpm storybook`으로
-확인한다. 기본 컴포넌트를 새로 추가하거나 variant를 바꾸면 스토리도 같이 갱신한다 — 나머지
-`shared/ui`(data-grid 등 도메인 데이터가 필요한 컴포넌트)의 스토리는 아직 없다.
+**Storybook이 디자인 시스템·화면의 단일 공개 카탈로그다.** `src/shared/ui`·`src/widgets`·
+`src/entities/*/ui`의 모든 컴포넌트와 `src/pages`의 라우팅되는 화면·내부 스텝 컴포넌트 전부에
+`*.stories.tsx`가 있다. 새 컴포넌트·화면을 추가하거나 variant를 바꾸면 스토리도 같이 갱신한다.
+`pnpm storybook`으로 로컬 확인하고, `main` 푸시 시 `.github/workflows/storybook-pages.yml`이
+자동으로 https://corebank-tech.github.io/corebank-design/ 에 재배포한다 — FE는 이 레포를
+체크아웃하지 않고 그 링크만으로 전체 디자인 시스템·화면을 확인할 수 있다.
 
 화면(`pages`) 단위 스토리는 `.storybook/decorators/page-providers.tsx`의
 `WithGuestPage`/`WithAuthenticatedPage`로 `src/main.tsx`와 동일한 프로바이더 조합
-(QueryClient·Router·Session·Notifications)을 재현한다 — `src/pages/a01-login.stories.tsx`,
-`src/pages/dashboard/a09-main-dashboard.stories.tsx`가 예시다. 아직 이 2개뿐이다
-(`docs/SESSION_HANDOFF.md` 참고).
+(QueryClient·Router·Session·Notifications)을 재현한다 — 인증 우회 없이 실제
+`SessionProvider.login()`을 태운다. `useSearchParams`로 쿼리스트링을 읽는 화면은
+`parameters: { route: "/path?query=1" }`로, `useLocation().state`로 이전 단계 데이터를
+받는 화면(상품가입 C-05·C-06 등)은 `parameters: { route: { path, state } }`
+(`RouteWithState` 타입)로 재현한다 — `src/pages/product/c06-complete.stories.tsx`가 예시다.
 
 ## 마이크로카피
 

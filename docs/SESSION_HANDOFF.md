@@ -61,11 +61,11 @@
 - `pnpm check` 전부 통과 상태 유지(eslint.config.js에 스토리 파일의 CSF `export default`
   허용 예외, `.storybook/**`의 `react-refresh/only-export-components` 예외 추가)
 
-### 5. 화면(Page) 스토리 공용 하네스 + 대표 화면 2개
+### 5. 화면(Page) 스토리 공용 하네스
 
 `src/pages/*.tsx`를 mock 데이터와 함께 통째로 스토리로 등록해 "화면 디자인 카탈로그"로
-쓰는 것이 목표였다. 47개 화면 전부가 아니라 **공용 하네스를 설계하고 대표 화면 2개로
-검증**하는 것으로 범위를 좁혔다(사용자 확인함).
+쓰는 것이 목표였다. 처음엔 하네스만 설계하고 대표 화면 2개로 검증하는 것으로 범위를
+좁혔으나(§6에서 전체 화면으로 확장됨).
 
 - `.storybook/decorators/page-providers.tsx` — 실제 `src/main.tsx`의 프로바이더 조합
   (`QueryClientProvider` → `MemoryRouter` → `SessionProvider` → `NotificationsProvider`)을
@@ -74,38 +74,54 @@
   - `WithGuestPage`: 로그인 전 화면(A01 로그인, 아이디찾기 등)용. 로그인하지 않은 상태 그대로
   - `WithAuthenticatedPage`: `RequireAuth`로 보호되는 화면용. 마운트 시 자동 로그인 — 실제
     라우트는 이 상태로만 도달 가능하므로 그 상태를 재현한다
+  - `parameters: { route: "/instant-transfer?from=..." }`로 `useSearchParams`를 읽는
+    화면의 진입 경로를 재현한다. `useLocation().state`로 이전 단계 데이터를 받는 화면
+    (상품가입 C-05·C-06 등)은 `parameters: { route: { path, state } }`(`RouteWithState`
+    타입)로 라우터 state까지 재현한다 — `MemoryRouter`의 `initialEntries`가 문자열 대신
+    `{ pathname, state }` 객체를 받을 수 있다는 점을 이용했다
   - `.storybook/`는 FSD 레이어 밖이라 `@/` 별칭을 자유롭게 쓴다. 반대로 `src/pages/*.stories.tsx`에서
     이 데코레이터를 불러올 때는 상대경로(`../../.storybook/...`)가 필요해서, eslint.config.js에
     `src/**/*.stories.tsx` 전용 예외(`@typescript-eslint/no-restricted-imports`,
     `boundaries/dependencies` off)를 추가했다 — 스토리는 `dist` 빌드에 포함되지 않는 dev 전용
     파일이라 FSD 레이어 방향·절대경로 규칙의 실질적 영향이 없다는 판단
-- 검증한 대표 화면 2개(둘 다 브라우저로 라이트/다크 확인 완료):
-  - `src/pages/a01-login.stories.tsx` — `WithGuestPage` + `PageShell bare`(실제 `/` 라우트와 동일)
-  - `src/pages/dashboard/a09-main-dashboard.stories.tsx` — `WithAuthenticatedPage` +
-    `PageShell breadcrumb/title`(실제 `/dashboard` 라우트와 동일). `Default`/`EmptyAccounts`
-    두 변형으로 props override 패턴(`accounts={[]}`)도 함께 보여준다
 - 각 스토리는 `App.tsx`의 실제 라우트 엘리먼트(`<PageShell ...><Page /></PageShell>`)를
   그대로 옮겨 적어 화면 전체(헤더·브레드크럼·사이드내비 포함)를 보여준다 — 페이지 컴포넌트
   단독 렌더가 아니다
 
+### 6. 전체 디자인 시스템·화면 커버리지 + GitHub Pages 배포
+
+사용자 요청: "모든 디자인 시스템과 페이지가 Storybook에 올라가야 하고, FE가 이 레포 없이도
+Storybook만으로 개발할 수 있어야 한다." 병렬 서브에이전트 7개로 나머지 전부를 작성했다:
+
+- **컴포넌트**: `src/shared/ui`(§1의 16종 포함 전체), `src/widgets/{query,transfer,shell}`,
+  `src/widgets/terms-agreement.tsx`, `src/entities/{auth,transfer}/ui` — 빠짐없이 스토리 작성
+- **화면**: `App.tsx`의 라우팅되는 화면 28개(로그인·대시보드 2개는 기존) + 이체/회원가입 내부
+  스텝 컴포넌트 14개(A02-06, D01-03, E01-03, G01-03) — 총 42개 스토리 파일 신규
+  - 제외: `src/pages/design-system/*`(앱 내부의 자체 디자인 시스템 갤러리 페이지) — Storybook
+    자체가 그 역할을 대체하므로 의도적으로 스토리화하지 않았다
+- 통합 검증: `pnpm check` 전체 통과, Storybook 부팅해 브라우저로 DataGrid/QueryPageLayout/
+  AppHeader/C06(라우터 state 주입) 등 표본 확인 완료 (총 스토리 175개 등록)
+- **GitHub Pages 배포**: `.github/workflows/storybook-pages.yml`이 `main` 푸시마다
+  `pnpm build-storybook` → `actions/deploy-pages`로 배포한다.
+  - 저장소를 `corebank-tech/corebank-design`(https://github.com/corebank-tech/corebank-design)에
+    연결(기존 `danhandev/corebank-design`에서 `origin` 변경)
+  - ⚠️ **레포를 public으로 전환했다.** GitHub Pages는 무료 조직 플랜에서 private 레포를
+    지원하지 않아(`Your current plan does not support GitHub Pages for this repository`),
+    Pages를 쓰려면 public 전환 또는 유료 플랜 업그레이드 중 하나가 필요했다 — 사용자가
+    public 전환을 선택함. 소스 코드 전체가 공개 상태다
+  - 라이브 URL: https://corebank-tech.github.io/corebank-design/
+  - 커밋은 3개로 나눴다: xlsx 갱신 → §1·§2 디자인 시스템 정리(이전 세션의 미커밋 완료 작업) →
+    §4·§5 Storybook·CI 설치. §6(이 항목)은 별도 커밋으로 이어진다
+
 ## 다음 단계
 
-**나머지 45개 화면의 스토리는 아직 없다.** §5의 두 예시가 패턴이다 — 각 화면마다
-1) `App.tsx`에서 해당 라우트의 `PageShell` props(breadcrumb/title/activeId/notice)를 그대로
-복사하고, 2) 인증 여부에 따라 `WithGuestPage`/`WithAuthenticatedPage`를 고르면 된다.
-알려진 한계: 하네스의 `MemoryRouter`는 `initialEntries={["/"]}`로 고정돼 있어 URL 파라미터
-(`:productId`)나 쿼리스트링(`?account=...`)을 읽는 화면(C-02 상품상세, 대시보드에서 넘어오는
-조회·이체 화면 등)은 그대로 쓰면 안 된다 — 그런 화면을 다룰 때 `initialEntries`를 파라미터화하는
-확장이 먼저 필요하다.
-
-**아직 스토리가 없는 `src/shared/ui` 컴포넌트**(위 §1에서 신설한 것 포함): data-grid,
-empty-state, pagination, summary-row, alert-dialog, confirm-dialog, error-dialog,
-grid-search-modal, text-view-modal, step-layout, step-indicator, confirm-summary,
-collapsible-section, label-value-row, panel, query-page-layout — 도메인 데이터나 복잡한
-상태(선택·정렬·페이징)를 mock으로 채워야 해서 기본 컴포넌트보다 손이 더 간다.
-
-Chromatic(시각 회귀 SaaS)은 무료 티어에 스냅샷 제한이 있다는 점만 참고 — Storybook 자체는
-완전 무료, 사용량 제한 없음(로컬/CI에서 도는 정적 빌드 도구).
+- **인터랙션/시각 회귀 테스트는 아직 없다** — `@storybook/addon-vitest`가 aria-query 버그로
+  빠져 있다(§4). Chromatic 애드온은 설치돼 있지만 계정 연결·스냅샷 베이스라인은 아직이다.
+  Chromatic 무료 티어는 월 스냅샷 제한이 있다는 점만 참고
+- **`src/pages/design-system/*`(앱 내부 갤러리 6개)는 의도적으로 스토리화하지 않았다** — 필요
+  없어지면 삭제를 검토해도 된다(§6 참고)
+- 그 외 CLAUDE.md "남은 마이그레이션" 절의 항목들(Orval 코드젠, docker-compose 배포)은
+  이번 세션과 무관하게 그대로 남아 있다
 
 ## 참고
 

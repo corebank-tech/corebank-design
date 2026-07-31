@@ -97,8 +97,6 @@ Storybook만으로 개발할 수 있어야 한다." 병렬 서브에이전트 7�
   `src/widgets/terms-agreement.tsx`, `src/entities/{auth,transfer}/ui` — 빠짐없이 스토리 작성
 - **화면**: `App.tsx`의 라우팅되는 화면 28개(로그인·대시보드 2개는 기존) + 이체/회원가입 내부
   스텝 컴포넌트 14개(A02-06, D01-03, E01-03, G01-03) — 총 42개 스토리 파일 신규
-  - 제외: `src/pages/design-system/*`(앱 내부의 자체 디자인 시스템 갤러리 페이지) — Storybook
-    자체가 그 역할을 대체하므로 의도적으로 스토리화하지 않았다
 - 통합 검증: `pnpm check` 전체 통과, Storybook 부팅해 브라우저로 DataGrid/QueryPageLayout/
   AppHeader/C06(라우터 state 주입) 등 표본 확인 완료 (총 스토리 175개 등록)
 - **GitHub Pages 배포**: `.github/workflows/storybook-pages.yml`이 `main` 푸시마다
@@ -112,6 +110,28 @@ Storybook만으로 개발할 수 있어야 한다." 병렬 서브에이전트 7�
   - 라이브 URL: https://corebank-tech.github.io/corebank-design/
   - 커밋은 3개로 나눴다: xlsx 갱신 → §1·§2 디자인 시스템 정리(이전 세션의 미커밋 완료 작업) →
     §4·§5 Storybook·CI 설치. §6(이 항목)은 별도 커밋으로 이어진다
+
+### 7. 커버리지 감사 — 빠진 요소 13개 보강
+
+사용자가 "빠진 페이지나 토큰, 요소 없지?"라고 확인 요청 — 서브에이전트가 각자 맡은 범위만
+보고 스토리를 썼기 때문에, 애초에 아무에게도 할당되지 않은 파일들이 있었다. `find`로
+컴포넌트/화면 트리 전체와 스토리 파일을 diff해 실제로 찾아냈다:
+
+- `src/shared/ui/notice-box.tsx`(NoticeBox/NoticeBoxFooter) — §6에서 짠 "나머지 16종" 목록에
+  이 파일이 애초에 빠져 있었다(내 스코핑 실수)
+- `src/pages/dashboard/{access-status-panel,banking-shortcuts,notification-summary}.tsx`,
+  `src/pages/product/{fields,product-card-grid,product-detail}.tsx` — A09·C01·C02·C04
+  화면의 내부 하위 컴포넌트라 각 화면의 스토리에는 이미 조합된 채로 나오지만, 독립된 스토리는
+  없었다. `fields.tsx`·`product-card-grid.tsx`는 `transfer-fields.tsx`/`search-fields.tsx`처럼
+  독립적으로 재사용 가치가 있는 패턴이라 스토리를 추가했다
+- **`src/pages/design-system/*` 6개(TokenGallery/PrimitiveGallery/CompositionGallery/
+  PatternGallery/ModalFamilyGallery/DesignSystemPage) — §6에서 "Storybook이 대체하니 제외"라고
+  판단했던 게 잘못이었다.** 이 갤러리들이야말로 색상·타이포·spacing·radius 토큰의 실제 문서였고,
+  Storybook에 없으면 토큰 자체를 볼 곳이 없어진다. 전부 prop 없는 자기완결 컴포넌트라 그대로
+  스토리로 감쌌다
+- 최종 스토리 193개. `find src/{shared/ui,widgets,entities} -name "*.tsx" ! -name
+  "*.stories.tsx"`와 `src/pages`를 스토리 파일 존재 여부로 diff하는 감사를 다시 돌리면
+  0건이어야 한다 — 다음에 컴포넌트/화면을 추가할 때도 이 diff로 빠짐을 확인할 수 있다
 
 ## 다음 단계
 

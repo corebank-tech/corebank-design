@@ -114,7 +114,6 @@ export const NAV: NavCategory[] = [
         title: "개인정보",
         items: [
           { label: "고객정보 관리", screenId: "F-01", path: "/user/profile" },
-          { label: "비밀번호 변경", screenId: "F-01", path: "/user/password" },
         ],
       },
       {

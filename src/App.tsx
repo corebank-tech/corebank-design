@@ -103,8 +103,7 @@ const DEV_ROUTES: DevRoute[] = [
     path: "/transfer/reservation/history",
   },
 
-  { screenId: "F-01", label: "고객정보 관리", path: "/user/profile" },
-  { screenId: "F-01", label: "비밀번호 변경", path: "/user/password" },
+  { screenId: "F-01", label: "고객정보 조회/변경", path: "/user/profile" },
   { screenId: "F-02", label: "알림함", path: "/notifications" },
 
   { screenId: "G-01", label: "자동이체 등록", path: "/transfer/auto/new" },
@@ -205,8 +204,8 @@ function SessionExpiredGate() {
 export default function App() {
   return (
     <>
-      {/* Dev-only route switcher (not part of the design system) */}
-      <DevNav />
+      {/* Dev-only route switcher (not part of the design system). 프로덕션 빌드에서 제외된다. */}
+      {import.meta.env.DEV && <DevNav />}
       <SessionExpiredGate />
 
       <Routes>
@@ -289,18 +288,20 @@ export default function App() {
             </RequireAuth>
           }
         />
-        <Route
-          path="/design-system"
-          element={
-            <PageShell
-              activeId="user"
-              breadcrumb={["개인", "공통", "디자인 시스템"]}
-              title="디자인 시스템"
-            >
-              <DesignSystemPage />
-            </PageShell>
-          }
-        />
+        {import.meta.env.DEV && (
+          <Route
+            path="/design-system"
+            element={
+              <PageShell
+                activeId="user"
+                breadcrumb={["개인", "공통", "디자인 시스템"]}
+                title="디자인 시스템"
+              >
+                <DesignSystemPage />
+              </PageShell>
+            }
+          />
+        )}
 
         <Route
           path="/accounts"
@@ -458,20 +459,6 @@ export default function App() {
         />
         <Route
           path="/user/profile"
-          element={
-            <RequireAuth>
-              <PageShell
-                activeId="user"
-                breadcrumb={["사용자관리", "고객정보관리"]}
-                title="고객정보 조회/변경"
-              >
-                <F01Profile />
-              </PageShell>
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="/user/password"
           element={
             <RequireAuth>
               <PageShell

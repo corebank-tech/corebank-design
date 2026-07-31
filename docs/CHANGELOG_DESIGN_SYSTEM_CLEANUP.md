@@ -118,3 +118,23 @@
 `text-[32px]`(상품가 강조 표시), `app-header.tsx`의 `text-[10px]`(알림 배지 숫자)는 9단
 타이포 스케일 밖의 임의값이다. 스케일에 없는 크기라 변환 시 렌더 결과가 바뀌므로(=승인
 범위 밖의 시각 변경) 손대지 않았다 — 스케일을 확장할지 예외로 남길지 결정이 필요하다.
+
+## 후속 조치 (2026-07-31) — B1·B2·B3·B4·B7·B8 해결
+
+사용자 확인을 받아 위 부록 항목을 해결했다. B5·B6은 원래 무해 항목으로 분류돼 작업하지 않았다.
+
+| # | 조치 |
+|---|---|
+| B1 | 실측 결과 셀 border-box 높이가 42px(border 포함, `getBoundingClientRect` 기준)로 확인돼 POL-041을 42px로 정정. `docs/requirements.md`(POL-041), `CLAUDE.md`, `docs/DESIGN_TOKENS.md` 3곳 동기화. 코드는 변경하지 않음(렌더 불변) |
+| B2 | `docs/requirements.md`에 REQ-NFR-022(다크 테마) 신설 |
+| B3 | `docs/requirements.md`에 REQ-CMN-027(텍스트 크기 조절) 신설. 인수기준에 "130%에서 콘텐츠가 1280px를 넘으면 가로 스크롤(REQ-NFR-012와 동일 원칙)"을 명시해 상충 소지를 해소. 동작 자체는 변경하지 않음 |
+| B4 | REQ-CMN-001을 개정해 SideNav를 공통 레이아웃의 일부로 명시. A-90 화면목록 행에도 SideNav 반영 |
+| B7 | `App.tsx`의 `DevNav`와 `/design-system` 라우트를 `import.meta.env.DEV`로 게이팅. 프로덕션 빌드(`vite build`)에서 디자인시스템 코드가 완전히 트리셰이킹되는 것을 번들 크기(617.86kB→597.81kB)와 문자열 검색으로 확인 |
+| B8 | `/user/password` 중복 라우트·`DEV_ROUTES`·`nav.ts` 메뉴 항목 제거. F-01은 이제 `/user/profile` 단일 경로로만 접근 |
+
+requirements.md 요구사항 총계 210건→212건(REQ-CMN 26→27, REQ-NFR 21→22). `CLAUDE.md`의
+프로젝트 설명 수치도 함께 갱신했다.
+
+> 주의: `docs/requirements.md` 상단에 명시된 대로 원본은 `CoreBank_요구사항정의서_v1_3.xlsx`이고
+> 이 마크다운은 구현 참조용 발췌본이다. 위 REQ-NFR-022·REQ-CMN-027 신설과 POL-041·REQ-CMN-001
+> 개정은 이 발췌본에만 반영했다 — 원본 xlsx 동기화는 별도로 필요하다.

@@ -77,7 +77,7 @@ export function GridSearchModal({
     >
       <div className="flex flex-col gap-4">
         <div>
-          <p className="mb-2 text-sm font-bold text-ink">검색 대상</p>
+          <p className="mb-2 text-base font-bold text-ink">검색 대상</p>
           <div className="flex flex-wrap gap-x-4 gap-y-2">
             {fields.map((f) => (
               <Radio
@@ -93,7 +93,7 @@ export function GridSearchModal({
         </div>
 
         <div>
-          <p className="mb-2 text-sm font-bold text-ink">검색어</p>
+          <p className="mb-2 text-base font-bold text-ink">검색어</p>
           <Input
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}

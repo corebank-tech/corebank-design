@@ -9,7 +9,6 @@
      primary: 버튼·탭·링크 등 상호작용 요소 전용. */
   --color-navy: #0a2e7d; /* H220 S85% L26% */
   --color-primary: #0a60f5; /* H218 S92% L50% — POL-039 팀 피드백: 채도 상향(2026-07) */
-  --color-primary-hover: #0846ba;
   --color-primary-tint: #ecf2fe; /* notice box background */
   --color-link: #0a60f5; /* inline text links */
 
@@ -29,20 +28,10 @@
   --color-danger: #d81e18; /* 팀 피드백: 채도 상향(2026-07) */
   --color-danger-tint: #fbf0ef;
   --color-danger-ring: color-mix(in srgb, var(--color-danger) 20%, white);
-  /* danger 상태 컨트롤(예: Button variant="danger")의 hover — primary-hover와
-     같은 방식(20% 검정 혼합)으로 어둡게 한다. */
-  --color-danger-hover: color-mix(in srgb, var(--color-danger) 82%, black);
   --color-success: #107f46;
   --color-success-tint: #e7f4ee;
-  --color-success-ring: color-mix(in srgb, var(--color-success) 20%, white);
   --color-warning: #ad6200;
   --color-warning-tint: #fbf3e2;
-  --color-warning-ring: color-mix(in srgb, var(--color-warning) 20%, white);
-  --color-info: #1359ae;
-  /* success·warning-tint와 같은 비율(약 10% 혼합)로 맞춘 info 배경/보더 —
-     danger/success/warning과 달리 이 둘이 없어서 info 톤을 실제로 쓸 수 없었다. */
-  --color-info-tint: color-mix(in srgb, var(--color-info) 10%, white);
-  --color-info-border-soft: color-mix(in srgb, var(--color-info) 20%, white);
   --color-ring-soft: color-mix(in srgb, var(--color-primary) 30%, white);
   --color-skeleton: color-mix(in srgb, var(--color-border) 60%, white);
 
@@ -68,22 +57,20 @@
   ); /* 색상 바 위 아이콘버튼 hover */
   --overlay-white-70: rgba(255, 255, 255, 0.7); /* 색상 바 위 포커스 링 */
 
-  /* Grid / ledger */
+  /* Grid / ledger — 출금액은 danger와 hex가 완전히 같아 별도 토큰을 두지 않는다.
+     입금·출금을 함께 보여줄 때는 --color-deposit과 --color-danger를 쓴다. */
   --color-deposit: #0c5bbb; /* 입금 amounts — 팀 피드백: 채도 상향(2026-07) */
-  --color-withdraw: #d81e18; /* 출금 amounts */
 
-  /* Type scale — 9단
-     팀 피드백(2026-07, 3차): 2차 확대가 과했다는 피드백("실제 은행 UI처럼 조밀해야
-     한다")에 따라 POL-041 원안 수치로 되돌린다. DataGrid·SummaryRow는 --text-sm에
-     종속시키지 않고 text-[14px]로 직접 고정해 향후 스케일 변경과 분리한다
-     (POL-041 3차 피드백: 표만 13→14px로 소폭 상향). */
+  /* Type scale — 6단 (2026-07 5차: 인접 단계가 1px 차이라 사용자가 구분하지
+     못하고 개발 시 어떤 걸 골라야 할지도 헷갈린다는 피드백에 따라, 9단→7단(h3·md
+     흡수)에 이어 text-sm(13px)을 text-base(14px)에 흡수했다 — 이제 각 단계는
+     최소 2px 이상 차이난다(2xs·xs 제외 — 이 둘은 각주 vs 라벨이라는 별개 용도로
+     CLAUDE.md에 고정 규정돼 있어 유지). DataGrid·SummaryRow는 text-[14px] 리터럴로
+     직접 고정해 스케일과 분리한다(POL-041 3차 피드백: 표만 13→14px로 소폭 상향). */
   --text-page: 26px;
   --text-h2: 20px;
-  --text-h3: 17px;
   --text-lg: 16px;
-  --text-md: 15px;
   --text-base: 14px;
-  --text-sm: 13px;
   --text-xs: 12px;
   --text-2xs: 11px;
 
@@ -150,7 +137,6 @@
      AA(4.5:1) 미달이었던 primary/danger/info를 카드 표면 기준으로 재보정. */
   --color-navy: #3c71dd;
   --color-primary: #5a95f7;
-  --color-primary-hover: #7aa8ff;
   --color-primary-tint: #14203a;
   --color-link: #7aa8ff;
 
@@ -179,32 +165,10 @@
     var(--color-danger) 30%,
     var(--color-surface-elevated)
   );
-  --color-danger-hover: color-mix(in srgb, var(--color-danger) 85%, white);
   --color-success: #2eb870;
   --color-success-tint: #12281c;
-  --color-success-ring: color-mix(
-    in srgb,
-    var(--color-success) 30%,
-    var(--color-surface-elevated)
-  );
   --color-warning: #f28f0d;
   --color-warning-tint: #2c2110;
-  --color-warning-ring: color-mix(
-    in srgb,
-    var(--color-warning) 30%,
-    var(--color-surface-elevated)
-  );
-  --color-info: #5597e7;
-  --color-info-tint: color-mix(
-    in srgb,
-    var(--color-info) 16%,
-    var(--color-surface-elevated)
-  );
-  --color-info-border-soft: color-mix(
-    in srgb,
-    var(--color-info) 30%,
-    var(--color-surface-elevated)
-  );
   --color-ring-soft: color-mix(
     in srgb,
     var(--color-primary) 35%,
@@ -222,7 +186,6 @@
   --color-danger-border-soft: #4a2321;
 
   --color-deposit: #3e8bea;
-  --color-withdraw: #f2645f;
 
   --color-footer-fg: var(--color-ink-muted);
   --color-footer-fg-strong: var(--color-ink);
@@ -244,7 +207,6 @@
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
   --color-primary-tint: var(--color-primary-tint);
-  --color-primary-hover: var(--color-primary-hover);
   --color-link: var(--color-link);
   --color-border: var(--border);
   --color-border-strong: var(--color-border-strong);
@@ -258,23 +220,16 @@
   --color-ink-faint: var(--color-ink-faint);
   --color-danger: var(--color-danger);
   --color-danger-tint: var(--color-danger-tint);
-  --color-danger-hover: var(--color-danger-hover);
   --color-success: var(--color-success);
   --color-success-tint: var(--color-success-tint);
-  --color-success-ring: var(--color-success-ring);
   --color-warning: var(--color-warning);
   --color-warning-tint: var(--color-warning-tint);
-  --color-warning-ring: var(--color-warning-ring);
-  --color-info: var(--color-info);
-  --color-info-tint: var(--color-info-tint);
-  --color-info-border-soft: var(--color-info-border-soft);
   --color-primary-border-soft: var(--color-primary-border-soft);
   --color-success-border-soft: var(--color-success-border-soft);
   --color-warning-border-soft: var(--color-warning-border-soft);
   --color-danger-border-soft: var(--color-danger-border-soft);
   --color-navy: var(--color-navy);
   --color-deposit: var(--color-deposit);
-  --color-withdraw: var(--color-withdraw);
   --color-danger-ring: var(--color-danger-ring);
   --color-ring-soft: var(--color-ring-soft);
   --color-skeleton: var(--color-skeleton);
@@ -287,7 +242,7 @@
   --color-footer-divider: var(--color-footer-divider);
   --color-footer-hover-bg: var(--color-footer-hover-bg);
 
-  /* 9단 스케일을 봉인한다 — text-xl 같은 Tailwind 기본 스케일 클래스가 컴파일되지
+  /* 7단 스케일을 봉인한다 — text-xl 같은 Tailwind 기본 스케일 클래스가 컴파일되지
      않게 해 리뷰가 아니라 컴파일러가 스케일을 지킨다. line-height는 Tailwind
      기본값과 동일하게 재선언해 봉인 전후 렌더 결과가 바뀌지 않도록 한다. */
   --text-*: initial;
@@ -295,14 +250,10 @@
   --text-page--line-height: 1.3;
   --text-h2: var(--text-h2);
   --text-h2--line-height: 1.4;
-  --text-h3: var(--text-h3);
   --text-lg: var(--text-lg);
   --text-lg--line-height: calc(1.75 / 1.125);
-  --text-md: var(--text-md);
   --text-base: var(--text-base);
   --text-base--line-height: calc(1.5 / 1);
-  --text-sm: var(--text-sm);
-  --text-sm--line-height: calc(1.25 / 0.875);
   --text-xs: var(--text-xs);
   --text-xs--line-height: calc(1 / 0.75);
   --text-2xs: var(--text-2xs);

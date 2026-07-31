@@ -84,7 +84,7 @@ export function ConfirmDialog({
         <div className="max-h-[240px] overflow-y-auto rounded-md border border-border bg-surface-2 px-5 py-4">
           <dl className="flex flex-col gap-2">
             {items.map((item, i) => (
-              <div key={i} className="flex gap-2 text-sm leading-relaxed">
+              <div key={i} className="flex gap-2 text-base leading-relaxed">
                 <dt className="shrink-0 font-bold text-ink">{item.label}</dt>
                 <dd className="min-w-0 flex-1 text-ink tabular-nums">
                   : {item.value}

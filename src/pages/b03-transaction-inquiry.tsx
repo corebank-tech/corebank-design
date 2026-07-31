@@ -1,9 +1,9 @@
 import * as React from "react"
 import { useSearchParams } from "react-router-dom"
-import { ChevronDown } from "lucide-react"
 import { FormSection } from "@/shared/ui/form-section"
 import { FormRow } from "@/shared/ui/form-row"
 import { Badge } from "@/shared/ui/badge"
+import { CollapsibleSection } from "@/shared/ui/collapsible-section"
 import { SearchPanel } from "@/widgets/query/search-panel"
 import {
   AccountSelectField,
@@ -75,7 +75,7 @@ function InfoRow({ items, gridCols }: { items: InfoItem[]; gridCols: string }) {
             className={
               item.dominant
                 ? "text-xs text-ink-faint"
-                : "text-sm text-ink-muted"
+                : "text-base text-ink-muted"
             }
           >
             {item.term}
@@ -84,7 +84,7 @@ function InfoRow({ items, gridCols }: { items: InfoItem[]; gridCols: string }) {
             className={cn(
               item.dominant
                 ? "text-h2 font-bold text-primary"
-                : "text-md font-bold text-ink",
+                : "text-base font-bold text-ink",
               item.numeric && "tabular-nums",
             )}
           >
@@ -110,7 +110,6 @@ export function B03TransactionInquiry() {
   const [content, setContent] = React.useState("all")
   const [order, setOrder] = React.useState("recent")
   const [keyword, setKeyword] = React.useState("")
-  const [accountOpen, setAccountOpen] = React.useState(true)
   const [pageSize, setPageSize] = React.useState<number | "all">(10)
   const [page, setPage] = React.useState(1)
   const [savedOpen, setSavedOpen] = React.useState(false)
@@ -181,7 +180,7 @@ export function B03TransactionInquiry() {
       width: 120,
       sortable: true,
       sortValue: (r) => r.withdraw,
-      render: (r) => amountCell(r.withdraw, "var(--color-withdraw)"),
+      render: (r) => amountCell(r.withdraw, "var(--color-danger)"),
     },
     {
       key: "deposit",
@@ -308,75 +307,57 @@ export function B03TransactionInquiry() {
         </SearchPanel>
       </FormSection>
 
-      {/* Collapsible account info panel */}
-      <div className="mb-6 overflow-hidden border border-border">
-        <button
-          type="button"
-          onClick={() => setAccountOpen((v) => !v)}
-          aria-expanded={accountOpen}
-          className="flex w-full items-center justify-between bg-surface px-4 py-2.5 text-sm font-bold text-ink focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-        >
-          <span>계좌정보</span>
-          <ChevronDown
-            className={cn(
-              "h-4 w-4 text-ink-muted transition-transform",
-              accountOpen && "rotate-180",
-            )}
-            aria-hidden="true"
+      <CollapsibleSection title="계좌정보" className="mb-6">
+        <div>
+          <InfoRow
+            gridCols="grid-cols-4"
+            items={[
+              { term: "계좌명", desc: selectedAccount.alias },
+              { term: "예금주", desc: maskName(selectedAccount.ownerName) },
+              {
+                term: "계좌번호",
+                desc: formatAccountNo(selectedAccount.accountNo),
+                numeric: true,
+              },
+              {
+                term: "계좌상태",
+                desc: (
+                  <Badge
+                    variant={getAccountStatusBadgeVariant(
+                      selectedAccount.status,
+                    )}
+                  >
+                    {selectedAccount.status}
+                  </Badge>
+                ),
+              },
+            ]}
           />
-        </button>
-        {accountOpen && (
           <div className="border-t border-border">
             <InfoRow
-              gridCols="grid-cols-4"
+              gridCols="grid-cols-3"
               items={[
-                { term: "계좌명", desc: selectedAccount.alias },
-                { term: "예금주", desc: maskName(selectedAccount.ownerName) },
                 {
-                  term: "계좌번호",
-                  desc: formatAccountNo(selectedAccount.accountNo),
+                  term: "계좌잔액",
+                  desc: formatAmount(selectedAccount.balance),
+                  numeric: true,
+                  dominant: true,
+                },
+                {
+                  term: "출금가능금액",
+                  desc: formatAmount(selectedAccount.withdrawable),
                   numeric: true,
                 },
                 {
-                  term: "계좌상태",
-                  desc: (
-                    <Badge
-                      variant={getAccountStatusBadgeVariant(
-                        selectedAccount.status,
-                      )}
-                    >
-                      {selectedAccount.status}
-                    </Badge>
-                  ),
+                  term: "신규일자",
+                  desc: formatDate(selectedAccount.openedDate),
+                  numeric: true,
                 },
               ]}
             />
-            <div className="border-t border-border">
-              <InfoRow
-                gridCols="grid-cols-3"
-                items={[
-                  {
-                    term: "계좌잔액",
-                    desc: formatAmount(selectedAccount.balance),
-                    numeric: true,
-                    dominant: true,
-                  },
-                  {
-                    term: "출금가능금액",
-                    desc: formatAmount(selectedAccount.withdrawable),
-                    numeric: true,
-                  },
-                  {
-                    term: "신규일자",
-                    desc: formatDate(selectedAccount.openedDate),
-                    numeric: true,
-                  },
-                ]}
-              />
-            </div>
           </div>
-        )}
-      </div>
+        </div>
+      </CollapsibleSection>
 
       <FormSection title="거래내역" className="mb-0">
         <SummaryRow
@@ -404,7 +385,7 @@ export function B03TransactionInquiry() {
                   </span>
                 </span>
               ),
-              valueColor: "var(--color-withdraw)",
+              valueColor: "var(--color-danger)",
             },
           ]}
         />

@@ -293,7 +293,7 @@ export function A04Info({ data, onChange, onNext }: A04InfoProps) {
                       {emailIssued}
                     </span>
                     <span
-                      className={`text-sm font-bold tabular-nums ${emailExpired ? "text-ink-faint" : "text-ink"}`}
+                      className={`text-base font-bold tabular-nums ${emailExpired ? "text-ink-faint" : "text-ink"}`}
                     >
                       {formatClock(emailRemaining)}
                     </span>

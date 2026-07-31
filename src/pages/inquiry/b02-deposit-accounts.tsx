@@ -1,7 +1,6 @@
-import * as React from "react"
 import { useNavigate } from "react-router-dom"
 import { ChevronDown } from "lucide-react"
-import { NoticeBox, NoticeBoxFooter } from "@/shared/ui/notice-box"
+import { QueryPageLayout } from "@/shared/ui/query-page-layout"
 import { FormSection } from "@/shared/ui/form-section"
 import { Button } from "@/shared/ui/button"
 import { DataGrid, type DataGridColumn } from "@/shared/ui/data-grid"
@@ -17,12 +16,13 @@ import {
   type OverviewAccount,
 } from "@/entities/account"
 import { cn } from "@/shared/lib/utils"
+import { useDisclosure } from "@/shared/lib/hooks/use-disclosure"
 import { MOCK_NOW as BASE_TIME } from "@/shared/config/mock-clock"
 
 /** REQ-INQR-001·004: 예금/적금 계좌만 대상으로 한 전체계좌조회(B-01)의 부분 화면. */
 export function B02DepositAccounts() {
   const navigate = useNavigate()
-  const [open, setOpen] = React.useState(true)
+  const { open, toggle } = useDisclosure(true)
 
   const rows = MOCK_OVERVIEW_ACCOUNTS.filter((a) => a.group === "deposit")
   const groupTotal = rows.reduce((sum, a) => sum + a.balance, 0)
@@ -91,24 +91,28 @@ export function B02DepositAccounts() {
   ]
 
   return (
-    <div className="flex flex-col gap-8">
-      <NoticeBox
-        items={[
-          "예금·적금계좌만 표시됩니다. 입출금계좌는 전체계좌조회에서 확인할 수 있습니다.",
-          "그룹을 접어도 총잔액 행은 계속 표시됩니다.",
-          "계좌명은 별명이 있는 경우 별명을 우선 표시합니다.",
-        ]}
-      />
-
+    <QueryPageLayout
+      noticeItems={[
+        "예금·적금계좌만 표시됩니다. 입출금계좌는 전체계좌조회에서 확인할 수 있습니다.",
+        "그룹을 접어도 총잔액 행은 계속 표시됩니다.",
+        "계좌명은 별명이 있는 경우 별명을 우선 표시합니다.",
+      ]}
+      footerItems={[
+        "계좌 잔액은 조회 시점 기준으로 표시되며 실제 처리 결과와 다를 수 있습니다(REQ-INQR-002).",
+        "계좌명은 별명이 등록된 경우 별명을 우선 표시합니다(REQ-ACCT-013).",
+        "[조회]는 해당 계좌의 거래내역조회로 이동합니다(REQ-INQR-005).",
+        "상품군 그룹은 접기·펼치기가 가능하며 기본 상태는 펼침입니다(REQ-INQR-006).",
+      ]}
+    >
       <FormSection
         title="예금·적금계좌"
         className="mb-0"
         action={
           <button
             type="button"
-            onClick={() => setOpen((v) => !v)}
+            onClick={toggle}
             aria-expanded={open}
-            className="inline-flex items-center gap-1 text-sm font-bold text-ink-muted hover:text-ink focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+            className="inline-flex items-center gap-1 text-base font-bold text-ink-muted hover:text-ink focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
           >
             {open ? "그룹 접기" : "그룹 펼치기"}
             <ChevronDown
@@ -158,15 +162,6 @@ export function B02DepositAccounts() {
           유지됩니다(REQ-INQR-006).
         </p>
       </FormSection>
-
-      <NoticeBoxFooter
-        items={[
-          "계좌 잔액은 조회 시점 기준으로 표시되며 실제 처리 결과와 다를 수 있습니다(REQ-INQR-002).",
-          "계좌명은 별명이 등록된 경우 별명을 우선 표시합니다(REQ-ACCT-013).",
-          "[조회]는 해당 계좌의 거래내역조회로 이동합니다(REQ-INQR-005).",
-          "상품군 그룹은 접기·펼치기가 가능하며 기본 상태는 펼침입니다(REQ-INQR-006).",
-        ]}
-      />
-    </div>
+    </QueryPageLayout>
   )
 }

@@ -29,7 +29,7 @@ export function StepIndicator({ steps, currentStep }: StepIndicatorProps) {
             key={label}
             aria-current={isCurrent ? "step" : undefined}
             className={cn(
-              "flex items-center gap-1.5 text-sm whitespace-nowrap tabular-nums",
+              "flex items-center gap-1.5 text-base whitespace-nowrap tabular-nums",
               active ? "text-primary" : "text-ink-faint",
             )}
           >

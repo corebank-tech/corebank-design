@@ -58,7 +58,7 @@ export function WithdrawAccountField({
         </Button>
       </div>
       {selected && (
-        <p className="text-sm text-ink-muted">
+        <p className="text-base text-ink-muted">
           출금가능금액{" "}
           <span className="font-bold text-ink tabular-nums">
             {formatAmount(selected.withdrawable)}
@@ -183,7 +183,7 @@ export function AccountNumberField({
         </Button>
       </div>
       {confirmed && holderName && (
-        <p className="text-sm text-ink-muted">
+        <p className="text-base text-ink-muted">
           예금주명 <span className="font-bold text-ink">{holderName}</span>
         </p>
       )}
@@ -258,7 +258,7 @@ export function AmountField({
           }}
           className="max-w-xs text-right tabular-nums"
         />
-        <span className="shrink-0 text-sm text-ink-muted">원</span>
+        <span className="shrink-0 text-base text-ink-muted">원</span>
       </div>
 
       {value != null && value > 0 && (

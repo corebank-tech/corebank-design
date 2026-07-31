@@ -37,7 +37,7 @@ export function BankingShortcuts({
                   onSelect(link.id)
                 }
               }}
-              className="flex items-center justify-between rounded-md border border-border bg-surface-elevated px-4 py-3 text-sm font-bold whitespace-nowrap text-ink transition-colors hover:border-primary hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+              className="flex items-center justify-between rounded-md border border-border bg-surface-elevated px-4 py-3 text-base font-bold whitespace-nowrap text-ink transition-colors hover:border-primary hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
             >
               {link.label}
               <ChevronRight

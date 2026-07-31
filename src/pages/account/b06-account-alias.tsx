@@ -1,5 +1,5 @@
 import * as React from "react"
-import { NoticeBox, NoticeBoxFooter } from "@/shared/ui/notice-box"
+import { QueryPageLayout } from "@/shared/ui/query-page-layout"
 import { FormSection } from "@/shared/ui/form-section"
 import { Button } from "@/shared/ui/button"
 import { Input } from "@/shared/ui/input"
@@ -149,15 +149,42 @@ export function B06AccountAlias() {
   ]
 
   return (
-    <div className="flex flex-col gap-8">
-      <NoticeBox
-        items={[
-          "별명은 한글 12자 또는 영문·숫자 24자 이내로 등록할 수 있습니다.",
-          "별명을 등록하면 계좌조회·이체 등 전 화면의 계좌 표시가 상품명 대신 별명으로 바뀝니다.",
-          "별명을 삭제하면 다시 상품명으로 표시됩니다.",
-        ]}
-      />
-
+    <QueryPageLayout
+      noticeItems={[
+        "별명은 한글 12자 또는 영문·숫자 24자 이내로 등록할 수 있습니다.",
+        "별명을 등록하면 계좌조회·이체 등 전 화면의 계좌 표시가 상품명 대신 별명으로 바뀝니다.",
+        "별명을 삭제하면 다시 상품명으로 표시됩니다.",
+      ]}
+      footerItems={[
+        "별명은 한글 12자 또는 영문·숫자 24자 이내로 제한되며, 초과 입력 시 저장되지 않습니다(REQ-ACCT-013).",
+        "별명이 등록된 계좌는 계좌조회·이체 등 전 화면에서 상품명 대신 별명으로 표시됩니다(REQ-ACCT-013).",
+        "별명을 삭제하면 해당 계좌는 다시 상품명으로 표시됩니다.",
+      ]}
+      modals={
+        <ConfirmDialog
+          open={deleteTarget != null}
+          onClose={() => setDeleteTarget(null)}
+          onConfirm={handleConfirmDelete}
+          title="계좌별명 삭제"
+          messages={[
+            "선택한 계좌의 별명을 삭제합니다.",
+            "삭제 후에는 상품명으로 표시됩니다.",
+          ]}
+          confirmLabel="삭제하기"
+          items={
+            deleteTarget
+              ? [
+                  {
+                    label: deleteTarget.productName,
+                    value: formatAccountNo(deleteTarget.accountNo),
+                  },
+                  { label: "현재 별명", value: deleteTarget.alias ?? "-" },
+                ]
+              : []
+          }
+        />
+      }
+    >
       {successMessage && <Alert variant="success">{successMessage}</Alert>}
 
       <FormSection title="계좌별명 관리" className="mb-0">
@@ -168,37 +195,6 @@ export function B06AccountAlias() {
           emptyMessage="보유한 계좌가 없습니다."
         />
       </FormSection>
-
-      <NoticeBoxFooter
-        items={[
-          "별명은 한글 12자 또는 영문·숫자 24자 이내로 제한되며, 초과 입력 시 저장되지 않습니다(REQ-ACCT-013).",
-          "별명이 등록된 계좌는 계좌조회·이체 등 전 화면에서 상품명 대신 별명으로 표시됩니다(REQ-ACCT-013).",
-          "별명을 삭제하면 해당 계좌는 다시 상품명으로 표시됩니다.",
-        ]}
-      />
-
-      <ConfirmDialog
-        open={deleteTarget != null}
-        onClose={() => setDeleteTarget(null)}
-        onConfirm={handleConfirmDelete}
-        title="계좌별명 삭제"
-        messages={[
-          "선택한 계좌의 별명을 삭제합니다.",
-          "삭제 후에는 상품명으로 표시됩니다.",
-        ]}
-        confirmLabel="삭제하기"
-        items={
-          deleteTarget
-            ? [
-                {
-                  label: deleteTarget.productName,
-                  value: formatAccountNo(deleteTarget.accountNo),
-                },
-                { label: "현재 별명", value: deleteTarget.alias ?? "-" },
-              ]
-            : []
-        }
-      />
-    </div>
+    </QueryPageLayout>
   )
 }

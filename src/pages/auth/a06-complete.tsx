@@ -38,7 +38,7 @@ export function A06Complete({ name }: A06CompleteProps) {
         <p className="mt-4 text-h2 font-bold text-balance text-ink">
           {name}님, 회원가입이 완료되었습니다.
         </p>
-        <p className="mt-2 text-sm leading-relaxed text-ink-muted">
+        <p className="mt-2 text-base leading-relaxed text-ink-muted">
           등록하신 아이디와 비밀번호로 로그인하실 수 있습니다.
         </p>
       </div>

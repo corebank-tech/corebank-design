@@ -23,7 +23,7 @@ export function SideNav({ activeId }: SideNavProps) {
       className="sticky top-22 flex w-50 shrink-0 flex-col gap-5 self-start border-r border-border pr-6"
       aria-label={`${category.label} 메뉴`}
     >
-      <h2 className="text-h3 font-bold text-ink">{category.label}</h2>
+      <h2 className="text-lg font-bold text-ink">{category.label}</h2>
       {category.groups.map((group: NavGroup) => (
         <div key={group.title} className="flex flex-col gap-1">
           <p className="text-xs text-ink-faint">{group.title}</p>
@@ -36,7 +36,7 @@ export function SideNav({ activeId }: SideNavProps) {
                     to={item.path}
                     data-screen-id={item.screenId}
                     className={cn(
-                      "block px-2 py-1.5 text-sm whitespace-nowrap transition-colors",
+                      "block px-2 py-1.5 text-base whitespace-nowrap transition-colors",
                       active
                         ? "bg-primary-tint font-bold text-primary"
                         : "text-ink-muted hover:bg-surface hover:text-ink",

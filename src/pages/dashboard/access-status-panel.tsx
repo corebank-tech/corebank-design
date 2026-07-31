@@ -1,5 +1,7 @@
 import type { AccessStatus } from "@/entities/dashboard"
 import { formatDateTime } from "@/shared/lib/format"
+import { Panel, PanelHeader } from "@/shared/ui/panel"
+import { LabelValueRow } from "@/shared/ui/label-value-row"
 
 type AccessStatusPanelProps = {
   status: AccessStatus
@@ -14,33 +16,19 @@ export function AccessStatusPanel({ status }: AccessStatusPanelProps) {
   ]
 
   return (
-    <section
-      className="overflow-hidden border border-border bg-surface-elevated"
-      aria-label="접속현황"
-    >
-      <h2 className="bg-surface-2 px-4 py-2.5 text-sm font-bold text-ink">
-        접속현황
-      </h2>
-      <dl>
-        {rows.map((row, i) => (
-          <div
-            key={row.label}
-            className={
-              "flex items-stretch" + (i > 0 ? " border-t border-border" : "")
-            }
-          >
-            <dt className="flex w-[120px] shrink-0 items-center bg-surface px-3 py-2.5 text-sm font-bold text-ink">
-              {row.label}
-            </dt>
-            <dd className="flex min-w-0 flex-1 items-center border-l border-border px-3 py-2.5 text-sm whitespace-nowrap text-ink-muted tabular-nums">
-              {row.value}
-            </dd>
-          </div>
-        ))}
-      </dl>
+    <Panel aria-label="접속현황">
+      <PanelHeader title="접속현황" className="bg-surface-2" />
+      {rows.map((row, i) => (
+        <LabelValueRow
+          key={row.label}
+          label={row.label}
+          value={row.value}
+          className={i > 0 ? "border-t border-border" : undefined}
+        />
+      ))}
       <p className="border-t border-border px-4 py-2 text-2xs text-ink-faint">
         ※ 본인이 아닌 접속 기록이 있으면 즉시 비밀번호를 변경해 주세요.
       </p>
-    </section>
+    </Panel>
   )
 }

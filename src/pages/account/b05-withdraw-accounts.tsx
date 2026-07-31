@@ -1,5 +1,5 @@
 import * as React from "react"
-import { NoticeBox, NoticeBoxFooter } from "@/shared/ui/notice-box"
+import { QueryPageLayout } from "@/shared/ui/query-page-layout"
 import { FormSection } from "@/shared/ui/form-section"
 import { Button } from "@/shared/ui/button"
 import { Input } from "@/shared/ui/input"
@@ -157,15 +157,114 @@ export function B05WithdrawAccounts() {
   }
 
   return (
-    <div className="flex flex-col gap-8">
-      <NoticeBox
-        items={[
-          "등록된 출금계좌와 미등록 계좌를 각각 체크박스로 선택합니다.",
-          "출금계좌 등록 시 해당 계좌의 계좌비밀번호 검증과 OTP 인증이 필요합니다.",
-          "대기 상태의 예약이체 또는 정상 상태의 자동이체가 등록된 계좌는 삭제할 수 없습니다.",
-        ]}
-      />
+    <QueryPageLayout
+      noticeItems={[
+        "등록된 출금계좌와 미등록 계좌를 각각 체크박스로 선택합니다.",
+        "출금계좌 등록 시 해당 계좌의 계좌비밀번호 검증과 OTP 인증이 필요합니다.",
+        "대기 상태의 예약이체 또는 정상 상태의 자동이체가 등록된 계좌는 삭제할 수 없습니다.",
+      ]}
+      footerItems={[
+        "예약 상태의 예약이체 또는 정상 상태의 자동이체가 등록된 계좌는 삭제할 수 없으며, 삭제 시도 시 사유가 계좌별로 안내됩니다(REQ-ACCT-011).",
+        "출금계좌 등록은 계좌비밀번호 검증과 OTP 인증을 모두 완료해야 처리됩니다(REQ-ACCT-010).",
+        "등록 해제된 계좌는 즉시이체의 출금계좌로 선택할 수 없으며, 다시 등록해야 이용할 수 있습니다.",
+      ]}
+      modals={
+        <>
+          <ConfirmDialog
+            open={deleteConfirmOpen}
+            onClose={() => setDeleteConfirmOpen(false)}
+            onConfirm={handleConfirmDelete}
+            title="출금계좌 삭제"
+            messages={[
+              "선택한 계좌의 출금계좌 등록을 해제합니다.",
+              "해제 후에는 해당 계좌로 즉시이체를 할 수 없습니다.",
+            ]}
+            confirmLabel="삭제하기"
+            items={registeredRows.map((r) => ({
+              label: r.alias,
+              value: formatAccountNo(r.accountNo),
+            }))}
+          />
 
+          <ErrorDialog
+            open={deleteBlocked != null}
+            onClose={() => setDeleteBlocked(null)}
+            title="삭제 불가"
+            messages={deleteBlocked ?? []}
+          />
+
+          <Modal
+            open={registerQueue != null && !otpOpen}
+            onClose={closeRegisterFlow}
+            title="계좌비밀번호 확인"
+            size="sm"
+            footer={
+              <>
+                <Button
+                  variant="secondary"
+                  size="lg"
+                  className="min-w-30"
+                  onClick={closeRegisterFlow}
+                >
+                  취소
+                </Button>
+                <Button
+                  variant="primary"
+                  size="lg"
+                  className="min-w-30"
+                  onClick={handlePasswordConfirm}
+                >
+                  {registerQueue && queueIndex + 1 < registerQueue.length
+                    ? "다음"
+                    : "확인"}
+                </Button>
+              </>
+            }
+          >
+            {currentTarget && (
+              <div className="flex flex-col gap-3">
+                <p className="text-base text-ink-muted">
+                  {registerQueue && registerQueue.length > 1
+                    ? `${queueIndex + 1}/${registerQueue.length}번째 계좌의 비밀번호를 입력하세요.`
+                    : "출금계좌로 등록할 계좌의 비밀번호를 입력하세요."}
+                </p>
+                <p className="text-base font-bold text-ink">
+                  {currentTarget.alias} /{" "}
+                  {formatAccountNo(currentTarget.accountNo)}
+                </p>
+                <Input
+                  type="password"
+                  inputMode="numeric"
+                  autoComplete="off"
+                  maxLength={PASSWORD_LIMIT}
+                  value={pwValue}
+                  invalid={pwError != null}
+                  onChange={(e) => {
+                    setPwValue(onlyDigits(e.target.value, PASSWORD_LIMIT))
+                    if (pwError) setPwError(null)
+                  }}
+                  placeholder="계좌비밀번호 4자리"
+                  className="text-center tracking-4"
+                  autoFocus
+                />
+                {pwError && (
+                  <p role="alert" className="text-base font-bold text-danger">
+                    {pwError}
+                  </p>
+                )}
+              </div>
+            )}
+          </Modal>
+
+          <OtpModal
+            open={otpOpen}
+            onClose={closeRegisterFlow}
+            onConfirm={handleOtpConfirm}
+            guide="출금계좌 등록을 위해 OTP를 발급한 뒤 화면에 표시된 6자리 번호를 입력하세요."
+          />
+        </>
+      }
+    >
       {successMessage && <Alert variant="success">{successMessage}</Alert>}
 
       <FormSection
@@ -216,106 +315,6 @@ export function B05WithdrawAccounts() {
           emptyMessage="미등록 계좌가 없습니다."
         />
       </FormSection>
-
-      <NoticeBoxFooter
-        items={[
-          "예약 상태의 예약이체 또는 정상 상태의 자동이체가 등록된 계좌는 삭제할 수 없으며, 삭제 시도 시 사유가 계좌별로 안내됩니다(REQ-ACCT-011).",
-          "출금계좌 등록은 계좌비밀번호 검증과 OTP 인증을 모두 완료해야 처리됩니다(REQ-ACCT-010).",
-          "등록 해제된 계좌는 즉시이체의 출금계좌로 선택할 수 없으며, 다시 등록해야 이용할 수 있습니다.",
-        ]}
-      />
-
-      <ConfirmDialog
-        open={deleteConfirmOpen}
-        onClose={() => setDeleteConfirmOpen(false)}
-        onConfirm={handleConfirmDelete}
-        title="출금계좌 삭제"
-        messages={[
-          "선택한 계좌의 출금계좌 등록을 해제합니다.",
-          "해제 후에는 해당 계좌로 즉시이체를 할 수 없습니다.",
-        ]}
-        confirmLabel="삭제하기"
-        items={registeredRows.map((r) => ({
-          label: r.alias,
-          value: formatAccountNo(r.accountNo),
-        }))}
-      />
-
-      <ErrorDialog
-        open={deleteBlocked != null}
-        onClose={() => setDeleteBlocked(null)}
-        title="삭제 불가"
-        messages={deleteBlocked ?? []}
-      />
-
-      <Modal
-        open={registerQueue != null && !otpOpen}
-        onClose={closeRegisterFlow}
-        title="계좌비밀번호 확인"
-        size="sm"
-        footer={
-          <>
-            <Button
-              variant="secondary"
-              size="lg"
-              className="min-w-30"
-              onClick={closeRegisterFlow}
-            >
-              취소
-            </Button>
-            <Button
-              variant="primary"
-              size="lg"
-              className="min-w-30"
-              onClick={handlePasswordConfirm}
-            >
-              {registerQueue && queueIndex + 1 < registerQueue.length
-                ? "다음"
-                : "확인"}
-            </Button>
-          </>
-        }
-      >
-        {currentTarget && (
-          <div className="flex flex-col gap-3">
-            <p className="text-sm text-ink-muted">
-              {registerQueue && registerQueue.length > 1
-                ? `${queueIndex + 1}/${registerQueue.length}번째 계좌의 비밀번호를 입력하세요.`
-                : "출금계좌로 등록할 계좌의 비밀번호를 입력하세요."}
-            </p>
-            <p className="text-sm font-bold text-ink">
-              {currentTarget.alias} / {formatAccountNo(currentTarget.accountNo)}
-            </p>
-            <Input
-              type="password"
-              inputMode="numeric"
-              autoComplete="off"
-              maxLength={PASSWORD_LIMIT}
-              value={pwValue}
-              invalid={pwError != null}
-              onChange={(e) => {
-                setPwValue(onlyDigits(e.target.value, PASSWORD_LIMIT))
-                if (pwError) setPwError(null)
-              }}
-              placeholder="계좌비밀번호 4자리"
-              className="text-center tracking-4"
-              autoFocus
-            />
-            {pwError && (
-              <p role="alert" className="text-sm font-bold text-danger">
-                {pwError}
-              </p>
-            )}
-          </div>
-        )}
-      </Modal>
-
-      <OtpModal
-        open={otpOpen}
-        onClose={closeRegisterFlow}
-        onConfirm={handleOtpConfirm}
-        guide="출금계좌 등록을 위해 OTP를 발급한 뒤 화면에 표시된 6자리 번호를 입력하세요."
-      />
-    </div>
+    </QueryPageLayout>
   )
 }

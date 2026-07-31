@@ -157,7 +157,7 @@ export function ReservedTransferStep1({
         </FormSection>
 
         {duplicate && (
-          <p role="alert" className="text-sm font-bold text-danger">
+          <p role="alert" className="text-base font-bold text-danger">
             출금계좌·입금계좌·이체금액·이체예정일자가 모두 같은 예약이체가 이미
             대기 중입니다. 내용을 변경한 뒤 다시 등록하세요.
           </p>

@@ -169,7 +169,7 @@ function DevNav() {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="rounded-full border bg-white px-4 py-1.5 text-sm font-bold text-ink-muted shadow-lg hover:bg-surface"
+        className="rounded-full border bg-white px-4 py-1.5 text-base font-bold text-ink-muted shadow-lg hover:bg-surface"
       >
         개발 메뉴
       </button>

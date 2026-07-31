@@ -35,6 +35,10 @@
 | StepLayout | `step-layout.tsx` | `steps`, `currentStep`, `title`, `notice`, `noticeTitle`, `footer`, `children` — 스텝 인디케이터+본문+하단 액션의 공통 골격 | §4 참조 |
 | StepIndicator | `step-indicator.tsx` | `steps`, `currentStep` | §4 참조 |
 | ConfirmSummary | `confirm-summary.tsx` | `columns`(label/value/emphasis) — 확인 단계 요약 표 | §4 참조 |
+| CollapsibleSection | `collapsible-section.tsx` | `title`, `children`, `defaultOpen`, `open`, `onOpenChange` — 헤더 버튼으로 여닫는 보더 패널(계좌정보류 부가 정보 패널) | B03 |
+| LabelValueRow | `label-value-row.tsx` | `label`, `value`, `labelWidth` — 세로로 쌓이는 상세정보 리스트 한 행 | 대시보드 접속현황 패널 |
+| Panel / PanelHeader | `panel.tsx` | `Panel`: 보더 패널 셸. `PanelHeader`: `title`, `action` | 대시보드 위젯 패널 |
+| QueryPageLayout | `query-page-layout.tsx` | `noticeItems`, `footerItems`, `children`, `modals` — 조회·폼 화면 공통 골격(NoticeBox→본문→NoticeBoxFooter)을 강제 | 14개 조회·폼 화면(B01·B02·B04~B07·D04·D05·E04·E05·F01·F02·G04·G05) |
 
 `data-grid.tsx`/`empty-state.tsx`/`pagination.tsx`/`summary-row.tsx`(조회 그리드)와
 `step-layout.tsx`/`step-indicator.tsx`/`confirm-summary.tsx`(스텝 폼)는 도메인 지식 없이
@@ -113,3 +117,12 @@ Modal 베이스 위에 있지만 인증 정책·오류 문구·POL 수치를 하
 SessionExpiredModal 미연결)은 이후 작업에서 이미 닫혔다 — D-02는 OtpModal이 실제로 연결됐고,
 `/products`·`/products/:productId`는 `C01ProductList`/`C02ProductDetail`로 라우팅되며,
 SessionExpiredModal은 §5에 적었듯 전역 세션 만료 게이트로 동작한다.
+
+## 8. `src/shared/lib` — 컴포넌트 관련 유틸
+
+컴포넌트는 아니지만 §1 컴포넌트 여러 개가 공유하는 유틸이라 함께 적는다.
+
+| 유틸 | 위치 | 역할 |
+|---|---|---|
+| `statusToneClasses` / `STATUS_TONE_CLASSES` | `shared/ui/status-tone.ts` | info/success/warning/danger 색상 톤의 단일 출처. Badge·Alert·ResultPanel의 cva variant가 여기서 border/bg/text 클래스를 가져다 쓴다 |
+| `useDisclosure` | `shared/lib/hooks/use-disclosure.ts` | 열림/닫힘 상태 훅(비제어·제어 겸용). `CollapsibleSection`·`NoticeBoxFooter`·조회 화면 그룹 접기 버튼이 공유한다 |

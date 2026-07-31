@@ -129,12 +129,12 @@ export function OtpModal({
         </>
       }
     >
-      <p className="mb-4 text-sm leading-relaxed text-ink-muted">{guide}</p>
+      <p className="mb-4 text-base leading-relaxed text-ink-muted">{guide}</p>
 
       <div className="mb-4 flex items-center justify-between gap-3 rounded-md border border-border bg-surface px-4 py-3">
         {issued == null ? (
           <>
-            <span className="text-sm text-ink-muted">
+            <span className="text-base text-ink-muted">
               발급된 OTP가 없습니다.
             </span>
             <Button variant="outline" size="sm" onClick={issue}>
@@ -155,7 +155,7 @@ export function OtpModal({
             <div className="flex flex-col items-end gap-1">
               <span
                 className={cn(
-                  "text-sm font-bold tabular-nums",
+                  "text-base font-bold tabular-nums",
                   expired ? "text-ink-faint" : "text-ink",
                 )}
               >
@@ -187,12 +187,12 @@ export function OtpModal({
       />
 
       {error && (
-        <p role="alert" className="mt-2 text-sm font-bold text-danger">
+        <p role="alert" className="mt-2 text-base font-bold text-danger">
           {error}
         </p>
       )}
       {attemptsExhausted && (
-        <p className="mt-2 text-sm text-ink-muted">
+        <p className="mt-2 text-base text-ink-muted">
           입력 횟수를 초과했습니다. 처음부터 다시 진행하세요.
         </p>
       )}

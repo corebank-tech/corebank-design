@@ -57,7 +57,7 @@ export function LimitModal({
         </Button>
       }
     >
-      <table className="w-full border-collapse border-t-2 border-t-navy text-sm">
+      <table className="w-full border-collapse border-t-2 border-t-navy text-base">
         <tbody>
           {rows.map((row) => (
             <tr key={row.label}>
@@ -75,7 +75,7 @@ export function LimitModal({
         </tbody>
       </table>
 
-      <p className="mt-3 text-sm leading-relaxed text-ink-muted">
+      <p className="mt-3 text-base leading-relaxed text-ink-muted">
         1회 최대 {formatAmount(TRANSFER_LIMIT_PER_TRANSFER_MAX)}, 1일 최대{" "}
         {formatAmount(TRANSFER_LIMIT_PER_DAY_MAX)}까지 변경할 수 있습니다. 변경
         후에는 다음 이체부터 적용됩니다.

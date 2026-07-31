@@ -1,5 +1,5 @@
 import * as React from "react"
-import { NoticeBox, NoticeBoxFooter } from "@/shared/ui/notice-box"
+import { QueryPageLayout } from "@/shared/ui/query-page-layout"
 import { FormSection } from "@/shared/ui/form-section"
 import { FormRow } from "@/shared/ui/form-row"
 import { Button } from "@/shared/ui/button"
@@ -105,15 +105,48 @@ export function D05TransferLimit() {
   }
 
   return (
-    <div className="flex flex-col gap-8">
-      <NoticeBox
-        items={[
-          "1회 이체한도와 1일 이체한도는 각각 정책 최대치 이내에서 변경할 수 있습니다.",
-          "1회 이체한도는 1일 이체한도를 초과할 수 없습니다.",
-          "한도 변경 시 OTP 인증이 필요하며, 별도의 보안매체는 사용하지 않습니다.",
-        ]}
-      />
+    <QueryPageLayout
+      noticeItems={[
+        "1회 이체한도와 1일 이체한도는 각각 정책 최대치 이내에서 변경할 수 있습니다.",
+        "1회 이체한도는 1일 이체한도를 초과할 수 없습니다.",
+        "한도 변경 시 OTP 인증이 필요하며, 별도의 보안매체는 사용하지 않습니다.",
+      ]}
+      footerItems={[
+        "당일 사용금액과 잔여 이체가능금액은 이체 실행 즉시 갱신됩니다(REQ-TRSF-024).",
+        `한도 변경은 1회 최대 ${formatAmount(PER_TRANSFER_MAX)}, 1일 최대 ${formatAmount(PER_DAY_MAX)} 이내에서만 가능하며 OTP 인증을 거쳐야 적용됩니다(REQ-TRSF-025).`,
+        "보안카드·OTP 실물매체 등 별도의 보안매체는 제공하지 않으며 OTP 단일 수단으로 인증합니다(EX-010).",
+      ]}
+      modals={
+        <>
+          <ConfirmDialog
+            open={confirmOpen}
+            onClose={() => setConfirmOpen(false)}
+            onConfirm={handleConfirm}
+            title="이체한도 변경"
+            messages={[
+              "아래 내용으로 이체한도를 변경합니다.",
+              "확인 후 OTP 인증을 거쳐 적용됩니다.",
+            ]}
+            confirmLabel="다음"
+            items={[
+              {
+                label: "신규 1회 이체한도",
+                value: formatAmount(perTransferValue),
+              },
+              { label: "신규 1일 이체한도", value: formatAmount(perDayValue) },
+            ]}
+          />
 
+          <OtpModal
+            open={otpOpen}
+            onClose={() => setOtpOpen(false)}
+            onConfirm={handleOtpConfirm}
+            title="이체한도 변경 OTP 인증"
+            guide="이체한도 변경을 위해 OTP를 발급한 뒤 화면에 표시된 6자리 번호를 입력하세요."
+          />
+        </>
+      }
+    >
       {successMessage && <Alert variant="success">{successMessage}</Alert>}
 
       <FormSection title="이체한도 조회">
@@ -155,7 +188,7 @@ export function D05TransferLimit() {
               onChange={(e) => setPerTransferDraft(onlyDigits(e.target.value))}
               className="max-w-[220px] text-right tabular-nums"
             />
-            <span className="shrink-0 text-sm text-ink-muted">원</span>
+            <span className="shrink-0 text-base text-ink-muted">원</span>
           </FormRow>
           <FormRow
             label="신규 1일 이체한도"
@@ -170,7 +203,7 @@ export function D05TransferLimit() {
               onChange={(e) => setPerDayDraft(onlyDigits(e.target.value))}
               className="max-w-[220px] text-right tabular-nums"
             />
-            <span className="shrink-0 text-sm text-ink-muted">원</span>
+            <span className="shrink-0 text-base text-ink-muted">원</span>
           </FormRow>
         </div>
         <p className="mt-2 text-2xs text-ink-muted">
@@ -180,7 +213,7 @@ export function D05TransferLimit() {
         </p>
 
         {fieldError && (
-          <p role="alert" className="mt-2 text-sm font-bold text-danger">
+          <p role="alert" className="mt-2 text-base font-bold text-danger">
             {fieldError}
           </p>
         )}
@@ -204,38 +237,6 @@ export function D05TransferLimit() {
           </Button>
         </div>
       </FormSection>
-
-      <ConfirmDialog
-        open={confirmOpen}
-        onClose={() => setConfirmOpen(false)}
-        onConfirm={handleConfirm}
-        title="이체한도 변경"
-        messages={[
-          "아래 내용으로 이체한도를 변경합니다.",
-          "확인 후 OTP 인증을 거쳐 적용됩니다.",
-        ]}
-        confirmLabel="다음"
-        items={[
-          { label: "신규 1회 이체한도", value: formatAmount(perTransferValue) },
-          { label: "신규 1일 이체한도", value: formatAmount(perDayValue) },
-        ]}
-      />
-
-      <OtpModal
-        open={otpOpen}
-        onClose={() => setOtpOpen(false)}
-        onConfirm={handleOtpConfirm}
-        title="이체한도 변경 OTP 인증"
-        guide="이체한도 변경을 위해 OTP를 발급한 뒤 화면에 표시된 6자리 번호를 입력하세요."
-      />
-
-      <NoticeBoxFooter
-        items={[
-          "당일 사용금액과 잔여 이체가능금액은 이체 실행 즉시 갱신됩니다(REQ-TRSF-024).",
-          `한도 변경은 1회 최대 ${formatAmount(PER_TRANSFER_MAX)}, 1일 최대 ${formatAmount(PER_DAY_MAX)} 이내에서만 가능하며 OTP 인증을 거쳐야 적용됩니다(REQ-TRSF-025).`,
-          "보안카드·OTP 실물매체 등 별도의 보안매체는 제공하지 않으며 OTP 단일 수단으로 인증합니다(EX-010).",
-        ]}
-      />
-    </div>
+    </QueryPageLayout>
   )
 }

@@ -154,7 +154,7 @@ export function A07FindId() {
           </Button>
         </div>
 
-        <div className="mt-4 flex items-center justify-center gap-3 text-sm text-ink-muted">
+        <div className="mt-4 flex items-center justify-center gap-3 text-base text-ink-muted">
           <Link
             to="/reset-password"
             className="hover:text-primary hover:underline"

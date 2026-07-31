@@ -145,7 +145,7 @@ export function PeriodField({ start, end, onChange, today }: PeriodFieldProps) {
             >
               <ChevronLeft className="h-4 w-4" aria-hidden="true" />
             </button>
-            <span className="flex items-center border-x border-border-strong bg-surface px-2 text-sm leading-[1.5] font-bold text-ink">
+            <span className="flex items-center border-x border-border-strong bg-surface px-2 text-base leading-[1.5] font-bold text-ink">
               년
             </span>
             <button
@@ -166,7 +166,7 @@ export function PeriodField({ start, end, onChange, today }: PeriodFieldProps) {
             >
               <ChevronLeft className="h-4 w-4" aria-hidden="true" />
             </button>
-            <span className="flex items-center border-x border-border-strong bg-surface px-2 text-sm leading-[1.5] font-bold text-ink">
+            <span className="flex items-center border-x border-border-strong bg-surface px-2 text-base leading-[1.5] font-bold text-ink">
               월
             </span>
             <button

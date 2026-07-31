@@ -1,5 +1,5 @@
 import * as React from "react"
-import { NoticeBox, NoticeBoxFooter } from "@/shared/ui/notice-box"
+import { QueryPageLayout } from "@/shared/ui/query-page-layout"
 import { FormSection } from "@/shared/ui/form-section"
 import { Badge } from "@/shared/ui/badge"
 import { GridToolbar } from "@/widgets/query/grid-toolbar"
@@ -87,30 +87,40 @@ export function F02NotificationInbox() {
         >
           <span
             className={cn(
-              "text-sm",
+              "text-base",
               r.read ? "text-ink" : "font-bold text-ink",
             )}
           >
             {r.title}
           </span>
-          <span className="text-sm text-ink-muted">{r.content}</span>
+          <span className="text-base text-ink-muted">{r.content}</span>
         </button>
       ),
     },
   ]
 
   return (
-    <div className="flex flex-col">
-      <NoticeBox
-        className="mb-8"
-        items={[
-          "이체·예약이체·자동이체·상품가입과 관련된 알림만 표시됩니다.",
-          "알림을 클릭하면 읽음 상태로 전환되고 헤더의 미읽음 배지 건수에 즉시 반영됩니다.",
-        ]}
-      />
-
+    <QueryPageLayout
+      noticeItems={[
+        "이체·예약이체·자동이체·상품가입과 관련된 알림만 표시됩니다.",
+        "알림을 클릭하면 읽음 상태로 전환되고 헤더의 미읽음 배지 건수에 즉시 반영됩니다.",
+      ]}
+      footerItems={[
+        "알림은 이체, 예약이체, 자동이체, 상품가입 처리 결과에 대해 생성되며 최신순으로 표시됩니다(REQ-MYPG-004).",
+        "알림을 클릭하면 읽음 상태로 전환되며, 헤더의 미읽음 건수 배지에 즉시 반영됩니다(REQ-MYPG-005).",
+      ]}
+      modals={
+        <TextViewModal
+          open={brailleOpen}
+          onClose={() => setBrailleOpen(false)}
+          title="알림함 점자보기"
+          headers={exportHeaders}
+          rows={exportRows}
+        />
+      }
+    >
       <FormSection title="알림함" className="mb-0">
-        <p className="mb-4 text-sm text-ink-muted">
+        <p className="mb-4 text-base text-ink-muted">
           미읽음 <span className="font-bold text-primary">{unreadCount}</span>건
         </p>
 
@@ -142,22 +152,6 @@ export function F02NotificationInbox() {
           onPageChange={setPage}
         />
       </FormSection>
-
-      <NoticeBoxFooter
-        className="mt-8"
-        items={[
-          "알림은 이체, 예약이체, 자동이체, 상품가입 처리 결과에 대해 생성되며 최신순으로 표시됩니다(REQ-MYPG-004).",
-          "알림을 클릭하면 읽음 상태로 전환되며, 헤더의 미읽음 건수 배지에 즉시 반영됩니다(REQ-MYPG-005).",
-        ]}
-      />
-
-      <TextViewModal
-        open={brailleOpen}
-        onClose={() => setBrailleOpen(false)}
-        title="알림함 점자보기"
-        headers={exportHeaders}
-        rows={exportRows}
-      />
-    </div>
+    </QueryPageLayout>
   )
 }

@@ -142,7 +142,7 @@ export function C04InputInfo() {
             </FormRow>
             <FormRow label="만기 시 처리방법" labelWidth={220}>
               <div className="flex flex-col gap-1">
-                <span className="text-sm font-bold text-ink">
+                <span className="text-base font-bold text-ink">
                   만기해지(원리금 지급)
                 </span>
                 <p className="text-2xs text-ink-faint">

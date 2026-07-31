@@ -69,7 +69,7 @@ export function C06Complete() {
   if (!result) {
     return (
       <StepLayout steps={PRODUCT_JOIN_STEPS} currentStep={4} title="상품가입">
-        <p className="py-10 text-center text-sm text-ink-muted">
+        <p className="py-10 text-center text-base text-ink-muted">
           가입 정보를 확인할 수 없습니다. 상품가입을 처음부터 다시 진행하세요.
         </p>
       </StepLayout>

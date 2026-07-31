@@ -40,7 +40,7 @@ export function ModalFamilyGallery() {
           </Button>
         </div>
         {otpDone && (
-          <p className="mt-3 text-sm font-bold text-success">
+          <p className="mt-3 text-base font-bold text-success">
             OTP 인증이 완료되었습니다. (입력값 {otpDone})
           </p>
         )}

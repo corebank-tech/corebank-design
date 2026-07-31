@@ -133,12 +133,12 @@ export function AppHeader({
                 )}
               </IconButton>
 
-              <span className="text-sm text-ink">
+              <span className="text-base text-ink">
                 <span className="font-value">{customerName}</span> 님
               </span>
 
               <span
-                className="text-sm text-ink-muted tabular-nums"
+                className="text-base text-ink-muted tabular-nums"
                 aria-live="off"
               >
                 {formatSession(remainingSeconds)}
@@ -147,7 +147,7 @@ export function AppHeader({
               <button
                 type="button"
                 onClick={onExtend}
-                className="text-sm text-ink-muted transition-colors hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+                className="text-base text-ink-muted transition-colors hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
               >
                 연장
               </button>
@@ -155,7 +155,7 @@ export function AppHeader({
               <button
                 type="button"
                 onClick={onLogout}
-                className="text-sm text-ink-muted transition-colors hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+                className="text-base text-ink-muted transition-colors hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
               >
                 로그아웃
               </button>
@@ -172,7 +172,7 @@ export function AppHeader({
           ) : (
             <Link
               to="/"
-              className="text-sm font-label text-ink-muted transition-colors hover:text-primary"
+              className="text-base font-label text-ink-muted transition-colors hover:text-primary"
             >
               로그인
             </Link>

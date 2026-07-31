@@ -1,5 +1,5 @@
 import * as React from "react"
-import { NoticeBox, NoticeBoxFooter } from "@/shared/ui/notice-box"
+import { QueryPageLayout } from "@/shared/ui/query-page-layout"
 import { FormSection } from "@/shared/ui/form-section"
 import { FormRow } from "@/shared/ui/form-row"
 import { Select } from "@/shared/ui/select"
@@ -172,15 +172,32 @@ export function G05AutoTransferResults() {
   ]
 
   return (
-    <div className="flex flex-col">
-      <NoticeBox
-        className="mb-8"
-        items={[
-          "회차 처리결과는 이체 처리상태(정상/오류)를 그대로 사용합니다.",
-          "실행 실패 건은 재시도되지 않으며 다음 회차부터 정상 진행됩니다.",
-        ]}
-      />
+    <QueryPageLayout
+      noticeItems={[
+        "회차 처리결과는 이체 처리상태(정상/오류)를 그대로 사용합니다.",
+        "실행 실패 건은 재시도되지 않으며 다음 회차부터 정상 진행됩니다.",
+      ]}
+      footerItems={[
+        "자동이체 회차 실행 실패는 해당 회차만 오류로 처리되며 이후 회차 실행에는 영향을 주지 않습니다(POL-038).",
+      ]}
+      modals={
+        <>
+          <AlertDialog
+            open={savedOpen}
+            onClose={() => setSavedOpen(false)}
+            messages={["조회조건이 저장되었습니다."]}
+          />
 
+          <TextViewModal
+            open={brailleOpen}
+            onClose={() => setBrailleOpen(false)}
+            title="자동이체 결과조회 점자보기"
+            headers={exportHeaders}
+            rows={exportRows}
+          />
+        </>
+      }
+    >
       <FormSection title="조회조건">
         <SearchPanel
           onReset={handleReset}
@@ -222,7 +239,7 @@ export function G05AutoTransferResults() {
               value: (
                 <span className="text-h2 font-bold">
                   {formatAmount(sum(normal))}{" "}
-                  <span className="text-sm font-normal text-ink-faint">
+                  <span className="text-base font-normal text-ink-faint">
                     ({normal.length}건)
                   </span>
                 </span>
@@ -234,7 +251,7 @@ export function G05AutoTransferResults() {
               value: (
                 <span className="text-h2 font-bold">
                   {formatAmount(sum(error))}{" "}
-                  <span className="text-sm font-normal text-ink-faint">
+                  <span className="text-base font-normal text-ink-faint">
                     ({error.length}건)
                   </span>
                 </span>
@@ -281,27 +298,6 @@ export function G05AutoTransferResults() {
           onPageChange={setPage}
         />
       </FormSection>
-
-      <NoticeBoxFooter
-        className="mt-8"
-        items={[
-          "자동이체 회차 실행 실패는 해당 회차만 오류로 처리되며 이후 회차 실행에는 영향을 주지 않습니다(POL-038).",
-        ]}
-      />
-
-      <AlertDialog
-        open={savedOpen}
-        onClose={() => setSavedOpen(false)}
-        messages={["조회조건이 저장되었습니다."]}
-      />
-
-      <TextViewModal
-        open={brailleOpen}
-        onClose={() => setBrailleOpen(false)}
-        title="자동이체 결과조회 점자보기"
-        headers={exportHeaders}
-        rows={exportRows}
-      />
-    </div>
+    </QueryPageLayout>
   )
 }

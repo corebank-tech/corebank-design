@@ -29,7 +29,7 @@ export function ConfirmSummary({
       className={cn("overflow-hidden border border-danger", className)}
       {...props}
     >
-      <table className="w-full border-collapse text-sm">
+      <table className="w-full border-collapse text-base">
         <thead>
           <tr>
             {columns.map((col, i) => (
@@ -39,8 +39,8 @@ export function ConfirmSummary({
                 className={cn(
                   "border-b border-danger bg-danger-tint px-3 py-2.5 text-center whitespace-nowrap [&:not(:first-child)]:border-l [&:not(:first-child)]:border-border",
                   col.emphasis
-                    ? "text-sm font-bold text-ink"
-                    : "text-sm text-ink-muted",
+                    ? "text-base font-bold text-ink"
+                    : "text-base text-ink-muted",
                 )}
               >
                 {col.label}
@@ -57,7 +57,7 @@ export function ConfirmSummary({
                   "bg-surface-elevated px-3 py-3 text-center align-middle whitespace-nowrap text-ink [&:not(:first-child)]:border-l [&:not(:first-child)]:border-border",
                   col.emphasis
                     ? "text-h2 font-bold text-primary tabular-nums"
-                    : "text-md font-bold",
+                    : "text-base font-bold",
                 )}
               >
                 {col.value}

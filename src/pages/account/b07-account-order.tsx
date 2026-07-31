@@ -1,6 +1,6 @@
 import * as React from "react"
 import { ArrowUp, ArrowDown } from "lucide-react"
-import { NoticeBox, NoticeBoxFooter } from "@/shared/ui/notice-box"
+import { QueryPageLayout } from "@/shared/ui/query-page-layout"
 import { FormSection } from "@/shared/ui/form-section"
 import { Button } from "@/shared/ui/button"
 import { Alert } from "@/shared/ui/alert"
@@ -103,15 +103,18 @@ export function B07AccountOrder() {
   ]
 
   return (
-    <div className="flex flex-col gap-8">
-      <NoticeBox
-        items={[
-          "행의 [위로 이동]/[아래로 이동] 버튼으로 계좌 표시순서를 바꿀 수 있습니다.",
-          "[확인]을 눌러야 변경한 순서가 저장됩니다.",
-          "[초기화]를 누르면 기본 순서(개설일 오름차순)로 되돌아갑니다.",
-        ]}
-      />
-
+    <QueryPageLayout
+      noticeItems={[
+        "행의 [위로 이동]/[아래로 이동] 버튼으로 계좌 표시순서를 바꿀 수 있습니다.",
+        "[확인]을 눌러야 변경한 순서가 저장됩니다.",
+        "[초기화]를 누르면 기본 순서(개설일 오름차순)로 되돌아갑니다.",
+      ]}
+      footerItems={[
+        "[확인]을 눌러야 변경한 표시순서가 저장되며, 저장 전에는 계좌조회 화면에 반영되지 않습니다(REQ-ACCT-014).",
+        "[초기화]를 누르면 기본 순서인 개설일 오름차순으로 되돌아갑니다(REQ-ACCT-014).",
+        "저장된 표시순서는 전체계좌조회 등 계좌 목록 화면의 계좌 나열 순서에 그대로 반영됩니다.",
+      ]}
+    >
       {successMessage && <Alert variant="success">{successMessage}</Alert>}
 
       <FormSection title="계좌순서 변경" className="mb-0">
@@ -141,14 +144,6 @@ export function B07AccountOrder() {
           </Button>
         </div>
       </FormSection>
-
-      <NoticeBoxFooter
-        items={[
-          "[확인]을 눌러야 변경한 표시순서가 저장되며, 저장 전에는 계좌조회 화면에 반영되지 않습니다(REQ-ACCT-014).",
-          "[초기화]를 누르면 기본 순서인 개설일 오름차순으로 되돌아갑니다(REQ-ACCT-014).",
-          "저장된 표시순서는 전체계좌조회 등 계좌 목록 화면의 계좌 나열 순서에 그대로 반영됩니다.",
-        ]}
-      />
-    </div>
+    </QueryPageLayout>
   )
 }

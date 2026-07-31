@@ -1,17 +1,18 @@
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/shared/lib/utils"
+import { statusToneClasses } from "@/shared/ui/status-tone"
 
 const badgeVariants = cva(
   "inline-flex items-center rounded-sm border px-1.5 py-0.5 text-xs leading-none font-bold whitespace-nowrap",
   {
     variants: {
       variant: {
-        primary: "border-primary-border-soft bg-primary-tint text-primary",
+        primary: statusToneClasses("primary"),
         neutral: "border-border bg-surface text-ink-muted",
-        success: "border-success-border-soft bg-success-tint text-success",
-        danger: "border-danger-border-soft bg-danger-tint text-danger",
-        warning: "border-warning-border-soft bg-warning-tint text-warning",
+        success: statusToneClasses("success"),
+        danger: statusToneClasses("danger"),
+        warning: statusToneClasses("warning"),
       },
     },
     defaultVariants: {

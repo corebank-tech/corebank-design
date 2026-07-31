@@ -32,7 +32,7 @@ export function SearchPanel({
         <button
           type="button"
           onClick={onSaveCondition}
-          className="inline-flex items-center gap-1 text-sm text-link hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+          className="inline-flex items-center gap-1 text-base text-link hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
         >
           <Bookmark className="h-4 w-4" aria-hidden="true" />
           조회조건저장

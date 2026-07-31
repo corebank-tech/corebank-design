@@ -59,7 +59,7 @@ export function Pagination({
             onClick={() => go(p)}
             aria-current={active ? "page" : undefined}
             className={cn(
-              "inline-flex h-9 min-w-9 items-center justify-center rounded-md border px-2 text-sm whitespace-nowrap tabular-nums focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
+              "inline-flex h-9 min-w-9 items-center justify-center rounded-md border px-2 text-base whitespace-nowrap tabular-nums focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
               active
                 ? "border-primary bg-primary font-bold text-primary-foreground"
                 : "border-border bg-surface-elevated text-ink hover:bg-surface",

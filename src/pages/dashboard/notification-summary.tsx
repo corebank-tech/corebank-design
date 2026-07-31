@@ -1,6 +1,7 @@
 import { ChevronRight } from "lucide-react"
 import type { NotificationItem } from "@/entities/dashboard"
 import { formatDateTime } from "@/shared/lib/format"
+import { Panel, PanelHeader } from "@/shared/ui/panel"
 
 type NotificationSummaryProps = {
   items: NotificationItem[]
@@ -21,27 +22,29 @@ export function NotificationSummary({
   const visibleItems = items.slice(0, maxVisible)
 
   return (
-    <section
-      aria-label="미읽음 알림"
-      className="overflow-hidden border border-border bg-surface-elevated"
-    >
-      <div className="flex items-center justify-between border-b border-border bg-surface px-4 py-2.5">
-        <h2 className="text-sm font-bold text-ink">
-          미읽음 알림{" "}
-          <span className="text-primary tabular-nums">
-            {totalCount ?? items.length}
-          </span>
-          건
-        </h2>
-        <button
-          type="button"
-          onClick={onOpenInbox}
-          className="inline-flex items-center gap-0.5 text-sm font-bold text-link hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-        >
-          알림함
-          <ChevronRight className="h-4 w-4" aria-hidden="true" />
-        </button>
-      </div>
+    <Panel aria-label="미읽음 알림">
+      <PanelHeader
+        className="border-b border-border bg-surface"
+        title={
+          <>
+            미읽음 알림{" "}
+            <span className="text-primary tabular-nums">
+              {totalCount ?? items.length}
+            </span>
+            건
+          </>
+        }
+        action={
+          <button
+            type="button"
+            onClick={onOpenInbox}
+            className="inline-flex items-center gap-0.5 text-base font-bold text-link hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+          >
+            알림함
+            <ChevronRight className="h-4 w-4" aria-hidden="true" />
+          </button>
+        }
+      />
       <ul>
         {visibleItems.map((item, i) => (
           <li
@@ -54,7 +57,7 @@ export function NotificationSummary({
             <span className="inline-flex w-12 shrink-0 items-center justify-center border border-border-strong bg-surface-elevated px-1 py-0.5 text-xs font-bold text-ink-muted">
               {item.category}
             </span>
-            <span className="min-w-0 flex-1 truncate text-sm text-ink">
+            <span className="min-w-0 flex-1 truncate text-base text-ink">
               {item.title}
             </span>
             <time className="shrink-0 text-2xs text-ink-faint tabular-nums">
@@ -63,6 +66,6 @@ export function NotificationSummary({
           </li>
         ))}
       </ul>
-    </section>
+    </Panel>
   )
 }

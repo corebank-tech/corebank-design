@@ -184,7 +184,7 @@ export function AutoTransferStep1({
                   startDate={form.startDate}
                 />
               ) : (
-                <p className="text-sm text-ink-muted">
+                <p className="text-base text-ink-muted">
                   이체 시작일을 먼저 선택하세요.
                 </p>
               )}
@@ -193,7 +193,7 @@ export function AutoTransferStep1({
         </FormSection>
 
         {duplicate && (
-          <p role="alert" className="text-sm font-bold text-danger">
+          <p role="alert" className="text-base font-bold text-danger">
             출금계좌·입금계좌·이체지정일이 모두 같은 자동이체가 이미 정상
             등록되어 있습니다. 자동이체 조회/변경/해지에서 기존 등록 건을
             확인하세요.

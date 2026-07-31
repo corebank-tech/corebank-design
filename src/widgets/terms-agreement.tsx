@@ -101,7 +101,7 @@ export const TermsAgreement = React.forwardRef<
             <span className="text-lg font-bold text-ink">약관 전체 동의</span>
           }
         />
-        <span className="text-sm text-ink-muted">
+        <span className="text-base text-ink-muted">
           필수 및 선택 항목에 모두 동의합니다.
         </span>
       </div>
@@ -132,7 +132,7 @@ export const TermsAgreement = React.forwardRef<
             <div className="mx-5 my-3 flex items-center justify-between gap-3 rounded-md bg-surface-2 px-4 py-3">
               <label
                 htmlFor={`agree-${term.id}`}
-                className="text-sm text-ink-muted"
+                className="text-base text-ink-muted"
               >
                 {viewed[term.id]
                   ? term.question
@@ -166,7 +166,7 @@ export const TermsAgreement = React.forwardRef<
           )
         }
       >
-        <div className="max-h-[52vh] overflow-y-auto text-sm leading-relaxed whitespace-pre-line text-ink">
+        <div className="max-h-[52vh] overflow-y-auto text-base leading-relaxed whitespace-pre-line text-ink">
           {viewing?.body}
         </div>
       </Modal>

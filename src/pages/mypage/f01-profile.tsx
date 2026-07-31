@@ -1,5 +1,5 @@
 import * as React from "react"
-import { NoticeBox, NoticeBoxFooter } from "@/shared/ui/notice-box"
+import { QueryPageLayout } from "@/shared/ui/query-page-layout"
 import { FormSection } from "@/shared/ui/form-section"
 import { FormRow } from "@/shared/ui/form-row"
 import { Button } from "@/shared/ui/button"
@@ -235,15 +235,41 @@ export function F01Profile() {
   }
 
   return (
-    <div className="flex flex-col gap-8">
-      <NoticeBox
-        items={[
-          "이 화면에서는 휴대폰번호와 이메일 주소만 변경할 수 있습니다. 주소 등 그 외 정보는 변경할 수 없습니다.",
-          "이메일을 변경하면 신규 이메일로 인증번호를 재발송해 확인해야 저장됩니다.",
-          "로그인 비밀번호는 현재 비밀번호 확인 후에만 변경할 수 있습니다.",
-        ]}
-      />
+    <QueryPageLayout
+      noticeItems={[
+        "이 화면에서는 휴대폰번호와 이메일 주소만 변경할 수 있습니다. 주소 등 그 외 정보는 변경할 수 없습니다.",
+        "이메일을 변경하면 신규 이메일로 인증번호를 재발송해 확인해야 저장됩니다.",
+        "로그인 비밀번호는 현재 비밀번호 확인 후에만 변경할 수 있습니다.",
+      ]}
+      footerItems={[
+        "고객정보 조회 항목 중 성명·아이디·생년월일·휴대폰번호·이메일은 마스킹되어 표시됩니다(REQ-MYPG-001).",
+        "이메일 변경은 신규 이메일 인증번호 확인 완료 후에만 저장되며, 이미 가입된 이메일로는 변경할 수 없습니다(REQ-MYPG-002).",
+        "로그인 비밀번호는 8~15자, 4종 중 3종 이상 조합이며 직전 비밀번호와 동일한 값은 사용할 수 없습니다(REQ-AUTH-011·012·034).",
+      ]}
+      modals={
+        <>
+          <ConfirmDialog
+            open={pwConfirmOpen}
+            onClose={() => setPwConfirmOpen(false)}
+            onConfirm={handlePwConfirm}
+            title="로그인 비밀번호 변경"
+            messages={[
+              "현재 비밀번호를 확인한 뒤 신규 비밀번호로 변경합니다.",
+              "확인을 누르면 즉시 적용됩니다.",
+            ]}
+            confirmLabel="변경하기"
+            items={[{ label: "대상 아이디", value: profile.userId }]}
+          />
 
+          <ErrorDialog
+            open={pwErrorDialog != null}
+            onClose={() => setPwErrorDialog(null)}
+            title="비밀번호 변경 실패"
+            messages={pwErrorDialog ?? []}
+          />
+        </>
+      }
+    >
       <FormSection title="고객정보 조회">
         <div>
           <FormRow label="성명" labelWidth={180}>
@@ -295,7 +321,7 @@ export function F01Profile() {
               className="max-w-[180px] tabular-nums"
             />
             {phoneDraft.length === 11 && (
-              <span className="text-sm text-ink-muted tabular-nums">
+              <span className="text-base text-ink-muted tabular-nums">
                 {formatPhone(phoneDraft)}
               </span>
             )}
@@ -332,7 +358,7 @@ export function F01Profile() {
                   >
                     {issuedCode}
                   </span>
-                  <span className="text-sm font-bold text-ink tabular-nums">
+                  <span className="text-base font-bold text-ink tabular-nums">
                     {formatClock(codeRemaining)}
                   </span>
                   <Input
@@ -389,7 +415,7 @@ export function F01Profile() {
         </p>
 
         {infoError && (
-          <p role="alert" className="mt-2 text-sm font-bold text-danger">
+          <p role="alert" className="mt-2 text-base font-bold text-danger">
             {infoError}
           </p>
         )}
@@ -468,7 +494,7 @@ export function F01Profile() {
         </p>
 
         {pwError && (
-          <p role="alert" className="mt-2 text-sm font-bold text-danger">
+          <p role="alert" className="mt-2 text-base font-bold text-danger">
             {pwError}
           </p>
         )}
@@ -492,34 +518,6 @@ export function F01Profile() {
           </Button>
         </div>
       </FormSection>
-
-      <ConfirmDialog
-        open={pwConfirmOpen}
-        onClose={() => setPwConfirmOpen(false)}
-        onConfirm={handlePwConfirm}
-        title="로그인 비밀번호 변경"
-        messages={[
-          "현재 비밀번호를 확인한 뒤 신규 비밀번호로 변경합니다.",
-          "확인을 누르면 즉시 적용됩니다.",
-        ]}
-        confirmLabel="변경하기"
-        items={[{ label: "대상 아이디", value: profile.userId }]}
-      />
-
-      <ErrorDialog
-        open={pwErrorDialog != null}
-        onClose={() => setPwErrorDialog(null)}
-        title="비밀번호 변경 실패"
-        messages={pwErrorDialog ?? []}
-      />
-
-      <NoticeBoxFooter
-        items={[
-          "고객정보 조회 항목 중 성명·아이디·생년월일·휴대폰번호·이메일은 마스킹되어 표시됩니다(REQ-MYPG-001).",
-          "이메일 변경은 신규 이메일 인증번호 확인 완료 후에만 저장되며, 이미 가입된 이메일로는 변경할 수 없습니다(REQ-MYPG-002).",
-          "로그인 비밀번호는 8~15자, 4종 중 3종 이상 조합이며 직전 비밀번호와 동일한 값은 사용할 수 없습니다(REQ-AUTH-011·012·034).",
-        ]}
-      />
-    </div>
+    </QueryPageLayout>
   )
 }

@@ -10,7 +10,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary:
-          "border border-primary bg-primary text-primary-foreground hover:bg-primary-hover disabled:border-border disabled:bg-surface disabled:text-ink-faint",
+          "border border-primary bg-primary text-primary-foreground hover:opacity-90 disabled:border-border disabled:bg-surface disabled:text-ink-faint",
         secondary:
           "border border-border-strong bg-surface text-ink hover:bg-border disabled:text-ink-faint",
         outline:
@@ -22,7 +22,7 @@ const buttonVariants = cva(
       },
       size: {
         sm: "h-8 gap-1 px-3 text-xs",
-        md: "h-10 gap-1.5 px-4 text-sm",
+        md: "h-10 gap-1.5 px-4 text-base",
         lg: "h-12 gap-2 px-6 text-lg",
       },
       fullWidth: {

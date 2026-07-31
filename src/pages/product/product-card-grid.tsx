@@ -96,7 +96,7 @@ export function ProductCardGrid({
               <h3 className="line-clamp-2 h-14 text-lg leading-7 font-bold text-ink">
                 {p.name}
               </h3>
-              <p className="mt-1 line-clamp-2 h-10 text-sm leading-5 text-ink-muted">
+              <p className="mt-1 line-clamp-2 h-10 text-base leading-5 text-ink-muted">
                 {p.summary}
               </p>
 
@@ -114,7 +114,7 @@ export function ProductCardGrid({
                 </span>
               </p>
 
-              <dl className="mt-5 flex flex-col gap-2 border-t border-border pt-4 text-sm">
+              <dl className="mt-5 flex flex-col gap-2 border-t border-border pt-4 text-base">
                 <div className="flex items-center justify-between">
                   <dt className="text-ink-muted">가입기간</dt>
                   <dd className="font-bold text-ink">{p.period}</dd>

@@ -38,7 +38,7 @@ export function TermMonthsField({
           }}
           className="w-24 text-right tabular-nums"
         />
-        <span className="shrink-0 text-sm text-ink-muted">개월</span>
+        <span className="shrink-0 text-base text-ink-muted">개월</span>
       </div>
       <p className="text-2xs text-ink-muted tabular-nums">
         ※ 가입 가능 기간 {min}개월 ~ {max}개월
@@ -95,7 +95,7 @@ export function JoinAmountField({
           }}
           className="max-w-xs text-right tabular-nums"
         />
-        <span className="shrink-0 text-sm text-ink-muted">원</span>
+        <span className="shrink-0 text-base text-ink-muted">원</span>
       </div>
 
       {value != null && value > 0 && (

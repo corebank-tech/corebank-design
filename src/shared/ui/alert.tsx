@@ -2,14 +2,31 @@ import * as React from "react"
 import { Info, CheckCircle2, AlertTriangle, XCircle } from "lucide-react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/shared/lib/utils"
+import { STATUS_TONE_CLASSES } from "@/shared/ui/status-tone"
 
-const alertVariants = cva("flex gap-2 rounded-md border p-3 text-sm", {
+const alertVariants = cva("flex gap-2 rounded-md border p-3 text-base", {
   variants: {
     variant: {
-      info: "border-primary-border-soft bg-primary-tint text-ink",
-      success: "border-success-border-soft bg-success-tint text-ink",
-      warning: "border-warning-border-soft bg-warning-tint text-ink",
-      danger: "border-danger-border-soft bg-danger-tint text-ink",
+      info: cn(
+        STATUS_TONE_CLASSES.primary.border,
+        STATUS_TONE_CLASSES.primary.bg,
+        "text-ink",
+      ),
+      success: cn(
+        STATUS_TONE_CLASSES.success.border,
+        STATUS_TONE_CLASSES.success.bg,
+        "text-ink",
+      ),
+      warning: cn(
+        STATUS_TONE_CLASSES.warning.border,
+        STATUS_TONE_CLASSES.warning.bg,
+        "text-ink",
+      ),
+      danger: cn(
+        STATUS_TONE_CLASSES.danger.border,
+        STATUS_TONE_CLASSES.danger.bg,
+        "text-ink",
+      ),
     },
   },
   defaultVariants: { variant: "info" },
@@ -18,10 +35,10 @@ const alertVariants = cva("flex gap-2 rounded-md border p-3 text-sm", {
 const alertIconVariants = cva("mt-0.5 h-4 w-4 shrink-0", {
   variants: {
     variant: {
-      info: "text-primary",
-      success: "text-success",
-      warning: "text-warning",
-      danger: "text-danger",
+      info: STATUS_TONE_CLASSES.primary.text,
+      success: STATUS_TONE_CLASSES.success.text,
+      warning: STATUS_TONE_CLASSES.warning.text,
+      danger: STATUS_TONE_CLASSES.danger.text,
     },
   },
   defaultVariants: { variant: "info" },

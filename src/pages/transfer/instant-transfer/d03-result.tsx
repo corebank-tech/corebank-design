@@ -32,7 +32,7 @@ export function InstantTransferStep3({
       }
     >
       {resultSlot ?? (
-        <div className="flex min-h-[160px] items-center justify-center border border-dashed border-border-strong bg-surface px-4 py-10 text-sm text-ink-muted">
+        <div className="flex min-h-[160px] items-center justify-center border border-dashed border-border-strong bg-surface px-4 py-10 text-base text-ink-muted">
           이체 결과 영역
         </div>
       )}

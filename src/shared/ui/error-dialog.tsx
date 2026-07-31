@@ -79,7 +79,7 @@ export function ErrorDialog({
           ))}
         </div>
 
-        <p className="mt-4 text-sm text-ink-muted">
+        <p className="mt-4 text-base text-ink-muted">
           {`문제가 반복되면 고객센터 ${CUSTOMER_CENTER_PHONE}(${CUSTOMER_CENTER_HOURS})으로 문의하세요.`}
         </p>
 
@@ -101,7 +101,7 @@ export function ErrorDialog({
               />
             </button>
             {codeOpen && (
-              <p className="mt-1.5 text-center text-sm text-ink-muted tabular-nums">
+              <p className="mt-1.5 text-center text-base text-ink-muted tabular-nums">
                 오류코드 : {code}
               </p>
             )}

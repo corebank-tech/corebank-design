@@ -1,5 +1,5 @@
 import * as React from "react"
-import { NoticeBox, NoticeBoxFooter } from "@/shared/ui/notice-box"
+import { QueryPageLayout } from "@/shared/ui/query-page-layout"
 import { FormSection } from "@/shared/ui/form-section"
 import { FormRow } from "@/shared/ui/form-row"
 import { Select } from "@/shared/ui/select"
@@ -312,16 +312,226 @@ export function G04AutoTransferList() {
   ]
 
   return (
-    <div className="flex flex-col">
-      <NoticeBox
-        className="mb-8"
-        items={[
-          "정상 상태이고 다음 실행 예정일 전일까지인 건만 해지할 수 있습니다.",
-          "출금계좌, 입금계좌, 이체지정일은 변경할 수 없으며 해지 후 재등록해야 합니다.",
-          "이체주기를 변경하면 다음 실행 예정일이 직전 실행 예정일 기준으로 다시 계산됩니다.",
-        ]}
-      />
+    <QueryPageLayout
+      noticeItems={[
+        "정상 상태이고 다음 실행 예정일 전일까지인 건만 해지할 수 있습니다.",
+        "출금계좌, 입금계좌, 이체지정일은 변경할 수 없으며 해지 후 재등록해야 합니다.",
+        "이체주기를 변경하면 다음 실행 예정일이 직전 실행 예정일 기준으로 다시 계산됩니다.",
+      ]}
+      footerItems={[
+        "이체지정일이 해당 월에 없는 경우(29~31일) 그 달의 말일에 실행됩니다(POL-034).",
+        "해지는 다음 실행 예정일 전일까지만 가능합니다(REQ-AUTO-011).",
+      ]}
+      modals={
+        <>
+          <ConfirmDialog
+            open={terminateConfirmOpen}
+            onClose={() => setTerminateConfirmOpen(false)}
+            onConfirm={handleConfirmTerminate}
+            title="자동이체 해지"
+            messages={[
+              "선택한 자동이체를 해지합니다.",
+              "해지 후에는 이후 회차가 실행되지 않으며, 확인을 누르면 OTP 인증으로 이어집니다.",
+            ]}
+            confirmLabel="해지하기"
+            cancelLabel="닫기"
+            items={selectedRows.map((r) => ({
+              label: `매월 ${r.dayOfMonth}일`,
+              value: `${r.fromAlias} → ${maskName(r.payeeName)} / ${formatAmount(r.amount)}`,
+            }))}
+          />
 
+          <ErrorDialog
+            open={blockedOpen}
+            onClose={() => setBlockedOpen(false)}
+            title="해지 불가"
+            messages={[
+              "정상 상태이고 다음 실행 예정일 전일까지인 건만 해지할 수 있습니다.",
+              "실행 예정일 당일이거나 이미 종료·해지된 건은 선택에서 제외하세요.",
+            ]}
+          />
+
+          <Modal
+            open={editTarget != null}
+            onClose={() => {
+              setEditTarget(null)
+              setEditForm(null)
+            }}
+            title="자동이체 변경"
+            size="sm"
+            footer={
+              <>
+                <Button
+                  variant="secondary"
+                  size="lg"
+                  className="min-w-30"
+                  onClick={() => {
+                    setEditTarget(null)
+                    setEditForm(null)
+                  }}
+                >
+                  취소
+                </Button>
+                <Button
+                  variant="primary"
+                  size="lg"
+                  className="min-w-30"
+                  disabled={
+                    !editForm ||
+                    !editTarget ||
+                    !(Number(editForm.amount) > 0) ||
+                    !isEndDateValid(editTarget.startDate, editForm.endDate)
+                  }
+                  onClick={() => setEditConfirmOpen(true)}
+                >
+                  변경하기
+                </Button>
+              </>
+            }
+          >
+            {editTarget && editForm && (
+              <div className="flex flex-col gap-0">
+                <FormRow label="출금계좌" labelWidth={110}>
+                  <span className="text-ink-muted">
+                    {editTarget.fromAlias} /{" "}
+                    {formatAccountNo(editTarget.fromAccountNo)}
+                    <span className="ml-1 text-2xs text-ink-faint">
+                      (변경 불가)
+                    </span>
+                  </span>
+                </FormRow>
+                <FormRow label="입금계좌" labelWidth={110}>
+                  <span className="text-ink-muted">
+                    {formatAccountNo(editTarget.toAccountNo)} (
+                    {maskName(editTarget.payeeName)})
+                    <span className="ml-1 text-2xs text-ink-faint">
+                      (변경 불가)
+                    </span>
+                  </span>
+                </FormRow>
+                <FormRow
+                  label="이체금액"
+                  htmlFor="g04-edit-amount"
+                  labelWidth={110}
+                >
+                  <Input
+                    id="g04-edit-amount"
+                    type="number"
+                    min={1}
+                    value={editForm.amount}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, amount: e.target.value })
+                    }
+                  />
+                </FormRow>
+                <FormRow label="이체주기" labelWidth={110}>
+                  <RadioRowField
+                    name="g04-edit-cycle"
+                    options={[
+                      { label: "1개월", value: "1" },
+                      { label: "3개월", value: "3" },
+                      { label: "6개월", value: "6" },
+                    ]}
+                    value={String(editForm.cycleMonths)}
+                    onChange={(v) =>
+                      setEditForm({
+                        ...editForm,
+                        cycleMonths: Number(v) as TransferCycle,
+                      })
+                    }
+                  />
+                </FormRow>
+                <FormRow
+                  label="이체종료일"
+                  htmlFor="g04-edit-end"
+                  labelWidth={110}
+                >
+                  <TransferEndDateField
+                    id="g04-edit-end"
+                    value={editForm.endDate}
+                    onChange={(v) => setEditForm({ ...editForm, endDate: v })}
+                    startDate={editTarget.startDate}
+                  />
+                </FormRow>
+                <FormRow
+                  label="표시내용"
+                  htmlFor="g04-edit-memo"
+                  labelWidth={110}
+                >
+                  <Input
+                    id="g04-edit-memo"
+                    maxLength={10}
+                    value={editForm.memo}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, memo: e.target.value })
+                    }
+                  />
+                </FormRow>
+              </div>
+            )}
+          </Modal>
+
+          <ConfirmDialog
+            open={editConfirmOpen}
+            onClose={() => setEditConfirmOpen(false)}
+            onConfirm={handleEditConfirm}
+            title="자동이체 변경"
+            messages={[
+              "아래 내용으로 자동이체를 변경합니다.",
+              "확인을 누르면 OTP 인증으로 이어집니다.",
+            ]}
+            confirmLabel="변경하기"
+            items={
+              editForm
+                ? [
+                    {
+                      label: "이체금액",
+                      value: formatAmount(Number(editForm.amount) || 0),
+                    },
+                    {
+                      label: "이체주기",
+                      value: CYCLE_LABEL[editForm.cycleMonths],
+                    },
+                    {
+                      label: "이체종료일",
+                      value: formatDate(editForm.endDate),
+                    },
+                    { label: "표시내용", value: editForm.memo },
+                  ]
+                : []
+            }
+          />
+
+          <OtpModal
+            open={editOtpOpen}
+            onClose={() => setEditOtpOpen(false)}
+            onConfirm={handleEditOtpConfirm}
+            guide="자동이체 변경을 위해 OTP를 발급한 뒤 화면에 표시된 6자리 번호를 입력하세요."
+          />
+
+          <OtpModal
+            open={terminateOtpOpen}
+            onClose={() => setTerminateOtpOpen(false)}
+            onConfirm={handleTerminateOtpConfirm}
+            guide="자동이체 해지를 위해 OTP를 발급한 뒤 화면에 표시된 6자리 번호를 입력하세요."
+          />
+
+          <AlertDialog
+            open={savedOpen}
+            onClose={() => setSavedOpen(false)}
+            messages={["조회조건이 저장되었습니다."]}
+          />
+
+          <TextViewModal
+            open={brailleOpen}
+            onClose={() => setBrailleOpen(false)}
+            title="자동이체 조회 점자보기"
+            headers={exportHeaders}
+            rows={exportRows}
+          />
+        </>
+      }
+    >
       <FormSection title="조회조건">
         <SearchPanel
           onReset={handleReset}
@@ -399,206 +609,6 @@ export function G04AutoTransferList() {
           onPageChange={setPage}
         />
       </FormSection>
-
-      <NoticeBoxFooter
-        className="mt-8"
-        items={[
-          "이체지정일이 해당 월에 없는 경우(29~31일) 그 달의 말일에 실행됩니다(POL-034).",
-          "해지는 다음 실행 예정일 전일까지만 가능합니다(REQ-AUTO-011).",
-        ]}
-      />
-
-      <ConfirmDialog
-        open={terminateConfirmOpen}
-        onClose={() => setTerminateConfirmOpen(false)}
-        onConfirm={handleConfirmTerminate}
-        title="자동이체 해지"
-        messages={[
-          "선택한 자동이체를 해지합니다.",
-          "해지 후에는 이후 회차가 실행되지 않으며, 확인을 누르면 OTP 인증으로 이어집니다.",
-        ]}
-        confirmLabel="해지하기"
-        cancelLabel="닫기"
-        items={selectedRows.map((r) => ({
-          label: `매월 ${r.dayOfMonth}일`,
-          value: `${r.fromAlias} → ${maskName(r.payeeName)} / ${formatAmount(r.amount)}`,
-        }))}
-      />
-
-      <ErrorDialog
-        open={blockedOpen}
-        onClose={() => setBlockedOpen(false)}
-        title="해지 불가"
-        messages={[
-          "정상 상태이고 다음 실행 예정일 전일까지인 건만 해지할 수 있습니다.",
-          "실행 예정일 당일이거나 이미 종료·해지된 건은 선택에서 제외하세요.",
-        ]}
-      />
-
-      <Modal
-        open={editTarget != null}
-        onClose={() => {
-          setEditTarget(null)
-          setEditForm(null)
-        }}
-        title="자동이체 변경"
-        size="sm"
-        footer={
-          <>
-            <Button
-              variant="secondary"
-              size="lg"
-              className="min-w-30"
-              onClick={() => {
-                setEditTarget(null)
-                setEditForm(null)
-              }}
-            >
-              취소
-            </Button>
-            <Button
-              variant="primary"
-              size="lg"
-              className="min-w-30"
-              disabled={
-                !editForm ||
-                !editTarget ||
-                !(Number(editForm.amount) > 0) ||
-                !isEndDateValid(editTarget.startDate, editForm.endDate)
-              }
-              onClick={() => setEditConfirmOpen(true)}
-            >
-              변경하기
-            </Button>
-          </>
-        }
-      >
-        {editTarget && editForm && (
-          <div className="flex flex-col gap-0">
-            <FormRow label="출금계좌" labelWidth={110}>
-              <span className="text-ink-muted">
-                {editTarget.fromAlias} /{" "}
-                {formatAccountNo(editTarget.fromAccountNo)}
-                <span className="ml-1 text-2xs text-ink-faint">
-                  (변경 불가)
-                </span>
-              </span>
-            </FormRow>
-            <FormRow label="입금계좌" labelWidth={110}>
-              <span className="text-ink-muted">
-                {formatAccountNo(editTarget.toAccountNo)} (
-                {maskName(editTarget.payeeName)})
-                <span className="ml-1 text-2xs text-ink-faint">
-                  (변경 불가)
-                </span>
-              </span>
-            </FormRow>
-            <FormRow
-              label="이체금액"
-              htmlFor="g04-edit-amount"
-              labelWidth={110}
-            >
-              <Input
-                id="g04-edit-amount"
-                type="number"
-                min={1}
-                value={editForm.amount}
-                onChange={(e) =>
-                  setEditForm({ ...editForm, amount: e.target.value })
-                }
-              />
-            </FormRow>
-            <FormRow label="이체주기" labelWidth={110}>
-              <RadioRowField
-                name="g04-edit-cycle"
-                options={[
-                  { label: "1개월", value: "1" },
-                  { label: "3개월", value: "3" },
-                  { label: "6개월", value: "6" },
-                ]}
-                value={String(editForm.cycleMonths)}
-                onChange={(v) =>
-                  setEditForm({
-                    ...editForm,
-                    cycleMonths: Number(v) as TransferCycle,
-                  })
-                }
-              />
-            </FormRow>
-            <FormRow label="이체종료일" htmlFor="g04-edit-end" labelWidth={110}>
-              <TransferEndDateField
-                id="g04-edit-end"
-                value={editForm.endDate}
-                onChange={(v) => setEditForm({ ...editForm, endDate: v })}
-                startDate={editTarget.startDate}
-              />
-            </FormRow>
-            <FormRow label="표시내용" htmlFor="g04-edit-memo" labelWidth={110}>
-              <Input
-                id="g04-edit-memo"
-                maxLength={10}
-                value={editForm.memo}
-                onChange={(e) =>
-                  setEditForm({ ...editForm, memo: e.target.value })
-                }
-              />
-            </FormRow>
-          </div>
-        )}
-      </Modal>
-
-      <ConfirmDialog
-        open={editConfirmOpen}
-        onClose={() => setEditConfirmOpen(false)}
-        onConfirm={handleEditConfirm}
-        title="자동이체 변경"
-        messages={[
-          "아래 내용으로 자동이체를 변경합니다.",
-          "확인을 누르면 OTP 인증으로 이어집니다.",
-        ]}
-        confirmLabel="변경하기"
-        items={
-          editForm
-            ? [
-                {
-                  label: "이체금액",
-                  value: formatAmount(Number(editForm.amount) || 0),
-                },
-                { label: "이체주기", value: CYCLE_LABEL[editForm.cycleMonths] },
-                { label: "이체종료일", value: formatDate(editForm.endDate) },
-                { label: "표시내용", value: editForm.memo },
-              ]
-            : []
-        }
-      />
-
-      <OtpModal
-        open={editOtpOpen}
-        onClose={() => setEditOtpOpen(false)}
-        onConfirm={handleEditOtpConfirm}
-        guide="자동이체 변경을 위해 OTP를 발급한 뒤 화면에 표시된 6자리 번호를 입력하세요."
-      />
-
-      <OtpModal
-        open={terminateOtpOpen}
-        onClose={() => setTerminateOtpOpen(false)}
-        onConfirm={handleTerminateOtpConfirm}
-        guide="자동이체 해지를 위해 OTP를 발급한 뒤 화면에 표시된 6자리 번호를 입력하세요."
-      />
-
-      <AlertDialog
-        open={savedOpen}
-        onClose={() => setSavedOpen(false)}
-        messages={["조회조건이 저장되었습니다."]}
-      />
-
-      <TextViewModal
-        open={brailleOpen}
-        onClose={() => setBrailleOpen(false)}
-        title="자동이체 조회 점자보기"
-        headers={exportHeaders}
-        rows={exportRows}
-      />
-    </div>
+    </QueryPageLayout>
   )
 }

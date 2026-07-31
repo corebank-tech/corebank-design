@@ -201,7 +201,7 @@ export function A08ResetPassword() {
               {issued}
             </span>
             <span
-              className={`text-sm font-bold tabular-nums ${expired ? "text-ink-faint" : "text-ink"}`}
+              className={`text-base font-bold tabular-nums ${expired ? "text-ink-faint" : "text-ink"}`}
             >
               {formatClock(remaining)}
             </span>
@@ -281,7 +281,7 @@ export function A08ResetPassword() {
         </FormSection>
       )}
 
-      <div className="flex items-center justify-center gap-3 text-sm text-ink-muted">
+      <div className="flex items-center justify-center gap-3 text-base text-ink-muted">
         <Link to="/find-id" className="hover:text-primary hover:underline">
           아이디 찾기
         </Link>

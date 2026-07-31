@@ -39,7 +39,7 @@ export function GridToolbar({
   return (
     <div className={cn("mb-2 flex flex-col gap-1", className)} {...props}>
       <div className="flex items-end justify-between gap-4">
-        <p className="flex items-center gap-2 text-sm text-ink">
+        <p className="flex items-center gap-2 text-base text-ink">
           <span className="font-bold text-ink">조회결과</span>
           {periodLabel != null && (
             <>
@@ -94,7 +94,7 @@ export function GridToolbar({
           </label>
           <Select
             id="grid-page-size"
-            className="h-8 w-[104px] text-sm"
+            className="h-8 w-[104px] text-base"
             value={String(pageSize)}
             onChange={(e) => {
               const v = e.target.value

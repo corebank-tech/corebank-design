@@ -21,12 +21,13 @@
 |---|---|---|---|---|
 | `--color-navy` | `#0a2e7d` | `#3c71dd` | 페이지를 바닥에 고정하는 구조색. **DataGrid 상단 룰, FormSection 하단 라인 전용.** 장식(배경·버튼 등)에 쓰지 않는다 | 표 컨테이너 상단 보더, 폼 섹션 하단 보더 |
 | `--color-primary` | `#0a60f5` | `#5a95f7` | 버튼·탭·링크 등 상호작용 요소 전용 | 컨트롤 |
-| `--color-primary-hover` | `#0846ba` | `#7aa8ff` | primary 요소의 hover 상태 | 컨트롤 |
 | `--color-primary-tint` | `#ecf2fe` | `#14203a` | 안내 박스(notice box) 배경 | 업무 블록 |
 | `--color-link` | `#0a60f5` | `#7aa8ff` | 본문 내 인라인 텍스트 링크 | 텍스트 |
 
 `--color-accent`/`-hover`(primary와 값이 같아 사문화)와 `--color-primary-soft`(참조 0건)는
-제거했다 — 다시 만들지 않는다.
+제거했다 — 다시 만들지 않는다. `--color-primary-hover`도 2026-07 5차 정리에서 제거했다:
+hover는 색상마다 별도 토큰을 만들지 않고 `hover:opacity-90`을 공통 적용한다(atomic — 상태는
+토큰이 아니라 변형으로 표현). `Button variant="danger"`가 이미 이 방식이었고 primary도 맞췄다.
 
 ### 1.2 뉴트럴
 
@@ -51,26 +52,21 @@
 
 | 토큰 | 라이트 | 다크 | 용도 |
 |---|---|---|---|
-| `--color-danger` | `#d81e18` | `#f2645f` | 오류 텍스트 |
+| `--color-danger` | `#d81e18` | `#f2645f` | 오류 텍스트. **출금 금액 표시색도 겸한다**(withdraw 토큰은 danger와 hex가 완전히 같아 2026-07 5차에 통합 제거) |
 | `--color-danger-tint` | `#fbf0ef` | `#2c1614` | 오류 배경 |
-| `--color-danger-hover` | primary-hover와 같은 방식(82% 혼합)으로 어둡게 한 danger | 좌동(85% 혼합, 밝게) | `Button variant="danger"`의 hover |
-| `--color-danger-ring` | danger 20%+white 혼합 | danger 30%+surface-elevated 혼합 | 포커스 링 |
+| `--color-danger-ring` | danger 20%+white 혼합 | danger 30%+surface-elevated 혼합 | Input invalid 상태 포커스 링(폼 전용, 대체 불가라 유지) |
 | `--color-success` | `#107f46` | `#2eb870` | 성공 상태 텍스트 |
 | `--color-success-tint` | `#e7f4ee` | `#12281c` | 성공 상태 배경 |
-| `--color-success-ring` | success 20%+white 혼합 | success 30%+surface-elevated 혼합 | 포커스 링 |
 | `--color-warning` | `#ad6200` | `#f28f0d` | 경고 상태 텍스트 |
 | `--color-warning-tint` | `#fbf3e2` | `#2c2110` | 경고 상태 배경 |
-| `--color-warning-ring` | warning 20%+white 혼합 | warning 30%+surface-elevated 혼합 | 포커스 링 |
-| `--color-info` | `#1359ae` | `#5597e7` | 정보성 안내 텍스트 |
-| `--color-info-tint` | info 10%+white 혼합 | info 16%+surface-elevated 혼합 | 정보성 안내 배경 (Alert `info` variant) |
-| `--color-info-border-soft` | info 20%+white 혼합 | info 30%+surface-elevated 혼합 | 정보성 안내 보더 |
 | `--color-{primary,success,warning,danger}-border-soft` | 각 색 20% 고정 혼합값 | 테마별 재보정값 | Alert/Badge 테두리 전용. 컴포넌트에서 투명도 표기(`border-x/20`)를 쓰지 않기 위한 사전 계산값(POL-039) |
-| `--color-ring-soft` | primary 30%+white 혼합 | primary 35%+surface-elevated 혼합 | 옅은 포커스 링 |
+| `--color-ring-soft` | primary 30%+white 혼합 | primary 35%+surface-elevated 혼합 | Input/Select/Checkbox/Radio 공통 폼 포커스 링 |
 | `--color-skeleton` | border 60%+white 혼합 | border 60%+surface-elevated 혼합 | Skeleton 배경 |
 
-`info`는 이전에 tint·border 토큰이 없어 실제로 쓸 수 없었다. 이번에 채워 Alert의 4개 variant가
-전부 성립한다(단, 실 화면에서는 여전히 success·danger만 쓰인다 — info·warning은
-`/design-system` 프리미티브 갤러리에서만 확인할 수 있다).
+2026-07 5차 정리에서 실사용 0건이던 `--color-success-ring`/`--color-warning-ring`/
+`--color-danger-hover`/`--color-info`/`--color-info-tint`/`--color-info-border-soft`를
+제거했다 — `Alert`의 기본 variant명은 여전히 `info`지만 실제 스타일은 `STATUS_TONE_CLASSES.primary`를
+재사용한다(`shared/ui/status-tone.ts`). info 전용 색은 다시 만들지 않는다.
 
 ### 1.4 오버레이
 
@@ -88,7 +84,8 @@ rgba를 직접 정의한다.
 | 토큰 | 라이트 | 다크 | 용도 |
 |---|---|---|---|
 | `--color-deposit` | `#0c5bbb` | `#3e8bea` | 입금 금액 표시색 |
-| `--color-withdraw` | `#d81e18` | `#f2645f` | 출금 금액 표시색 |
+
+출금 금액은 별도 토큰 없이 `--color-danger`를 쓴다(1.3 참고).
 
 ### 1.6 shadcn 스타일 시맨틱 매핑
 
@@ -98,27 +95,30 @@ rgba를 직접 정의한다.
 `--destructive`/`--input` 등 15개)는 정의만 있고 사용처가 0건이라 제거했다 — 신규 shadcn
 프리미티브 도입 시 필요한 만큼만 다시 추가한다.
 
-## 2. 타이포 — 9단 스케일
+## 2. 타이포 — 6단 스케일
+
+9단(2026-07 이전) → 7단(4차: h3·md 흡수) → 6단(5차: sm 흡수)으로 축소했다. 인접 단계가 1px
+차이면 사용자가 구분하지 못하고 개발 시에도 어떤 걸 골라야 할지 헷갈린다는 피드백에 따른 것이다.
 
 | 토큰 | 값 | 용도 |
 |---|---|---|
 | `--text-page` | 26px | 페이지 타이틀 (1개 화면당 지배 요소 1개 원칙) |
 | `--text-h2` | 20px | 섹션 타이틀 |
-| `--text-h3` | 17px | 서브 섹션 타이틀 |
 | `--text-lg` | 16px | 강조 본문 |
-| `--text-md` | 15px | 준본문 |
-| `--text-base` | 14px | 기본 본문 (POL-041 밀도 기준) |
-| `--text-sm` | 13px | 표 셀 외 압축 텍스트(모달 본문, Pagination, NoticeBox 등) |
-| `--text-xs` | 12px | 후퇴 라벨 |
+| `--text-base` | 14px | 기본 본문(POL-041 밀도 기준). 구 `--text-sm`(13px)이 흡수돼 버튼·모달·알림·Pagination 등
+  이전에 13px이던 압축 텍스트도 전부 이 값을 쓴다 |
+| `--text-xs` | 12px | 후퇴 라벨, Badge |
 | `--text-2xs` | 11px | 기준일시·각주·메타 — 반드시 이 값을 쓴다 |
+
+`--text-2xs`↔`--text-xs`만 1px 차이로 남아 있다 — 각주 vs 라벨이라는 서로 다른 용도로 CLAUDE.md에
+고정 규정된 유일한 예외다. 나머지 단계는 전부 최소 2px 이상 차이난다.
 
 화면마다 지배 요소를 하나만 `--text-page`/`--text-h2`로 지정하고, 나머지 라벨은 `--text-xs` +
 `--color-ink-faint`로 후퇴시킨다.
 
-DataGrid·SummaryRow의 표 셀 텍스트는 `--text-sm`을 쓰지 않고 `text-[14px]`로 직접 고정돼
-있다(POL-041 2026-07 3차 피드백: 표만 13→14px로 상향하되, 향후 9단 스케일 전체가 다시 바뀌어도
-표 크기는 독립적으로 유지하기 위함). `--text-sm`(13px) 자체는 스케일에 남아 다른 압축 텍스트에
-쓰인다.
+DataGrid·SummaryRow의 표 셀 텍스트는 스케일 토큰 대신 `text-[14px]`로 직접 고정돼 있다(POL-041
+2026-07 3차 피드백: 표만 13→14px로 상향하되, 향후 스케일이 다시 바뀌어도 표 크기는 독립적으로
+유지하기 위함). 5차 정리로 스케일의 `--text-base`도 14px가 돼 지금은 값이 우연히 같다.
 
 ## 3. 간격
 

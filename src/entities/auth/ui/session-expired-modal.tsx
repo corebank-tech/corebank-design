@@ -65,7 +65,7 @@ export function SessionExpiredModal({
           <Clock className="h-7 w-7" strokeWidth={2.25} />
         </span>
         <p className="text-base leading-relaxed text-ink">{message}</p>
-        <p className="mt-2 text-sm leading-relaxed text-ink-muted">
+        <p className="mt-2 text-base leading-relaxed text-ink-muted">
           보안을 위해 다시 로그인한 뒤 이용하세요.
         </p>
       </div>

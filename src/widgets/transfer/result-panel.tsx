@@ -1,16 +1,24 @@
 import * as React from "react"
 import { Check, X } from "lucide-react"
 import { cva, type VariantProps } from "class-variance-authority"
+import { cn } from "@/shared/lib/utils"
 import { DataGrid, type DataGridColumn } from "@/shared/ui/data-grid"
 import { Spinner } from "@/shared/ui/spinner"
+import { STATUS_TONE_CLASSES } from "@/shared/ui/status-tone"
 
 const resultIconRingVariants = cva(
   "inline-flex h-18 w-18 items-center justify-center rounded-full",
   {
     variants: {
       variant: {
-        success: "bg-primary-tint text-primary",
-        fail: "bg-danger-tint text-danger",
+        success: cn(
+          STATUS_TONE_CLASSES.primary.bg,
+          STATUS_TONE_CLASSES.primary.text,
+        ),
+        fail: cn(
+          STATUS_TONE_CLASSES.danger.bg,
+          STATUS_TONE_CLASSES.danger.text,
+        ),
         pending: "bg-surface text-ink-muted",
       },
     },
@@ -87,7 +95,7 @@ export function ResultPanel<Row>({
           {message}
         </p>
         {description && (
-          <p className="mt-2 text-sm leading-relaxed text-ink-muted">
+          <p className="mt-2 text-base leading-relaxed text-ink-muted">
             {description}
           </p>
         )}

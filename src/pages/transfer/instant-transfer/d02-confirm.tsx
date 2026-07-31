@@ -103,13 +103,13 @@ export function InstantTransferStep2({
       </FormSection>
 
       <FormSection title="인증 절차">
-        <p className="text-sm leading-relaxed text-ink-muted">
+        <p className="text-base leading-relaxed text-ink-muted">
           [이체하기]를 누르면 거래내용 확인 모달이 열립니다. 확인을 선택하면
           출금계좌의 계좌비밀번호를 검증하고, 이어서 OTP 인증을 완료해야 이체가
           실행됩니다.
         </p>
         {authError && (
-          <p role="alert" className="mt-2 text-sm font-bold text-danger">
+          <p role="alert" className="mt-2 text-base font-bold text-danger">
             {authError}
           </p>
         )}

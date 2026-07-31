@@ -195,10 +195,10 @@ export function A09MainDashboard({
             <>
               <div className="mb-4 flex items-end justify-between gap-4">
                 <div className="flex flex-col gap-1">
-                  <span className="text-md font-bold text-ink-muted">
+                  <span className="text-base font-bold text-ink-muted">
                     기본 입출금계좌 · {accounts[0].alias}
                   </span>
-                  <span className="text-md font-bold text-ink-muted tabular-nums">
+                  <span className="text-base font-bold text-ink-muted tabular-nums">
                     {formatAccountNo(accounts[0].accountNo)}
                   </span>
                 </div>

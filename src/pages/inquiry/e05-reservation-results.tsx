@@ -1,5 +1,5 @@
 import * as React from "react"
-import { NoticeBox, NoticeBoxFooter } from "@/shared/ui/notice-box"
+import { QueryPageLayout } from "@/shared/ui/query-page-layout"
 import { FormSection } from "@/shared/ui/form-section"
 import { FormRow } from "@/shared/ui/form-row"
 import { Badge } from "@/shared/ui/badge"
@@ -173,15 +173,32 @@ export function E05ReservationResults() {
   ]
 
   return (
-    <div className="flex flex-col">
-      <NoticeBox
-        className="mb-8"
-        items={[
-          "예약이체는 매일 00:10에 일괄 실행되며 실패 건은 재시도되지 않습니다.",
-          "집계 금액은 페이징과 무관하게 조회 조건에 해당하는 전체 건 기준입니다.",
-        ]}
-      />
+    <QueryPageLayout
+      noticeItems={[
+        "예약이체는 매일 00:10에 일괄 실행되며 실패 건은 재시도되지 않습니다.",
+        "집계 금액은 페이징과 무관하게 조회 조건에 해당하는 전체 건 기준입니다.",
+      ]}
+      footerItems={[
+        "처리 실패 건은 재시도 없이 실패로 확정되며, 실패 사유는 목록의 실패사유 열에서 확인할 수 있습니다.",
+      ]}
+      modals={
+        <>
+          <AlertDialog
+            open={savedOpen}
+            onClose={() => setSavedOpen(false)}
+            messages={["조회조건이 저장되었습니다."]}
+          />
 
+          <TextViewModal
+            open={brailleOpen}
+            onClose={() => setBrailleOpen(false)}
+            title="예약이체 처리결과 점자보기"
+            headers={exportHeaders}
+            rows={exportRows}
+          />
+        </>
+      }
+    >
       <FormSection title="조회조건">
         <SearchPanel
           onReset={handleReset}
@@ -216,7 +233,7 @@ export function E05ReservationResults() {
               value: (
                 <span className="text-h2 font-bold">
                   {formatAmount(sum(normal))}{" "}
-                  <span className="text-sm font-normal text-ink-faint">
+                  <span className="text-base font-normal text-ink-faint">
                     ({normal.length}건)
                   </span>
                 </span>
@@ -228,7 +245,7 @@ export function E05ReservationResults() {
               value: (
                 <span className="text-h2 font-bold">
                   {formatAmount(sum(error))}{" "}
-                  <span className="text-sm font-normal text-ink-faint">
+                  <span className="text-base font-normal text-ink-faint">
                     ({error.length}건)
                   </span>
                 </span>
@@ -240,7 +257,7 @@ export function E05ReservationResults() {
               value: (
                 <span className="text-h2 font-bold">
                   {formatAmount(sum(canceled))}{" "}
-                  <span className="text-sm font-normal text-ink-faint">
+                  <span className="text-base font-normal text-ink-faint">
                     ({canceled.length}건)
                   </span>
                 </span>
@@ -285,27 +302,6 @@ export function E05ReservationResults() {
           onPageChange={setPage}
         />
       </FormSection>
-
-      <NoticeBoxFooter
-        className="mt-8"
-        items={[
-          "처리 실패 건은 재시도 없이 실패로 확정되며, 실패 사유는 목록의 실패사유 열에서 확인할 수 있습니다.",
-        ]}
-      />
-
-      <AlertDialog
-        open={savedOpen}
-        onClose={() => setSavedOpen(false)}
-        messages={["조회조건이 저장되었습니다."]}
-      />
-
-      <TextViewModal
-        open={brailleOpen}
-        onClose={() => setBrailleOpen(false)}
-        title="예약이체 처리결과 점자보기"
-        headers={exportHeaders}
-        rows={exportRows}
-      />
-    </div>
+    </QueryPageLayout>
   )
 }

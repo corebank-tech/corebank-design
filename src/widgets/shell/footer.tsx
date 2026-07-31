@@ -32,7 +32,7 @@ export function Footer() {
                 <li key={link} className="flex items-center gap-4">
                   <a
                     href="#"
-                    className="text-sm text-footer-fg hover:text-footer-fg-strong hover:underline"
+                    className="text-base text-footer-fg hover:text-footer-fg-strong hover:underline"
                   >
                     {link}
                   </a>

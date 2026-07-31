@@ -9,7 +9,7 @@ export function PatternGallery() {
   return (
     <div className="flex flex-col gap-8">
       <FormSection title="조회 화면 골격">
-        <ol className="flex flex-col gap-2 text-sm text-ink">
+        <ol className="flex flex-col gap-2 text-base text-ink">
           <li>1. NoticeBox — 화면 상단 유의사항(선택)</li>
           <li>2. FormSection "조회조건" — SearchPanel + 검색 필드</li>
           <li>
@@ -27,7 +27,7 @@ export function PatternGallery() {
       </FormSection>
 
       <FormSection title="폼(스텝) 화면 골격">
-        <ol className="flex flex-col gap-2 text-sm text-ink">
+        <ol className="flex flex-col gap-2 text-base text-ink">
           <li>1. StepLayout — 타이틀 + StepIndicator</li>
           <li>2. NoticeBox(선택) — 단계별 유의사항</li>
           <li>3. FormSection별 FormRow — 입력 필드, 각 필드 하단 ※ 단서</li>

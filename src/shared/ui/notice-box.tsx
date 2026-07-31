@@ -1,6 +1,6 @@
-import * as React from "react"
-import { CheckCircle2, ChevronDown, ChevronUp, Info } from "lucide-react"
+import { CheckCircle2, ChevronDown, Info } from "lucide-react"
 import { cn } from "@/shared/lib/utils"
+import { useDisclosure } from "@/shared/lib/hooks/use-disclosure"
 
 type NoticeBoxProps = {
   title?: React.ReactNode
@@ -23,13 +23,13 @@ export function NoticeBox({
     >
       <div className="mb-2 flex items-center gap-2">
         <Info className="h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
-        <h2 className="text-sm font-bold text-ink">{title}</h2>
+        <h2 className="text-base font-bold text-ink">{title}</h2>
       </div>
       <ul className="flex flex-col gap-1.5 pl-6">
         {items.map((item, i) => (
           <li
             key={i}
-            className="relative text-sm leading-relaxed text-ink-muted before:absolute before:top-[9px] before:-left-3 before:h-1 before:w-1 before:rounded-full before:bg-ink-faint"
+            className="relative text-base leading-relaxed text-ink-muted before:absolute before:top-[9px] before:-left-3 before:h-1 before:w-1 before:rounded-full before:bg-ink-faint"
           >
             {item}
           </li>
@@ -53,7 +53,7 @@ export function NoticeBoxFooter({
   className,
   defaultOpen = true,
 }: NoticeBoxFooterProps) {
-  const [open, setOpen] = React.useState(defaultOpen)
+  const { open, toggle } = useDisclosure(defaultOpen)
   return (
     <section
       className={cn("border border-border p-4", className)}
@@ -61,7 +61,7 @@ export function NoticeBoxFooter({
     >
       <button
         type="button"
-        onClick={() => setOpen((v) => !v)}
+        onClick={toggle}
         className="flex w-full items-center justify-between"
         aria-expanded={open}
       >
@@ -72,17 +72,13 @@ export function NoticeBoxFooter({
           />
           <h2 className="text-base font-bold text-ink">{title}</h2>
         </span>
-        {open ? (
-          <ChevronUp
-            className="h-4 w-4 shrink-0 text-ink-faint"
-            aria-hidden="true"
-          />
-        ) : (
-          <ChevronDown
-            className="h-4 w-4 shrink-0 text-ink-faint"
-            aria-hidden="true"
-          />
-        )}
+        <ChevronDown
+          className={cn(
+            "h-4 w-4 shrink-0 text-ink-faint transition-transform",
+            open && "rotate-180",
+          )}
+          aria-hidden="true"
+        />
       </button>
       {open && (
         <ul className="mt-3 flex flex-col gap-1.5">

@@ -38,7 +38,7 @@ export function FormRow({
           className="flex items-center gap-1 text-base leading-[1.5] font-bold text-ink"
         >
           {required && (
-            <span className="text-sm leading-[1.5] font-bold whitespace-nowrap text-danger">
+            <span className="text-base leading-[1.5] font-bold whitespace-nowrap text-danger">
               [필수]
             </span>
           )}

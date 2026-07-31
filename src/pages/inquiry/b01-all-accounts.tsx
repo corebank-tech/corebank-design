@@ -1,6 +1,6 @@
 import * as React from "react"
 import { useNavigate } from "react-router-dom"
-import { NoticeBox, NoticeBoxFooter } from "@/shared/ui/notice-box"
+import { QueryPageLayout } from "@/shared/ui/query-page-layout"
 import { FormSection } from "@/shared/ui/form-section"
 import { Button } from "@/shared/ui/button"
 import { DataGrid, type DataGridColumn } from "@/shared/ui/data-grid"
@@ -161,15 +161,39 @@ export function B01AllAccounts() {
   ])
 
   return (
-    <div className="flex flex-col gap-8">
-      <NoticeBox
-        items={[
-          "계좌 잔액은 조회 시점 기준으로 표시되며 실제 거래 처리 결과와 다를 수 있습니다.",
-          "예금·적금계좌는 최근거래일 대신 만기일이 표시됩니다.",
-          "[이체]는 출금계좌로 등록된 입출금계좌에만 노출됩니다.",
-        ]}
-      />
+    <QueryPageLayout
+      noticeItems={[
+        "계좌 잔액은 조회 시점 기준으로 표시되며 실제 거래 처리 결과와 다를 수 있습니다.",
+        "예금·적금계좌는 최근거래일 대신 만기일이 표시됩니다.",
+        "[이체]는 출금계좌로 등록된 입출금계좌에만 노출됩니다.",
+      ]}
+      footerItems={[
+        "계좌 잔액은 조회 시점 기준으로 표시되며, 그룹별 총잔액과 총자산도 같은 시점의 잔액 합계로 집계됩니다(REQ-INQR-002·003).",
+        "계좌명은 별명이 등록된 경우 별명을 우선 표시합니다(REQ-ACCT-013).",
+        "[이체]는 출금계좌로 등록된 입출금계좌에만 노출됩니다(REQ-INQR-005).",
+        "계좌목록은 CSV 파일로 저장할 수 있으며, 파일에는 마스킹된 계좌번호가 사용됩니다(REQ-INQR-015).",
+      ]}
+      modals={
+        <>
+          <TextViewModal
+            open={brailleOpen}
+            onClose={() => setBrailleOpen(false)}
+            title="전체계좌조회 점자보기"
+            headers={exportHeaders}
+            rows={exportRows}
+          />
 
+          <GridSearchModal
+            open={searchOpen}
+            onClose={() => setSearchOpen(false)}
+            fields={SEARCH_FIELDS}
+            onApply={(field, keyword) =>
+              setSearch(keyword ? { field, keyword } : null)
+            }
+          />
+        </>
+      }
+    >
       <GridToolbar
         totalCount={filteredAccounts.length}
         pageSize={pageSize}
@@ -226,32 +250,6 @@ export function B01AllAccounts() {
           합계로 산출됩니다.
         </p>
       </div>
-
-      <NoticeBoxFooter
-        items={[
-          "계좌 잔액은 조회 시점 기준으로 표시되며, 그룹별 총잔액과 총자산도 같은 시점의 잔액 합계로 집계됩니다(REQ-INQR-002·003).",
-          "계좌명은 별명이 등록된 경우 별명을 우선 표시합니다(REQ-ACCT-013).",
-          "[이체]는 출금계좌로 등록된 입출금계좌에만 노출됩니다(REQ-INQR-005).",
-          "계좌목록은 CSV 파일로 저장할 수 있으며, 파일에는 마스킹된 계좌번호가 사용됩니다(REQ-INQR-015).",
-        ]}
-      />
-
-      <TextViewModal
-        open={brailleOpen}
-        onClose={() => setBrailleOpen(false)}
-        title="전체계좌조회 점자보기"
-        headers={exportHeaders}
-        rows={exportRows}
-      />
-
-      <GridSearchModal
-        open={searchOpen}
-        onClose={() => setSearchOpen(false)}
-        fields={SEARCH_FIELDS}
-        onApply={(field, keyword) =>
-          setSearch(keyword ? { field, keyword } : null)
-        }
-      />
-    </div>
+    </QueryPageLayout>
   )
 }

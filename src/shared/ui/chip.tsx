@@ -15,8 +15,8 @@ const chipVariants = cva(
     variants: {
       size: {
         sm: "h-7 px-2.5 text-xs",
-        md: "h-8 px-3 text-sm",
-        lg: "h-9 px-4 text-sm font-bold",
+        md: "h-8 px-3 text-base",
+        lg: "h-9 px-4 text-base font-bold",
       },
       tone: {
         default:

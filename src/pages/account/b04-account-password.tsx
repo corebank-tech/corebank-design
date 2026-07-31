@@ -1,5 +1,5 @@
 import * as React from "react"
-import { NoticeBox, NoticeBoxFooter } from "@/shared/ui/notice-box"
+import { QueryPageLayout } from "@/shared/ui/query-page-layout"
 import { FormSection } from "@/shared/ui/form-section"
 import { FormRow } from "@/shared/ui/form-row"
 import { Button } from "@/shared/ui/button"
@@ -115,15 +115,84 @@ export function B04AccountPassword() {
   const blocked = account?.status === "거래정지"
 
   return (
-    <div className="flex flex-col gap-8">
-      <NoticeBox
-        items={[
-          "계좌비밀번호는 숫자 4자리이며 입출금계좌만 대상입니다. 예금·적금계좌는 계좌비밀번호가 없습니다.",
-          "현재 비밀번호를 5회 연속 잘못 입력하면 해당 계좌가 거래정지 상태로 전환됩니다.",
-          "정상 입력 시 신규 비밀번호로 즉시 이체가 가능합니다.",
-        ]}
-      />
+    <QueryPageLayout
+      noticeItems={[
+        "계좌비밀번호는 숫자 4자리이며 입출금계좌만 대상입니다. 예금·적금계좌는 계좌비밀번호가 없습니다.",
+        "현재 비밀번호를 5회 연속 잘못 입력하면 해당 계좌가 거래정지 상태로 전환됩니다.",
+        "정상 입력 시 신규 비밀번호로 즉시 이체가 가능합니다.",
+      ]}
+      footerItems={[
+        "누적 오류 횟수는 계좌비밀번호 검증에 성공하면 0회로 초기화됩니다(REQ-ACCT-007).",
+        "계좌비밀번호는 단방향 해시로 저장되어 평문으로 조회하거나 복원할 수 없습니다(REQ-ACCT-009).",
+        "[오류횟수 조회] 버튼으로 현재 누적 오류 횟수와 제한 정책(5회)을 확인할 수 있습니다(REQ-ACCT-008).",
+      ]}
+      modals={
+        <>
+          <ConfirmDialog
+            open={confirmOpen}
+            onClose={() => setConfirmOpen(false)}
+            onConfirm={handleConfirm}
+            title="계좌비밀번호 변경"
+            messages={[
+              "아래 계좌의 비밀번호를 변경합니다.",
+              "확인을 누르면 신규 비밀번호로 적용됩니다.",
+            ]}
+            confirmLabel="변경하기"
+            items={[
+              {
+                label: "대상계좌",
+                value: `${account?.alias} / ${formatAccountNo(accountNo)}`,
+              },
+            ]}
+          />
 
+          <ErrorDialog
+            open={errorDialog != null}
+            onClose={() => setErrorDialog(null)}
+            title="비밀번호 변경 실패"
+            messages={errorDialog ?? []}
+          />
+
+          <Modal
+            open={infoOpen}
+            onClose={() => setInfoOpen(false)}
+            title="오류횟수 조회"
+            size="sm"
+            footer={
+              <Button
+                variant="primary"
+                size="lg"
+                className="min-w-30"
+                onClick={() => setInfoOpen(false)}
+              >
+                확인
+              </Button>
+            }
+          >
+            <dl className="flex flex-col gap-2 text-base text-ink">
+              <div className="flex justify-between">
+                <dt className="font-bold">대상계좌</dt>
+                <dd className="tabular-nums">
+                  {account
+                    ? `${account.alias} / ${formatAccountNo(account.accountNo)}`
+                    : "-"}
+                </dd>
+              </div>
+              <div className="flex justify-between">
+                <dt className="font-bold">현재 누적 오류 횟수</dt>
+                <dd className="font-bold text-primary tabular-nums">
+                  {account?.errorCount ?? 0}회
+                </dd>
+              </div>
+              <div className="flex justify-between">
+                <dt className="font-bold">제한 정책</dt>
+                <dd className="tabular-nums">5회 도달 시 거래정지</dd>
+              </div>
+            </dl>
+          </Modal>
+        </>
+      }
+    >
       {successMessage && <Alert variant="success">{successMessage}</Alert>}
       {blocked && (
         <Alert variant="danger" title="거래정지 계좌">
@@ -223,7 +292,7 @@ export function B04AccountPassword() {
         </div>
 
         {fieldError && (
-          <p role="alert" className="mt-2 text-sm font-bold text-danger">
+          <p role="alert" className="mt-2 text-base font-bold text-danger">
             {fieldError}
           </p>
         )}
@@ -248,77 +317,6 @@ export function B04AccountPassword() {
           </Button>
         </div>
       </FormSection>
-
-      <NoticeBoxFooter
-        items={[
-          "누적 오류 횟수는 계좌비밀번호 검증에 성공하면 0회로 초기화됩니다(REQ-ACCT-007).",
-          "계좌비밀번호는 단방향 해시로 저장되어 평문으로 조회하거나 복원할 수 없습니다(REQ-ACCT-009).",
-          "[오류횟수 조회] 버튼으로 현재 누적 오류 횟수와 제한 정책(5회)을 확인할 수 있습니다(REQ-ACCT-008).",
-        ]}
-      />
-
-      <ConfirmDialog
-        open={confirmOpen}
-        onClose={() => setConfirmOpen(false)}
-        onConfirm={handleConfirm}
-        title="계좌비밀번호 변경"
-        messages={[
-          "아래 계좌의 비밀번호를 변경합니다.",
-          "확인을 누르면 신규 비밀번호로 적용됩니다.",
-        ]}
-        confirmLabel="변경하기"
-        items={[
-          {
-            label: "대상계좌",
-            value: `${account?.alias} / ${formatAccountNo(accountNo)}`,
-          },
-        ]}
-      />
-
-      <ErrorDialog
-        open={errorDialog != null}
-        onClose={() => setErrorDialog(null)}
-        title="비밀번호 변경 실패"
-        messages={errorDialog ?? []}
-      />
-
-      <Modal
-        open={infoOpen}
-        onClose={() => setInfoOpen(false)}
-        title="오류횟수 조회"
-        size="sm"
-        footer={
-          <Button
-            variant="primary"
-            size="lg"
-            className="min-w-30"
-            onClick={() => setInfoOpen(false)}
-          >
-            확인
-          </Button>
-        }
-      >
-        <dl className="flex flex-col gap-2 text-sm text-ink">
-          <div className="flex justify-between">
-            <dt className="font-bold">대상계좌</dt>
-            <dd className="tabular-nums">
-              {account
-                ? `${account.alias} / ${formatAccountNo(account.accountNo)}`
-                : "-"}
-            </dd>
-          </div>
-          <div className="flex justify-between">
-            <dt className="font-bold">현재 누적 오류 횟수</dt>
-            <dd className="font-bold text-primary tabular-nums">
-              {account?.errorCount ?? 0}회
-            </dd>
-          </div>
-          <div className="flex justify-between">
-            <dt className="font-bold">제한 정책</dt>
-            <dd className="tabular-nums">5회 도달 시 거래정지</dd>
-          </div>
-        </dl>
-      </Modal>
-    </div>
+    </QueryPageLayout>
   )
 }

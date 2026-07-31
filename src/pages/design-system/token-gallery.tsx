@@ -14,7 +14,6 @@ const COLOR_GROUPS: {
     tokens: [
       { name: "navy", cls: "bg-navy" },
       { name: "primary", cls: "bg-primary" },
-      { name: "primary-hover", cls: "bg-primary-hover" },
       { name: "primary-tint", cls: "bg-primary-tint" },
       { name: "link", cls: "bg-link" },
     ],
@@ -41,27 +40,19 @@ const COLOR_GROUPS: {
       { name: "success-tint", cls: "bg-success-tint" },
       { name: "warning", cls: "bg-warning" },
       { name: "warning-tint", cls: "bg-warning-tint" },
-      { name: "info", cls: "bg-info" },
-      { name: "info-tint", cls: "bg-info-tint" },
     ],
   },
   {
-    title: "원장(입출금)",
-    tokens: [
-      { name: "deposit", cls: "bg-deposit" },
-      { name: "withdraw", cls: "bg-withdraw" },
-    ],
+    title: "원장(입금) — 출금은 danger 재사용",
+    tokens: [{ name: "deposit", cls: "bg-deposit" }],
   },
 ]
 
 const TYPE_SCALE = [
   { name: "text-page", label: "페이지 타이틀", cls: "text-page" },
   { name: "text-h2", label: "섹션 타이틀", cls: "text-h2" },
-  { name: "text-h3", label: "서브 섹션 타이틀", cls: "text-h3" },
   { name: "text-lg", label: "강조 본문", cls: "text-lg" },
-  { name: "text-md", label: "준본문", cls: "text-md" },
-  { name: "text-base", label: "기본 본문", cls: "text-base" },
-  { name: "text-sm", label: "표 셀", cls: "text-sm" },
+  { name: "text-base", label: "기본 본문 · 표 셀", cls: "text-base" },
   { name: "text-xs", label: "후퇴 라벨", cls: "text-xs" },
   { name: "text-2xs", label: "기준일시·각주·메타", cls: "text-2xs" },
 ]
@@ -132,7 +123,7 @@ export function TokenGallery() {
         </div>
       </FormSection>
 
-      <FormSection title="타이포 — 9단 스케일">
+      <FormSection title="타이포 — 6단 스케일">
         <div className="flex flex-col gap-3">
           {TYPE_SCALE.map((t) => (
             <div key={t.name} className="flex items-baseline gap-4">
@@ -179,7 +170,7 @@ export function TokenGallery() {
       <FormSection title="z-index 레이어">
         <div className="flex flex-col gap-1.5">
           {Z_INDEX.map((z) => (
-            <div key={z.name} className="flex items-center gap-3 text-sm">
+            <div key={z.name} className="flex items-center gap-3 text-base">
               <span className="w-28 font-bold text-ink">{z.name}</span>
               <span className="text-ink-muted tabular-nums">{z.value}</span>
             </div>

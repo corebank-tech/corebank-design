@@ -31,9 +31,9 @@ export function EmptyState({
       >
         !
       </span>
-      <p className="text-sm font-bold text-ink">{message}</p>
+      <p className="text-base font-bold text-ink">{message}</p>
       {description != null && (
-        <p className="text-sm text-ink-muted">{description}</p>
+        <p className="text-base text-ink-muted">{description}</p>
       )}
       {action != null && <div className="mt-1">{action}</div>}
     </div>

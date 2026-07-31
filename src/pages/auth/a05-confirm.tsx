@@ -49,23 +49,23 @@ export function A05Confirm({ data, onEdit, onComplete }: A05ConfirmProps) {
       <FormSection title="입력정보 확인">
         <div>
           <FormRow label="성명" labelWidth={180}>
-            <span className="text-sm text-ink">{maskName(data.name)}</span>
+            <span className="text-base text-ink">{maskName(data.name)}</span>
           </FormRow>
           <FormRow label="아이디" labelWidth={180}>
-            <span className="text-sm text-ink">{data.userId}</span>
+            <span className="text-base text-ink">{data.userId}</span>
           </FormRow>
           <FormRow label="생년월일" labelWidth={180}>
-            <span className="text-sm text-ink tabular-nums">
+            <span className="text-base text-ink tabular-nums">
               {birthToDisplay(data.birth)}
             </span>
           </FormRow>
           <FormRow label="휴대폰번호" labelWidth={180}>
-            <span className="text-sm text-ink tabular-nums">
+            <span className="text-base text-ink tabular-nums">
               {maskPhone(data.phone)}
             </span>
           </FormRow>
           <FormRow label="이메일" labelWidth={180}>
-            <span className="text-sm text-ink">{maskEmail(data.email)}</span>
+            <span className="text-base text-ink">{maskEmail(data.email)}</span>
           </FormRow>
         </div>
       </FormSection>

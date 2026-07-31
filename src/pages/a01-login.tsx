@@ -38,7 +38,7 @@ export function A01Login() {
         <div className="border border-border-strong bg-surface-elevated p-8 shadow-card">
           <div className="mb-6 text-center">
             <h1 className="text-page font-bold text-ink">로그인</h1>
-            <p className="mt-1 text-sm text-ink-muted">
+            <p className="mt-1 text-base text-ink-muted">
               CoreBank 인터넷뱅킹에 오신 것을 환영합니다.
             </p>
           </div>
@@ -53,12 +53,12 @@ export function A01Login() {
                 aria-hidden="true"
               />
               {failure.locked ? (
-                <p className="text-sm text-ink">
+                <p className="text-base text-ink">
                   비밀번호를 5회 연속 잘못 입력해 계정이 잠겼습니다. 잠금 해제는
                   고객센터를 통한 관리자 확인 후에만 가능합니다.
                 </p>
               ) : (
-                <p className="text-sm text-ink">
+                <p className="text-base text-ink">
                   아이디 또는 비밀번호가 올바르지 않습니다.{" "}
                   <span className="font-bold text-danger">
                     ({failure.attempts}/{MAX_ATTEMPTS}회)
@@ -70,7 +70,10 @@ export function A01Login() {
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="login-id" className="text-sm font-bold text-ink">
+              <label
+                htmlFor="login-id"
+                className="text-base font-bold text-ink"
+              >
                 이용자ID
               </label>
               <Input
@@ -88,7 +91,10 @@ export function A01Login() {
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="login-pw" className="text-sm font-bold text-ink">
+              <label
+                htmlFor="login-pw"
+                className="text-base font-bold text-ink"
+              >
                 비밀번호
               </label>
               <Input
@@ -113,7 +119,7 @@ export function A01Login() {
             </Button>
           </form>
 
-          <div className="mt-5 flex items-center justify-center gap-3 text-sm text-ink-muted">
+          <div className="mt-5 flex items-center justify-center gap-3 text-base text-ink-muted">
             <Link to="/find-id" className="hover:text-primary hover:underline">
               아이디 찾기
             </Link>

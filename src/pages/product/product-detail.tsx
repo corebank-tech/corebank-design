@@ -60,7 +60,7 @@ export function ProductDetail({ product, onJoin }: ProductDetailProps) {
             {product.category}
           </Badge>
           <h2 className="mt-3 text-h2 font-bold text-ink">{product.name}</h2>
-          <p className="mt-1 text-sm leading-relaxed text-ink-muted">
+          <p className="mt-1 text-base leading-relaxed text-ink-muted">
             {product.summary}
           </p>
 
@@ -73,7 +73,7 @@ export function ProductDetail({ product, onJoin }: ProductDetailProps) {
           </div>
           <p className="mt-1 text-xs text-ink-faint">최고 금리</p>
 
-          <dl className="mt-5 flex flex-col gap-3 text-sm">
+          <dl className="mt-5 flex flex-col gap-3 text-base">
             <div className="flex items-center justify-between">
               <dt className="text-ink-muted">가입기간</dt>
               <dd className="font-bold text-ink">{product.period}</dd>
@@ -136,10 +136,10 @@ export function ProductDetail({ product, onJoin }: ProductDetailProps) {
                   key={item.label}
                   className={cn("flex", i > 0 && "border-t border-border")}
                 >
-                  <dt className="flex w-40 shrink-0 items-center bg-surface px-4 py-3 text-sm font-bold text-ink">
+                  <dt className="flex w-40 shrink-0 items-center bg-surface px-4 py-3 text-base font-bold text-ink">
                     {item.label}
                   </dt>
-                  <dd className="flex-1 bg-surface-elevated px-4 py-3 text-sm leading-relaxed text-ink">
+                  <dd className="flex-1 bg-surface-elevated px-4 py-3 text-base leading-relaxed text-ink">
                     {item.value}
                   </dd>
                 </div>
@@ -167,7 +167,7 @@ export function ProductDetail({ product, onJoin }: ProductDetailProps) {
                 {product.notices.map((notice, i) => (
                   <li
                     key={i}
-                    className="flex gap-2 text-sm leading-relaxed text-ink"
+                    className="flex gap-2 text-base leading-relaxed text-ink"
                   >
                     <span
                       className="mt-2 h-1 w-1 shrink-0 rounded-full bg-ink-faint"
@@ -177,7 +177,7 @@ export function ProductDetail({ product, onJoin }: ProductDetailProps) {
                   </li>
                 ))}
               </ul>
-              <div className="mt-5 rounded-md bg-primary-tint px-4 py-3 text-sm leading-relaxed text-ink">
+              <div className="mt-5 rounded-md bg-primary-tint px-4 py-3 text-base leading-relaxed text-ink">
                 이 예금은 예금자보호법에 따라 원금과 소정의 이자를 합하여 1인당
                 최고 5천만원까지 보호됩니다. 보호 한도는 CoreBank의 다른
                 보호대상 예금과 합산하여 적용됩니다.

@@ -43,13 +43,13 @@ export function TextViewModal({
         {rows.length.toLocaleString("ko-KR")}건입니다.
       </p>
       {rows.length === 0 ? (
-        <p className="text-sm text-ink-muted">조회 결과가 없습니다.</p>
+        <p className="text-base text-ink-muted">조회 결과가 없습니다.</p>
       ) : (
         <ol className="flex max-h-[420px] flex-col gap-3 overflow-y-auto">
           {rows.map((row, i) => (
             <li
               key={i}
-              className="border-b border-border pb-3 text-sm last:border-0"
+              className="border-b border-border pb-3 text-base last:border-0"
             >
               <p className="mb-1 font-bold text-ink">{i + 1}번째 항목</p>
               <dl className="flex flex-col gap-0.5">

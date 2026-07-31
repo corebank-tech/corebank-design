@@ -1,6 +1,6 @@
 import * as React from "react"
 import { BarChart3 } from "lucide-react"
-import { NoticeBox, NoticeBoxFooter } from "@/shared/ui/notice-box"
+import { QueryPageLayout } from "@/shared/ui/query-page-layout"
 import { FormSection } from "@/shared/ui/form-section"
 import { FormRow } from "@/shared/ui/form-row"
 import { Select } from "@/shared/ui/select"
@@ -205,7 +205,7 @@ export function D04TransferHistory() {
         <button
           type="button"
           onClick={() => setDetail(r)}
-          className="text-sm text-link tabular-nums hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+          className="text-base text-link tabular-nums hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
         >
           {r.txId}
         </button>
@@ -214,16 +214,176 @@ export function D04TransferHistory() {
   ]
 
   return (
-    <div className="flex flex-col">
-      <NoticeBox
-        className="mb-8"
-        items={[
-          "조회기간은 최대 1년까지 선택할 수 있으며 기본값은 최근 1개월입니다.",
-          "처리중 상태는 서버 처리 지연 시에만 표시되며 이후 정상 또는 오류로 확정됩니다.",
-          "집계 금액은 페이징과 무관하게 조회 조건에 해당하는 전체 건 기준입니다.",
-        ]}
-      />
+    <QueryPageLayout
+      noticeItems={[
+        "조회기간은 최대 1년까지 선택할 수 있으며 기본값은 최근 1개월입니다.",
+        "처리중 상태는 서버 처리 지연 시에만 표시되며 이후 정상 또는 오류로 확정됩니다.",
+        "집계 금액은 페이징과 무관하게 조회 조건에 해당하는 전체 건 기준입니다.",
+      ]}
+      footerItems={[
+        "이체 처리상태는 정상, 오류, 처리중 3종으로만 관리됩니다(POL-025).",
+        "당행이체는 수수료가 발생하지 않습니다(POL-028).",
+      ]}
+      modals={
+        <>
+          <Modal
+            open={detail != null}
+            onClose={() => setDetail(null)}
+            title="이체 상세"
+            size="sm"
+            footer={
+              <Button
+                variant="primary"
+                size="lg"
+                className="min-w-30"
+                onClick={() => setDetail(null)}
+              >
+                확인
+              </Button>
+            }
+          >
+            {detail && (
+              <dl className="flex flex-col gap-3">
+                {(
+                  [
+                    { label: "거래번호", value: detail.txId },
+                    {
+                      label: "이체일시",
+                      value: formatDateTime(detail.datetime),
+                    },
+                    {
+                      label: "출금계좌",
+                      value: `${detail.fromAlias} / ${formatAccountNo(detail.fromAccountNo)}`,
+                    },
+                    {
+                      label: "입금계좌",
+                      value: formatAccountNo(detail.toAccountNo),
+                    },
+                    { label: "예금주", value: maskName(detail.payeeName) },
+                    {
+                      label: "이체금액",
+                      value: formatAmount(detail.amount),
+                      dominant: true,
+                    },
+                    { label: "수수료", value: formatAmount(detail.fee) },
+                    { label: "표시내용", value: detail.memo },
+                    {
+                      label: "처리상태",
+                      value: (
+                        <Badge
+                          variant={getTransferStatusBadgeVariant(detail.status)}
+                        >
+                          {detail.status}
+                        </Badge>
+                      ),
+                    },
+                    ...(detail.errorReason
+                      ? [{ label: "오류사유", value: detail.errorReason }]
+                      : []),
+                  ] satisfies {
+                    label: string
+                    value: React.ReactNode
+                    dominant?: boolean
+                  }[]
+                ).map((item) => (
+                  <div key={item.label} className="flex gap-2">
+                    <dt
+                      className={
+                        item.dominant
+                          ? "w-24 shrink-0 text-xs text-ink-faint"
+                          : "w-24 shrink-0 text-base text-ink-muted"
+                      }
+                    >
+                      {item.label}
+                    </dt>
+                    <dd
+                      className={
+                        item.dominant
+                          ? "min-w-0 flex-1 text-h2 font-bold text-primary tabular-nums"
+                          : "min-w-0 flex-1 text-base font-bold text-ink tabular-nums"
+                      }
+                    >
+                      {item.value}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            )}
+            <p className="mt-3 text-2xs leading-relaxed text-ink-faint">
+              ※ 예금주명은 개인정보 보호를 위해 가운데 1자를 마스킹하여
+              표시합니다.
+            </p>
+          </Modal>
 
+          <Modal
+            open={statsOpen}
+            onClose={() => setStatsOpen(false)}
+            title="이체결과 통계"
+            size="md"
+            footer={
+              <Button
+                variant="primary"
+                size="lg"
+                className="min-w-30"
+                onClick={() => setStatsOpen(false)}
+              >
+                확인
+              </Button>
+            }
+          >
+            <p className="mb-4 text-2xs text-ink-faint">
+              전월 기준 최근 1년 이내 월별·출금계좌별 이체건수와 이체금액입니다.
+            </p>
+            <DataGrid
+              columns={[
+                { key: "month", header: "월", align: "center", width: 90 },
+                { key: "fromAlias", header: "출금계좌", align: "left" },
+                {
+                  key: "count",
+                  header: "이체건수",
+                  align: "right",
+                  width: 90,
+                  render: (r) => `${r.count}건`,
+                },
+                {
+                  key: "amount",
+                  header: "이체금액",
+                  align: "right",
+                  width: 130,
+                  render: (r) => formatAmount(r.amount),
+                },
+              ]}
+              rows={MOCK_MONTHLY_TRANSFER_STATS}
+              rowKey={(r, i) => `${r.month}-${r.fromAlias}-${i}`}
+            />
+          </Modal>
+
+          <AlertDialog
+            open={savedOpen}
+            onClose={() => setSavedOpen(false)}
+            messages={["조회조건이 저장되었습니다."]}
+          />
+
+          <TextViewModal
+            open={brailleOpen}
+            onClose={() => setBrailleOpen(false)}
+            title="이체결과조회 점자보기"
+            headers={exportHeaders}
+            rows={exportRows}
+          />
+
+          <GridSearchModal
+            open={searchOpen}
+            onClose={() => setSearchOpen(false)}
+            fields={SEARCH_FIELDS}
+            onApply={(field, keyword) => {
+              setSearch(keyword ? { field, keyword } : null)
+              setPage(1)
+            }}
+          />
+        </>
+      }
+    >
       <FormSection title="조회조건">
         <SearchPanel
           onReset={handleReset}
@@ -337,166 +497,6 @@ export function D04TransferHistory() {
           onPageChange={setPage}
         />
       </FormSection>
-
-      <NoticeBoxFooter
-        className="mt-8"
-        items={[
-          "이체 처리상태는 정상, 오류, 처리중 3종으로만 관리됩니다(POL-025).",
-          "당행이체는 수수료가 발생하지 않습니다(POL-028).",
-        ]}
-      />
-
-      <Modal
-        open={detail != null}
-        onClose={() => setDetail(null)}
-        title="이체 상세"
-        size="sm"
-        footer={
-          <Button
-            variant="primary"
-            size="lg"
-            className="min-w-30"
-            onClick={() => setDetail(null)}
-          >
-            확인
-          </Button>
-        }
-      >
-        {detail && (
-          <dl className="flex flex-col gap-3">
-            {(
-              [
-                { label: "거래번호", value: detail.txId },
-                { label: "이체일시", value: formatDateTime(detail.datetime) },
-                {
-                  label: "출금계좌",
-                  value: `${detail.fromAlias} / ${formatAccountNo(detail.fromAccountNo)}`,
-                },
-                {
-                  label: "입금계좌",
-                  value: formatAccountNo(detail.toAccountNo),
-                },
-                { label: "예금주", value: maskName(detail.payeeName) },
-                {
-                  label: "이체금액",
-                  value: formatAmount(detail.amount),
-                  dominant: true,
-                },
-                { label: "수수료", value: formatAmount(detail.fee) },
-                { label: "표시내용", value: detail.memo },
-                {
-                  label: "처리상태",
-                  value: (
-                    <Badge
-                      variant={getTransferStatusBadgeVariant(detail.status)}
-                    >
-                      {detail.status}
-                    </Badge>
-                  ),
-                },
-                ...(detail.errorReason
-                  ? [{ label: "오류사유", value: detail.errorReason }]
-                  : []),
-              ] satisfies {
-                label: string
-                value: React.ReactNode
-                dominant?: boolean
-              }[]
-            ).map((item) => (
-              <div key={item.label} className="flex gap-2">
-                <dt
-                  className={
-                    item.dominant
-                      ? "w-24 shrink-0 text-xs text-ink-faint"
-                      : "w-24 shrink-0 text-sm text-ink-muted"
-                  }
-                >
-                  {item.label}
-                </dt>
-                <dd
-                  className={
-                    item.dominant
-                      ? "min-w-0 flex-1 text-h2 font-bold text-primary tabular-nums"
-                      : "min-w-0 flex-1 text-sm font-bold text-ink tabular-nums"
-                  }
-                >
-                  {item.value}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        )}
-        <p className="mt-3 text-2xs leading-relaxed text-ink-faint">
-          ※ 예금주명은 개인정보 보호를 위해 가운데 1자를 마스킹하여 표시합니다.
-        </p>
-      </Modal>
-
-      <Modal
-        open={statsOpen}
-        onClose={() => setStatsOpen(false)}
-        title="이체결과 통계"
-        size="md"
-        footer={
-          <Button
-            variant="primary"
-            size="lg"
-            className="min-w-30"
-            onClick={() => setStatsOpen(false)}
-          >
-            확인
-          </Button>
-        }
-      >
-        <p className="mb-4 text-2xs text-ink-faint">
-          전월 기준 최근 1년 이내 월별·출금계좌별 이체건수와 이체금액입니다.
-        </p>
-        <DataGrid
-          columns={[
-            { key: "month", header: "월", align: "center", width: 90 },
-            { key: "fromAlias", header: "출금계좌", align: "left" },
-            {
-              key: "count",
-              header: "이체건수",
-              align: "right",
-              width: 90,
-              render: (r) => `${r.count}건`,
-            },
-            {
-              key: "amount",
-              header: "이체금액",
-              align: "right",
-              width: 130,
-              render: (r) => formatAmount(r.amount),
-            },
-          ]}
-          rows={MOCK_MONTHLY_TRANSFER_STATS}
-          rowKey={(r, i) => `${r.month}-${r.fromAlias}-${i}`}
-        />
-      </Modal>
-
-      <AlertDialog
-        open={savedOpen}
-        onClose={() => setSavedOpen(false)}
-        messages={["조회조건이 저장되었습니다."]}
-      />
-
-      <TextViewModal
-        open={brailleOpen}
-        onClose={() => setBrailleOpen(false)}
-        title="이체결과조회 점자보기"
-        headers={exportHeaders}
-        rows={exportRows}
-      />
-
-      <GridSearchModal
-        open={searchOpen}
-        onClose={() => setSearchOpen(false)}
-        fields={SEARCH_FIELDS}
-        onApply={(field, keyword) => {
-          setSearch(keyword ? { field, keyword } : null)
-          setPage(1)
-        }}
-      />
-    </div>
+    </QueryPageLayout>
   )
 }

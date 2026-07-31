@@ -1,5 +1,5 @@
 import * as React from "react"
-import { NoticeBox, NoticeBoxFooter } from "@/shared/ui/notice-box"
+import { QueryPageLayout } from "@/shared/ui/query-page-layout"
 import { FormSection } from "@/shared/ui/form-section"
 import { FormRow } from "@/shared/ui/form-row"
 import { Button } from "@/shared/ui/button"
@@ -209,16 +209,68 @@ export function E04ReservationList() {
   ]
 
   return (
-    <div className="flex flex-col">
-      <NoticeBox
-        className="mb-8"
-        items={[
-          "대기 상태이고 이체 예정일 전일 23:59:59까지인 건만 취소할 수 있습니다.",
-          "이체 예정일 당일에는 취소할 수 없습니다.",
-          "대기 건은 이체 예정일이 빠른 순으로 정렬됩니다.",
-        ]}
-      />
+    <QueryPageLayout
+      noticeItems={[
+        "대기 상태이고 이체 예정일 전일 23:59:59까지인 건만 취소할 수 있습니다.",
+        "이체 예정일 당일에는 취소할 수 없습니다.",
+        "대기 건은 이체 예정일이 빠른 순으로 정렬됩니다.",
+      ]}
+      footerItems={[
+        "예약이체는 이체 예정일 전일 23:59:59까지 취소할 수 있으며, 이체 예정일 당일에는 취소할 수 없습니다(REQ-RSV-008).",
+        "예약이체는 매일 00:10에 실행되며 실행 실패 시 재시도되지 않습니다(POL-019·020).",
+      ]}
+      modals={
+        <>
+          <ConfirmDialog
+            open={confirmOpen}
+            onClose={() => setConfirmOpen(false)}
+            onConfirm={handleConfirmCancel}
+            title="예약이체 취소"
+            messages={[
+              "선택한 예약이체를 취소합니다.",
+              "취소 후에는 되돌릴 수 없으며, 확인을 누르면 OTP 인증으로 이어집니다.",
+            ]}
+            confirmLabel="취소하기"
+            cancelLabel="닫기"
+            items={selectedRows.map((r) => ({
+              label: formatDate(r.scheduledDate),
+              value: `${r.fromAlias} → ${maskName(r.payeeName)} / ${formatAmount(r.amount)}`,
+            }))}
+          />
 
+          <OtpModal
+            open={otpOpen}
+            onClose={() => setOtpOpen(false)}
+            onConfirm={handleOtpConfirm}
+            guide="예약이체 취소를 위해 OTP를 발급한 뒤 화면에 표시된 6자리 번호를 입력하세요."
+          />
+
+          <ErrorDialog
+            open={blockedOpen}
+            onClose={() => setBlockedOpen(false)}
+            title="취소 불가"
+            messages={[
+              "대기 상태이고 이체 예정일 전일까지인 건만 취소할 수 있습니다.",
+              "이체 예정일 당일이거나 이미 처리된 건은 선택에서 제외하세요.",
+            ]}
+          />
+
+          <AlertDialog
+            open={savedOpen}
+            onClose={() => setSavedOpen(false)}
+            messages={["조회조건이 저장되었습니다."]}
+          />
+
+          <TextViewModal
+            open={brailleOpen}
+            onClose={() => setBrailleOpen(false)}
+            title="예약이체 조회 점자보기"
+            headers={exportHeaders}
+            rows={exportRows}
+          />
+        </>
+      }
+    >
       <FormSection title="조회조건">
         <SearchPanel
           onReset={handleReset}
@@ -293,62 +345,6 @@ export function E04ReservationList() {
           onPageChange={setPage}
         />
       </FormSection>
-
-      <NoticeBoxFooter
-        className="mt-8"
-        items={[
-          "예약이체는 이체 예정일 전일 23:59:59까지 취소할 수 있으며, 이체 예정일 당일에는 취소할 수 없습니다(REQ-RSV-008).",
-          "예약이체는 매일 00:10에 실행되며 실행 실패 시 재시도되지 않습니다(POL-019·020).",
-        ]}
-      />
-
-      <ConfirmDialog
-        open={confirmOpen}
-        onClose={() => setConfirmOpen(false)}
-        onConfirm={handleConfirmCancel}
-        title="예약이체 취소"
-        messages={[
-          "선택한 예약이체를 취소합니다.",
-          "취소 후에는 되돌릴 수 없으며, 확인을 누르면 OTP 인증으로 이어집니다.",
-        ]}
-        confirmLabel="취소하기"
-        cancelLabel="닫기"
-        items={selectedRows.map((r) => ({
-          label: formatDate(r.scheduledDate),
-          value: `${r.fromAlias} → ${maskName(r.payeeName)} / ${formatAmount(r.amount)}`,
-        }))}
-      />
-
-      <OtpModal
-        open={otpOpen}
-        onClose={() => setOtpOpen(false)}
-        onConfirm={handleOtpConfirm}
-        guide="예약이체 취소를 위해 OTP를 발급한 뒤 화면에 표시된 6자리 번호를 입력하세요."
-      />
-
-      <ErrorDialog
-        open={blockedOpen}
-        onClose={() => setBlockedOpen(false)}
-        title="취소 불가"
-        messages={[
-          "대기 상태이고 이체 예정일 전일까지인 건만 취소할 수 있습니다.",
-          "이체 예정일 당일이거나 이미 처리된 건은 선택에서 제외하세요.",
-        ]}
-      />
-
-      <AlertDialog
-        open={savedOpen}
-        onClose={() => setSavedOpen(false)}
-        messages={["조회조건이 저장되었습니다."]}
-      />
-
-      <TextViewModal
-        open={brailleOpen}
-        onClose={() => setBrailleOpen(false)}
-        title="예약이체 조회 점자보기"
-        headers={exportHeaders}
-        rows={exportRows}
-      />
-    </div>
+    </QueryPageLayout>
   )
 }

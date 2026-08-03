@@ -8,6 +8,7 @@ import { formatAccountNo, formatAmount } from "@/shared/lib/format"
 import { daysBetween, parseISO, toISO } from "@/shared/lib/date"
 import { QUERY_MAX_RANGE_DAYS as MAX_RANGE_DAYS } from "@/shared/config/policy"
 import type { AccountOption } from "@/shared/types/account"
+import { checkPeriodRange } from "@/entities/transaction"
 
 /* ------------------------------------------------------------------ */
 /* AccountSelectField                                                  */
@@ -85,8 +86,7 @@ export function PeriodField({ start, end, onChange, today }: PeriodFieldProps) {
     return PERIOD_CHIPS.find((c) => c.days === span)?.id ?? null
   }, [start, end, today])
 
-  const overLimit = daysBetween(start, end) > MAX_RANGE_DAYS
-  const reversed = daysBetween(start, end) < 0
+  const { reversed, overLimit } = checkPeriodRange(start, end, MAX_RANGE_DAYS)
 
   const stepperGroup =
     "inline-flex items-stretch overflow-hidden rounded-md border border-border-strong"

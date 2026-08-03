@@ -68,4 +68,14 @@ export {
   AUTO_TRANSFER_CYCLE_LABEL,
 } from "@/entities/transfer/lib/status-badge"
 
+export type {
+  AmountLimitCheck,
+  DateRangeCheck,
+} from "@/entities/transfer/lib/validate-transfer"
+export {
+  checkAmountLimit,
+  checkReservationDateRange,
+  checkTransferEndDateRange,
+} from "@/entities/transfer/lib/validate-transfer"
+
 export { LimitModal } from "@/entities/transfer/ui/limit-modal"

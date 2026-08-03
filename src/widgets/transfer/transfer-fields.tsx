@@ -8,9 +8,13 @@ import {
   formatAmount,
   formatKoreanAmount,
 } from "@/shared/lib/format"
-import { addDays, addMonths, daysBetween } from "@/shared/lib/date"
 import { RESERVATION_MAX_RANGE_DAYS } from "@/shared/config/policy"
 import type { AccountOption } from "@/shared/types/account"
+import {
+  checkAmountLimit,
+  checkReservationDateRange,
+  checkTransferEndDateRange,
+} from "@/entities/transfer"
 
 /* ================================================================== */
 /* WithdrawAccountField — 출금계좌 선택                                 */
@@ -237,11 +241,11 @@ export function AmountField({
   fullAmount,
   showDailyLimit = true,
 }: AmountFieldProps) {
-  const limit = showDailyLimit
-    ? Math.min(perTransferLimit, dailyRemaining)
-    : perTransferLimit
-  const overLimit = value != null && value > limit
-  const overPer = value != null && value > perTransferLimit
+  const {
+    limit,
+    overLimit,
+    overPerTransferLimit: overPer,
+  } = checkAmountLimit(value, perTransferLimit, dailyRemaining, showDailyLimit)
 
   return (
     <div className="flex w-full flex-col gap-2">
@@ -365,10 +369,12 @@ export function TransferDateField({
   maxDays = RESERVATION_MAX_RANGE_DAYS,
   rangeLabel = "예약일",
 }: TransferDateFieldProps) {
-  const min = addDays(today, minDays)
-  const max = addDays(today, maxDays)
-  const span = value ? daysBetween(today, value) : null
-  const outOfRange = span != null && (span < minDays || span > maxDays)
+  const { min, max, outOfRange } = checkReservationDateRange(
+    today,
+    value,
+    minDays,
+    maxDays,
+  )
 
   return (
     <div className="flex w-full flex-col gap-2">
@@ -482,13 +488,11 @@ export function TransferEndDateField({
   startDate,
   maxMonths = 60,
 }: TransferEndDateFieldProps) {
-  const min = addDays(startDate, 1)
-  const max = addMonths(startDate, maxMonths)
-  const afterStart = value ? daysBetween(startDate, value) > 0 : true
-  const withinMax = value
-    ? daysBetween(startDate, value) <= daysBetween(startDate, max)
-    : true
-  const outOfRange = value !== "" && (!afterStart || !withinMax)
+  const { min, max, outOfRange } = checkTransferEndDateRange(
+    startDate,
+    value,
+    maxMonths,
+  )
 
   return (
     <div className="flex w-full flex-col gap-2">

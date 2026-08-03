@@ -1,10 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
 import { Alert } from "@/shared/ui/alert"
 
+const PLACEHOLDER_TEXT = "예시 안내 문구가 표시되는 영역입니다."
+
 const meta = {
   title: "shared/ui/Alert",
   component: Alert,
-  args: { children: "입력하신 정보를 다시 확인해 주세요." },
+  args: { children: PLACEHOLDER_TEXT },
   parameters: {
     layout: "padded",
     docs: {
@@ -60,7 +62,7 @@ export const Warning: Story = {
   args: {
     variant: "warning",
     title: "주의",
-    children: "1일 이체한도에 근접했습니다.",
+    children: PLACEHOLDER_TEXT,
   },
   parameters: {
     docs: {

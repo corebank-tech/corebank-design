@@ -4,6 +4,12 @@ import { Spinner } from "@/shared/ui/spinner"
 const meta = {
   title: "shared/ui/Spinner",
   component: Spinner,
+  argTypes: {
+    size: {
+      control: "select",
+      options: ["sm", "md", "lg"],
+    },
+  },
 } satisfies Meta<typeof Spinner>
 
 export default meta

@@ -6,6 +6,17 @@ const meta = {
   component: Alert,
   args: { children: "입력하신 정보를 다시 확인해 주세요." },
   parameters: { layout: "padded" },
+  argTypes: {
+    variant: {
+      control: "select",
+      options: ["info", "success", "warning", "danger"],
+      description:
+        "안내 톤. 실 화면에서는 success·danger만 쓴다(폼 검증 안내).",
+    },
+    title: {
+      control: "text",
+    },
+  },
 } satisfies Meta<typeof Alert>
 
 export default meta

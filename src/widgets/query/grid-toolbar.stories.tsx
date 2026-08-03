@@ -1,6 +1,9 @@
 import * as React from "react"
 import type { Meta, StoryObj } from "@storybook/react-vite"
 import { GridToolbar } from "@/widgets/query/grid-toolbar"
+import { formatDate, formatDateTime } from "@/shared/lib/format"
+import { addMonths } from "@/shared/lib/date"
+import { MOCK_NOW, MOCK_TODAY } from "@/shared/config/mock-clock"
 
 type GridToolbarDemoProps = React.ComponentProps<typeof GridToolbar>
 
@@ -23,8 +26,8 @@ const meta = {
   args: {
     totalCount: 42,
     pageSize: 10,
-    periodLabel: "2026.06.23 ~ 2026.07.23",
-    baseTimeLabel: "2026.07.23 08:57:34",
+    periodLabel: `${formatDate(addMonths(MOCK_TODAY, -1))} ~ ${formatDate(MOCK_TODAY)}`,
+    baseTimeLabel: formatDateTime(MOCK_NOW),
   },
 } satisfies Meta<typeof GridToolbarDemo>
 

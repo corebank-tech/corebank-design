@@ -2,15 +2,18 @@ import type { Meta, StoryObj } from "@storybook/react-vite"
 import { PageShell } from "@/app/page-shell"
 import { A05Confirm } from "@/pages/auth/a05-confirm"
 import type { SignupData } from "@/pages/auth/signup-shared"
+import { MOCK_MEMBERS } from "@/entities/auth"
 import { WithGuestPage } from "../../../.storybook/decorators/page-providers"
 
+const REGISTERING_MEMBER = MOCK_MEMBERS[0]
+
 const MOCK_DATA: SignupData = {
-  name: "홍길동",
-  birth: "900101",
+  name: REGISTERING_MEMBER.ownerName,
+  birth: REGISTERING_MEMBER.birth,
   phone: "01012345678",
-  email: "hong@corebank.com",
-  userId: "honggildong",
-  password: "Password1!",
+  email: REGISTERING_MEMBER.email,
+  userId: REGISTERING_MEMBER.memberId,
+  password: REGISTERING_MEMBER.loginPassword,
 }
 
 const meta = {

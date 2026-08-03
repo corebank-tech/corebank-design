@@ -3,6 +3,7 @@ import { ResultPanel } from "@/widgets/transfer/result-panel"
 import { Button } from "@/shared/ui/button"
 import type { DataGridColumn } from "@/shared/ui/data-grid"
 import { formatAccountNo, formatAmount } from "@/shared/lib/format"
+import { MOCK_PAYEE_ACCOUNTS } from "@/entities/transfer"
 
 type TransferResultRow = {
   toAccountNo: string
@@ -12,8 +13,8 @@ type TransferResultRow = {
 }
 
 const ROW: TransferResultRow = {
-  toAccountNo: "333330730135",
-  payeeName: "김민수",
+  toAccountNo: MOCK_PAYEE_ACCOUNTS[0].accountNo,
+  payeeName: MOCK_PAYEE_ACCOUNTS[0].payeeName,
   fee: 0,
   balanceAfter: 11_500_000,
 }
@@ -46,6 +47,14 @@ const meta = {
   args: {
     columns: COLUMNS,
     row: ROW,
+  },
+  argTypes: {
+    variant: {
+      control: "select",
+      options: ["success", "fail", "pending"],
+      description:
+        "결과 상태 아이콘·색상 톤. pending은 아이콘 대신 스피너를 보여준다.",
+    },
   },
 } satisfies Meta<typeof ResultPanel<TransferResultRow>>
 

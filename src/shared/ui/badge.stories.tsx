@@ -5,6 +5,14 @@ const meta = {
   title: "shared/ui/Badge",
   component: Badge,
   args: { children: "정상" },
+  argTypes: {
+    variant: {
+      control: "select",
+      options: ["primary", "neutral", "success", "danger", "warning"],
+      description:
+        "상태 톤. 화면별 상태값 → variant 매핑은 entities/*/lib/status-badge.ts를 따른다.",
+    },
+  },
 } satisfies Meta<typeof Badge>
 
 export default meta

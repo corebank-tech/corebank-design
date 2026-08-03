@@ -5,6 +5,12 @@ const meta = {
   title: "shared/ui/Radio",
   component: Radio,
   args: { name: "period", label: "1개월" },
+  argTypes: {
+    label: {
+      control: "text",
+      description: "라디오 오른쪽에 표시되는 라벨.",
+    },
+  },
 } satisfies Meta<typeof Radio>
 
 export default meta

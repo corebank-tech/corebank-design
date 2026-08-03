@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
 import { PageShell } from "@/app/page-shell"
 import { C06Complete } from "@/pages/product/c06-complete"
+import { MOCK_JOIN_PRODUCTS } from "@/entities/product"
 import {
   WithAuthenticatedPage,
   type RouteWithState,
@@ -20,17 +21,19 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
+const JOINED_PRODUCT = MOCK_JOIN_PRODUCTS.P001
+
 const JOIN_RESULT_STATE: RouteWithState = {
-  path: "/product/P001/join/4",
+  path: `/product/${JOINED_PRODUCT.id}/join/4`,
   state: {
-    productId: "P001",
-    productName: "코어 정기예금",
-    category: "정기예금",
-    newAccountNo: "110774213980",
+    productId: JOINED_PRODUCT.id,
+    productName: JOINED_PRODUCT.name,
+    category: JOINED_PRODUCT.category,
+    newAccountNo: JOINED_PRODUCT.mockNewAccountNo,
     amount: 5_000_000,
     termMonths: 12,
     maturityDate: "2027-07-31",
-    rate: 3.85,
+    rate: JOINED_PRODUCT.rate,
   },
 }
 

@@ -14,6 +14,7 @@ import {
 } from "@/widgets/transfer/transfer-fields"
 import { FormRow } from "@/shared/ui/form-row"
 import {
+  MOCK_PAYEE_ACCOUNTS,
   MOCK_TRANSFER_ACCOUNTS,
   MOCK_TRANSFER_LIMITS,
 } from "@/entities/transfer"
@@ -42,14 +43,14 @@ function AccountPasswordFieldDemo() {
 }
 
 function AccountNumberFieldDemo() {
-  const [value, setValue] = React.useState("333330730135")
+  const [value, setValue] = React.useState(MOCK_PAYEE_ACCOUNTS[0].accountNo)
   return (
     <FormRow label="받는분 계좌번호">
       <AccountNumberField
         value={value}
         onChange={setValue}
         confirmed
-        holderName="김민수"
+        holderName={MOCK_PAYEE_ACCOUNTS[0].payeeName}
       />
     </FormRow>
   )

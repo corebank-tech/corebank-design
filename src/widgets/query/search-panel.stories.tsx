@@ -3,6 +3,8 @@ import { SearchPanel } from "@/widgets/query/search-panel"
 import { FormRow } from "@/shared/ui/form-row"
 import { Input } from "@/shared/ui/input"
 import { Select } from "@/shared/ui/select"
+import { MOCK_TRANSFER_ACCOUNTS } from "@/entities/transfer"
+import { formatAccountNo } from "@/shared/lib/format"
 
 const meta = {
   title: "widgets/query/SearchPanel",
@@ -20,8 +22,11 @@ export const Default: Story = {
       <SearchPanel {...args}>
         <FormRow label="조회계좌번호" htmlFor="search-panel-account">
           <Select id="search-panel-account">
-            <option>자유입출금 110-632-892336</option>
-            <option>급여통장 302-998-112233</option>
+            {MOCK_TRANSFER_ACCOUNTS.map((account) => (
+              <option key={account.accountNo}>
+                {account.alias} {formatAccountNo(account.accountNo)}
+              </option>
+            ))}
           </Select>
         </FormRow>
         <FormRow label="적요검색" htmlFor="search-panel-keyword">

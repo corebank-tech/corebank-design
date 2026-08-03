@@ -5,6 +5,12 @@ const meta = {
   title: "shared/ui/Checkbox",
   component: Checkbox,
   args: { label: "전체 약관에 동의합니다" },
+  argTypes: {
+    label: {
+      control: "text",
+      description: "체크박스 오른쪽에 표시되는 라벨.",
+    },
+  },
 } satisfies Meta<typeof Checkbox>
 
 export default meta

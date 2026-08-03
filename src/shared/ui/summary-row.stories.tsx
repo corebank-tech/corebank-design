@@ -1,6 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
 import { SummaryRow } from "@/shared/ui/summary-row"
 import { formatAmount } from "@/shared/lib/format"
+import { MOCK_OVERVIEW_ACCOUNTS } from "@/entities/account"
+
+const CHECKING_TOTAL_BALANCE = MOCK_OVERVIEW_ACCOUNTS.filter(
+  (account) => account.group === "checking",
+).reduce((sum, account) => sum + account.balance, 0)
 
 const meta = {
   title: "shared/ui/SummaryRow",
@@ -13,7 +18,12 @@ type Story = StoryObj<typeof meta>
 
 export const Single: Story = {
   args: {
-    items: [{ label: "입출금계좌 총잔액", value: formatAmount(17_700_500) }],
+    items: [
+      {
+        label: "입출금계좌 총잔액",
+        value: formatAmount(CHECKING_TOTAL_BALANCE),
+      },
+    ],
   },
 }
 

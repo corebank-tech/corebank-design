@@ -7,6 +7,16 @@ const meta = {
   component: FormRow,
   parameters: { layout: "padded" },
   args: { label: "받는분 계좌번호" },
+  argTypes: {
+    required: {
+      control: "boolean",
+      description: "라벨 앞에 [필수] 배지를 붙인다.",
+    },
+    labelWidth: {
+      control: "number",
+      description: "라벨 컬럼 고정 폭(px). 기본 160.",
+    },
+  },
 } satisfies Meta<typeof FormRow>
 
 export default meta

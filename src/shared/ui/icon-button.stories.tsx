@@ -10,6 +10,16 @@ const meta = {
     className: "border border-border-strong text-ink-muted hover:bg-surface",
     children: <X className="h-4 w-4" aria-hidden="true" />,
   },
+  argTypes: {
+    size: {
+      control: "select",
+      options: ["sm", "md", "lg"],
+    },
+    shape: {
+      control: "select",
+      options: ["square", "circle"],
+    },
+  },
 } satisfies Meta<typeof IconButton>
 
 export default meta

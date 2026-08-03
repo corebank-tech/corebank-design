@@ -2,7 +2,10 @@ import * as React from "react"
 import type { Meta, StoryObj } from "@storybook/react-vite"
 import { ConfirmDialog } from "@/shared/ui/confirm-dialog"
 import { Button } from "@/shared/ui/button"
+import { MOCK_PAYEE_NAME, MOCK_PAYEE_ACCOUNTS } from "@/entities/transfer"
 import { formatAccountNo, formatAmount } from "@/shared/lib/format"
+
+const DEMO_PAYEE_ACCOUNT_NO = MOCK_PAYEE_ACCOUNTS[0].accountNo
 
 function ConfirmDialogDemo() {
   const [open, setOpen] = React.useState(false)
@@ -15,8 +18,11 @@ function ConfirmDialogDemo() {
         onClose={() => setOpen(false)}
         onConfirm={() => setOpen(false)}
         items={[
-          { label: "받는분", value: "홍길동" },
-          { label: "받는분 계좌번호", value: formatAccountNo("110632892336") },
+          { label: "받는분", value: MOCK_PAYEE_NAME },
+          {
+            label: "받는분 계좌번호",
+            value: formatAccountNo(DEMO_PAYEE_ACCOUNT_NO),
+          },
           { label: "이체금액", value: formatAmount(500_000) },
         ]}
       />

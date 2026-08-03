@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
 import { MemoryRouter } from "react-router-dom"
 import { AppHeader } from "@/widgets/shell/app-header"
+import { MOCK_PROFILE } from "@/entities/customer"
 
 const meta = {
   title: "widgets/shell/AppHeader",
@@ -15,7 +16,7 @@ const meta = {
   ],
   args: {
     activeId: "transfer",
-    customerName: "홍길동",
+    customerName: MOCK_PROFILE.name,
     unreadCount: 0,
     remainingSeconds: 540,
     loggedIn: true,

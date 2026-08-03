@@ -2,6 +2,8 @@ import type { Meta, StoryObj } from "@storybook/react-vite"
 import { Panel, PanelHeader } from "@/shared/ui/panel"
 import { LabelValueRow } from "@/shared/ui/label-value-row"
 import { Button } from "@/shared/ui/button"
+import { MOCK_ACCESS_STATUS } from "@/entities/dashboard"
+import { formatDateTime } from "@/shared/lib/format"
 
 const meta = {
   title: "shared/ui/Panel",
@@ -17,8 +19,11 @@ export const Default: Story = {
       <Panel>
         <PanelHeader title="접속현황" />
         <div className="border-t border-border">
-          <LabelValueRow label="최근 접속일시" value="2026.07.23 08:57:34" />
-          <LabelValueRow label="접속 IP" value="203.245.11.87" />
+          <LabelValueRow
+            label="최근 접속일시"
+            value={formatDateTime(MOCK_ACCESS_STATUS.lastLogin)}
+          />
+          <LabelValueRow label="접속 IP" value={MOCK_ACCESS_STATUS.ip} />
         </div>
       </Panel>
     </div>

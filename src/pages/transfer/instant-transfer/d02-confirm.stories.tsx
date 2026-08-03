@@ -2,7 +2,10 @@ import type { Meta, StoryObj } from "@storybook/react-vite"
 import { PageShell } from "@/app/page-shell"
 import { InstantTransferStep2 } from "@/pages/transfer/instant-transfer/d02-confirm"
 import { TRANSFER_STEPS } from "@/pages/transfer/transfer-steps"
-import { MOCK_TRANSFER_ACCOUNTS } from "@/entities/transfer"
+import {
+  MOCK_PAYEE_ACCOUNTS,
+  MOCK_TRANSFER_ACCOUNTS,
+} from "@/entities/transfer"
 import {
   formatAccountNo,
   formatAmount,
@@ -13,8 +16,9 @@ import { MOCK_NOW } from "@/shared/config/mock-clock"
 import { WithAuthenticatedPage } from "../../../../.storybook/decorators/page-providers"
 
 const FROM_ACCOUNT = MOCK_TRANSFER_ACCOUNTS[0]
-const TO_ACCOUNT_NO = "333330730135"
-const PAYEE_NAME = "김민수"
+const TO_PAYEE = MOCK_PAYEE_ACCOUNTS[0]
+const TO_ACCOUNT_NO = TO_PAYEE.accountNo
+const PAYEE_NAME = TO_PAYEE.payeeName
 const AMOUNT = 500_000
 
 const meta = {

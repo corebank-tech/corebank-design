@@ -2,7 +2,11 @@ import type { Meta, StoryObj } from "@storybook/react-vite"
 import { PageShell } from "@/app/page-shell"
 import { AutoTransferStep2 } from "@/pages/transfer/auto/g02-confirm"
 import { TRANSFER_STEPS } from "@/pages/transfer/transfer-steps"
-import { MOCK_PAYEE_NAME, MOCK_TRANSFER_ACCOUNTS } from "@/entities/transfer"
+import {
+  MOCK_PAYEE_ACCOUNTS,
+  MOCK_PAYEE_NAME,
+  MOCK_TRANSFER_ACCOUNTS,
+} from "@/entities/transfer"
 import {
   formatAccountNo,
   formatAmount,
@@ -12,7 +16,7 @@ import {
 import { WithAuthenticatedPage } from "../../../../.storybook/decorators/page-providers"
 
 const FROM_ACCOUNT = MOCK_TRANSFER_ACCOUNTS[0]
-const TO_ACCOUNT_NO = "333330730135"
+const TO_ACCOUNT_NO = MOCK_PAYEE_ACCOUNTS[0].accountNo
 const AMOUNT = 200_000
 const START_DATE = "2026-07-30"
 const END_DATE = "2027-07-30"

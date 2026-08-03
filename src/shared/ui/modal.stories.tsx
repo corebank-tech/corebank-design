@@ -37,7 +37,16 @@ function ModalDemo({ tone, title, triggerLabel }: ModalDemoProps) {
 
 const meta = {
   title: "shared/ui/Modal",
+  component: ModalDemo,
   parameters: { layout: "fullscreen" },
+  args: { tone: "primary", title: "확인", triggerLabel: "모달 열기" },
+  argTypes: {
+    tone: {
+      control: "select",
+      options: ["primary", "danger"],
+      description: "타이틀바 색. danger는 해지·삭제 등 위험 동작 확인에 쓴다.",
+    },
+  },
 } satisfies Meta<typeof ModalDemo>
 
 export default meta

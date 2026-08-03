@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
 import { PageShell } from "@/app/page-shell"
 import { C05ConfirmAuth } from "@/pages/product/c05-confirm-auth"
+import { MOCK_JOIN_ACCOUNTS } from "@/entities/product"
 import {
   WithAuthenticatedPage,
   type RouteWithState,
@@ -27,7 +28,7 @@ const FILLED_FORM_STATE: RouteWithState = {
   path: "/product/P001/join/3",
   state: {
     termMonths: 12,
-    fromAccount: "110632892336",
+    fromAccount: MOCK_JOIN_ACCOUNTS[0].accountNo,
     amount: 5_000_000,
   },
 }

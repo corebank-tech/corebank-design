@@ -5,9 +5,11 @@ import { FormRow } from "@/shared/ui/form-row"
 import { Input } from "@/shared/ui/input"
 import { Button } from "@/shared/ui/button"
 import { ConfirmSummary } from "@/shared/ui/confirm-summary"
+import { MOCK_PAYEE_NAME, MOCK_PAYEE_ACCOUNTS } from "@/entities/transfer"
 import { formatAccountNo, formatAmount } from "@/shared/lib/format"
 
 const STEPS = ["정보입력", "정보확인 및 인증", "완료"]
+const DEMO_PAYEE_ACCOUNT_NO = MOCK_PAYEE_ACCOUNTS[0].accountNo
 
 const meta = {
   title: "shared/ui/StepLayout",
@@ -60,10 +62,10 @@ export const ConfirmStep: Story = {
     children: (
       <ConfirmSummary
         columns={[
-          { label: "받는분", value: "홍길동" },
+          { label: "받는분", value: MOCK_PAYEE_NAME },
           {
             label: "받는분 계좌번호",
-            value: formatAccountNo("110632892336"),
+            value: formatAccountNo(DEMO_PAYEE_ACCOUNT_NO),
           },
           {
             label: "이체금액(원)",

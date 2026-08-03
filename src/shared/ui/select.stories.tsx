@@ -4,6 +4,12 @@ import { Select } from "@/shared/ui/select"
 const meta = {
   title: "shared/ui/Select",
   component: Select,
+  argTypes: {
+    invalid: {
+      control: "boolean",
+      description: "검증 실패 상태. 보더를 danger 톤으로 바꾼다.",
+    },
+  },
 } satisfies Meta<typeof Select>
 
 export default meta

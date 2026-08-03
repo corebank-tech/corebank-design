@@ -17,6 +17,7 @@ const WithTheme: Decorator = (Story, context) => {
 }
 
 const preview: Preview = {
+  tags: ["autodocs"],
   parameters: {
     layout: "centered",
     controls: {

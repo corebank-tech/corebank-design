@@ -5,6 +5,7 @@ import {
   type ShortcutLink,
 } from "@/pages/dashboard/banking-shortcuts"
 
+/** REQ-CMN-024: 주요 업무 바로가기 4종. A09MainDashboard의 DEFAULT_SHORTCUTS와 동일하다. */
 const SHORTCUTS: ShortcutLink[] = [
   { id: "accounts", label: "전체계좌조회", href: "/accounts" },
   { id: "transfer", label: "즉시이체", href: "/instant-transfer" },

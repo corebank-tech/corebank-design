@@ -4,6 +4,13 @@ import { Divider } from "@/shared/ui/divider"
 const meta = {
   title: "shared/ui/Divider",
   component: Divider,
+  argTypes: {
+    tone: {
+      control: "select",
+      options: ["border-strong", "ink-faint", "footer-divider"],
+      description: "구분선 색. 헤더·푸터 등 배경 톤에 맞춰 고른다.",
+    },
+  },
 } satisfies Meta<typeof Divider>
 
 export default meta

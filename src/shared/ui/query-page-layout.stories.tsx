@@ -9,6 +9,14 @@ import {
   type OverviewAccount,
 } from "@/entities/account"
 
+const CHECKING_ACCOUNTS = MOCK_OVERVIEW_ACCOUNTS.filter(
+  (account) => account.group === "checking",
+)
+const CHECKING_TOTAL_BALANCE = CHECKING_ACCOUNTS.reduce(
+  (sum, account) => sum + account.balance,
+  0,
+)
+
 const columns: DataGridColumn<OverviewAccount>[] = [
   { key: "alias", header: "계좌명", width: 160 },
   {
@@ -60,12 +68,14 @@ export const Default: Story = {
       <FormSection title="입출금계좌">
         <DataGrid
           columns={columns}
-          rows={MOCK_OVERVIEW_ACCOUNTS}
+          rows={CHECKING_ACCOUNTS}
           rowKey={(row) => row.id}
         />
         <SummaryRow
           className="mt-3"
-          items={[{ label: "총잔액", value: formatAmount(17_700_500) }]}
+          items={[
+            { label: "총잔액", value: formatAmount(CHECKING_TOTAL_BALANCE) },
+          ]}
         />
       </FormSection>
     ),

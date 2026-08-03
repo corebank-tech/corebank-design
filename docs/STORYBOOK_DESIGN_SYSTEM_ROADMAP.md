@@ -6,6 +6,36 @@
 > 실행 순서와 각 단계의 완료 기준을 여기 남긴다. 코드 자체가 최신 상태의 보증이고, 이 문서는
 > "무엇을 왜 이 순서로 하는지"만 남긴다.
 
+## Phase 0 개정 — 축별 폴더 분리 (2026-08-03, Button 피드백 이후)
+
+Phase 0에서 만든 Button `AllVariants` 단일 매트릭스 스토리는 사용자 피드백으로 다시
+설계했다. 최종 확정 패턴(Button으로 검증 후 Chip·IconButton·Modal에 적용):
+
+- **2개 이상의 실제 축이 있는 컴포넌트만** 축별 파일로 쪼갠다(예: Button = variant/size/status,
+  Modal = tone/size). 축이 1개뿐인 컴포넌트(Badge/Alert/Divider/Spinner)나 축이 아예 없는
+  컴포넌트(Checkbox/Radio/Input/Select)는 쪼개지 않는다 — 기존 파일 하나에 `docs.description`만
+  보강한다. 억지로 폴더를 만들면 같은 목록을 한 겹 더 감싸는 것뿐이라 무의미하다
+- 축별 파일은 각각 `title: ".../컴포넌트/축이름"` + `component:` + `argTypes` + 모든 story에
+  `parameters.docs.description.story` + meta에 `parameters.docs.description.component`를
+  갖는다. **파일마다 자체 Docs 탭이 생기는 게 의도된 설계다** — "중복"이 아니라 축마다 다른
+  내용(그 축의 props만 노출)을 보여주는 것. 사용자가 명시적으로 이 형태를 승인했다
+- **"전체 조합(All Metrics)" 그리드는 여러 개를 동시에 작게 렌더할 수 있는 컴포넌트에만
+  만든다**(Button/Chip/IconButton). Modal처럼 전체화면 오버레이라 여러 개를 동시에 열 수 없는
+  컴포넌트는 축 조합별 트리거 버튼 그리드로 대체한다 — 버튼을 누르면 그 조합의 모달이 열림
+- 매트릭스 그리드 셀 패딩은 `px-6 py-4`로 여유 있게 준다(처음 `p-2`로 만들었다가 "따닥따닥
+  붙어있다"는 피드백을 받고 수정)
+- 텍스트는 액션/매트릭스형 컴포넌트(Button/Chip/Modal)만 임의 문자열("코어뱅크")로 통일한다.
+  Badge처럼 텍스트 자체가 콘텐츠(상태값)인 컴포넌트는 실제 상태 텍스트를 유지한다
+- 컴포넌트에 disabled 등 상태의 시각적 처리가 실제로 없으면(Chip, IconButton이 그렇다) 있는
+  척하지 않고 Status 스토리 docs에 그 사실을 정직하게 적는다 — 실제 소비자가 생기면 그때
+  컴포넌트에 스타일을 추가한다
+- 구조 변경(파일 삭제/생성) 후에는 `storybook-static/index.json` 구조 확인만으로 끝내지 않고
+  실행 중인 dev 서버(`localhost:6006`)를 브라우저로 직접 열어 렌더링을 확인한다 — 이번에
+  구조는 맞는데 실제로 안 보이거나 간격이 이상했던 문제를 구조 확인만으로는 못 잡았다
+
+적용 완료: Button(4폴더) · Chip(4폴더) · Modal(3폴더+트리거그리드) · IconButton(4폴더) ·
+Badge/Alert/Divider/Spinner/Checkbox/Radio/Input/Select(단일 파일 docs 보강).
+
 ## 레퍼런스로 확인한 기준
 
 - **조합 매트릭스**: variant×size를 개별 스토리로 나열하지 않고, 전체 조합을 한 화면에서

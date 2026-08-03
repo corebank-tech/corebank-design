@@ -4,6 +4,14 @@ import { Select } from "@/shared/ui/select"
 const meta = {
   title: "shared/ui/Select",
   component: Select,
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "정해진 옵션 중 하나를 고르는 드롭다운. 조회 조건의 구분값처럼 선택지가 고정된 값에 쓴다.",
+      },
+    },
+  },
   argTypes: {
     invalid: {
       control: "boolean",
@@ -29,6 +37,11 @@ export const Default: Story = {
       <Options />
     </Select>
   ),
+  parameters: {
+    docs: {
+      description: { story: "옵션이 선택 가능한 기본 상태." },
+    },
+  },
 }
 
 export const Invalid: Story = {
@@ -38,6 +51,14 @@ export const Invalid: Story = {
       <Options />
     </Select>
   ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "폼 검증 실패 시 쓴다. 필수 항목을 고르지 않고 제출했을 때 등 — 에러 메시지는 화면에 하드코딩하지 않는다(REQ-CMN-008).",
+      },
+    },
+  },
 }
 
 export const Disabled: Story = {
@@ -47,4 +68,11 @@ export const Disabled: Story = {
       <Options />
     </Select>
   ),
+  parameters: {
+    docs: {
+      description: {
+        story: "조건 미충족 등으로 값을 바꿀 수 없을 때 쓴다.",
+      },
+    },
+  },
 }

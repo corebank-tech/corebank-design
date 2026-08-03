@@ -4,6 +4,14 @@ import { Divider } from "@/shared/ui/divider"
 const meta = {
   title: "shared/ui/Divider",
   component: Divider,
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "헤더·툴바·푸터에서 각자 만들던 `|` 구분자 span을 하나로 모은 컴포넌트. 색 톤(tone) 축만 있고, 놓이는 배경에 맞춰 톤을 고른다.",
+      },
+    },
+  },
   argTypes: {
     tone: {
       control: "select",
@@ -26,4 +34,12 @@ export const InContext: Story = {
       <span>고객센터</span>
     </div>
   ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "border-strong은 app-header의 메뉴 구분(예: 이용약관/개인정보처리방침)에, ink-faint는 grid-toolbar의 버튼 구분에 쓴다. footer-divider는 footer.tsx 전용 톤으로 이 예시에는 포함하지 않았다.",
+      },
+    },
+  },
 }

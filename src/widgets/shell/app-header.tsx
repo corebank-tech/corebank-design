@@ -5,6 +5,7 @@ import { NAV } from "@/shared/config/nav"
 import { cn } from "@/shared/lib/utils"
 import { useTheme } from "@/shared/lib/theme"
 import { IconButton } from "@/shared/ui/icon-button"
+import { Button } from "@/shared/ui/button"
 import { Divider } from "@/shared/ui/divider"
 import { Logo } from "@/shared/ui/logo"
 
@@ -159,14 +160,15 @@ export function AppHeader({
                 로그아웃
               </button>
 
-              <IconButton
+              <Button
+                variant="secondary"
+                size="sm"
                 onClick={onOpenFullMenu}
                 onMouseEnter={scheduleClose}
-                className={ICON_BTN_CLASS}
-                aria-label="전체메뉴 열기"
               >
-                <Menu className="h-4.5 w-4.5" aria-hidden="true" />
-              </IconButton>
+                <Menu className="h-4 w-4" aria-hidden="true" />
+                전체메뉴
+              </Button>
             </>
           ) : (
             <Link

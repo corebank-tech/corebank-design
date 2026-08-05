@@ -6,6 +6,7 @@ import { cn } from "@/shared/lib/utils"
 import { useTheme } from "@/shared/lib/theme"
 import { IconButton } from "@/shared/ui/icon-button"
 import { Divider } from "@/shared/ui/divider"
+import { Logo } from "@/shared/ui/logo"
 
 type AppHeaderProps = {
   activeId?: string
@@ -64,11 +65,8 @@ export function AppHeader({
     >
       <div className="mx-auto flex h-18 w-320 items-stretch justify-between px-4">
         <div className="flex items-stretch">
-          <Link
-            to="/"
-            className="flex shrink-0 items-center pr-8 text-h2 leading-[1.5] font-heading text-primary"
-          >
-            CoreBank
+          <Link to="/" className="flex shrink-0 items-center pr-8">
+            <Logo />
           </Link>
           <ul
             className={cn(

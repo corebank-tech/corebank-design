@@ -28,6 +28,9 @@ function formatSession(seconds: number) {
   return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`
 }
 
+const ICON_BTN_CLASS =
+  "border border-border bg-surface-elevated text-ink-muted hover:bg-surface hover:text-ink"
+
 /**
  * REQ-CMN-001/002/003/005 통합 헤더. utility-bar + gnb + breadcrumb-bar의
  * 유틸 영역을 병합한 흰 배경 sticky 헤더. hover 시 2뎁스 드롭다운을 노출한다.
@@ -100,30 +103,28 @@ export function AppHeader({
 
         <div className="flex shrink-0 items-center gap-4">
           <IconButton
-            shape="circle"
             onClick={toggleTheme}
-            className="text-ink-muted hover:bg-primary-tint hover:text-primary"
+            className={ICON_BTN_CLASS}
             aria-label={
               theme === "dark" ? "라이트 모드로 전환" : "다크 모드로 전환"
             }
             aria-pressed={theme === "dark"}
           >
             {theme === "dark" ? (
-              <Sun className="h-5 w-5" aria-hidden="true" />
+              <Sun className="h-4.5 w-4.5" aria-hidden="true" />
             ) : (
-              <Moon className="h-5 w-5" aria-hidden="true" />
+              <Moon className="h-4.5 w-4.5" aria-hidden="true" />
             )}
           </IconButton>
 
           {loggedIn ? (
             <>
               <IconButton
-                shape="circle"
                 onClick={onOpenNotifications}
-                className="relative text-ink-muted hover:bg-primary-tint hover:text-primary"
+                className={cn("relative", ICON_BTN_CLASS)}
                 aria-label={`알림 ${unreadCount}건`}
               >
-                <Bell className="h-5 w-5" aria-hidden="true" />
+                <Bell className="h-4.5 w-4.5" aria-hidden="true" />
                 {unreadCount > 0 && (
                   <span className="absolute top-0.5 right-0.5 inline-flex min-w-[16px] items-center justify-center rounded-full bg-danger px-1 text-[10px] leading-4 font-bold text-white">
                     {unreadCount > 99 ? "99+" : unreadCount}
@@ -161,10 +162,10 @@ export function AppHeader({
               <IconButton
                 onClick={onOpenFullMenu}
                 onMouseEnter={scheduleClose}
-                className="text-ink-muted hover:bg-primary-tint hover:text-primary"
+                className={ICON_BTN_CLASS}
                 aria-label="전체메뉴 열기"
               >
-                <Menu className="h-5 w-5" aria-hidden="true" />
+                <Menu className="h-4.5 w-4.5" aria-hidden="true" />
               </IconButton>
             </>
           ) : (
